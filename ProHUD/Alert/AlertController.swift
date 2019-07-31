@@ -18,12 +18,14 @@ public extension ProHUD {
         /// 正文（包括icon、textStack、actionStack)
         internal var contentStack: StackContainer = {
             let stack = StackContainer()
+            stack.spacing = alertConfig.margin
             return stack
         }()
         
         /// 文本区域
         internal var textStack: StackContainer = {
             let stack = StackContainer()
+            stack.spacing = alertConfig.margin
             return stack
         }()
         internal var imageView: UIImageView?
@@ -33,6 +35,7 @@ public extension ProHUD {
         internal var actionStack: StackContainer = {
             let stack = StackContainer()
             stack.alignment = .fill
+            stack.spacing = alertConfig.margin
             return stack
         }()
         
@@ -41,6 +44,8 @@ public extension ProHUD {
         
         /// 显示顶部按钮（最小化）
         internal var showNavButtonsBlock: DispatchWorkItem?
+        
+        internal var minimizeCallback: (() -> Void)?
         
         // MARK: 生命周期
         
@@ -51,7 +56,7 @@ public extension ProHUD {
         /// - Parameter icon: 图标
         public convenience init(scene: Scene = .default, title: String? = nil, message: String? = nil, icon: UIImage? = nil) {
             self.init()
-            view.tintColor = hud.config.alert.tintColor
+            view.tintColor = alertConfig.tintColor
             vm.scene = scene
             vm.title = title
             vm.message = message
@@ -85,7 +90,7 @@ public extension ProHUD {
             let count = hud.alerts.count
             if count == 0 && hud.alertWindow != nil {
                 UIView.animateFastEaseOut(delay: 0, animations: {
-                    self.view.transform = .init(scaleX: 1.02, y: 1.02)
+                    self.view.transform = .init(scaleX: 1.05, y: 1.05)
                     window.backgroundColor = window.backgroundColor?.withAlphaComponent(0)
                 }) { (done) in
                     hud.alertWindow = nil
@@ -130,6 +135,13 @@ public extension ProHUD {
             return self
         }
         
+        /// 最小化事件
+        /// - Parameter callback: 事件回调
+        @discardableResult public func didMinimize(_ callback: (() -> Void)?) -> Alert {
+            minimizeCallback = callback
+            return self
+        }
+        
         /// 消失事件
         /// - Parameter callback: 事件回调
         @discardableResult public func didDisappear(_ callback: (() -> Void)?) -> Alert {
@@ -144,7 +156,7 @@ public extension ProHUD {
             vm.message = message
             vm.scene = scene
             vm.icon = icon
-            hud.config.alert.updateFrame(self)
+            alertConfig.updateFrame(self)
             return self
         }
         
@@ -206,8 +218,8 @@ fileprivate extension ProHUD.Alert {
         willLayout = DispatchWorkItem(block: { [weak self] in
             if let a = self {
                 // 布局
-                hud.config.alert.loadSubviews(a)
-                hud.config.alert.updateFrame(a)
+                alertConfig.loadSubviews(a)
+                alertConfig.updateFrame(a)
                 // 超时
                 a.timeoutBlock?.cancel()
                 if let t = a.timeout, t > 0 {
@@ -219,14 +231,14 @@ fileprivate extension ProHUD.Alert {
                     a.timeoutBlock = nil
                 }
                 // 顶部按钮
-                if hud.config.alert.forceQuitTimeout > 0 && self?.actionStack.superview == nil {
+                if alertConfig.minimizeTimeout > 0 && self?.actionStack.superview == nil {
                     a.showNavButtonsBlock?.cancel()
                     a.showNavButtonsBlock = DispatchWorkItem(block: { [weak self] in
                         if let s = self {
-                            hud.config.alert.showNavButtons(s)
+                            alertConfig.showNavButtons(s)
                         }
                     })
-                    DispatchQueue.main.asyncAfter(deadline: .now()+hud.config.alert.forceQuitTimeout, execute: a.showNavButtonsBlock!)
+                    DispatchQueue.main.asyncAfter(deadline: .now()+alertConfig.minimizeTimeout, execute: a.showNavButtonsBlock!)
                 }
             }
         })
@@ -257,7 +269,7 @@ public extension ProHUD {
             alert.view.alpha = 1
         })
         alerts.append(alert)
-        updateAlertsScale()
+        updateAlertsLayout()
         // setup timeout
         if let _ = alert.timeout, alert.timeoutBlock == nil {
             alert.timeout(alert.timeout)
@@ -303,6 +315,11 @@ public extension ProHUD {
 public extension ProHUD {
     
     @discardableResult
+    class func show(_ alert: Alert) -> Alert {
+        return shared.show(alert)
+    }
+    
+    @discardableResult
     class func show(alert: Alert.Scene, title: String? = nil, message: String? = nil, icon: UIImage? = nil) -> Alert {
         return shared.show(alert: alert, title: title, message: message, icon: icon)
     }
@@ -325,7 +342,7 @@ public extension ProHUD {
 
 fileprivate extension ProHUD {
     
-    func updateAlertsScale() {
+    func updateAlertsLayout() {
         for (i, a) in alerts.reversed().enumerated() {
             let scale = CGFloat(pow(0.7, CGFloat(i)))
             UIView.animate(withDuration: 2, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.allowUserInteraction, .curveEaseInOut], animations: {
@@ -356,7 +373,7 @@ fileprivate extension ProHUD {
                     alerts.remove(at: i)
                 }
             }
-            updateAlertsScale()
+            updateAlertsLayout()
         } else if alerts.count == 1 {
             alerts.removeAll()
         } else {

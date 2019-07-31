@@ -22,20 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
  
          
         
-        hud.config(alert: { (a) in
-//            a.tintColor = .green
-//            a.loadSubviews { (aa) in
-//                
-//            }
-//            a.padding = 12
-//            a.margin = 4
-//            a.loadSubviews { (aa) in
-//
-//            }
-        })
-        hud.config(toast: { (a) in
-            
-        })
+        
+        
         return true
     }
 

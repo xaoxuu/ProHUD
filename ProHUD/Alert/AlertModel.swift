@@ -6,8 +6,6 @@
 //  Copyright © 2019 Titan Studio. All rights reserved.
 //
 
-import UIKit
-
 public extension ProHUD.Alert {
     enum Scene {
         /// 默认场景

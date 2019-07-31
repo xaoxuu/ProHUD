@@ -15,7 +15,7 @@ public extension ProHUD {
         
         public override init(frame: CGRect) {
             super.init(frame: frame)
-            spacing = hud.config.alert.margin
+            spacing = alertConfig.margin
             distribution = .fill
             alignment = .center
             axis = .vertical
@@ -57,6 +57,14 @@ internal extension UIView {
     
     class func animateSlowEaseOut(delay: TimeInterval = 0, animations: @escaping () -> Void, completion: ((Bool) -> Void)? = nil) {
         animateEaseOut(duration: 2, delay: delay, animations: animations, completion: completion)
+    }
+    
+    class func animateForToast(animations: @escaping () -> Void) {
+        animateEaseOut(duration: 1, delay: 0, animations: animations, completion: nil)
+    }
+    
+    class func animateForToast(animations: @escaping () -> Void, completion: ((Bool) -> Void)? = nil) {
+        animateEaseOut(duration: 1, delay: 0, animations: animations, completion: completion)
     }
     
 }

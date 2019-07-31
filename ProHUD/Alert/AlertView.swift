@@ -33,14 +33,14 @@ extension UIButton {
     class func actionButton(style: UIAlertAction.Style, title: String?) -> UIButton {
         let btn = UIButton(type: .system)
         btn.setTitle(title, for: .normal)
-        btn.layer.cornerRadius = hud.config.alert.cornerRadius / 2
-        btn.titleLabel?.font = hud.config.alert.buttonFont
+        btn.layer.cornerRadius = alertConfig.cornerRadius / 2
+        btn.titleLabel?.font = alertConfig.buttonFont
         btn.update(style: style)
         return btn
     }
     
     func update(style: UIAlertAction.Style) {
-        let pd = hud.config.alert.padding/2
+        let pd = alertConfig.padding/2
         if style != .cancel {
             backgroundColor = .init(white: 0, alpha: 0.04)
             contentEdgeInsets = .init(top: pd*1.5, left: pd*1.5, bottom: pd*1.5, right: pd*1.5)

@@ -14,34 +14,15 @@ public class ProHUD: NSObject {
     
     public static let shared = ProHUD()
     
-    internal var config = Configuration()
-    
-    public var elements = [String]()
-    
-//    public var toasts = [Toast]()
-    public var alerts = [Alert]()
+    internal var toasts = [Toast]()
+    internal var alerts = [Alert]()
     
     internal var alertWindow: UIWindow?
     
     deinit {
         debugPrint(self, "deinit")
     }
-
     
-    
-}
-
-public extension ProHUD {
-    
-    func config(toast: (inout Configuration.Toast) -> Void) {
-        toast(&config.toast)
-    }
-    func config(alert: (inout Configuration.Alert) -> Void) {
-        alert(&config.alert)
-    }
-    func config(guard: (inout Configuration.Guard) -> Void) {
-        `guard`(&config.guard)
-    }
     
 }
 

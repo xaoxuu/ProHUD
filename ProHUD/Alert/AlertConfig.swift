@@ -35,8 +35,9 @@ public extension ProHUD.Configuration {
         public var iconSize = CGSize(width: 48, height: 48)
         
         public var tintColor = UIColor.init(red: 3/255, green: 169/255, blue: 244/255, alpha: 1)
-        /// 多少秒后显示强制退出的按钮【终止/隐藏】
-        public var forceQuitTimeout = TimeInterval(2)
+        
+        /// 多少秒后显示最小化的按钮
+        public var minimizeTimeout = TimeInterval(10)
         
         /// 加载视图
         lazy var loadSubviews: (ProHUD.Alert) -> Void = {
@@ -45,22 +46,21 @@ public extension ProHUD.Configuration {
                 vc.view.addSubview(vc.contentView)
                 vc.contentView.contentView.addSubview(vc.contentStack)
                 
-                let config = hud.config.alert
-                vc.contentStack.spacing = config.margin + config.padding
+                vc.contentStack.spacing = alertConfig.margin + alertConfig.padding
                 
                 vc.contentView.layer.masksToBounds = true
-                vc.contentView.layer.cornerRadius = config.cornerRadius
+                vc.contentView.layer.cornerRadius = alertConfig.cornerRadius
                 
                 vc.contentView.snp.makeConstraints { (mk) in
                     mk.center.equalToSuperview()
-                    mk.width.lessThanOrEqualTo(CGFloat.minimum(UIScreen.main.bounds.width * 0.68, config.maxWidth))
+                    mk.width.lessThanOrEqualTo(CGFloat.minimum(UIScreen.main.bounds.width * 0.68, alertConfig.maxWidth))
                 }
                 vc.contentStack.snp.makeConstraints { (mk) in
                     mk.centerX.equalToSuperview()
-                    mk.top.equalToSuperview().offset(config.padding)
-                    mk.bottom.equalToSuperview().offset(-config.padding)
-                    mk.leading.equalToSuperview().offset(config.padding)
-                    mk.trailing.equalToSuperview().offset(-config.padding)
+                    mk.top.equalToSuperview().offset(alertConfig.padding)
+                    mk.bottom.equalToSuperview().offset(-alertConfig.padding)
+                    mk.leading.equalToSuperview().offset(alertConfig.padding)
+                    mk.trailing.equalToSuperview().offset(-alertConfig.padding)
                 }
                 
             }
@@ -70,7 +70,6 @@ public extension ProHUD.Configuration {
         lazy var updateFrame: (ProHUD.Alert) -> Void = {
             return { (vc) in
                 debugPrint(vc, "updateFrame")
-                let config = hud.config.alert
                 let isFirstLayout: Bool
                 // 图标和文字至少有一个，如果都没有添加到视图中，说明是第一次layout
                 if vc.textStack.superview == nil && vc.imageView?.superview == nil {
@@ -102,10 +101,10 @@ public extension ProHUD.Configuration {
                     let icon = UIImageView(image: img)
                     vc.contentStack.addArrangedSubview(icon)
                     icon.snp.makeConstraints { (mk) in
-                        mk.top.greaterThanOrEqualTo(vc.contentView).offset(config.padding*2.5)
-                        mk.bottom.lessThanOrEqualTo(vc.contentView).offset(-config.padding*2.5)
-                        mk.leading.greaterThanOrEqualTo(vc.contentView).offset(config.padding*4)
-                        mk.trailing.lessThanOrEqualTo(vc.contentView).offset(-config.padding*4)
+                        mk.top.greaterThanOrEqualTo(vc.contentView).offset(alertConfig.padding*2.5)
+                        mk.bottom.lessThanOrEqualTo(vc.contentView).offset(-alertConfig.padding*2.5)
+                        mk.leading.greaterThanOrEqualTo(vc.contentView).offset(alertConfig.padding*4)
+                        mk.trailing.lessThanOrEqualTo(vc.contentView).offset(-alertConfig.padding*4)
                     }
                     vc.imageView = icon
                 }
@@ -114,10 +113,10 @@ public extension ProHUD.Configuration {
                 if vc.vm.title?.count ?? 0 > 0 || vc.vm.message?.count ?? 0 > 0 {
                     vc.contentStack.addArrangedSubview(vc.textStack)
                     vc.textStack.snp.makeConstraints { (mk) in
-                        mk.top.greaterThanOrEqualTo(vc.contentView).offset(config.padding*1.5)
-                        mk.bottom.lessThanOrEqualTo(vc.contentView).offset(-config.padding*1.5)
-                        mk.leading.greaterThanOrEqualTo(vc.contentView).offset(config.padding*2)
-                        mk.trailing.lessThanOrEqualTo(vc.contentView).offset(-config.padding*2)
+                        mk.top.greaterThanOrEqualTo(vc.contentView).offset(alertConfig.padding*1.5)
+                        mk.bottom.lessThanOrEqualTo(vc.contentView).offset(-alertConfig.padding*1.5)
+                        mk.leading.greaterThanOrEqualTo(vc.contentView).offset(alertConfig.padding*2)
+                        mk.trailing.lessThanOrEqualTo(vc.contentView).offset(-alertConfig.padding*2)
                     }
                     if vc.vm.title?.count ?? 0 > 0 {
                         if let lb = vc.titleLabel {
@@ -125,7 +124,7 @@ public extension ProHUD.Configuration {
                         } else {
                             let title = UILabel()
                             title.textAlignment = .center
-                            title.numberOfLines = config.titleMaxLines
+                            title.numberOfLines = alertConfig.titleMaxLines
                             title.textColor = UIColor.init(white: 0.2, alpha: 1)
                             title.text = vc.vm.title
                             vc.textStack.addArrangedSubview(title)
@@ -133,10 +132,10 @@ public extension ProHUD.Configuration {
                         }
                         if vc.vm.message?.count ?? 0 > 0 {
                             // 有message
-                            vc.titleLabel?.font = config.largeTitleFont
+                            vc.titleLabel?.font = alertConfig.largeTitleFont
                         } else {
                             // 没有message
-                            vc.titleLabel?.font = config.titleFont
+                            vc.titleLabel?.font = alertConfig.titleFont
                         }
                     } else {
                         vc.titleLabel?.removeFromSuperview()
@@ -147,8 +146,8 @@ public extension ProHUD.Configuration {
                         } else {
                             let body = UILabel()
                             body.textAlignment = .center
-                            body.font = config.bodyFont
-                            body.numberOfLines = config.bodyMaxLines
+                            body.font = alertConfig.bodyFont
+                            body.numberOfLines = alertConfig.bodyMaxLines
                             body.textColor = UIColor.darkGray
                             body.text = vc.vm.message
                             vc.textStack.addArrangedSubview(body)
@@ -156,10 +155,10 @@ public extension ProHUD.Configuration {
                         }
                         if vc.vm.title?.count ?? 0 > 0 {
                             // 有title
-                            vc.messageLabel?.font = config.bodyFont
+                            vc.messageLabel?.font = alertConfig.bodyFont
                         } else {
                             // 没有title
-                            vc.messageLabel?.font = config.titleFont
+                            vc.messageLabel?.font = alertConfig.titleFont
                         }
                     } else {
                         vc.messageLabel?.removeFromSuperview()
@@ -202,10 +201,11 @@ public extension ProHUD.Configuration {
                 let btn = UIButton.hideButton()
                 vc.view.addSubview(btn)
                 btn.snp.makeConstraints { (mk) in
-                    mk.leading.top.equalTo(vc.contentView).offset(hud.config.alert.margin/2)
+                    mk.leading.top.equalTo(vc.contentView).offset(alertConfig.margin/2)
                 }
                 vc.addTouchUpAction(for: btn) { [weak vc] in
                     debugPrint("点击了隐藏")
+                    vc?.minimizeCallback?()
                     vc?.remove()
                 }
             }
@@ -223,5 +223,13 @@ public extension ProHUD.Configuration {
             updateFrame = callback
         }
         
+    }
+}
+
+internal var alertConfig = ProHUD.Configuration.Alert()
+
+public extension ProHUD {
+    static func configAlert(_ config: (inout Configuration.Alert) -> Void) {
+        config(&alertConfig)
     }
 }
