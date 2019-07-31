@@ -1,0 +1,438 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CD16490B22EF09AB0077988C /* AlertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD16490A22EF09AB0077988C /* AlertModel.swift */; };
+		CD16490D22EF09B40077988C /* AlertConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD16490C22EF09B40077988C /* AlertConfig.swift */; };
+		CD16490F22EF09D50077988C /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD16490E22EF09D50077988C /* AlertView.swift */; };
+		CD16491222EF0D900077988C /* HUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD16491122EF0D900077988C /* HUDView.swift */; };
+		CD16491422EF12220077988C /* ProHUD.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD16491322EF12220077988C /* ProHUD.xcassets */; };
+		CD67039022E7F7B60072C96A /* HUDForToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD67038F22E7F7B60072C96A /* HUDForToast.swift */; };
+		CD67039222E7F7BC0072C96A /* HUDForGuard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD67039122E7F7BC0072C96A /* HUDForGuard.swift */; };
+		CD6CD86C22F1858F00F4FD4A /* ToastModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD86B22F1858F00F4FD4A /* ToastModel.swift */; };
+		CD6CD86E22F185A000F4FD4A /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD86D22F185A000F4FD4A /* ToastView.swift */; };
+		CD6CD87022F185A700F4FD4A /* ToastController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD86F22F185A700F4FD4A /* ToastController.swift */; };
+		CD6CD87222F185AF00F4FD4A /* ToastConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD87122F185AF00F4FD4A /* ToastConfig.swift */; };
+		CD6CD87522F185C200F4FD4A /* GuardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD87422F185C200F4FD4A /* GuardController.swift */; };
+		CD6CD87722F185C900F4FD4A /* GuardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD87622F185C900F4FD4A /* GuardModel.swift */; };
+		CD6CD87922F185D000F4FD4A /* GuardConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD87822F185D000F4FD4A /* GuardConfig.swift */; };
+		CD6CD87B22F185D600F4FD4A /* GuardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD87A22F185D600F4FD4A /* GuardView.swift */; };
+		CD95D22122E72C4C007559A3 /* ProHUD.h in Headers */ = {isa = PBXBuildFile; fileRef = CD95D21F22E72C4C007559A3 /* ProHUD.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CD95D26922E72DA1007559A3 /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD95D26822E72DA1007559A3 /* AlertController.swift */; };
+		CD95D26B22E72DB3007559A3 /* ProHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD95D26A22E72DB3007559A3 /* ProHUD.swift */; };
+		CDB6A07B22EEF06500AF6CF0 /* HUDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB6A07A22EEF06500AF6CF0 /* HUDController.swift */; };
+		CDB6A07D22EEF19D00AF6CF0 /* HUDConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB6A07C22EEF19D00AF6CF0 /* HUDConfig.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		CD16490A22EF09AB0077988C /* AlertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModel.swift; sourceTree = "<group>"; };
+		CD16490C22EF09B40077988C /* AlertConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertConfig.swift; sourceTree = "<group>"; };
+		CD16490E22EF09D50077988C /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
+		CD16491122EF0D900077988C /* HUDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDView.swift; sourceTree = "<group>"; };
+		CD16491322EF12220077988C /* ProHUD.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ProHUD.xcassets; sourceTree = "<group>"; };
+		CD67038F22E7F7B60072C96A /* HUDForToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDForToast.swift; sourceTree = "<group>"; };
+		CD67039122E7F7BC0072C96A /* HUDForGuard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDForGuard.swift; sourceTree = "<group>"; };
+		CD6CD86B22F1858F00F4FD4A /* ToastModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastModel.swift; sourceTree = "<group>"; };
+		CD6CD86D22F185A000F4FD4A /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		CD6CD86F22F185A700F4FD4A /* ToastController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastController.swift; sourceTree = "<group>"; };
+		CD6CD87122F185AF00F4FD4A /* ToastConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastConfig.swift; sourceTree = "<group>"; };
+		CD6CD87422F185C200F4FD4A /* GuardController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardController.swift; sourceTree = "<group>"; };
+		CD6CD87622F185C900F4FD4A /* GuardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardModel.swift; sourceTree = "<group>"; };
+		CD6CD87822F185D000F4FD4A /* GuardConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardConfig.swift; sourceTree = "<group>"; };
+		CD6CD87A22F185D600F4FD4A /* GuardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardView.swift; sourceTree = "<group>"; };
+		CD95D21C22E72C4C007559A3 /* ProHUD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ProHUD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD95D21F22E72C4C007559A3 /* ProHUD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProHUD.h; sourceTree = "<group>"; };
+		CD95D22022E72C4C007559A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CD95D26722E72D68007559A3 /* ProHUD.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = ProHUD.podspec; sourceTree = "<group>"; };
+		CD95D26822E72DA1007559A3 /* AlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
+		CD95D26A22E72DB3007559A3 /* ProHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProHUD.swift; sourceTree = "<group>"; };
+		CDB6A07A22EEF06500AF6CF0 /* HUDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDController.swift; sourceTree = "<group>"; };
+		CDB6A07C22EEF19D00AF6CF0 /* HUDConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDConfig.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CD95D21922E72C4C007559A3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CD16491022EF0A4B0077988C /* Alert */ = {
+			isa = PBXGroup;
+			children = (
+				CD95D26822E72DA1007559A3 /* AlertController.swift */,
+				CD16490A22EF09AB0077988C /* AlertModel.swift */,
+				CD16490C22EF09B40077988C /* AlertConfig.swift */,
+				CD16490E22EF09D50077988C /* AlertView.swift */,
+			);
+			path = Alert;
+			sourceTree = "<group>";
+		};
+		CD6CD87322F185B400F4FD4A /* Toast */ = {
+			isa = PBXGroup;
+			children = (
+				CD6CD86B22F1858F00F4FD4A /* ToastModel.swift */,
+				CD6CD86D22F185A000F4FD4A /* ToastView.swift */,
+				CD6CD86F22F185A700F4FD4A /* ToastController.swift */,
+				CD6CD87122F185AF00F4FD4A /* ToastConfig.swift */,
+			);
+			path = Toast;
+			sourceTree = "<group>";
+		};
+		CD6CD87C22F185DA00F4FD4A /* Guard */ = {
+			isa = PBXGroup;
+			children = (
+				CD6CD87422F185C200F4FD4A /* GuardController.swift */,
+				CD6CD87622F185C900F4FD4A /* GuardModel.swift */,
+				CD6CD87822F185D000F4FD4A /* GuardConfig.swift */,
+				CD6CD87A22F185D600F4FD4A /* GuardView.swift */,
+			);
+			path = Guard;
+			sourceTree = "<group>";
+		};
+		CD95D21222E72C4C007559A3 = {
+			isa = PBXGroup;
+			children = (
+				CD95D26722E72D68007559A3 /* ProHUD.podspec */,
+				CD95D21E22E72C4C007559A3 /* ProHUD */,
+				CD95D21D22E72C4C007559A3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CD95D21D22E72C4C007559A3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CD95D21C22E72C4C007559A3 /* ProHUD.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CD95D21E22E72C4C007559A3 /* ProHUD */ = {
+			isa = PBXGroup;
+			children = (
+				CD95D21F22E72C4C007559A3 /* ProHUD.h */,
+				CD16491322EF12220077988C /* ProHUD.xcassets */,
+				CD95D26A22E72DB3007559A3 /* ProHUD.swift */,
+				CD67038F22E7F7B60072C96A /* HUDForToast.swift */,
+				CD67039122E7F7BC0072C96A /* HUDForGuard.swift */,
+				CDB6A07C22EEF19D00AF6CF0 /* HUDConfig.swift */,
+				CDB6A07A22EEF06500AF6CF0 /* HUDController.swift */,
+				CD16491122EF0D900077988C /* HUDView.swift */,
+				CD6CD87322F185B400F4FD4A /* Toast */,
+				CD16491022EF0A4B0077988C /* Alert */,
+				CD6CD87C22F185DA00F4FD4A /* Guard */,
+				CD95D22022E72C4C007559A3 /* Info.plist */,
+			);
+			path = ProHUD;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		CD95D21722E72C4C007559A3 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD95D22122E72C4C007559A3 /* ProHUD.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		CD95D21B22E72C4C007559A3 /* ProHUD */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CD95D22422E72C4C007559A3 /* Build configuration list for PBXNativeTarget "ProHUD" */;
+			buildPhases = (
+				CD95D21722E72C4C007559A3 /* Headers */,
+				CD95D21822E72C4C007559A3 /* Sources */,
+				CD95D21922E72C4C007559A3 /* Frameworks */,
+				CD95D21A22E72C4C007559A3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ProHUD;
+			productName = ProHUD;
+			productReference = CD95D21C22E72C4C007559A3 /* ProHUD.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CD95D21322E72C4C007559A3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1100;
+				ORGANIZATIONNAME = "Titan Studio";
+				TargetAttributes = {
+					CD95D21B22E72C4C007559A3 = {
+						CreatedOnToolsVersion = 11.0;
+						LastSwiftMigration = 1100;
+					};
+				};
+			};
+			buildConfigurationList = CD95D21622E72C4C007559A3 /* Build configuration list for PBXProject "ProHUD" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CD95D21222E72C4C007559A3;
+			productRefGroup = CD95D21D22E72C4C007559A3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CD95D21B22E72C4C007559A3 /* ProHUD */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CD95D21A22E72C4C007559A3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD16491422EF12220077988C /* ProHUD.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CD95D21822E72C4C007559A3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD6CD87B22F185D600F4FD4A /* GuardView.swift in Sources */,
+				CD95D26922E72DA1007559A3 /* AlertController.swift in Sources */,
+				CD6CD87922F185D000F4FD4A /* GuardConfig.swift in Sources */,
+				CD67039222E7F7BC0072C96A /* HUDForGuard.swift in Sources */,
+				CDB6A07D22EEF19D00AF6CF0 /* HUDConfig.swift in Sources */,
+				CD16490F22EF09D50077988C /* AlertView.swift in Sources */,
+				CD6CD86E22F185A000F4FD4A /* ToastView.swift in Sources */,
+				CD6CD87222F185AF00F4FD4A /* ToastConfig.swift in Sources */,
+				CD67039022E7F7B60072C96A /* HUDForToast.swift in Sources */,
+				CD6CD87522F185C200F4FD4A /* GuardController.swift in Sources */,
+				CD6CD87022F185A700F4FD4A /* ToastController.swift in Sources */,
+				CD95D26B22E72DB3007559A3 /* ProHUD.swift in Sources */,
+				CD16490D22EF09B40077988C /* AlertConfig.swift in Sources */,
+				CD6CD86C22F1858F00F4FD4A /* ToastModel.swift in Sources */,
+				CD16490B22EF09AB0077988C /* AlertModel.swift in Sources */,
+				CD16491222EF0D900077988C /* HUDView.swift in Sources */,
+				CDB6A07B22EEF06500AF6CF0 /* HUDController.swift in Sources */,
+				CD6CD87722F185C900F4FD4A /* GuardModel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		CD95D22222E72C4C007559A3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		CD95D22322E72C4C007559A3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		CD95D22522E72C4C007559A3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 34W5TB5KD2;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = ProHUD/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.xaoxuu.ProHUD;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CD95D22622E72C4C007559A3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 34W5TB5KD2;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = ProHUD/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.xaoxuu.ProHUD;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CD95D21622E72C4C007559A3 /* Build configuration list for PBXProject "ProHUD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CD95D22222E72C4C007559A3 /* Debug */,
+				CD95D22322E72C4C007559A3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CD95D22422E72C4C007559A3 /* Build configuration list for PBXNativeTarget "ProHUD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CD95D22522E72C4C007559A3 /* Debug */,
+				CD95D22622E72C4C007559A3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CD95D21322E72C4C007559A3 /* Project object */;
+}
