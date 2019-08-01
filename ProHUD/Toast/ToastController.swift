@@ -7,33 +7,54 @@
 //
 
 import UIKit
-import SnapKit
+import Inspire
 
 public extension ProHUD {
     class Toast: HUDController {
         
         public var window: UIWindow?
-        /// 内容容器
-        public var contentView = BlurView()
-        internal var contentStack: StackContainer = {
-            let stack = StackContainer()
-            stack.axis = .horizontal
-            stack.alignment = .top
-            stack.spacing = toastConfig.margin
-            return stack
-        }()
         
         /// 图标
-        internal var imageView: UIImageView?
-        /// 文本区域
-        internal var textStack: StackContainer = {
-            let stack = StackContainer()
-            stack.spacing = toastConfig.margin
-            stack.alignment = .leading
-            return stack
+        internal lazy var imageView: UIImageView = {
+            let imgv = UIImageView()
+            imgv.contentMode = .scaleAspectFit
+            return imgv
         }()
-        internal var titleLabel: UILabel?
-        internal var messageLabel: UILabel?
+        
+        /// 标题
+        internal lazy var titleLabel: UILabel = {
+            let lb = UILabel()
+            lb.textColor = UIColor.init(white: 0.2, alpha: 1)
+            lb.font = toastConfig.titleFont
+            lb.textAlignment = .justified
+            lb.numberOfLines = toastConfig.titleMaxLines
+            return lb
+        }()
+        
+        /// 正文
+        internal lazy var bodyLabel: UILabel = {
+            let lb = UILabel()
+            lb.textColor = .darkGray
+            lb.font = toastConfig.bodyFont
+            lb.textAlignment = .justified
+            lb.numberOfLines = toastConfig.bodyMaxLines
+            return lb
+        }()
+        
+        /// 毛玻璃层
+        var blurView: UIVisualEffectView?
+        
+        /// 背景层（在iOS13之后window）
+        var backgroundView = UIView()
+        
+        /// 设置颜色
+        open var tintColor: UIColor!{
+            didSet {
+                imageView.tintColor = tintColor
+                titleLabel.textColor = tintColor
+                bodyLabel.textColor = tintColor
+            }
+        }
         
         /// 视图模型
         public var vm = ViewModel()
@@ -51,6 +72,7 @@ public extension ProHUD {
         /// - Parameter icon: 图标
         public convenience init(scene: Scene = .default, title: String? = nil, message: String? = nil, icon: UIImage? = nil) {
             self.init()
+            
             vm.scene = scene
             vm.title = title
             vm.message = message
@@ -62,7 +84,10 @@ public extension ProHUD {
                 timeout = 2
             }
             
-            willLayout()
+            // 布局
+            toastConfig.loadSubviews(self)
+            toastConfig.reloadData(self)
+            toastConfig.layoutSubviews(self)
             
             // 点击
             let tap = UITapGestureRecognizer(target: self, action: #selector(privDidTapped(_:)))
@@ -92,12 +117,66 @@ public extension ProHUD {
             }
         }
         
-        internal func updateFrame() {
-            let newSize = contentView.frame.size
-            view.frame.size = newSize
-            window?.frame.size = newSize
-            hud.updateToastsLayout()
+        @discardableResult
+        func blurMask(_ blurEffectStyle: UIBlurEffect.Style?) -> Toast {
+            if let s = blurEffectStyle {
+                if let bv = blurView {
+                    bv.effect = UIBlurEffect.init(style: s)
+                } else {
+                    blurView = UIVisualEffectView(effect: UIBlurEffect.init(style: s))
+                    blurView?.layer.masksToBounds = true
+                    blurView?.layer.cornerRadius = toastConfig.cornerRadius
+                }
+            } else {
+                blurView?.removeFromSuperview()
+                blurView = nil
+            }
+            return self
         }
+        
+        @discardableResult
+        func update(title: String?) -> Toast {
+            vm.title = title
+            titleLabel.text = title
+            return self
+        }
+        
+        @discardableResult
+        func update(message: String?) -> Toast {
+            vm.message = message
+            bodyLabel.text = message
+            return self
+        }
+        
+        @discardableResult
+        func update(icon: UIImage?) -> Toast {
+            vm.icon = icon
+            imageView.image = icon
+            return self
+        }
+        
+//        internal func updateFrame() {
+//            let config = toastConfig
+//            var f = UIScreen.main.bounds
+//            contentStack.frame.size.width = CGFloat.minimum(f.width - 4 * config.margin, config.maxWidth)
+//            titleLabel?.sizeToFit()
+//            messageLabel?.sizeToFit()
+//            contentStack.layoutIfNeeded()
+//            f.size.width = contentStack.frame.size.width
+//            f.size.height = (textStack.arrangedSubviews.last?.frame.maxY ?? 0) + config.margin
+//            debugPrint(f)
+//            func updateFrame(_ frame: CGRect) -> CGRect {
+//                return CGRect(origin: CGPoint(x: config.margin, y: config.margin), size: frame.size)
+//            }
+//            func superBounds(_ frame: CGRect) -> CGRect {
+//                return CGRect(x: 0, y: 0, width: frame.width + 2 * config.margin, height: frame.height + 2 * config.margin)
+//            }
+//            contentStack.frame = updateFrame(f)
+//            contentView.frame = superBounds(f)
+//            view.frame = superBounds(f)
+//            window?.frame = superBounds(f)
+//            hud.updateToastsLayout()
+//        }
         
         // MARK: 设置函数
         
@@ -105,7 +184,16 @@ public extension ProHUD {
         /// - Parameter timeout: 超时时间
         @discardableResult public func timeout(_ timeout: TimeInterval?) -> Toast {
             self.timeout = timeout
-            willLayout()
+            // 超时
+            timeoutBlock?.cancel()
+            if let t = timeout, t > 0 {
+                timeoutBlock = DispatchWorkItem(block: { [weak self] in
+                    self?.remove()
+                })
+                DispatchQueue.main.asyncAfter(deadline: .now()+t, execute: timeoutBlock!)
+            } else {
+                timeoutBlock = nil
+            }
             return self
         }
         
@@ -130,7 +218,8 @@ public extension ProHUD {
             vm.title = title
             vm.message = message
             vm.icon = icon
-            toastConfig.updateFrame(self)
+            toastConfig.reloadData(self)
+            toastConfig.layoutSubviews(self)
             return self
         }
         
@@ -141,32 +230,6 @@ public extension ProHUD {
 }
 
 fileprivate extension ProHUD.Toast {
-    func willLayout() {
-        willLayout?.cancel()
-        willLayout = DispatchWorkItem(block: { [weak self] in
-            if let a = self {
-                // 布局
-                toastConfig.loadSubviews(a)
-                toastConfig.updateFrame(a)
-                // 超时
-                a.timeoutBlock?.cancel()
-                if let t = a.timeout, t > 0 {
-                    a.timeoutBlock = DispatchWorkItem(block: { [weak self] in
-                        self?.remove()
-                    })
-                    DispatchQueue.main.asyncAfter(deadline: .now()+t, execute: a.timeoutBlock!)
-                } else {
-                    a.timeoutBlock = nil
-                }
-            }
-        })
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.001, execute: willLayout!)
-    }
-    
-    func willUpdateToastsLayout() {
-        
-    }
-    
     
     /// 点击事件
     /// - Parameter sender: 手势
@@ -189,7 +252,7 @@ fileprivate extension ProHUD.Toast {
                 UIView.animateForToast(animations: {
                     self.window?.transform = .identity
                 }) { (done) in
-                    // 重置计时器
+                    // FIXME: 重置计时器
                     
                 }
             }
@@ -206,22 +269,39 @@ public extension ProHUD {
     func show(_ toast: Toast) -> Toast {
         let config = toastConfig
         if toast.window == nil {
-            let w = UIWindow(frame: .init(x: config.margin, y: config.margin, width: UIScreen.main.bounds.width - 2*config.margin, height: 500))
+            let width = CGFloat.minimum(UIScreen.main.bounds.width - 2*config.margin, config.maxWidth)
+            let w = UIWindow(frame: .init(x: (UIScreen.main.bounds.width - width) / 2, y: config.margin, width: width, height: 400))
             toast.window = w
-            w.rootViewController = toast
             w.windowLevel = UIWindow.Level(5000)
             w.backgroundColor = .clear
             w.layer.shadowRadius = 8
             w.layer.shadowOffset = .init(width: 0, height: 5)
             w.layer.shadowOpacity = 0.2
+            w.rootViewController = toast
+            
         }
         
         let window = toast.window!
-        window.makeKeyAndVisible()
-        window.transform = .init(translationX: 0, y: -window.frame.maxY)
-        
+        window.isHidden = false
         toasts.append(toast)
         
+        // background & frame
+        toast.view.layoutIfNeeded()
+        toast.titleLabel.sizeToFit()
+        toast.bodyLabel.sizeToFit()
+        let width = toast.view.frame.width
+        var height = CGFloat(0)
+        for v in toast.view.subviews {
+            height = CGFloat.maximum(v.frame.maxY, height)
+        }
+        height += config.padding
+        toast.backgroundView.frame.size = CGSize(width: width, height: height)
+        window.insertSubview(toast.backgroundView, at: 0)
+        window.frame.size.height = height // 这里之后toast.view.frame.height会变成0
+        toast.view.frame.size.height = height
+        
+        updateToastsLayout()
+        window.transform = .init(translationX: 0, y: -window.frame.maxY)
         UIView.animateForToast {
             window.transform = .identity
         }
@@ -296,18 +376,25 @@ fileprivate extension ProHUD {
     func updateToastsLayout() {
         for (i, e) in toasts.enumerated() {
             let config = toastConfig
-            var frame = e.window?.frame ?? .zero
-            if i == 0 {
-                frame.origin.y = 44
-            } else {
-                let lastY = toasts[i-1].window?.frame.maxY ?? .zero
-                frame.origin.y = lastY + config.margin
+            if let window = e.window {
+                var frame = window.frame
+                if i == 0 {
+                    if isPortrait {
+                        frame.origin.y = Inspire.shared.screen.updatedSafeAreaInsets.top
+                    } else {
+                        frame.origin.y = config.margin
+                    }
+                } else {
+                    let lastY = toasts[i-1].window?.frame.maxY ?? .zero
+                    frame.origin.y = lastY + config.margin
+                }
+                UIView.animateForToast(animations: {
+                    e.window?.frame = frame
+                }) { (done) in
+                    
+                }
             }
-            UIView.animateForToast(animations: {
-                e.window?.frame = frame
-            }) { (done) in
-                
-            }
+            
         }
     }
     

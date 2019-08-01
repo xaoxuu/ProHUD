@@ -101,8 +101,8 @@ public extension ProHUD.Configuration {
                     let icon = UIImageView(image: img)
                     vc.contentStack.addArrangedSubview(icon)
                     icon.snp.makeConstraints { (mk) in
-                        mk.top.greaterThanOrEqualTo(vc.contentView).offset(alertConfig.padding*2.5)
-                        mk.bottom.lessThanOrEqualTo(vc.contentView).offset(-alertConfig.padding*2.5)
+                        mk.top.greaterThanOrEqualTo(vc.contentView).offset(alertConfig.padding*2.25)
+                        mk.bottom.lessThanOrEqualTo(vc.contentView).offset(-alertConfig.padding*2.25)
                         mk.leading.greaterThanOrEqualTo(vc.contentView).offset(alertConfig.padding*4)
                         mk.trailing.lessThanOrEqualTo(vc.contentView).offset(-alertConfig.padding*4)
                     }
@@ -113,8 +113,8 @@ public extension ProHUD.Configuration {
                 if vc.vm.title?.count ?? 0 > 0 || vc.vm.message?.count ?? 0 > 0 {
                     vc.contentStack.addArrangedSubview(vc.textStack)
                     vc.textStack.snp.makeConstraints { (mk) in
-                        mk.top.greaterThanOrEqualTo(vc.contentView).offset(alertConfig.padding*1.5)
-                        mk.bottom.lessThanOrEqualTo(vc.contentView).offset(-alertConfig.padding*1.5)
+                        mk.top.greaterThanOrEqualTo(vc.contentView).offset(alertConfig.padding*1.75)
+                        mk.bottom.lessThanOrEqualTo(vc.contentView).offset(-alertConfig.padding*1.75)
                         mk.leading.greaterThanOrEqualTo(vc.contentView).offset(alertConfig.padding*2)
                         mk.trailing.lessThanOrEqualTo(vc.contentView).offset(-alertConfig.padding*2)
                     }

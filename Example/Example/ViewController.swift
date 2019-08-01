@@ -43,15 +43,15 @@ class ViewController: UIViewController {
 //            debugPrint("didDisappear")
 //        }
         
-        let t = ProHUD.Toast(scene: .loading, title: "正在加载", message: "哈哈")
-        let a = ProHUD.show(alert: .loading, title: "正在加载", message: "请坐和放宽")
-        a.didMinimize {
-            hud.show(t)
-        }
-        t.didTapped { [weak t] in
-            hud.show(a)
-            t?.remove()
-        }
+//        let t = ProHUD.Toast(scene: .loading, title: "正在加载", message: "哈哈")
+//        let a = ProHUD.show(alert: .loading, title: "正在加载", message: "请坐和放宽")
+//        a.didMinimize {
+//            hud.show(t)
+//        }
+//        t.didTapped { [weak t] in
+//            hud.show(a)
+//            t?.remove()
+//        }
         
 //            a.didMinimize {
 //            ProHUD.show(toast: .loading, title: "正在加载", message: "哈哈").didTapped {
@@ -60,8 +60,8 @@ class ViewController: UIViewController {
 //        }
         
         
-        
-        
+        ProHUD.show(toast: .loading, title: "正在加载", message: "拉升的反馈老实交代分开就撒开了击快乐圣反馈老实交代分开就撒开了击快乐圣")
+//        ProHUD.show(toast: .loading, title: "正在加载", message: "哈克里斯蒂娜疯狂拉升的反馈老实交代分开就撒开了击快乐圣诞哈克里斯蒂娜疯狂拉升的反馈老实交代分开就撒开了击快乐圣诞")
         
         DispatchQueue.main.asyncAfter(deadline: .now()+1) {
             

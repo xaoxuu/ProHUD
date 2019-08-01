@@ -16,12 +16,12 @@ public extension ProHUD.Configuration {
         public var titleFont = UIFont.boldSystemFont(ofSize: 18)
         /// 正文字体
         public var bodyFont = UIFont.systemFont(ofSize: 16)
-        /// 标题最多行数（0代表不限制）
-        public var titleMaxLines = Int(0)
-        /// 正文最多行数（0代表不限制）
-        public var bodyMaxLines = Int(0)
+        /// 标题最多行数
+        public var titleMaxLines = Int(1)
+        /// 正文最多行数
+        public var bodyMaxLines = Int(10)
         /// 圆角半径
-        public var cornerRadius = CGFloat(16)
+        public var cornerRadius = CGFloat(12)
         
         public var margin = CGFloat(8)
         
@@ -33,39 +33,18 @@ public extension ProHUD.Configuration {
         lazy var loadSubviews: (ProHUD.Toast) -> Void = {
             return { (vc) in
                 debugPrint(vc, "loadSubviews")
-                let config = toastConfig
-                vc.view.addSubview(vc.contentView)
-                vc.contentView.contentView.addSubview(vc.contentStack)
-                vc.contentStack.spacing = config.margin
-                
-                vc.contentView.layer.masksToBounds = true
-                vc.contentView.layer.cornerRadius = config.cornerRadius
-                
-                vc.contentView.snp.makeConstraints { (mk) in
-                    mk.leading.trailing.top.equalToSuperview()
-                }
-                vc.contentStack.snp.makeConstraints { (mk) in
-                    mk.top.equalToSuperview().offset(config.padding)
-                    mk.bottom.equalToSuperview().offset(-config.padding)
-                    mk.leading.equalToSuperview().offset(config.padding)
-                    mk.trailing.equalToSuperview().offset(-config.padding)
-                }
+                vc.view.addSubview(vc.titleLabel)
+                vc.view.addSubview(vc.bodyLabel)
+                vc.view.addSubview(vc.imageView)
                 
             }
         }()
         
         /// 更新视图
-        lazy var updateFrame: (ProHUD.Toast) -> Void = {
+        lazy var reloadData: (ProHUD.Toast) -> Void = {
             return { (vc) in
-                debugPrint(vc, "updateFrame")
-                let config = toastConfig
-                let isFirstLayout: Bool
-                // 图标和文字至少有一个，如果都没有添加到视图中，说明是第一次layout
-                if vc.textStack.superview == nil && vc.imageView?.superview == nil {
-                    isFirstLayout = true
-                } else {
-                    isFirstLayout = false
-                }
+                debugPrint(vc, "reloadData")
+                // 设置数据
                 let imgStr: String
                 switch vc.vm.scene {
                 case .success:
@@ -84,84 +63,52 @@ public extension ProHUD.Configuration {
                     imgStr = "ProHUDMessage"
                 }
                 let img = vc.vm.icon ?? ProHUD.image(named: imgStr)
-                if let imgv = vc.imageView {
-                    imgv.image = img
-                } else {
-                    let icon = UIImageView(image: img)
-                    vc.contentStack.addArrangedSubview(icon)
-//                    icon.snp.makeConstraints { (mk) in
-//                        mk.top.greaterThanOrEqualTo(vc.contentView).offset(config.padding+config.margin)
-//                        mk.bottom.lessThanOrEqualTo(vc.contentView).offset(-config.padding-config.margin)
-//                        mk.leading.greaterThanOrEqualTo(vc.contentView).offset(config.padding+config.margin)
-//                        mk.trailing.lessThanOrEqualTo(vc.contentView).offset(-config.padding-config.margin)
-//                    }
-                    vc.imageView = icon
-                }
+                vc.imageView.image = img
+                vc.titleLabel.text = vc.vm.title
+                vc.bodyLabel.text = vc.vm.message
                 
-                // text
-                if vc.vm.title?.count ?? 0 > 0 || vc.vm.message?.count ?? 0 > 0 {
-                    vc.contentStack.addArrangedSubview(vc.textStack)
-//                    vc.textStack.snp.makeConstraints { (mk) in
-//                        mk.top.greaterThanOrEqualTo(vc.contentView).offset(config.padding*1.5)
-//                        mk.bottom.lessThanOrEqualTo(vc.contentView).offset(-config.padding*1.5)
-//                        mk.leading.greaterThanOrEqualTo(vc.contentView).offset(config.padding*2)
-//                        mk.trailing.lessThanOrEqualTo(vc.contentView).offset(-config.padding*2)
-//                    }
-                    if vc.vm.title?.count ?? 0 > 0 {
-                        if let lb = vc.titleLabel {
-                            lb.text = vc.vm.title
-                        } else {
-                            let title = UILabel()
-                            title.textAlignment = .justified
-                            title.numberOfLines = config.titleMaxLines
-                            title.textColor = UIColor.init(white: 0.2, alpha: 1)
-                            title.font = config.titleFont
-                            title.text = vc.vm.title
-                            vc.textStack.addArrangedSubview(title)
-                            vc.titleLabel = title
-                        }
-                    } else {
-                        vc.titleLabel?.removeFromSuperview()
-                    }
-                    if vc.vm.message?.count ?? 0 > 0 {
-                        if let lb = vc.messageLabel {
-                            lb.text = vc.vm.message
-                        } else {
-                            let body = UILabel()
-                            body.textAlignment = .justified
-                            body.font = config.bodyFont
-                            body.numberOfLines = config.bodyMaxLines
-                            body.textColor = UIColor.darkGray
-                            body.font = config.bodyFont
-                            body.text = vc.vm.message
-                            vc.textStack.addArrangedSubview(body)
-                            vc.messageLabel = body
-                        }
-                    } else {
-                        vc.messageLabel?.removeFromSuperview()
-                    }
-                } else {
-                    vc.textStack.removeFromSuperview()
-                }
+                vc.tintColor = vc.vm.scene.tintColor
                 
-                if isFirstLayout {
-                    vc.view.layoutIfNeeded()
-                    vc.updateFrame()
-                    vc.imageView?.transform = .init(scaleX: 0.75, y: 0.75)
-                } else {
-                    
-                }
-                
-                UIView.animateFastEaseOut(delay: 0, animations: {
-                    vc.imageView?.transform = .identity
-                    vc.view.layoutIfNeeded()
-                    vc.updateFrame()
-                    
-                }) { (done) in
-                }
             }
         }()
         
+        /// 更新视图
+        lazy var layoutSubviews: (ProHUD.Toast) -> Void = {
+            return { (vc) in
+                debugPrint(vc, "layoutSubviews")
+                let config = toastConfig
+                
+                let scene = vc.vm.scene
+                
+                vc.imageView.snp.makeConstraints { (mk) in
+                    mk.top.equalToSuperview().offset(config.padding)
+                    mk.leading.equalToSuperview().offset(config.padding)
+                    mk.bottom.lessThanOrEqualToSuperview().offset(-config.padding)
+                }
+                vc.titleLabel.snp.makeConstraints { (mk) in
+                    mk.top.equalToSuperview().offset(config.padding)
+                    mk.leading.equalTo(vc.imageView.snp.trailing).offset(config.margin)
+                    mk.leading.greaterThanOrEqualToSuperview().offset(config.padding)
+                    mk.trailing.equalToSuperview().offset(-config.padding)
+                }
+                vc.bodyLabel.snp.makeConstraints { (mk) in
+                    mk.top.equalTo(vc.titleLabel.snp.bottom).offset(config.margin)
+                    mk.leading.trailing.equalTo(vc.titleLabel)
+                    mk.bottom.lessThanOrEqualToSuperview().offset(-config.padding)
+                }
+                if [.default, .loading].contains(vc.vm.scene) {
+                    vc.blurMask(.extraLight)
+                } else {
+                    vc.blurMask(nil)
+                }
+                if let bv = vc.blurView {
+                    vc.backgroundView = bv
+                } else {
+                    vc.backgroundView.backgroundColor = vc.vm.scene.backgroundColor
+                }
+                vc.view.layoutIfNeeded()
+            }
+        }()
         /// 加载视图
         /// - Parameter callback: 回调代码
         public mutating func loadSubviews(_ callback: @escaping (ProHUD.Toast) -> Void) {
@@ -170,8 +117,8 @@ public extension ProHUD.Configuration {
         
         /// 更新视图
         /// - Parameter callback: 回调代码
-        public mutating func updateFrame(_ callback: @escaping (ProHUD.Toast) -> Void) {
-            updateFrame = callback
+        public mutating func reloadData(_ callback: @escaping (ProHUD.Toast) -> Void) {
+            reloadData = callback
         }
         
     }
