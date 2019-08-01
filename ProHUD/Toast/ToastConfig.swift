@@ -84,6 +84,7 @@ public extension ProHUD.Configuration {
                     mk.top.equalToSuperview().offset(config.padding)
                     mk.leading.equalToSuperview().offset(config.padding)
                     mk.bottom.lessThanOrEqualToSuperview().offset(-config.padding)
+                    mk.width.height.equalTo(config.iconSize)
                 }
                 vc.titleLabel.snp.makeConstraints { (mk) in
                     mk.top.equalToSuperview().offset(config.padding)

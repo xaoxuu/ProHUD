@@ -59,6 +59,7 @@ public extension ProHUD {
         /// 视图模型
         public var vm = ViewModel()
         
+        
         public var removable = true
         
         internal var tapCallback: (() -> Void)?
@@ -262,48 +263,57 @@ fileprivate extension ProHUD.Toast {
 
 
 // MARK: - AlertHUD public func
-
 public extension ProHUD {
     
     @discardableResult
     func show(_ toast: Toast) -> Toast {
         let config = toastConfig
+        let isNew: Bool
         if toast.window == nil {
-            let width = CGFloat.minimum(UIScreen.main.bounds.width - 2*config.margin, config.maxWidth)
-            let w = UIWindow(frame: .init(x: (UIScreen.main.bounds.width - width) / 2, y: config.margin, width: width, height: 400))
+            let w = ToastWindow(frame: .zero)
             toast.window = w
             w.windowLevel = UIWindow.Level(5000)
             w.backgroundColor = .clear
             w.layer.shadowRadius = 8
             w.layer.shadowOffset = .init(width: 0, height: 5)
             w.layer.shadowOpacity = 0.2
-            w.rootViewController = toast
-            
+            w.isHidden = false
+            isNew = true
+        } else {
+            isNew = false
         }
         
         let window = toast.window!
-        window.isHidden = false
-        toasts.append(toast)
-        
         // background & frame
-        toast.view.layoutIfNeeded()
+        // 设定正确的宽度，更新子视图
+        let width = CGFloat.minimum(UIScreen.main.bounds.width - 2*config.margin, config.maxWidth)
+        toast.view.frame.size = CGSize(width: width, height: 800)
         toast.titleLabel.sizeToFit()
         toast.bodyLabel.sizeToFit()
-        let width = toast.view.frame.width
+        toast.view.layoutIfNeeded()
+        // 更新子视图之后获取正确的高度
         var height = CGFloat(0)
         for v in toast.view.subviews {
             height = CGFloat.maximum(v.frame.maxY, height)
         }
         height += config.padding
-        toast.backgroundView.frame.size = CGSize(width: width, height: height)
+        // 应用到frame
+        window.frame = CGRect(x: (UIScreen.main.bounds.width - width) / 2, y: 0, width: width, height: height)
+        toast.backgroundView.frame.size = window.frame.size
         window.insertSubview(toast.backgroundView, at: 0)
-        window.frame.size.height = height // 这里之后toast.view.frame.height会变成0
-        toast.view.frame.size.height = height
-        
+        window.rootViewController = toast // 此时toast.view.frame.size会自动更新为window.frame.size
+        // 根据在屏幕中的顺序，确定y坐标
+        if toasts.contains(toast) == false {
+            toasts.append(toast)
+        }
         updateToastsLayout()
-        window.transform = .init(translationX: 0, y: -window.frame.maxY)
-        UIView.animateForToast {
-            window.transform = .identity
+        if isNew {
+            window.transform = .init(translationX: 0, y: -window.frame.maxY)
+            UIView.animateForToast {
+                window.transform = .identity
+            }
+        } else {
+            toast.view.layoutIfNeeded()
         }
         return toast
     }
@@ -371,32 +381,43 @@ public extension ProHUD {
 
 // MARK: AlertHUD private func
 
-fileprivate extension ProHUD {
-    
+fileprivate var willUpdateToastsLayout: DispatchWorkItem?
+
+internal extension ProHUD {
     func updateToastsLayout() {
-        for (i, e) in toasts.enumerated() {
-            let config = toastConfig
-            if let window = e.window {
-                var frame = window.frame
-                if i == 0 {
-                    if isPortrait {
-                        frame.origin.y = Inspire.shared.screen.updatedSafeAreaInsets.top
+        func f() {
+            let top = Inspire.shared.screen.updatedSafeAreaInsets.top
+            for (i, e) in toasts.enumerated() {
+                let config = toastConfig
+                if let window = e.window {
+                    var y = window.frame.origin.y
+                    if i == 0 {
+                        if isPortrait {
+                            y = top
+                        } else {
+                            y = config.margin
+                        }
                     } else {
-                        frame.origin.y = config.margin
+                        let lastY = toasts[i-1].window?.frame.maxY ?? .zero
+                        y = lastY + config.margin
                     }
-                } else {
-                    let lastY = toasts[i-1].window?.frame.maxY ?? .zero
-                    frame.origin.y = lastY + config.margin
-                }
-                UIView.animateForToast(animations: {
-                    e.window?.frame = frame
-                }) { (done) in
-                    
+                    UIView.animateForToast {
+                        e.window?.frame.origin.y = y
+                    }
                 }
             }
-            
         }
+        willUpdateToastsLayout?.cancel()
+        willUpdateToastsLayout = DispatchWorkItem(block: {
+            f()
+        })
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.001, execute: willUpdateToastsLayout!)
     }
+    
+}
+
+internal extension ProHUD {
+    
     
     func removeItemFromArray(toast: Toast) {
         if toasts.count > 1 {

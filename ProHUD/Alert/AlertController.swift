@@ -68,7 +68,7 @@ public extension ProHUD {
                 timeout = 2
             }
             
-            willLayout()
+            willLayoutSubviews()
             
         }
         
@@ -105,7 +105,7 @@ public extension ProHUD {
         /// - Parameter timeout: 超时时间
         @discardableResult public func timeout(_ timeout: TimeInterval?) -> Alert {
             self.timeout = timeout
-            willLayout()
+            willLayoutSubviews()
             return self
         }
         
@@ -132,6 +132,7 @@ public extension ProHUD {
                     self?.remove()
                 }
             }
+            willLayoutSubviews()
             return self
         }
         
@@ -213,15 +214,16 @@ public extension ProHUD {
 }
 
 fileprivate extension ProHUD.Alert {
-    func willLayout() {
+    func willLayoutSubviews() {
         willLayout?.cancel()
+        timeoutBlock?.cancel()
+        showNavButtonsBlock?.cancel()
         willLayout = DispatchWorkItem(block: { [weak self] in
             if let a = self {
                 // 布局
                 alertConfig.loadSubviews(a)
                 alertConfig.updateFrame(a)
                 // 超时
-                a.timeoutBlock?.cancel()
                 if let t = a.timeout, t > 0 {
                     a.timeoutBlock = DispatchWorkItem(block: { [weak self] in
                         self?.remove()
@@ -232,7 +234,6 @@ fileprivate extension ProHUD.Alert {
                 }
                 // 顶部按钮
                 if alertConfig.minimizeTimeout > 0 && self?.actionStack.superview == nil {
-                    a.showNavButtonsBlock?.cancel()
                     a.showNavButtonsBlock = DispatchWorkItem(block: { [weak self] in
                         if let s = self {
                             alertConfig.showNavButtons(s)
@@ -339,8 +340,7 @@ public extension ProHUD {
 }
 
 // MARK: AlertHUD private func
-
-fileprivate extension ProHUD {
+internal extension ProHUD {
     
     func updateAlertsLayout() {
         for (i, a) in alerts.reversed().enumerated() {
@@ -353,6 +353,8 @@ fileprivate extension ProHUD {
             }
         }
     }
+}
+fileprivate extension ProHUD {
     
     func getAlertWindow(_ vc: UIViewController) -> UIWindow {
         if let w = alertWindow {

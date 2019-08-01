@@ -10,7 +10,7 @@ import UIKit
 
 internal let hud = ProHUD.shared
 
-public class ProHUD: NSObject {
+public class ProHUD {
     
     public static let shared = ProHUD()
     
@@ -19,18 +19,14 @@ public class ProHUD: NSObject {
     
     internal var alertWindow: UIWindow?
     
-    deinit {
-        debugPrint(self, "deinit")
-    }
-    
     
 }
 
 
 internal extension ProHUD {
     
-    class var bundle: Bundle {
-        var b = Bundle.init(for: ProHUD.self)
+    static var bundle: Bundle {
+        var b = Bundle.init(for: ProHUD.Alert.self)
         let p = b.path(forResource: "ProHUD", ofType: "bundle")
         if let bb = Bundle.init(path: p ?? "") {
             b = bb
@@ -38,7 +34,7 @@ internal extension ProHUD {
         return b
     }
     
-    class func image(named: String) -> UIImage? {
+    static func image(named: String) -> UIImage? {
         return UIImage.init(named: named, in: bundle, compatibleWith: nil)
     }
     

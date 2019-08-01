@@ -10,6 +10,29 @@ import UIKit
 
 public extension ProHUD {
     
+    class ToastWindow: UIWindow {
+        
+        var deviceOrientationDidChangeCallback: (() -> Void)?
+        
+        public override init(frame: CGRect) {
+            super.init(frame: frame)
+            
+            
+        }
+        
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        
+        @objc func deviceOrientationDidChange(_ notification: Notification){
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+                self.deviceOrientationDidChangeCallback?()
+            }
+        }
+        
+    }
+    
     class StackContainer: UIStackView {
         
         

@@ -41,26 +41,34 @@ class ViewController: UIViewController {
 //
 //        }.addAction(style: .cancel, title: "取消", action: nil).didDisappear {
 //            debugPrint("didDisappear")
+//        }.addAction(style: .cancel, title: nil) {
+//
 //        }
         
-//        let t = ProHUD.Toast(scene: .loading, title: "正在加载", message: "哈哈")
-//        let a = ProHUD.show(alert: .loading, title: "正在加载", message: "请坐和放宽")
-//        a.didMinimize {
-//            hud.show(t)
-//        }
-//        t.didTapped { [weak t] in
-//            hud.show(a)
-//            t?.remove()
-//        }
+        let t = ProHUD.Toast(scene: .loading, title: "正在加载", message: "请稍候片刻")
+
+        let a = ProHUD.show(alert : .loading, title: "正在加载", message: "请稍候片刻")
+        a.didMinimize {
+            hud.show(t)
+        }
+        t.didTapped { [weak t] in
+            t?.remove()
+            let a2 = ProHUD.show(alert: .loading, title: "正在加载", message: "马上就要成功了")
+            DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                a2.updateContent(scene: .error, title: "加载失败", message: "点击充实")
+                a2.addAction(style: .default, title: "重新加载") { [weak a2] in
+                    a2?.updateContent(scene: .success, title: "加载成功", message: "马上就要成功了")
+                    a2?.updateAction(index: 0, style: .default, title: "OK", action: { [weak a2] in
+                        a2?.remove()
+                    }).removeAction(index: 1).removeAction(index: 1)
+                }.addAction(style: .destructive, title: "终止", action: nil).addAction(style: .cancel, title: "取消", action: nil)
+                
+            }
+
+        }
         
-//            a.didMinimize {
-//            ProHUD.show(toast: .loading, title: "正在加载", message: "哈哈").didTapped {
-//                ProHUD.show(toast: .loading, title: "正在加载", message: "哈克里斯蒂娜疯狂拉升的反馈老实交代分开就撒开了击快乐圣诞哈克里斯蒂娜疯狂拉升的反馈老实交代分开就撒开了击快乐圣诞")
-//            }
-//        }
         
-        
-        ProHUD.show(toast: .loading, title: "正在加载", message: "拉升的反馈老实交代分开就撒开了击快乐圣反馈老实交代分开就撒开了击快乐圣")
+//        ProHUD.show(toast: .loading, title: "正在加载", message: "拉升的反馈老实交代分开就撒开了击快乐圣反馈老实交代分开就撒开了击快乐圣")
 //        ProHUD.show(toast: .loading, title: "正在加载", message: "哈克里斯蒂娜疯狂拉升的反馈老实交代分开就撒开了击快乐圣诞哈克里斯蒂娜疯狂拉升的反馈老实交代分开就撒开了击快乐圣诞")
         
         DispatchQueue.main.asyncAfter(deadline: .now()+1) {
