@@ -365,7 +365,7 @@ public extension ProHUD {
         return shared.show(toast: toast, title: title, message: message, icon: icon)
     }
     
-    class func alert(identifier: String?) -> [Toast] {
+    class func toast(identifier: String?) -> [Toast] {
         return shared.toasts(identifier: identifier)
     }
     

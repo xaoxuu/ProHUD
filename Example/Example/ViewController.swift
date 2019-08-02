@@ -17,7 +17,7 @@ class ViewController: UIViewController {
         
         
         ProHUD.configAlert { (alert) in
-            alert.minimizeTimeout = 1
+            alert.minimizeTimeout = 5
             
         }
         
@@ -26,11 +26,23 @@ class ViewController: UIViewController {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        ProHUD.show(alert: .delete, title: "确认删除", message: "此操作不可撤销").timeout(nil)
+        let a = ProHUD.show(alert: .delete, title: "确认删除", message: "此操作不可撤销")
+        a.addAction(style: .destructive, title: "确认", action: { [weak a] in
+            a?.removeAction(index: 0).removeAction(index: 0)
+            a?.updateContent(scene: .loading, title: "正在删除", message: "请稍后片刻")
+            DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                a?.updateContent(scene: .success, title: "删除成功", message: "啊哈哈哈哈").timeout(2)
+                a?.addAction(style: .default, title: "我知道了", action: {
+//                    a?.remove()
+                    a?.removeAction(index: 0)
+                })
+            }
+        }).addAction(style: .cancel, title: "取消", action: nil)
         
-        ProHUD.show(alert: .loading, title: "确认删除", message: "此操作不可撤销").timeout(nil)
-        
-        ProHUD.show(alert: .confirm, title: "确认删除", message: "此操作不可撤销").timeout(3)
+//
+//        ProHUD.show(alert: .loading, title: "确认删除", message: "此操作不可撤销").timeout(nil)
+//
+//        ProHUD.show(alert: .confirm, title: "确认删除", message: "此操作不可撤销").timeout(3)
         
 //
 //        a.addAction(style: .destructive, title: "删除") { [weak a] in

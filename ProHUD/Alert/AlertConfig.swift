@@ -60,24 +60,26 @@ public extension ProHUD.Configuration {
         lazy var loadSubviews: (ProHUD.Alert, Alert) -> Void = {
             return { (vc, config) in
                 debugPrint(vc, "loadSubviews")
-                vc.view.addSubview(vc.contentView)
-                vc.contentView.contentView.addSubview(vc.contentStack)
-                
-                vc.contentStack.spacing = alertConfig.margin + alertConfig.padding
-                
-                vc.contentView.layer.masksToBounds = true
-                vc.contentView.layer.cornerRadius = alertConfig.cornerRadius
-                
-                vc.contentView.snp.makeConstraints { (mk) in
-                    mk.center.equalToSuperview()
-                    mk.width.lessThanOrEqualTo(CGFloat.minimum(UIScreen.main.bounds.width * 0.68, alertConfig.maxWidth))
-                }
-                vc.contentStack.snp.makeConstraints { (mk) in
-                    mk.centerX.equalToSuperview()
-                    mk.top.equalToSuperview().offset(alertConfig.padding)
-                    mk.bottom.equalToSuperview().offset(-alertConfig.padding)
-                    mk.leading.equalToSuperview().offset(alertConfig.padding)
-                    mk.trailing.equalToSuperview().offset(-alertConfig.padding)
+                if vc.contentView.superview == nil {
+                    vc.view.addSubview(vc.contentView)
+                    vc.contentView.contentView.addSubview(vc.contentStack)
+                    
+                    vc.contentStack.spacing = alertConfig.margin + alertConfig.padding
+                    
+                    vc.contentView.layer.masksToBounds = true
+                    vc.contentView.layer.cornerRadius = alertConfig.cornerRadius
+                    
+                    vc.contentView.snp.makeConstraints { (mk) in
+                        mk.center.equalToSuperview()
+                        mk.width.lessThanOrEqualTo(CGFloat.minimum(UIScreen.main.bounds.width * 0.68, alertConfig.maxWidth))
+                    }
+                    vc.contentStack.snp.makeConstraints { (mk) in
+                        mk.centerX.equalToSuperview()
+                        mk.top.equalToSuperview().offset(alertConfig.padding)
+                        mk.bottom.equalToSuperview().offset(-alertConfig.padding)
+                        mk.leading.equalToSuperview().offset(alertConfig.padding)
+                        mk.trailing.equalToSuperview().offset(-alertConfig.padding)
+                    }
                 }
                 
             }
@@ -184,7 +186,15 @@ public extension ProHUD.Configuration {
                     vc.textStack.removeFromSuperview()
                 }
                 if vc.actionStack.superview != nil {
-                    vc.contentStack.addArrangedSubview(vc.actionStack)
+                    if isFirstLayout {
+                        vc.contentStack.addArrangedSubview(vc.actionStack)
+                    } else {
+                        vc.actionStack.transform = .init(scaleX: 1, y: 0.001)
+                        UIView.animateForAlert {
+                            vc.contentStack.addArrangedSubview(vc.actionStack)
+                            vc.view.layoutIfNeeded()
+                        }
+                    }
                     // 适配横竖屏和iPad
                     if isPortrait == false {
                         vc.actionStack.axis = .horizontal
@@ -195,17 +205,25 @@ public extension ProHUD.Configuration {
                         mk.width.greaterThanOrEqualTo(200)
                         mk.leading.trailing.equalToSuperview()
                     }
-                }
-                if isFirstLayout {
-                    vc.view.layoutIfNeeded()
-                    vc.imageView?.transform = .init(scaleX: 0.75, y: 0.75)
-                } else {
+                    if isFirstLayout == false {
+                        UIView.animateForAlert {
+                            vc.actionStack.transform = .identity
+                        }
+                    }
                     
                 }
                 
-                UIView.animateForAlert {
-                    vc.imageView?.transform = .identity
+                if isFirstLayout {
                     vc.view.layoutIfNeeded()
+                    vc.imageView?.transform = .init(scaleX: 0.75, y: 0.75)
+                    UIView.animateForAlert {
+                        vc.imageView?.transform = .identity
+                        vc.view.layoutIfNeeded()
+                    }
+                } else {
+                    UIView.animateForAlert {
+                        vc.view.layoutIfNeeded()
+                    }
                 }
             }
         }()

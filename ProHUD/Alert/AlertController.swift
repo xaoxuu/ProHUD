@@ -127,7 +127,13 @@ public extension ProHUD {
             if actionStack.superview == nil {
                 contentStack.addArrangedSubview(actionStack)
             }
+            self.view.layoutIfNeeded()
+            button.transform = .init(scaleX: 1, y: 0.001)
             actionStack.addArrangedSubview(button)
+            UIView.animateForAlert {
+                button.transform = .identity
+                self.view.layoutIfNeeded()
+            }
             addTouchUpAction(for: button) { [weak self] in
                 action?()
                 if button.tag == UIAlertAction.Style.cancel.rawValue {
@@ -201,13 +207,15 @@ public extension ProHUD {
             } else if index < self.actionStack.arrangedSubviews.count, let btn = self.actionStack.arrangedSubviews[index] as? UIButton {
                 btn.removeFromSuperview()
             }
+            if self.actionStack.arrangedSubviews.count == 0 {
+                self.actionStack.removeFromSuperview()
+            }
+            willLayoutSubviews()
             UIView.animateForAlert {
                 self.view.layoutIfNeeded()
             }
             return self
         }
-        
-        
         
     }
     
