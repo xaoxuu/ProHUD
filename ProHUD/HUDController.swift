@@ -48,13 +48,13 @@ public class HUDController: UIViewController {
 
 internal extension HUDController {
     
-    func animateOut(completion: ((Bool) -> Void)? = nil) {
-        UIView.animateFastEaseOut(delay: 0, animations: {
-            self.view.alpha = 0
-        }) { (done) in
-            completion?(done)
-        }
-    }
+//    func animateOut(completion: ((Bool) -> Void)? = nil) {
+//        UIView.animateForAlertBuildOut(animations: {
+//            self.view.alpha = 0
+//        }) { (done) in
+//            completion?(done)
+//        }
+//    }
     
     func addTouchUpAction(for button: UIButton, action: @escaping () -> Void) {
         button.addTarget(self, action: #selector(didTappedButton(_:)), for: .touchUpInside)

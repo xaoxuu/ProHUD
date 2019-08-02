@@ -82,15 +82,17 @@ public extension ProHUD {
         public func remove() {
             let window = hud.getAlertWindow(self)
             hud.removeItemFromArray(alert: self)
-            animateOut { (done) in
+            UIView.animateForAlertBuildOut(animations: {
+                self.view.alpha = 0
+                self.view.transform = .init(scaleX: 1.08, y: 1.08)
+            }) { (done) in
                 self.view.removeFromSuperview()
                 self.removeFromParent()
             }
             // hide window
             let count = hud.alerts.count
             if count == 0 && hud.alertWindow != nil {
-                UIView.animateFastEaseOut(delay: 0, animations: {
-                    self.view.transform = .init(scaleX: 1.05, y: 1.05)
+                UIView.animateForAlertBuildOut(animations: {
                     window.backgroundColor = window.backgroundColor?.withAlphaComponent(0)
                 }) { (done) in
                     hud.alertWindow = nil
@@ -157,7 +159,7 @@ public extension ProHUD {
             vm.message = message
             vm.scene = scene
             vm.icon = icon
-            alertConfig.updateFrame(self)
+            alertConfig.updateFrame(self, alertConfig)
             return self
         }
         
@@ -183,9 +185,8 @@ public extension ProHUD {
                     addTouchUpAction(for: btn, action: ac)
                 }
             }
-            UIView.animateFastEaseOut(delay: 0, animations: {
+            UIView.animateForAlert {
                 self.view.layoutIfNeeded()
-            }) { (done) in
             }
             return self
         }
@@ -200,9 +201,8 @@ public extension ProHUD {
             } else if index < self.actionStack.arrangedSubviews.count, let btn = self.actionStack.arrangedSubviews[index] as? UIButton {
                 btn.removeFromSuperview()
             }
-            UIView.animateFastEaseOut(delay: 0, animations: {
+            UIView.animateForAlert {
                 self.view.layoutIfNeeded()
-            }) { (done) in
             }
             return self
         }
@@ -221,8 +221,8 @@ fileprivate extension ProHUD.Alert {
         willLayout = DispatchWorkItem(block: { [weak self] in
             if let a = self {
                 // 布局
-                alertConfig.loadSubviews(a)
-                alertConfig.updateFrame(a)
+                alertConfig.loadSubviews(a, alertConfig)
+                alertConfig.updateFrame(a, alertConfig)
                 // 超时
                 if let t = a.timeout, t > 0 {
                     a.timeoutBlock = DispatchWorkItem(block: { [weak self] in
@@ -236,7 +236,7 @@ fileprivate extension ProHUD.Alert {
                 if alertConfig.minimizeTimeout > 0 && self?.actionStack.superview == nil {
                     a.showNavButtonsBlock = DispatchWorkItem(block: { [weak self] in
                         if let s = self {
-                            alertConfig.showNavButtons(s)
+                            alertConfig.showNavButtons(s, alertConfig)
                         }
                     })
                     DispatchQueue.main.asyncAfter(deadline: .now()+alertConfig.minimizeTimeout, execute: a.showNavButtonsBlock!)
@@ -260,15 +260,13 @@ public extension ProHUD {
         window.makeKeyAndVisible()
         window.resignKey()
         window.addSubview(alert.view)
-        UIView.animateFastEaseOut(delay: 0, animations: {
-            window.backgroundColor = window.backgroundColor?.withAlphaComponent(0.6)
-        })
         alert.view.transform = .init(scaleX: 1.2, y: 1.2)
         alert.view.alpha = 0
-        UIView.animateFastEaseOut(delay: 0, animations: {
+        UIView.animateForAlertBuildIn {
             alert.view.transform = .identity
             alert.view.alpha = 1
-        })
+            window.backgroundColor = window.backgroundColor?.withAlphaComponent(0.6)
+        }
         alerts.append(alert)
         updateAlertsLayout()
         // setup timeout
@@ -345,7 +343,7 @@ internal extension ProHUD {
     func updateAlertsLayout() {
         for (i, a) in alerts.reversed().enumerated() {
             let scale = CGFloat(pow(0.7, CGFloat(i)))
-            UIView.animate(withDuration: 2, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.allowUserInteraction, .curveEaseInOut], animations: {
+            UIView.animate(withDuration: 1.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.allowUserInteraction, .curveEaseInOut], animations: {
                 let y = -50 * CGFloat(i) * CGFloat(pow(0.8, CGFloat(i)))
                 a.view.transform = CGAffineTransform.init(translationX: 0, y: y).scaledBy(x: scale, y: scale)
             }) { (done) in

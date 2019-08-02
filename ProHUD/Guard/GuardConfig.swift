@@ -11,7 +11,7 @@ import SnapKit
 public extension ProHUD.Configuration {
     struct Guard {
         /// 最大宽度（用于优化横屏或者iPad显示）
-        public var maxWidth = CGFloat(500)
+        public var maxWidth = CGFloat(556)
         /// 标题字体
         public var titleFont = UIFont.boldSystemFont(ofSize: 18)
         /// 正文字体

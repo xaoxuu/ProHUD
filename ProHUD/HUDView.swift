@@ -74,12 +74,18 @@ internal extension UIView {
         animate(withDuration: duration, delay: delay, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: [.allowUserInteraction, .curveEaseOut], animations: animations, completion: completion)
     }
     
-    class func animateFastEaseOut(delay: TimeInterval = 0, animations: @escaping () -> Void, completion: ((Bool) -> Void)? = nil) {
-        animateEaseOut(duration: 0.5, delay: delay, animations: animations, completion: completion)
+    class func animateForAlertBuildIn(animations: @escaping () -> Void) {
+        animateEaseOut(duration: 0.8, delay: 0, animations: animations, completion: nil)
+    }
+    class func animateForAlertBuildOut(animations: @escaping () -> Void, completion: ((Bool) -> Void)? = nil) {
+        animateEaseOut(duration: 0.38, delay: 0, animations: animations, completion: completion)
+    }
+    class func animateForAlert(animations: @escaping () -> Void) {
+        animateEaseOut(duration: 1, delay: 0, animations: animations, completion: nil)
     }
     
-    class func animateSlowEaseOut(delay: TimeInterval = 0, animations: @escaping () -> Void, completion: ((Bool) -> Void)? = nil) {
-        animateEaseOut(duration: 2, delay: delay, animations: animations, completion: completion)
+    class func animateForAlert(animations: @escaping () -> Void, completion: ((Bool) -> Void)? = nil) {
+        animateEaseOut(duration: 1, delay: 0, animations: animations, completion: completion)
     }
     
     class func animateForToast(animations: @escaping () -> Void) {
