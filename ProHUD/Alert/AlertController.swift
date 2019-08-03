@@ -116,31 +116,17 @@ public extension ProHUD {
         /// - Parameter text: 标题
         /// - Parameter action: 事件
         @discardableResult public func addAction(style: UIAlertAction.Style, title: String?, action: (() -> Void)?) -> Alert {
-            return addAction(custom: UIButton.actionButton(style: style, title: title), action: action)
+            if let btn = privAddButton(custom: Button.actionButton(title: title), action: action) as? Button {
+                btn.update(style: style)
+            }
+            return self
         }
         
         /// 添加按钮
         /// - Parameter button: 按钮
         /// - Parameter action: 事件
-        @discardableResult public func addAction(custom button: UIButton , action: (() -> Void)?) -> Alert {
-            timeout = nil
-            if actionStack.superview == nil {
-                contentStack.addArrangedSubview(actionStack)
-            }
-            self.view.layoutIfNeeded()
-            button.transform = .init(scaleX: 1, y: 0.001)
-            actionStack.addArrangedSubview(button)
-            UIView.animateForAlert {
-                button.transform = .identity
-                self.view.layoutIfNeeded()
-            }
-            addTouchUpAction(for: button) { [weak self] in
-                action?()
-                if button.tag == UIAlertAction.Style.cancel.rawValue {
-                    self?.remove()
-                }
-            }
-            willLayoutSubviews()
+        @discardableResult public func addAction(custom button: UIButton, action: (() -> Void)?) -> Alert {
+            privAddButton(custom: button, action: action)
             return self
         }
         
@@ -178,7 +164,9 @@ public extension ProHUD {
         @discardableResult public func updateAction(index: Int, style: UIAlertAction.Style, title: String?, action: (() -> Void)?) -> Alert {
             return updateAction(index: index, button: { (btn) in
                 btn.setTitle(title, for: .normal)
-                btn.update(style: style)
+                if let b = btn as? Button {
+                    b.update(style: style)
+                }
                 btn.layoutIfNeeded()
             }, action: action)
         }
@@ -254,6 +242,27 @@ fileprivate extension ProHUD.Alert {
         DispatchQueue.main.asyncAfter(deadline: .now()+0.001, execute: willLayout!)
     }
     
+    @discardableResult private func privAddButton(custom button: UIButton, action: (() -> Void)?) -> UIButton {
+        timeout = nil
+        if actionStack.superview == nil {
+            contentStack.addArrangedSubview(actionStack)
+        }
+        self.view.layoutIfNeeded()
+        button.transform = .init(scaleX: 1, y: 0.001)
+        actionStack.addArrangedSubview(button)
+        UIView.animateForAlert {
+            button.transform = .identity
+            self.view.layoutIfNeeded()
+        }
+        addTouchUpAction(for: button) { [weak self] in
+            action?()
+            if button.tag == UIAlertAction.Style.cancel.rawValue {
+                self?.remove()
+            }
+        }
+        willLayoutSubviews()
+        return button
+    }
     
 }
 

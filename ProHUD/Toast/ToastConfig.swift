@@ -29,10 +29,12 @@ public extension ProHUD.Configuration {
         
         public var iconSize = CGSize(width: 48, height: 48)
         
+        public var tintColor: UIColor?
         /// 加载视图
         lazy var loadSubviews: (ProHUD.Toast) -> Void = {
             return { (vc) in
                 debugPrint(vc, "loadSubviews")
+                vc.view.tintColor = toastConfig.tintColor
                 vc.view.addSubview(vc.titleLabel)
                 vc.view.addSubview(vc.bodyLabel)
                 vc.view.addSubview(vc.imageView)
@@ -64,11 +66,10 @@ public extension ProHUD.Configuration {
                 }
                 let img = vc.vm.icon ?? ProHUD.image(named: imgStr)
                 vc.imageView.image = img
+                vc.titleLabel.textColor = UIColorForPrimaryLabel
                 vc.titleLabel.text = vc.vm.title
+                vc.bodyLabel.textColor = UIColorForSecondaryLabel
                 vc.bodyLabel.text = vc.vm.message
-                
-                vc.tintColor = vc.vm.scene.tintColor
-                
             }
         }()
         
@@ -77,7 +78,6 @@ public extension ProHUD.Configuration {
             return { (vc) in
                 debugPrint(vc, "layoutSubviews")
                 let config = toastConfig
-                
                 let scene = vc.vm.scene
                 
                 vc.imageView.snp.makeConstraints { (mk) in
@@ -97,16 +97,7 @@ public extension ProHUD.Configuration {
                     mk.leading.trailing.equalTo(vc.titleLabel)
                     mk.bottom.lessThanOrEqualToSuperview().offset(-config.padding)
                 }
-                if [.default, .loading].contains(vc.vm.scene) {
-                    vc.blurMask(.extraLight)
-                } else {
-                    vc.blurMask(nil)
-                }
-                if let bv = vc.blurView {
-                    vc.backgroundView = bv
-                } else {
-                    vc.backgroundView.backgroundColor = vc.vm.scene.backgroundColor
-                }
+                
                 vc.view.layoutIfNeeded()
             }
         }()

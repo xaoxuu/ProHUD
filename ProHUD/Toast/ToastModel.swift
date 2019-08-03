@@ -29,27 +29,27 @@ public extension ProHUD.Toast {
         /// 错误场景
         case error
         
-        public var backgroundColor: UIColor {
-            switch self {
-            case .success:
-                return UIColor.green
-            case .warning:
-                return UIColor.yellow
-            case .error:
-                return UIColor.red
-            default:
-                return .clear
-            }
-        }
-        
-        public var tintColor: UIColor {
-            switch self {
-            case .success, .error:
-                return .white
-            default:
-                return UIColor.darkGray
-            }
-        }
+//        public var backgroundColor: UIColor {
+//            switch self {
+//            case .success:
+//                return UIColor.green
+//            case .warning:
+//                return UIColor.yellow
+//            case .error:
+//                return UIColor.red
+//            default:
+//                return .clear
+//            }
+//        }
+//        
+//        public var tintColor: UIColor {
+//            switch self {
+//            case .success, .error:
+//                return .white
+//            default:
+//                return UIColor.darkGray
+//            }
+//        }
     }
     
     struct ViewModel {

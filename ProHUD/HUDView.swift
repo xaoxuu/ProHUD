@@ -55,8 +55,15 @@ public extension ProHUD {
         
         
         init() {
-            super.init(effect: UIBlurEffect(style: .light))
-            backgroundColor = UIColor.init(white: 1, alpha: 0.66)
+            
+            if #available(iOS 13.0, *) {
+                super.init(effect: UIBlurEffect(style: .systemMaterial))
+//                backgroundColor = UIColor.init(white: 1, alpha: 0.3)
+            } else {
+                super.init(effect: UIBlurEffect(style: .extraLight))
+                backgroundColor = UIColor.init(white: 1, alpha: 0.66)
+            }
+            
         }
         
         required init?(coder: NSCoder) {
@@ -96,4 +103,11 @@ internal extension UIView {
         animateEaseOut(duration: 1, delay: 0, animations: animations, completion: completion)
     }
     
+    class func animateForGuard(animations: @escaping () -> Void) {
+        animateForGuard(animations: animations, completion: nil)
+    }
+    
+    class func animateForGuard(animations: @escaping () -> Void, completion: ((Bool) -> Void)? = nil) {
+        animateEaseOut(duration: 0.6, delay: 0, animations: animations, completion: completion)
+    }
 }

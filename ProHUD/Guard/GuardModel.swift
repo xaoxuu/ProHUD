@@ -6,4 +6,23 @@
 //  Copyright © 2019 Titan Studio. All rights reserved.
 //
 
-import Foundation
+public extension ProHUD.Guard {
+    
+    struct ViewModel {
+        
+        /// 标题
+        public var title: String?
+        
+        /// 正文
+        public var message: String?
+        
+        public init(title: String? = nil, message: String? = nil, icon: UIImage? = nil) {
+            self.title = title
+            self.message = message
+        }
+        
+        
+    }
+    
+}
+

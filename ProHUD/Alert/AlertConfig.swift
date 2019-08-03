@@ -31,7 +31,7 @@ public extension ProHUD.Configuration {
         /// 标题字体
         public var titleFont = UIFont.boldSystemFont(ofSize: 22)
         /// 标题颜色
-        public var titleColor = UIColor(white: 0.2, alpha: 1)
+        public var titleColor = UIColorForPrimaryLabel
         /// 标题最多行数
         public var titleMaxLines = Int(1)
         
@@ -41,7 +41,7 @@ public extension ProHUD.Configuration {
         /// 正文字体
         public var bodyFont = UIFont.systemFont(ofSize: 17)
         /// 正文颜色
-        public var bodyColor = UIColor.darkGray
+        public var bodyColor = UIColorForSecondaryLabel
         /// 正文最多行数
         public var bodyMaxLines = Int(5)
         
@@ -232,7 +232,7 @@ public extension ProHUD.Configuration {
         lazy var showNavButtons: (ProHUD.Alert, Alert) -> Void = {
             return { (vc, config) in
                 debugPrint(vc, "showNavButtons")
-                let btn = UIButton.minimizeButton()
+                let btn = ProHUD.Alert.Button.minimizeButton()
                 let bg = ProHUD.BlurView()
                 bg.layer.masksToBounds = true
                 bg.layer.cornerRadius = config.cornerRadius

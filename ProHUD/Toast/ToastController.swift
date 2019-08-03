@@ -24,7 +24,7 @@ public extension ProHUD {
         /// 标题
         internal lazy var titleLabel: UILabel = {
             let lb = UILabel()
-            lb.textColor = UIColor.init(white: 0.2, alpha: 1)
+            lb.textColor = UIColorForPrimaryLabel
             lb.font = toastConfig.titleFont
             lb.textAlignment = .justified
             lb.numberOfLines = toastConfig.titleMaxLines
@@ -34,27 +34,25 @@ public extension ProHUD {
         /// 正文
         internal lazy var bodyLabel: UILabel = {
             let lb = UILabel()
-            lb.textColor = .darkGray
+            lb.textColor = UIColorForSecondaryLabel
             lb.font = toastConfig.bodyFont
             lb.textAlignment = .justified
             lb.numberOfLines = toastConfig.bodyMaxLines
             return lb
         }()
         
-        /// 毛玻璃层
-        var blurView: UIVisualEffectView?
-        
-        /// 背景层（在iOS13之后window）
-        var backgroundView = UIView()
-        
-        /// 设置颜色
-        open var tintColor: UIColor!{
-            didSet {
-                imageView.tintColor = tintColor
-                titleLabel.textColor = tintColor
-                bodyLabel.textColor = tintColor
+        /// 背景层
+        var backgroundView: UIVisualEffectView = {
+            let vev = UIVisualEffectView()
+            if #available(iOS 13.0, *) {
+                vev.effect = UIBlurEffect.init(style: .systemMaterial)
+            } else {
+                vev.effect = UIBlurEffect.init(style: .extraLight)
             }
-        }
+            vev.layer.masksToBounds = true
+            vev.layer.cornerRadius = toastConfig.cornerRadius
+            return vev
+        }()
         
         /// 视图模型
         public var vm = ViewModel()
@@ -116,23 +114,6 @@ public extension ProHUD {
                 self.removeFromParent()
                 self.window = nil
             }
-        }
-        
-        @discardableResult
-        func blurMask(_ blurEffectStyle: UIBlurEffect.Style?) -> Toast {
-            if let s = blurEffectStyle {
-                if let bv = blurView {
-                    bv.effect = UIBlurEffect.init(style: s)
-                } else {
-                    blurView = UIVisualEffectView(effect: UIBlurEffect.init(style: s))
-                    blurView?.layer.masksToBounds = true
-                    blurView?.layer.cornerRadius = toastConfig.cornerRadius
-                }
-            } else {
-                blurView?.removeFromSuperview()
-                blurView = nil
-            }
-            return self
         }
         
         @discardableResult

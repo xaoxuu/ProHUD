@@ -48,3 +48,56 @@ internal var isPortrait: Bool {
         return false
     }
 }
+
+
+internal var dynamicColor: UIColor {
+    if #available(iOS 13.0, *) {
+        let color = UIColor { (traitCollection: UITraitCollection) -> UIColor in
+            if traitCollection.userInterfaceStyle == .dark {
+                return .white
+            } else {
+                return .black
+            }
+        }
+        return color
+    } else {
+        // Fallback on earlier versions
+    }
+    return .init(white: 0.2, alpha: 1)
+}
+
+
+
+internal var UIColorForPrimaryLabel: UIColor {
+    return dynamicColor.withAlphaComponent(0.75)
+}
+internal var UIColorForSecondaryLabel: UIColor {
+    return dynamicColor.withAlphaComponent(0.6)
+}
+
+internal extension UIColor {
+    
+    var dynamicColor: UIColor {
+        if #available(iOS 13.0, *) {
+            let color = UIColor { (traitCollection: UITraitCollection) -> UIColor in
+                if traitCollection.userInterfaceStyle == .dark {
+                    return .white
+                } else {
+                    return .black
+                }
+            }
+            return color
+        } else {
+            // Fallback on earlier versions
+        }
+        return .init(white: 0.2, alpha: 1)
+    }
+    
+    var dynamicPrimaryLabelColor: UIColor {
+        return dynamicColor.withAlphaComponent(0.75)
+    }
+    var dynamicSecondaryLabelColor: UIColor {
+        return dynamicColor.withAlphaComponent(0.6)
+    }
+    
+}
