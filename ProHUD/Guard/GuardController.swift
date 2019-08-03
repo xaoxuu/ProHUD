@@ -17,7 +17,7 @@ public extension ProHUD {
         /// 内容容器（包括textStack、actionStack)
         public var contentStack: StackContainer = {
             let stack = StackContainer()
-            stack.spacing = guardConfig.padding + guardConfig.margin
+            stack.spacing = cfg.guard.padding + cfg.guard.margin
             stack.alignment = .fill
             return stack
         }()
@@ -25,19 +25,19 @@ public extension ProHUD {
         /// 文本区域
         public var textStack: StackContainer = {
             let stack = StackContainer()
-            stack.spacing = guardConfig.margin
+            stack.spacing = cfg.guard.margin
             stack.alignment = .fill
             return stack
         }()
         
-        public var titleLabel: UILabel?
-        public var bodyLabel: UILabel?
+//        public var titleLabel: UILabel?
+//        public var bodyLabel: UILabel?
         
         /// 操作区域
         public var actionStack: StackContainer = {
             let stack = StackContainer()
             stack.alignment = .fill
-            stack.spacing = guardConfig.margin
+            stack.spacing = cfg.guard.margin
             return stack
         }()
         
@@ -57,15 +57,15 @@ public extension ProHUD {
         public convenience init(title: String? = nil, message: String? = nil) {
             self.init()
             view = View()
-            view.tintColor = guardConfig.tintColor
+            view.tintColor = cfg.guard.tintColor
             if let _ = title {
                 loadTitle(title)
             }
             if let _ = message {
                 loadBody(message)
             }
-            guardConfig.loadSubviews(self, guardConfig)
-//            willLayoutSubviews()
+            cfg.guard.loadSubviews(self)
+            cfg.guard.reloadData(self)
             
             // 点击
             let tap = UITapGestureRecognizer(target: self, action: #selector(privDidTapped(_:)))
@@ -81,7 +81,7 @@ public extension ProHUD {
         }
         
         deinit {
-            debugPrint(self, "deinit")
+            debug(self, "deinit")
         }
         
         public func push(to viewController: UIViewController? = nil) {
@@ -106,7 +106,7 @@ public extension ProHUD {
         
         public func pop() {
             if displaying {
-                debugPrint("pop")
+                debug("pop")
                 displaying = false
                 view.isUserInteractionEnabled = false
                 self.removeFromParent()
@@ -126,21 +126,31 @@ public extension ProHUD.Guard {
     
     @discardableResult
     func loadTitle(_ text: String?) -> UILabel {
-        guardConfig.loadTitleLabel(self, guardConfig)
-        let lb = titleLabel!
+        let lb = UILabel()
+        lb.font = cfg.guard.titleFont
+        lb.textColor = cfg.primaryLabelColor
+        lb.numberOfLines = 0
+        lb.textAlignment = .justified
         lb.text = text
-        if textStack.arrangedSubviews.count > 0 {
-            textStack.insertArrangedSubview(lb, at: 0)
+        textStack.addArrangedSubview(lb)
+        if #available(iOS 11.0, *) {
+            let count = textStack.arrangedSubviews.count
+            if count > 1 {
+                textStack.setCustomSpacing(cfg.guard.margin * 2, after: textStack.arrangedSubviews[count-2])
+            }
         } else {
-            textStack.addArrangedSubview(lb)
+            // Fallback on earlier versions
         }
         return lb
     }
     
     @discardableResult
     func loadBody(_ text: String?) -> UILabel {
-        guardConfig.loadBodyLabel(self, guardConfig)
-        let lb = bodyLabel!
+        let lb = UILabel()
+        lb.font = cfg.guard.bodyFont
+        lb.textColor = cfg.secondaryLabelColor
+        lb.numberOfLines = 0
+        lb.textAlignment = .justified
         lb.text = text
         textStack.addArrangedSubview(lb)
         return lb
@@ -149,7 +159,7 @@ public extension ProHUD.Guard {
     @discardableResult
     func loadButton(style: UIAlertAction.Style, title: String?, action: (() -> Void)? = nil) -> UIButton {
         let btn = Button.actionButton(title: title)
-        btn.titleLabel?.font = guardConfig.buttonFont
+        btn.titleLabel?.font = cfg.guard.buttonFont
         if actionStack.superview == nil {
             contentStack.addArrangedSubview(actionStack)
         }
@@ -189,7 +199,7 @@ fileprivate extension ProHUD.Guard {
     
     func translateOut() {
         view.backgroundColor = UIColor(white: 0, alpha: 0)
-        contentView.transform = .init(translationX: 0, y: view.frame.size.height - contentView.frame.minY + guardConfig.margin)
+        contentView.transform = .init(translationX: 0, y: view.frame.size.height - contentView.frame.minY + cfg.guard.margin)
     }
     
     

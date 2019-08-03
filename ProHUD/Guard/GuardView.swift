@@ -42,8 +42,8 @@ internal extension ProHUD.Guard {
         class func actionButton(title: String?) -> Button {
             let btn = Button(type: .system)
             btn.setTitle(title, for: .normal)
-            btn.layer.cornerRadius = guardConfig.buttonCornerRadius
-            btn.titleLabel?.font = guardConfig.buttonFont
+            btn.layer.cornerRadius = cfg.guard.buttonCornerRadius
+            btn.titleLabel?.font = cfg.guard.buttonFont
             return btn
         }
         
@@ -62,7 +62,7 @@ internal extension ProHUD.Guard {
                 backgroundColor = .init(red: 244/255, green: 67/255, blue: 54/255, alpha: 1)
                 setTitleColor(.white, for: .normal)
             case .cancel:
-                setTitleColor(UIColorForSecondaryLabel, for: .normal)
+                setTitleColor(cfg.secondaryLabelColor, for: .normal)
             @unknown default:
                 break
             }

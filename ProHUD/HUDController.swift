@@ -25,7 +25,7 @@ public class HUDController: UIViewController {
     
     init() {
         super.init(nibName: nil, bundle: nil)
-        print(self, "init")
+        debug(self, "init")
     }
     
     required public init?(coder: NSCoder) {
@@ -33,7 +33,7 @@ public class HUDController: UIViewController {
     }
     
     deinit {
-        debugPrint(self, "deinit")
+        debug(self, "deinit")
     }
     
     
@@ -47,14 +47,6 @@ public class HUDController: UIViewController {
 }
 
 internal extension HUDController {
-    
-//    func animateOut(completion: ((Bool) -> Void)? = nil) {
-//        UIView.animateForAlertBuildOut(animations: {
-//            self.view.alpha = 0
-//        }) { (done) in
-//            completion?(done)
-//        }
-//    }
     
     func addTouchUpAction(for button: UIButton, action: @escaping () -> Void) {
         button.addTarget(self, action: #selector(didTappedButton(_:)), for: .touchUpInside)

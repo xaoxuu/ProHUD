@@ -14,6 +14,10 @@ public class ProHUD {
     
     public static let shared = ProHUD()
     
+    public var config: Configuration {
+        return cfg
+    }
+    
     internal var toasts = [Toast]()
     internal var alerts = [Alert]()
     
@@ -22,9 +26,11 @@ public class ProHUD {
     
 }
 
+// MARK: - Utilities
 
 internal extension ProHUD {
     
+    /// 获取Bundle
     static var bundle: Bundle {
         var b = Bundle.init(for: ProHUD.Alert.self)
         let p = b.path(forResource: "ProHUD", ofType: "bundle")
@@ -33,7 +39,7 @@ internal extension ProHUD {
         }
         return b
     }
-    
+    /// 获取Image
     static func image(named: String) -> UIImage? {
         return UIImage.init(named: named, in: bundle, compatibleWith: nil)
     }
@@ -41,63 +47,26 @@ internal extension ProHUD {
     
 }
 
+
+/// 是否是手机竖屏模式
 internal var isPortrait: Bool {
-    if UIScreen.main.bounds.width < 500 {
-        return true
-    } else {
-        return false
-    }
-}
-
-
-internal var dynamicColor: UIColor {
-    if #available(iOS 13.0, *) {
-        let color = UIColor { (traitCollection: UITraitCollection) -> UIColor in
-            if traitCollection.userInterfaceStyle == .dark {
-                return .white
-            } else {
-                return .black
-            }
-        }
-        return color
-    } else {
-        // Fallback on earlier versions
-    }
-    return .init(white: 0.2, alpha: 1)
-}
-
-
-
-internal var UIColorForPrimaryLabel: UIColor {
-    return dynamicColor.withAlphaComponent(0.75)
-}
-internal var UIColorForSecondaryLabel: UIColor {
-    return dynamicColor.withAlphaComponent(0.6)
-}
-
-internal extension UIColor {
-    
-    var dynamicColor: UIColor {
-        if #available(iOS 13.0, *) {
-            let color = UIColor { (traitCollection: UITraitCollection) -> UIColor in
-                if traitCollection.userInterfaceStyle == .dark {
-                    return .white
-                } else {
-                    return .black
-                }
-            }
-            return color
+    if UIDevice.current.userInterfaceIdiom == .phone {
+        if UIApplication.shared.statusBarOrientation.isPortrait {
+            debug("当前是手机竖屏模式")
+            return true
         } else {
-            // Fallback on earlier versions
+            debug("当前是手机横屏模式")
         }
-        return .init(white: 0.2, alpha: 1)
+    } else {
+        debug("非手机设备（unspecified、iPad、tv、carPlay）")
     }
-    
-    var dynamicPrimaryLabelColor: UIColor {
-        return dynamicColor.withAlphaComponent(0.75)
-    }
-    var dynamicSecondaryLabelColor: UIColor {
-        return dynamicColor.withAlphaComponent(0.6)
-    }
-    
+    return false
 }
+
+/// 可控Debug输出
+internal func debug(_ items: Any..., separator: String = " ", terminator: String = "\n") {
+    if cfg.enableDebugPrint {
+        debugPrint(items, separator: separator, terminator: terminator)
+    }
+}
+

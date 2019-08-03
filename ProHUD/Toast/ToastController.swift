@@ -24,20 +24,20 @@ public extension ProHUD {
         /// 标题
         internal lazy var titleLabel: UILabel = {
             let lb = UILabel()
-            lb.textColor = UIColorForPrimaryLabel
-            lb.font = toastConfig.titleFont
+            lb.textColor = cfg.primaryLabelColor
+            lb.font = cfg.toast.titleFont
             lb.textAlignment = .justified
-            lb.numberOfLines = toastConfig.titleMaxLines
+            lb.numberOfLines = cfg.toast.titleMaxLines
             return lb
         }()
         
         /// 正文
         internal lazy var bodyLabel: UILabel = {
             let lb = UILabel()
-            lb.textColor = UIColorForSecondaryLabel
-            lb.font = toastConfig.bodyFont
+            lb.textColor = cfg.secondaryLabelColor
+            lb.font = cfg.toast.bodyFont
             lb.textAlignment = .justified
-            lb.numberOfLines = toastConfig.bodyMaxLines
+            lb.numberOfLines = cfg.toast.bodyMaxLines
             return lb
         }()
         
@@ -50,7 +50,7 @@ public extension ProHUD {
                 vev.effect = UIBlurEffect.init(style: .extraLight)
             }
             vev.layer.masksToBounds = true
-            vev.layer.cornerRadius = toastConfig.cornerRadius
+            vev.layer.cornerRadius = cfg.toast.cornerRadius
             return vev
         }()
         
@@ -84,9 +84,8 @@ public extension ProHUD {
             }
             
             // 布局
-            toastConfig.loadSubviews(self)
-            toastConfig.reloadData(self)
-            toastConfig.layoutSubviews(self)
+            cfg.toast.loadSubviews(self)
+            cfg.toast.reloadData(self)
             
             // 点击
             let tap = UITapGestureRecognizer(target: self, action: #selector(privDidTapped(_:)))
@@ -137,28 +136,6 @@ public extension ProHUD {
             return self
         }
         
-//        internal func updateFrame() {
-//            let config = toastConfig
-//            var f = UIScreen.main.bounds
-//            contentStack.frame.size.width = CGFloat.minimum(f.width - 4 * config.margin, config.maxWidth)
-//            titleLabel?.sizeToFit()
-//            messageLabel?.sizeToFit()
-//            contentStack.layoutIfNeeded()
-//            f.size.width = contentStack.frame.size.width
-//            f.size.height = (textStack.arrangedSubviews.last?.frame.maxY ?? 0) + config.margin
-//            debugPrint(f)
-//            func updateFrame(_ frame: CGRect) -> CGRect {
-//                return CGRect(origin: CGPoint(x: config.margin, y: config.margin), size: frame.size)
-//            }
-//            func superBounds(_ frame: CGRect) -> CGRect {
-//                return CGRect(x: 0, y: 0, width: frame.width + 2 * config.margin, height: frame.height + 2 * config.margin)
-//            }
-//            contentStack.frame = updateFrame(f)
-//            contentView.frame = superBounds(f)
-//            view.frame = superBounds(f)
-//            window?.frame = superBounds(f)
-//            hud.updateToastsLayout()
-//        }
         
         // MARK: 设置函数
         
@@ -200,8 +177,7 @@ public extension ProHUD {
             vm.title = title
             vm.message = message
             vm.icon = icon
-            toastConfig.reloadData(self)
-            toastConfig.layoutSubviews(self)
+            cfg.toast.reloadData(self)
             return self
         }
         
@@ -248,7 +224,7 @@ public extension ProHUD {
     
     @discardableResult
     func show(_ toast: Toast) -> Toast {
-        let config = toastConfig
+        let config = cfg.toast
         let isNew: Bool
         if toast.window == nil {
             let w = ToastWindow(frame: .zero)
@@ -369,7 +345,7 @@ internal extension ProHUD {
         func f() {
             let top = Inspire.shared.screen.updatedSafeAreaInsets.top
             for (i, e) in toasts.enumerated() {
-                let config = toastConfig
+                let config = cfg.toast
                 if let window = e.window {
                     var y = window.frame.origin.y
                     if i == 0 {
@@ -411,7 +387,7 @@ internal extension ProHUD {
         } else if toasts.count == 1 {
             toasts.removeAll()
         } else {
-            debugPrint("漏洞：已经没有toast了")
+            debug("漏洞：已经没有toast了")
         }
     }
     

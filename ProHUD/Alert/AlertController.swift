@@ -18,14 +18,14 @@ public extension ProHUD {
         /// 正文（包括icon、textStack、actionStack)
         internal var contentStack: StackContainer = {
             let stack = StackContainer()
-            stack.spacing = alertConfig.margin
+            stack.spacing = cfg.alert.margin
             return stack
         }()
         
         /// 文本区域
         internal var textStack: StackContainer = {
             let stack = StackContainer()
-            stack.spacing = alertConfig.margin
+            stack.spacing = cfg.alert.margin
             return stack
         }()
         internal var imageView: UIImageView?
@@ -35,7 +35,7 @@ public extension ProHUD {
         internal var actionStack: StackContainer = {
             let stack = StackContainer()
             stack.alignment = .fill
-            stack.spacing = alertConfig.margin
+            stack.spacing = cfg.alert.margin
             return stack
         }()
         
@@ -56,7 +56,7 @@ public extension ProHUD {
         /// - Parameter icon: 图标
         public convenience init(scene: Scene = .default, title: String? = nil, message: String? = nil, icon: UIImage? = nil) {
             self.init()
-            view.tintColor = alertConfig.tintColor
+            view.tintColor = cfg.alert.tintColor
             vm.scene = scene
             vm.title = title
             vm.message = message
@@ -151,7 +151,7 @@ public extension ProHUD {
             vm.message = message
             vm.scene = scene
             vm.icon = icon
-            alertConfig.updateFrame(self, alertConfig)
+            cfg.alert.reloadData(self)
             return self
         }
         
@@ -217,8 +217,8 @@ fileprivate extension ProHUD.Alert {
         willLayout = DispatchWorkItem(block: { [weak self] in
             if let a = self {
                 // 布局
-                alertConfig.loadSubviews(a, alertConfig)
-                alertConfig.updateFrame(a, alertConfig)
+                cfg.alert.loadSubviews(a)
+                cfg.alert.reloadData(a)
                 // 超时
                 if let t = a.timeout, t > 0 {
                     a.timeoutBlock = DispatchWorkItem(block: { [weak self] in
@@ -229,13 +229,13 @@ fileprivate extension ProHUD.Alert {
                     a.timeoutBlock = nil
                 }
                 // 顶部按钮
-                if alertConfig.minimizeTimeout > 0 && self?.actionStack.superview == nil {
+                if cfg.alert.forceQuitTimer > 0 && self?.actionStack.superview == nil {
                     a.showNavButtonsBlock = DispatchWorkItem(block: { [weak self] in
                         if let s = self {
-                            alertConfig.showNavButtons(s, alertConfig)
+                            cfg.alert.loadForceQuitButton(s)
                         }
                     })
-                    DispatchQueue.main.asyncAfter(deadline: .now()+alertConfig.minimizeTimeout, execute: a.showNavButtonsBlock!)
+                    DispatchQueue.main.asyncAfter(deadline: .now()+cfg.alert.forceQuitTimer, execute: a.showNavButtonsBlock!)
                 }
             }
         })
@@ -394,7 +394,7 @@ fileprivate extension ProHUD {
         } else if alerts.count == 1 {
             alerts.removeAll()
         } else {
-            debugPrint("漏洞：已经没有alert了")
+            debug("漏洞：已经没有alert了")
         }
     }
     

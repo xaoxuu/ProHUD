@@ -1,5 +1,5 @@
 //
-//  GuardConfig.swift
+//  cfg.guard.swift
 //  ProHUD
 //
 //  Created by xaoxuu on 2019/7/31.
@@ -29,13 +29,9 @@ public extension ProHUD.Configuration {
         // MARK: 文本样式
         /// 标题字体
         public var titleFont = UIFont.boldSystemFont(ofSize: 22)
-        /// 标题颜色
-        public var titleColor = UIColorForPrimaryLabel
         
         /// 正文字体
         public var bodyFont = UIFont.systemFont(ofSize: 18)
-        /// 正文颜色
-        public var bodyColor = UIColorForSecondaryLabel
         
         // MARK: 按钮样式
         /// 按钮字体
@@ -45,111 +41,89 @@ public extension ProHUD.Configuration {
         /// 按钮圆角半径
         public var buttonCornerRadius = CGFloat(12)
         
-        lazy var loadTitleLabel: (ProHUD.Guard, Guard) -> Void = {
-            return { (vc, config) in
-                debugPrint(vc, "loadTitleLabel")
-                if vc.titleLabel == nil {
-                    vc.titleLabel = UILabel()
-                    vc.titleLabel?.font = config.titleFont
-                    vc.titleLabel?.textColor = config.titleColor
-                    vc.titleLabel?.numberOfLines = 0
-                    vc.titleLabel?.textAlignment = .justified
-                }
-            }
-        }()
-        
-        lazy var loadBodyLabel: (ProHUD.Guard, Guard) -> Void = {
-            return { (vc, config) in
-                debugPrint(vc, "loadBodyLabel")
-                if vc.bodyLabel == nil {
-                    vc.bodyLabel = UILabel()
-                    vc.bodyLabel?.font = config.bodyFont
-                    vc.bodyLabel?.textColor = config.bodyColor
-                    vc.bodyLabel?.numberOfLines = 0
-                    vc.titleLabel?.textAlignment = .justified
-                }
-            }
-        }()
-        
         /// 加载视图
-        lazy var loadSubviews: (ProHUD.Guard, Guard) -> Void = {
-            return { (vc, config) in
-                debugPrint(vc, "loadSubviews")
-                // background
-                vc.view.tintColor = config.tintColor
-                vc.view.backgroundColor = UIColor(white: 0, alpha: 0)
-                vc.view.addSubview(vc.contentView)
-                var width = UIScreen.main.bounds.width
-                if width > config.cardMaxWidth {
-                    // 横屏或者iPad
-                    width = config.cardMaxWidth
-                    vc.contentView.layer.masksToBounds = true
-                    vc.contentView.layer.cornerRadius = config.cardCornerRadius
+        /// - Parameter callback: 回调代码
+        public mutating func loadSubviews(_ callback: @escaping (ProHUD.Guard) -> Void) {
+            privLoadSubviews = callback
+        }
+        
+        /// 更新视图
+        /// - Parameter callback: 回调代码
+        public mutating func reloadData(_ callback: @escaping (ProHUD.Guard) -> Void) {
+            privReloadData = callback
+        }
+        
+    }
+}
+
+// MARK: - 默认实现
+
+internal extension ProHUD.Configuration.Guard {
+    var loadSubviews: (ProHUD.Guard) -> Void {
+        return privLoadSubviews
+    }
+    var reloadData: (ProHUD.Guard) -> Void {
+        return privReloadData
+    }
+}
+
+fileprivate var privLoadSubviews: (ProHUD.Guard) -> Void = {
+    return { (vc) in
+        debug(vc, "loadSubviews")
+        let config = cfg.guard
+        // background
+        vc.view.tintColor = config.tintColor
+        vc.view.backgroundColor = UIColor(white: 0, alpha: 0)
+        vc.view.addSubview(vc.contentView)
+        vc.contentView.contentView.addSubview(vc.contentStack)
+        vc.contentStack.addArrangedSubview(vc.textStack)
+        vc.contentStack.addArrangedSubview(vc.actionStack)
+    }
+}()
+
+fileprivate var privReloadData: (ProHUD.Guard) -> Void = {
+    return { (vc) in
+        debug(vc, "reloadData")
+        let config = cfg.guard
+        // 更新布局
+        var width = UIScreen.main.bounds.width
+        if width > config.cardMaxWidth {
+            // 横屏或者iPad
+            width = config.cardMaxWidth
+            vc.contentView.layer.masksToBounds = true
+            vc.contentView.layer.cornerRadius = config.cardCornerRadius
+        } else {
+            vc.contentView.layer.shadowRadius = 4
+            vc.contentView.layer.shadowOffset = .init(width: 0, height: 2)
+            vc.contentView.layer.shadowOpacity = 0.12
+        }
+        vc.contentView.snp.makeConstraints { (mk) in
+            mk.centerX.equalToSuperview()
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                if width == config.cardMaxWidth {
+                    mk.bottom.equalToSuperview().offset(-Inspire.shared.screen.safeAreaInsets.bottom)
                 } else {
-                    vc.contentView.layer.shadowRadius = 4
-                    vc.contentView.layer.shadowOffset = .init(width: 0, height: 2)
-                    vc.contentView.layer.shadowOpacity = 0.12
+                    mk.bottom.equalToSuperview()
                 }
-                vc.contentView.snp.makeConstraints { (mk) in
-                    mk.centerX.equalToSuperview()
-                    if UIDevice.current.userInterfaceIdiom == .phone {
-                        if width == config.cardMaxWidth {
-                            mk.bottom.equalToSuperview().offset(-Inspire.shared.screen.safeAreaInsets.bottom)
-                        } else {
-                            mk.bottom.equalToSuperview()
-                        }
-                    } else if UIDevice.current.userInterfaceIdiom == .pad {
-                        mk.centerY.equalToSuperview()
-                    }
-                    mk.width.equalTo(width)
-                }
-                // stack
-                vc.contentView.contentView.addSubview(vc.contentStack)
-                vc.contentStack.snp.makeConstraints { (mk) in
-                    mk.top.equalToSuperview().offset(config.padding + config.margin)
-                    mk.centerX.equalToSuperview()
-                    if width == config.cardMaxWidth {
-                        mk.bottom.equalToSuperview().offset(-config.padding)
-                    } else {
-                        mk.bottom.equalToSuperview().offset(-config.margin-Inspire.shared.screen.safeAreaInsets.bottom)
-                    }
-                    if isPortrait {
-                        mk.width.equalToSuperview().offset(-config.padding * 2)
-                    } else {
-                        mk.width.equalToSuperview().offset(-config.padding * 4)
-                    }
-                }
-                vc.contentStack.addArrangedSubview(vc.textStack)
-                
+            } else if UIDevice.current.userInterfaceIdiom == .pad {
+                mk.centerY.equalToSuperview()
             }
-        }()
-        
-        /// 更新视图
-        lazy var updateFrame: (ProHUD.Guard, Guard) -> Void = {
-            return { (vc, config) in
-                debugPrint(vc, "updateFrame")
+            mk.width.equalTo(width)
+        }
+        // stack
+        vc.contentStack.snp.makeConstraints { (mk) in
+            mk.top.equalToSuperview().offset(config.padding + config.margin)
+            mk.centerX.equalToSuperview()
+            if width == config.cardMaxWidth {
+                mk.bottom.equalToSuperview().offset(-config.padding)
+            } else {
+                mk.bottom.equalToSuperview().offset(-config.margin-Inspire.shared.screen.safeAreaInsets.bottom)
             }
-        }()
-        
-        /// 加载视图
-        /// - Parameter callback: 回调代码
-        public mutating func loadSubviews(_ callback: @escaping (ProHUD.Guard, Guard) -> Void) {
-            loadSubviews = callback
+            if isPortrait {
+                mk.width.equalToSuperview().offset(-config.padding * 2)
+            } else {
+                mk.width.equalToSuperview().offset(-config.padding * 4)
+            }
         }
-        
-        /// 更新视图
-        /// - Parameter callback: 回调代码
-        public mutating func updateFrame(_ callback: @escaping (ProHUD.Guard, Guard) -> Void) {
-            updateFrame = callback
-        }
-        
     }
-}
-
-internal var guardConfig = ProHUD.Configuration.Guard()
-
-public extension ProHUD {
-    static func configGuard(_ config: (inout Configuration.Guard) -> Void) {
-        config(&guardConfig)
-    }
-}
+}()

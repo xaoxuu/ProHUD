@@ -12,8 +12,6 @@
 		CD16490F22EF09D50077988C /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD16490E22EF09D50077988C /* AlertView.swift */; };
 		CD16491222EF0D900077988C /* HUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD16491122EF0D900077988C /* HUDView.swift */; };
 		CD16491422EF12220077988C /* ProHUD.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD16491322EF12220077988C /* ProHUD.xcassets */; };
-		CD67039022E7F7B60072C96A /* HUDForToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD67038F22E7F7B60072C96A /* HUDForToast.swift */; };
-		CD67039222E7F7BC0072C96A /* HUDForGuard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD67039122E7F7BC0072C96A /* HUDForGuard.swift */; };
 		CD6CD86C22F1858F00F4FD4A /* ToastModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD86B22F1858F00F4FD4A /* ToastModel.swift */; };
 		CD6CD86E22F185A000F4FD4A /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD86D22F185A000F4FD4A /* ToastView.swift */; };
 		CD6CD87022F185A700F4FD4A /* ToastController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD86F22F185A700F4FD4A /* ToastController.swift */; };
@@ -35,8 +33,6 @@
 		CD16490E22EF09D50077988C /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		CD16491122EF0D900077988C /* HUDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDView.swift; sourceTree = "<group>"; };
 		CD16491322EF12220077988C /* ProHUD.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ProHUD.xcassets; sourceTree = "<group>"; };
-		CD67038F22E7F7B60072C96A /* HUDForToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDForToast.swift; sourceTree = "<group>"; };
-		CD67039122E7F7BC0072C96A /* HUDForGuard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDForGuard.swift; sourceTree = "<group>"; };
 		CD6CD86B22F1858F00F4FD4A /* ToastModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastModel.swift; sourceTree = "<group>"; };
 		CD6CD86D22F185A000F4FD4A /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		CD6CD86F22F185A700F4FD4A /* ToastController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastController.swift; sourceTree = "<group>"; };
@@ -122,8 +118,6 @@
 				CD95D21F22E72C4C007559A3 /* ProHUD.h */,
 				CD16491322EF12220077988C /* ProHUD.xcassets */,
 				CD95D26A22E72DB3007559A3 /* ProHUD.swift */,
-				CD67038F22E7F7B60072C96A /* HUDForToast.swift */,
-				CD67039122E7F7BC0072C96A /* HUDForGuard.swift */,
 				CDB6A07C22EEF19D00AF6CF0 /* HUDConfig.swift */,
 				CDB6A07A22EEF06500AF6CF0 /* HUDController.swift */,
 				CD16491122EF0D900077988C /* HUDView.swift */,
@@ -219,12 +213,10 @@
 				CD6CD87B22F185D600F4FD4A /* GuardView.swift in Sources */,
 				CD95D26922E72DA1007559A3 /* AlertController.swift in Sources */,
 				CD6CD87922F185D000F4FD4A /* GuardConfig.swift in Sources */,
-				CD67039222E7F7BC0072C96A /* HUDForGuard.swift in Sources */,
 				CDB6A07D22EEF19D00AF6CF0 /* HUDConfig.swift in Sources */,
 				CD16490F22EF09D50077988C /* AlertView.swift in Sources */,
 				CD6CD86E22F185A000F4FD4A /* ToastView.swift in Sources */,
 				CD6CD87222F185AF00F4FD4A /* ToastConfig.swift in Sources */,
-				CD67039022E7F7B60072C96A /* HUDForToast.swift in Sources */,
 				CD6CD87522F185C200F4FD4A /* GuardController.swift in Sources */,
 				CD6CD87022F185A700F4FD4A /* ToastController.swift in Sources */,
 				CD95D26B22E72DB3007559A3 /* ProHUD.swift in Sources */,

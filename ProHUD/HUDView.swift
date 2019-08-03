@@ -38,7 +38,7 @@ public extension ProHUD {
         
         public override init(frame: CGRect) {
             super.init(frame: frame)
-            spacing = alertConfig.margin
+            spacing = cfg.alert.margin
             distribution = .fill
             alignment = .center
             axis = .vertical
@@ -58,10 +58,8 @@ public extension ProHUD {
             
             if #available(iOS 13.0, *) {
                 super.init(effect: UIBlurEffect(style: .systemMaterial))
-//                backgroundColor = UIColor.init(white: 1, alpha: 0.3)
             } else {
                 super.init(effect: UIBlurEffect(style: .extraLight))
-                backgroundColor = UIColor.init(white: 1, alpha: 0.66)
             }
             
         }

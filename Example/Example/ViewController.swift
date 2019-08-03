@@ -16,17 +16,12 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         
-        ProHUD.configAlert { (alert) in
-            alert.minimizeTimeout = 3
-            
-        }
-        ProHUD.configGuard { (g) in
-            g.tintColor = .success
-        }
-        ProHUD.configToast { (toast) in
-//            toast.backgroundColorForScene { (scene) -> UIColor? in
-//                return UIColor.yellow
-//            }
+        ProHUD.config { (cfg) in
+//            cfg.enableDebugPrint = false
+            cfg.alert { (a) in
+                a.forceQuitTimer = 2
+            }
+//            cfg.primaryLabelColor = .purple
         }
         
     }
@@ -71,7 +66,8 @@ class ViewController: UIViewController {
         let g = ProHUD.Guard(title: "请求权限", message: "请打开相机权限开关，否则无法进行测量。")
 //        g.view.tintColor = .warning
 //        g.loadBody(g.description)
-        
+        g.loadTitle("呵呵")
+        g.loadBody("请打开相机权限开关，否则无法进行测量。请打开相机权限开关，否则无法进行测量。")
         g.loadButton(style: .default, title: "测试弹窗", action: { [weak self] in
             self?.testToast()
         })
