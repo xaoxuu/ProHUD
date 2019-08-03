@@ -56,7 +56,7 @@ public extension ProHUD {
         /// - Parameter icon: 图标
         public convenience init(title: String? = nil, message: String? = nil) {
             self.init()
-            view = View()
+//            view = View()
             view.tintColor = cfg.guard.tintColor
             if let _ = title {
                 loadTitle(title)

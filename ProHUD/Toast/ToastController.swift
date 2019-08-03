@@ -103,7 +103,7 @@ public extension ProHUD {
         
         
         /// 移除
-        public func remove() {
+        public func pop() {
             hud.removeItemFromArray(toast: self)
             UIView.animateForToast(animations: {
                 let frame = self.window?.frame ?? .zero
@@ -147,7 +147,7 @@ public extension ProHUD {
             timeoutBlock?.cancel()
             if let t = timeout, t > 0 {
                 timeoutBlock = DispatchWorkItem(block: { [weak self] in
-                    self?.remove()
+                    self?.pop()
                 })
                 DispatchQueue.main.asyncAfter(deadline: .now()+t, execute: timeoutBlock!)
             } else {
@@ -205,7 +205,7 @@ fileprivate extension ProHUD.Toast {
             let v = sender.velocity(in: sender.view)
             if removable == true && (((window?.frame.origin.y ?? 0) < 0 && v.y < 0) || v.y < -1200) {
                 // 移除
-                self.remove()
+                self.pop()
             } else {
                 UIView.animateForToast(animations: {
                     self.window?.transform = .identity
@@ -223,7 +223,7 @@ fileprivate extension ProHUD.Toast {
 public extension ProHUD {
     
     @discardableResult
-    func show(_ toast: Toast) -> Toast {
+    func push(_ toast: Toast) -> Toast {
         let config = cfg.toast
         let isNew: Bool
         if toast.window == nil {
@@ -276,8 +276,8 @@ public extension ProHUD {
     }
     
     @discardableResult
-    func show(toast: Toast.Scene, title: String? = nil, message: String? = nil, icon: UIImage? = nil) -> Toast {
-        return show(Toast(scene: toast, title: title, message: message, icon: icon))
+    func push(toast: Toast.Scene, title: String? = nil, message: String? = nil, icon: UIImage? = nil) -> Toast {
+        return push(Toast(scene: toast, title: title, message: message, icon: icon))
     }
     
     func toasts(identifier: String?) -> [Toast] {
@@ -290,18 +290,18 @@ public extension ProHUD {
         return tt
     }
     
-    func remove(toast: Toast) {
+    func pop(toast: Toast) {
         for t in toasts {
             if t == toast {
-                t.remove()
+                t.pop()
             }
         }
     }
     
-    func remove(toast identifier: String?) {
+    func pop(toast identifier: String?) {
         for t in toasts {
             if t.identifier == identifier {
-                t.remove()
+                t.pop()
             }
         }
     }
@@ -313,25 +313,25 @@ public extension ProHUD {
 public extension ProHUD {
     
     @discardableResult
-    class func show(_ toast: Toast) -> Toast {
-        return shared.show(toast)
+    class func push(_ toast: Toast) -> Toast {
+        return shared.push(toast)
     }
     
     @discardableResult
     class func show(toast: Toast.Scene, title: String? = nil, message: String? = nil, icon: UIImage? = nil) -> Toast {
-        return shared.show(toast: toast, title: title, message: message, icon: icon)
+        return shared.push(toast: toast, title: title, message: message, icon: icon)
     }
     
     class func toast(identifier: String?) -> [Toast] {
         return shared.toasts(identifier: identifier)
     }
     
-    class func remove(toast: Toast) {
-        shared.remove(toast: toast)
+    class func pop(toast: Toast) {
+        shared.pop(toast: toast)
     }
     
-    class func remove(toast identifier: String?) {
-        shared.remove(toast: identifier)
+    class func pop(toast identifier: String?) {
+        shared.pop(toast: identifier)
     }
     
 }

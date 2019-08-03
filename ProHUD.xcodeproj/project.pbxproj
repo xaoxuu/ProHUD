@@ -17,7 +17,6 @@
 		CD6CD87022F185A700F4FD4A /* ToastController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD86F22F185A700F4FD4A /* ToastController.swift */; };
 		CD6CD87222F185AF00F4FD4A /* ToastConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD87122F185AF00F4FD4A /* ToastConfig.swift */; };
 		CD6CD87522F185C200F4FD4A /* GuardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD87422F185C200F4FD4A /* GuardController.swift */; };
-		CD6CD87722F185C900F4FD4A /* GuardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD87622F185C900F4FD4A /* GuardModel.swift */; };
 		CD6CD87922F185D000F4FD4A /* GuardConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD87822F185D000F4FD4A /* GuardConfig.swift */; };
 		CD6CD87B22F185D600F4FD4A /* GuardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD87A22F185D600F4FD4A /* GuardView.swift */; };
 		CD95D22122E72C4C007559A3 /* ProHUD.h in Headers */ = {isa = PBXBuildFile; fileRef = CD95D21F22E72C4C007559A3 /* ProHUD.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -38,7 +37,6 @@
 		CD6CD86F22F185A700F4FD4A /* ToastController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastController.swift; sourceTree = "<group>"; };
 		CD6CD87122F185AF00F4FD4A /* ToastConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastConfig.swift; sourceTree = "<group>"; };
 		CD6CD87422F185C200F4FD4A /* GuardController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardController.swift; sourceTree = "<group>"; };
-		CD6CD87622F185C900F4FD4A /* GuardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardModel.swift; sourceTree = "<group>"; };
 		CD6CD87822F185D000F4FD4A /* GuardConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardConfig.swift; sourceTree = "<group>"; };
 		CD6CD87A22F185D600F4FD4A /* GuardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardView.swift; sourceTree = "<group>"; };
 		CD95D21C22E72C4C007559A3 /* ProHUD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ProHUD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -88,7 +86,6 @@
 			isa = PBXGroup;
 			children = (
 				CD6CD87422F185C200F4FD4A /* GuardController.swift */,
-				CD6CD87622F185C900F4FD4A /* GuardModel.swift */,
 				CD6CD87822F185D000F4FD4A /* GuardConfig.swift */,
 				CD6CD87A22F185D600F4FD4A /* GuardView.swift */,
 			);
@@ -225,7 +222,6 @@
 				CD16490B22EF09AB0077988C /* AlertModel.swift in Sources */,
 				CD16491222EF0D900077988C /* HUDView.swift in Sources */,
 				CDB6A07B22EEF06500AF6CF0 /* HUDController.swift in Sources */,
-				CD6CD87722F185C900F4FD4A /* GuardModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

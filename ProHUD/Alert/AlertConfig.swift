@@ -154,11 +154,14 @@ fileprivate var privReloadData: (ProHUD.Alert) -> Void = {
         } else {
             let icon = UIImageView(image: img)
             vc.contentStack.addArrangedSubview(icon)
+            icon.contentMode = .scaleAspectFit
             icon.snp.makeConstraints { (mk) in
                 mk.top.greaterThanOrEqualTo(vc.contentView).offset(config.padding*2.25)
                 mk.bottom.lessThanOrEqualTo(vc.contentView).offset(-config.padding*2.25)
                 mk.leading.greaterThanOrEqualTo(vc.contentView).offset(config.padding*4)
                 mk.trailing.lessThanOrEqualTo(vc.contentView).offset(-config.padding*4)
+                mk.width.equalTo(config.iconSize.width)
+                mk.height.equalTo(config.iconSize.height)
             }
             vc.imageView = icon
         }
@@ -295,7 +298,7 @@ fileprivate var privLoadForceQuitButton: (ProHUD.Alert) -> Void = {
         vc.addTouchUpAction(for: btn) { [weak vc] in
             debug("点击了隐藏")
             vc?.minimizeCallback?()
-            vc?.remove()
+            vc?.pop()
         }
     }
 }()

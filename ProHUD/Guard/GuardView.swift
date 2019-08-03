@@ -9,35 +9,7 @@
 import UIKit
 
 internal extension ProHUD.Guard {
-    class View: UIView {
-        
-        override func willMove(toSuperview newSuperview: UIView?) {
-            if let sv = newSuperview {
-                for v in sv.subviews {
-                    if let vv = v as? ProHUD.Guard.View {
-                        if vv.tag == self.tag {
-                            UIView.animate(withDuration: 0.38, delay: 0.1, options: .curveEaseIn, animations: {
-                                vv.alpha = 0
-                            }) { (done) in
-                                vv.removeFromSuperview()
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-//        override func didMoveToSuperview() {
-//            if let _ = superview {
-//                snp.makeConstraints { (mk) in
-////                    mk.left.right.bottom.equalToSuperview()
-//                    mk.edges.equalToSuperview()
-//                }
-////                push(duration: duration)
-//            }
-//        }
-        
-    }
+    
     class Button: UIButton {
         class func actionButton(title: String?) -> Button {
             let btn = Button(type: .system)

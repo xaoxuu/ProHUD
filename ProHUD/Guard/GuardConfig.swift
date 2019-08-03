@@ -36,8 +36,7 @@ public extension ProHUD.Configuration {
         // MARK: 按钮样式
         /// 按钮字体
         public var buttonFont = UIFont.boldSystemFont(ofSize: 18)
-        /// 按钮最大宽度（用于优化横屏或者iPad显示）
-//        public var buttonMaxWidth = CGFloat(460)
+        
         /// 按钮圆角半径
         public var buttonCornerRadius = CGFloat(12)
         

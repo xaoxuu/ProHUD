@@ -79,7 +79,7 @@ public extension ProHUD {
         
         
         /// 移除
-        public func remove() {
+        public func pop() {
             let window = hud.getAlertWindow(self)
             hud.removeItemFromArray(alert: self)
             UIView.animateForAlertBuildOut(animations: {
@@ -222,7 +222,7 @@ fileprivate extension ProHUD.Alert {
                 // 超时
                 if let t = a.timeout, t > 0 {
                     a.timeoutBlock = DispatchWorkItem(block: { [weak self] in
-                        self?.remove()
+                        self?.pop()
                     })
                     DispatchQueue.main.asyncAfter(deadline: .now()+t, execute: a.timeoutBlock!)
                 } else {
@@ -257,7 +257,7 @@ fileprivate extension ProHUD.Alert {
         addTouchUpAction(for: button) { [weak self] in
             action?()
             if button.tag == UIAlertAction.Style.cancel.rawValue {
-                self?.remove()
+                self?.pop()
             }
         }
         willLayoutSubviews()
@@ -272,7 +272,7 @@ fileprivate extension ProHUD.Alert {
 public extension ProHUD {
     
     @discardableResult
-    func show(_ alert: Alert) -> Alert {
+    func push(_ alert: Alert) -> Alert {
         let window = getAlertWindow(alert)
         window.makeKeyAndVisible()
         window.resignKey()
@@ -294,8 +294,8 @@ public extension ProHUD {
     }
     
     @discardableResult
-    func show(alert: Alert.Scene, title: String? = nil, message: String? = nil, icon: UIImage? = nil) -> Alert {
-        return show(Alert(scene: alert, title: title, message: message, icon: icon))
+    func push(alert: Alert.Scene, title: String? = nil, message: String? = nil, icon: UIImage? = nil) -> Alert {
+        return push(Alert(scene: alert, title: title, message: message, icon: icon))
     }
     
     func alerts(identifier: String?) -> [Alert] {
@@ -308,18 +308,18 @@ public extension ProHUD {
         return aa
     }
     
-    func remove(alert: Alert) {
+    func pop(alert: Alert) {
         for a in alerts {
             if a == alert {
-                a.remove()
+                a.pop()
             }
         }
     }
     
-    func remove(alert identifier: String?) {
+    func pop(alert identifier: String?) {
         for a in alerts {
             if a.identifier == identifier {
-                a.remove()
+                a.pop()
             }
         }
     }
@@ -331,25 +331,25 @@ public extension ProHUD {
 public extension ProHUD {
     
     @discardableResult
-    class func show(_ alert: Alert) -> Alert {
-        return shared.show(alert)
+    class func push(_ alert: Alert) -> Alert {
+        return shared.push(alert)
     }
     
     @discardableResult
-    class func show(alert: Alert.Scene, title: String? = nil, message: String? = nil, icon: UIImage? = nil) -> Alert {
-        return shared.show(alert: alert, title: title, message: message, icon: icon)
+    class func push(alert: Alert.Scene, title: String? = nil, message: String? = nil, icon: UIImage? = nil) -> Alert {
+        return shared.push(alert: alert, title: title, message: message, icon: icon)
     }
     
     class func alert(identifier: String?) -> [Alert] {
         return shared.alerts(identifier: identifier)
     }
     
-    class func remove(alert: Alert) {
-        shared.remove(alert: alert)
+    class func pop(alert: Alert) {
+        shared.pop(alert: alert)
     }
     
-    class func remove(alert identifier: String?) {
-        shared.remove(alert: identifier)
+    class func pop(alert identifier: String?) {
+        shared.pop(alert: identifier)
     }
     
 }
