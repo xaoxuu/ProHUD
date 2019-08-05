@@ -77,10 +77,10 @@ fileprivate var privReloadData: (ProHUD.Toast) -> Void = {
     return { (vc) in
         debug(vc, "reloadData")
         let config = cfg.toast
-        let scene = vc.vm.scene
+        let scene = vc.model.scene
         // 设置数据
         let imgStr: String
-        switch vc.vm.scene {
+        switch vc.model.scene {
         case .success:
             imgStr = "ProHUDSuccess"
         case .warning:
@@ -96,12 +96,12 @@ fileprivate var privReloadData: (ProHUD.Toast) -> Void = {
         default:
             imgStr = "ProHUDMessage"
         }
-        let img = vc.vm.icon ?? ProHUD.image(named: imgStr)
+        let img = vc.model.icon ?? ProHUD.image(named: imgStr)
         vc.imageView.image = img
         vc.titleLabel.textColor = cfg.primaryLabelColor
-        vc.titleLabel.text = vc.vm.title
+        vc.titleLabel.text = vc.model.title
         vc.bodyLabel.textColor = cfg.secondaryLabelColor
-        vc.bodyLabel.text = vc.vm.message
+        vc.bodyLabel.text = vc.model.message
         
         // 更新布局
         vc.imageView.snp.makeConstraints { (mk) in

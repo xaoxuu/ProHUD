@@ -45,6 +45,18 @@ public extension ProHUD.Toast {
         /// 图标
         public var icon: UIImage?
         
+        /// 持续时间
+        internal var duration: TimeInterval?
+        
+        /// 持续时间
+        internal var durationBlock: DispatchWorkItem?
+        
+        /// 是否可以通过手势移除（向上划）
+        public var removable = true
+        
+        /// 点击事件回调
+        internal var tapCallback: (() -> Void)?
+        
         public init(title: String? = nil, message: String? = nil, icon: UIImage? = nil) {
             self.title = title
             self.message = message

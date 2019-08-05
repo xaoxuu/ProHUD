@@ -66,6 +66,18 @@ public extension ProHUD.Alert {
         /// 图标
         public var icon: UIImage?
         
+        /// 持续时间
+        internal var duration: TimeInterval?
+        
+        /// 持续时间
+        internal var durationBlock: DispatchWorkItem?
+        
+        /// 显示顶部按钮（最小化）
+        internal var forceQuitTimerBlock: DispatchWorkItem?
+        
+        /// 强制退出代码
+        internal var forceQuitCallback: (() -> Void)?
+        
         public init(title: String? = nil, message: String? = nil, icon: UIImage? = nil) {
             self.title = title
             self.message = message

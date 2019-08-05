@@ -31,7 +31,7 @@ class ViewController: UIViewController {
         let t = ProHUD.Toast(scene: .loading, title: "正在加载", message: "请稍候片刻")
         
         let a = ProHUD.push(alert : .loading, title: "正在加载", message: "请稍候片刻")
-        a.didMinimize {
+        a.didForceQuit {
             hud.push(t)
         }
         t.didTapped { [weak t] in
@@ -58,15 +58,23 @@ class ViewController: UIViewController {
             a?.removeAction(index: 0).removeAction(index: 0)
             a?.updateContent(scene: .loading, title: "正在删除", message: "请稍后片刻")
             DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                a?.updateContent(scene: .success, title: "删除成功", message: "啊哈哈哈哈").timeout(2)
-                ProHUD.show(toast: .success, title: "删除成功", message: "aaa")
+                a?.updateContent(scene: .success, title: "删除成功", message: "啊哈哈哈哈").duration(2)
+                ProHUD.push(toast: .success, title: "删除成功", message: "aaa")
             }
         }).addAction(style: .cancel, title: "取消", action: nil)
+        
     }
     
     @IBAction func test(_ sender: UIButton) {
+        
+        
+        textUpdateAction()
+        
+    }
+    
+    func testGuard() {
         let g = ProHUD.Guard(title: "请求权限", message: "请打开相机权限开关，否则无法进行测量。")
-
+        
         g.loadTitle("呵呵")
         g.loadBody("请打开相机权限开关，否则无法进行测量。请打开相机权限开关，否则无法进行测量。")
         g.loadButton(style: .default, title: "测试弹窗", action: { [weak self] in
@@ -78,8 +86,18 @@ class ViewController: UIViewController {
         g.loadButton(style: .cancel, title: "我知道了")
         g.push(to: self)
         debugPrint("test: ", g)
+    }
+    
+    func textUpdateAction() {
+        let a = ProHUD.push(alert: .confirm, title: "确认删除", message: "此操作无法撤销")
+        a.addAction(style: .destructive, title: "删除") {
+            a.removeAction(index: 0, 1).updateContent(scene: .loading, title: "正在删除", message: "请稍后片刻")
+        }.addAction(style: .cancel, title: "取消", action: nil)
+        
+        
         
     }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
 

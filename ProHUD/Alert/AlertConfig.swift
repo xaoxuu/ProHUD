@@ -132,7 +132,7 @@ fileprivate var privReloadData: (ProHUD.Alert) -> Void = {
             isFirstLayout = false
         }
         let imgStr: String
-        switch vc.vm.scene {
+        switch vc.model.scene {
         case .success:
             imgStr = "ProHUDSuccess"
         case .warning:
@@ -148,7 +148,7 @@ fileprivate var privReloadData: (ProHUD.Alert) -> Void = {
         default:
             imgStr = "ProHUDMessage"
         }
-        let img = vc.vm.icon ?? ProHUD.image(named: imgStr)
+        let img = vc.model.icon ?? ProHUD.image(named: imgStr)
         if let imgv = vc.imageView {
             imgv.image = img
         } else {
@@ -167,7 +167,7 @@ fileprivate var privReloadData: (ProHUD.Alert) -> Void = {
         }
         
         // text
-        if vc.vm.title?.count ?? 0 > 0 || vc.vm.message?.count ?? 0 > 0 {
+        if vc.model.title?.count ?? 0 > 0 || vc.model.message?.count ?? 0 > 0 {
             vc.contentStack.addArrangedSubview(vc.textStack)
             vc.textStack.snp.makeConstraints { (mk) in
                 mk.top.greaterThanOrEqualTo(vc.contentView).offset(config.padding*1.75)
@@ -175,19 +175,19 @@ fileprivate var privReloadData: (ProHUD.Alert) -> Void = {
                 mk.leading.greaterThanOrEqualTo(vc.contentView).offset(config.padding*2)
                 mk.trailing.lessThanOrEqualTo(vc.contentView).offset(-config.padding*2)
             }
-            if vc.vm.title?.count ?? 0 > 0 {
+            if vc.model.title?.count ?? 0 > 0 {
                 if let lb = vc.titleLabel {
-                    lb.text = vc.vm.title
+                    lb.text = vc.model.title
                 } else {
                     let title = UILabel()
                     title.textAlignment = .center
                     title.numberOfLines = config.titleMaxLines
                     title.textColor = cfg.primaryLabelColor
-                    title.text = vc.vm.title
+                    title.text = vc.model.title
                     vc.textStack.addArrangedSubview(title)
                     vc.titleLabel = title
                 }
-                if vc.vm.message?.count ?? 0 > 0 {
+                if vc.model.message?.count ?? 0 > 0 {
                     // 有message
                     vc.titleLabel?.font = config.titleFont
                 } else {
@@ -197,28 +197,28 @@ fileprivate var privReloadData: (ProHUD.Alert) -> Void = {
             } else {
                 vc.titleLabel?.removeFromSuperview()
             }
-            if vc.vm.message?.count ?? 0 > 0 {
-                if let lb = vc.messageLabel {
-                    lb.text = vc.vm.message
+            if vc.model.message?.count ?? 0 > 0 {
+                if let lb = vc.bodyLabel {
+                    lb.text = vc.model.message
                 } else {
                     let body = UILabel()
                     body.textAlignment = .center
                     body.font = config.bodyFont
                     body.numberOfLines = config.bodyMaxLines
                     body.textColor = cfg.secondaryLabelColor
-                    body.text = vc.vm.message
+                    body.text = vc.model.message
                     vc.textStack.addArrangedSubview(body)
-                    vc.messageLabel = body
+                    vc.bodyLabel = body
                 }
-                if vc.vm.title?.count ?? 0 > 0 {
+                if vc.model.title?.count ?? 0 > 0 {
                     // 有title
-                    vc.messageLabel?.font = config.bodyFont
+                    vc.bodyLabel?.font = config.bodyFont
                 } else {
                     // 没有title
-                    vc.messageLabel?.font = config.boldTextFont
+                    vc.bodyLabel?.font = config.boldTextFont
                 }
             } else {
-                vc.messageLabel?.removeFromSuperview()
+                vc.bodyLabel?.removeFromSuperview()
             }
         } else {
             vc.textStack.removeFromSuperview()
@@ -297,7 +297,7 @@ fileprivate var privLoadForceQuitButton: (ProHUD.Alert) -> Void = {
         }
         vc.addTouchUpAction(for: btn) { [weak vc] in
             debug("点击了隐藏")
-            vc?.minimizeCallback?()
+            vc?.model.forceQuitCallback?()
             vc?.pop()
         }
     }

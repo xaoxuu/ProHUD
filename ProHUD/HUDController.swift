@@ -14,11 +14,6 @@ public class HUDController: UIViewController {
     
     internal var willLayout: DispatchWorkItem?
     
-    /// 超时（自动消失）时间
-    internal var timeout: TimeInterval?
-    
-    internal var timeoutBlock: DispatchWorkItem?
-    
     /// 消失回调
     internal var disappearCallback: (() -> Void)?
     internal var buttonEvents = [UIButton:() -> Void]()

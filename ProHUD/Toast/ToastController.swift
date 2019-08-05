@@ -15,14 +15,14 @@ public extension ProHUD {
         public var window: UIWindow?
         
         /// 图标
-        internal lazy var imageView: UIImageView = {
+        public lazy var imageView: UIImageView = {
             let imgv = UIImageView()
             imgv.contentMode = .scaleAspectFit
             return imgv
         }()
         
         /// 标题
-        internal lazy var titleLabel: UILabel = {
+        public lazy var titleLabel: UILabel = {
             let lb = UILabel()
             lb.textColor = cfg.primaryLabelColor
             lb.font = cfg.toast.titleFont
@@ -32,7 +32,7 @@ public extension ProHUD {
         }()
         
         /// 正文
-        internal lazy var bodyLabel: UILabel = {
+        public lazy var bodyLabel: UILabel = {
             let lb = UILabel()
             lb.textColor = cfg.secondaryLabelColor
             lb.font = cfg.toast.bodyFont
@@ -42,7 +42,7 @@ public extension ProHUD {
         }()
         
         /// 背景层
-        var backgroundView: UIVisualEffectView = {
+        public var backgroundView: UIVisualEffectView = {
             let vev = UIVisualEffectView()
             if #available(iOS 13.0, *) {
                 vev.effect = UIBlurEffect.init(style: .systemMaterial)
@@ -55,12 +55,7 @@ public extension ProHUD {
         }()
         
         /// 视图模型
-        public var vm = ViewModel()
-        
-        
-        public var removable = true
-        
-        internal var tapCallback: (() -> Void)?
+        public var model = ViewModel()
         
         // MARK: 生命周期
         
@@ -72,15 +67,15 @@ public extension ProHUD {
         public convenience init(scene: Scene = .default, title: String? = nil, message: String? = nil, icon: UIImage? = nil) {
             self.init()
             
-            vm.scene = scene
-            vm.title = title
-            vm.message = message
-            vm.icon = icon
+            model.scene = scene
+            model.title = title
+            model.message = message
+            model.icon = icon
             switch scene {
             case .loading:
-                timeout = nil
+                model.duration = nil
             default:
-                timeout = 2
+                model.duration = 2
             }
             
             // 布局
@@ -101,88 +96,103 @@ public extension ProHUD {
             disappearCallback?()
         }
         
-        
-        /// 移除
-        public func pop() {
-            hud.removeItemFromArray(toast: self)
-            UIView.animateForToast(animations: {
-                let frame = self.window?.frame ?? .zero
-                self.window?.transform = .init(translationX: 0, y: -200-frame.maxY)
-            }) { (done) in
-                self.view.removeFromSuperview()
-                self.removeFromParent()
-                self.window = nil
-            }
+    }
+    
+}
+
+// MARK: - 实例函数
+
+public extension ProHUD.Toast {
+    
+    // MARK: 生命周期函数
+    
+    /// 推入屏幕
+    func push() {
+        ProHUD.push(self)
+    }
+    
+    /// 弹出屏幕
+    func pop() {
+        hud.removeItemFromArray(toast: self)
+        UIView.animateForToast(animations: {
+            let frame = self.window?.frame ?? .zero
+            self.window?.transform = .init(translationX: 0, y: -200-frame.maxY)
+        }) { (done) in
+            self.view.removeFromSuperview()
+            self.removeFromParent()
+            self.window = nil
         }
-        
-        @discardableResult
-        func update(title: String?) -> Toast {
-            vm.title = title
-            titleLabel.text = title
-            return self
+    }
+    
+    // MARK: 设置函数
+    
+    /// 设置持续时间
+    /// - Parameter duration: 持续时间
+    @discardableResult func duration(_ duration: TimeInterval?) -> ProHUD.Toast {
+        model.duration = duration
+        // 持续时间
+        model.durationBlock?.cancel()
+        if let t = duration, t > 0 {
+            model.durationBlock = DispatchWorkItem(block: { [weak self] in
+                self?.pop()
+            })
+            DispatchQueue.main.asyncAfter(deadline: .now()+t, execute: model.durationBlock!)
+        } else {
+            model.durationBlock = nil
         }
-        
-        @discardableResult
-        func update(message: String?) -> Toast {
-            vm.message = message
-            bodyLabel.text = message
-            return self
-        }
-        
-        @discardableResult
-        func update(icon: UIImage?) -> Toast {
-            vm.icon = icon
-            imageView.image = icon
-            return self
-        }
-        
-        
-        // MARK: 设置函数
-        
-        /// 设置超时时间
-        /// - Parameter timeout: 超时时间
-        @discardableResult public func timeout(_ timeout: TimeInterval?) -> Toast {
-            self.timeout = timeout
-            // 超时
-            timeoutBlock?.cancel()
-            if let t = timeout, t > 0 {
-                timeoutBlock = DispatchWorkItem(block: { [weak self] in
-                    self?.pop()
-                })
-                DispatchQueue.main.asyncAfter(deadline: .now()+t, execute: timeoutBlock!)
-            } else {
-                timeoutBlock = nil
-            }
-            return self
-        }
-        
-        /// 点击事件
-        /// - Parameter callback: 事件回调
-        @discardableResult public func didTapped(_ callback: (() -> Void)?) -> Toast {
-            tapCallback = callback
-            return self
-        }
-        
-        /// 消失事件
-        /// - Parameter callback: 事件回调
-        @discardableResult public func didDisappear(_ callback: (() -> Void)?) -> Toast {
-            disappearCallback = callback
-            return self
-        }
-        
-        /// 更新标题
-        /// - Parameter title: 标题
-        @discardableResult public func update(scene: Scene, title: String? = nil, message: String? = nil, icon: UIImage? = nil) -> Toast {
-            vm.scene = scene
-            vm.title = title
-            vm.message = message
-            vm.icon = icon
-            cfg.toast.reloadData(self)
-            return self
-        }
-        
-        
-        
+        return self
+    }
+    
+    /// 点击事件
+    /// - Parameter callback: 事件回调
+    @discardableResult func didTapped(_ callback: (() -> Void)?) -> ProHUD.Toast {
+        model.tapCallback = callback
+        return self
+    }
+    
+    /// 消失事件
+    /// - Parameter callback: 事件回调
+    @discardableResult func didDisappear(_ callback: (() -> Void)?) -> ProHUD.Toast {
+        disappearCallback = callback
+        return self
+    }
+    
+    /// 更新
+    /// - Parameter scene: 场景
+    /// - Parameter title: 标题
+    /// - Parameter message: 内容
+    /// - Parameter icon: 图标
+    @discardableResult func update(scene: Scene, title: String? = nil, message: String? = nil, icon: UIImage? = nil) -> ProHUD.Toast {
+        model.scene = scene
+        model.title = title
+        model.message = message
+        model.icon = icon
+        cfg.toast.reloadData(self)
+        return self
+    }
+    
+    /// 更新标题
+    /// - Parameter title: 标题
+    @discardableResult func update(title: String?) -> ProHUD.Toast {
+        model.title = title
+        titleLabel.text = title
+        return self
+    }
+    
+    /// 更新文本
+    /// - Parameter message: 消息
+    @discardableResult func update(message: String?) -> ProHUD.Toast {
+        model.message = message
+        bodyLabel.text = message
+        return self
+    }
+    
+    /// 更新图标
+    /// - Parameter icon: 图标
+    @discardableResult func update(icon: UIImage?) -> ProHUD.Toast {
+        model.icon = icon
+        imageView.image = icon
+        return self
     }
     
 }
@@ -192,18 +202,18 @@ fileprivate extension ProHUD.Toast {
     /// 点击事件
     /// - Parameter sender: 手势
     @objc func privDidTapped(_ sender: UITapGestureRecognizer) {
-        tapCallback?()
+        model.tapCallback?()
     }
     
     /// 拖拽事件
     /// - Parameter sender: 手势
     @objc func privDidPan(_ sender: UIPanGestureRecognizer) {
-        timeoutBlock?.cancel()
+        model.durationBlock?.cancel()
         let point = sender.translation(in: sender.view)
         window?.transform = .init(translationX: 0, y: point.y)
         if sender.state == .recognized {
             let v = sender.velocity(in: sender.view)
-            if removable == true && (((window?.frame.origin.y ?? 0) < 0 && v.y < 0) || v.y < -1200) {
+            if model.removable == true && (((window?.frame.origin.y ?? 0) < 0 && v.y < 0) || v.y < -1200) {
                 // 移除
                 self.pop()
             } else {
@@ -219,11 +229,13 @@ fileprivate extension ProHUD.Toast {
 }
 
 
-// MARK: - AlertHUD public func
+// MARK: - 实例函数
+
 public extension ProHUD {
     
-    @discardableResult
-    func push(_ toast: Toast) -> Toast {
+    /// Toast推入屏幕
+    /// - Parameter toast: 实例
+    @discardableResult func push(_ toast: Toast) -> Toast {
         let config = cfg.toast
         let isNew: Bool
         if toast.window == nil {
@@ -275,11 +287,17 @@ public extension ProHUD {
         return toast
     }
     
-    @discardableResult
-    func push(toast: Toast.Scene, title: String? = nil, message: String? = nil, icon: UIImage? = nil) -> Toast {
-        return push(Toast(scene: toast, title: title, message: message, icon: icon))
+    /// Toast推入屏幕
+    /// - Parameter toast: 场景
+    /// - Parameter title: 标题
+    /// - Parameter message: 内容
+    /// - Parameter icon: 图标
+    @discardableResult func push(toast scene: Toast.Scene, title: String? = nil, message: String? = nil, icon: UIImage? = nil) -> Toast {
+        return push(Toast(scene: scene, title: title, message: message, icon: icon))
     }
     
+    /// 获取指定的toast
+    /// - Parameter identifier: 标识
     func toasts(identifier: String?) -> [Toast] {
         var tt = [Toast]()
         for t in toasts {
@@ -290,6 +308,8 @@ public extension ProHUD {
         return tt
     }
     
+    /// Toast弹出屏幕
+    /// - Parameter toast: 实例
     func pop(toast: Toast) {
         for t in toasts {
             if t == toast {
@@ -298,6 +318,8 @@ public extension ProHUD {
         }
     }
     
+    /// Toast弹出屏幕
+    /// - Parameter identifier: 需要弹出的Toast的标识
     func pop(toast identifier: String?) {
         for t in toasts {
             if t.identifier == identifier {
@@ -305,38 +327,50 @@ public extension ProHUD {
             }
         }
     }
+    
 }
 
 
-// MARK: AlertHUD public class func
+// MARK: 类函数
 
 public extension ProHUD {
     
-    @discardableResult
-    class func push(_ toast: Toast) -> Toast {
+    /// Toast推入屏幕
+    /// - Parameter toast: 实例
+    @discardableResult class func push(_ toast: Toast) -> Toast {
         return shared.push(toast)
     }
     
-    @discardableResult
-    class func show(toast: Toast.Scene, title: String? = nil, message: String? = nil, icon: UIImage? = nil) -> Toast {
+    /// Toast推入屏幕
+    /// - Parameter toast: 场景
+    /// - Parameter title: 标题
+    /// - Parameter message: 内容
+    /// - Parameter icon: 图标
+    @discardableResult class func push(toast: Toast.Scene, title: String? = nil, message: String? = nil, icon: UIImage? = nil) -> Toast {
         return shared.push(toast: toast, title: title, message: message, icon: icon)
     }
     
+    /// 获取指定的toast
+    /// - Parameter identifier: 标识
     class func toast(identifier: String?) -> [Toast] {
         return shared.toasts(identifier: identifier)
     }
     
+    /// Toast弹出屏幕
+    /// - Parameter toast: 实例
     class func pop(toast: Toast) {
         shared.pop(toast: toast)
     }
     
+    /// Toast弹出屏幕
+    /// - Parameter identifier: 需要弹出的Toast的标识
     class func pop(toast identifier: String?) {
         shared.pop(toast: identifier)
     }
     
 }
 
-// MARK: AlertHUD private func
+// MARK: 私有
 
 fileprivate var willUpdateToastsLayout: DispatchWorkItem?
 
@@ -375,7 +409,8 @@ internal extension ProHUD {
 
 internal extension ProHUD {
     
-    
+    /// 从数组中移除
+    /// - Parameter toast: 实例
     func removeItemFromArray(toast: Toast) {
         if toasts.count > 1 {
             for (i, t) in toasts.enumerated() {

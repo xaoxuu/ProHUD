@@ -9,12 +9,13 @@
 import SnapKit
 
 public extension ProHUD {
+    
     class Guard: HUDController {
         
-        /// 内容容器
+        /// 内容视图
         public var contentView = BlurView()
         
-        /// 内容容器（包括textStack、actionStack)
+        /// 内容容器（包括textStack、actionStack，可以自己插入需要的控件)
         public var contentStack: StackContainer = {
             let stack = StackContainer()
             stack.spacing = cfg.guard.padding + cfg.guard.margin
@@ -22,7 +23,7 @@ public extension ProHUD {
             return stack
         }()
         
-        /// 文本区域
+        /// 文本区容器
         public var textStack: StackContainer = {
             let stack = StackContainer()
             stack.spacing = cfg.guard.margin
@@ -30,10 +31,7 @@ public extension ProHUD {
             return stack
         }()
         
-//        public var titleLabel: UILabel?
-//        public var bodyLabel: UILabel?
-        
-        /// 操作区域
+        /// 操作区容器
         public var actionStack: StackContainer = {
             let stack = StackContainer()
             stack.alignment = .fill
@@ -47,6 +45,7 @@ public extension ProHUD {
         private let tag = Int(23905340)
         
         private var displaying = false
+        
         // MARK: 生命周期
         
         /// 实例化
@@ -56,7 +55,7 @@ public extension ProHUD {
         /// - Parameter icon: 图标
         public convenience init(title: String? = nil, message: String? = nil) {
             self.init()
-//            view = View()
+            
             view.tintColor = cfg.guard.tintColor
             if let _ = title {
                 loadTitle(title)
@@ -84,48 +83,58 @@ public extension ProHUD {
             debug(self, "deinit")
         }
         
-        public func push(to viewController: UIViewController? = nil) {
-            if let vc = viewController {
-                view.layoutIfNeeded()
-                vc.addChild(self)
-                vc.view.addSubview(view)
-                view.isUserInteractionEnabled = true
-                view.snp.makeConstraints { (mk) in
-                    mk.edges.equalToSuperview()
-                }
-                if displaying == false {
-                    translateOut()
-                }
-                displaying = true
-                UIView.animateForGuard {
-                    self.translateIn()
-                }
+        
+    }
+}
+
+// MARK: - 实例函数
+
+public extension ProHUD.Guard {
+    
+    // MARK: 生命周期函数
+    
+    /// 推入某个视图控制器
+    /// - Parameter viewController: 视图控制器
+    func push(to viewController: UIViewController? = nil) {
+        if let vc = viewController {
+            view.layoutIfNeeded()
+            vc.addChild(self)
+            vc.view.addSubview(view)
+            view.isUserInteractionEnabled = true
+            view.snp.makeConstraints { (mk) in
+                mk.edges.equalToSuperview()
             }
-            
+            if displaying == false {
+                translateOut()
+            }
+            displaying = true
+            UIView.animateForGuard {
+                self.translateIn()
+            }
         }
         
-        public func pop() {
-            if displaying {
-                debug("pop")
-                displaying = false
-                view.isUserInteractionEnabled = false
-                self.removeFromParent()
-                UIView.animateForGuard(animations: {
-                    self.translateOut()
-                }) { (done) in
-                    if self.displaying == false {
-                        self.view.removeFromSuperview()
-                    }
+    }
+    
+    /// 从父视图控制器弹出
+    func pop() {
+        if displaying {
+            debug("pop")
+            displaying = false
+            view.isUserInteractionEnabled = false
+            self.removeFromParent()
+            UIView.animateForGuard(animations: {
+                self.translateOut()
+            }) { (done) in
+                if self.displaying == false {
+                    self.view.removeFromSuperview()
                 }
             }
         }
     }
-}
-
-public extension ProHUD.Guard {
     
-    @discardableResult
-    func loadTitle(_ text: String?) -> UILabel {
+    /// 加载一个标题
+    /// - Parameter text: 文本
+    @discardableResult func loadTitle(_ text: String?) -> UILabel {
         let lb = UILabel()
         lb.font = cfg.guard.titleFont
         lb.textColor = cfg.primaryLabelColor
@@ -144,8 +153,9 @@ public extension ProHUD.Guard {
         return lb
     }
     
-    @discardableResult
-    func loadBody(_ text: String?) -> UILabel {
+    /// 加载一段正文
+    /// - Parameter text: 文本
+    @discardableResult func loadBody(_ text: String?) -> UILabel {
         let lb = UILabel()
         lb.font = cfg.guard.bodyFont
         lb.textColor = cfg.secondaryLabelColor
@@ -156,8 +166,11 @@ public extension ProHUD.Guard {
         return lb
     }
     
-    @discardableResult
-    func loadButton(style: UIAlertAction.Style, title: String?, action: (() -> Void)? = nil) -> UIButton {
+    /// 加载一个按钮
+    /// - Parameter style: 样式
+    /// - Parameter title: 标题
+    /// - Parameter action: 事件
+    @discardableResult func loadButton(style: UIAlertAction.Style, title: String?, action: (() -> Void)? = nil) -> UIButton {
         let btn = Button.actionButton(title: title)
         btn.titleLabel?.font = cfg.guard.buttonFont
         if actionStack.superview == nil {
