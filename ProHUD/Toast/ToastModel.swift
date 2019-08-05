@@ -57,10 +57,15 @@ public extension ProHUD.Toast {
         /// 点击事件回调
         internal var tapCallback: (() -> Void)?
         
-        public init(title: String? = nil, message: String? = nil, icon: UIImage? = nil) {
-            self.title = title
-            self.message = message
-            self.icon = icon
+        internal mutating func setupDuration(duration: TimeInterval?, callback: @escaping () -> Void) {
+            self.duration = duration
+            durationBlock?.cancel()
+            if let t = duration, t > 0 {
+                durationBlock = DispatchWorkItem(block: callback)
+                DispatchQueue.main.asyncAfter(deadline: .now()+t, execute: durationBlock!)
+            } else {
+                durationBlock = nil
+            }
         }
         
         

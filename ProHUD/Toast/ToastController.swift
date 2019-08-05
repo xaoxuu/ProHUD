@@ -91,10 +91,6 @@ public extension ProHUD {
             
         }
         
-        public override func viewDidDisappear(_ animated: Bool) {
-            super.viewDidDisappear(animated)
-            disappearCallback?()
-        }
         
     }
     
@@ -129,16 +125,8 @@ public extension ProHUD.Toast {
     /// 设置持续时间
     /// - Parameter duration: 持续时间
     @discardableResult func duration(_ duration: TimeInterval?) -> ProHUD.Toast {
-        model.duration = duration
-        // 持续时间
-        model.durationBlock?.cancel()
-        if let t = duration, t > 0 {
-            model.durationBlock = DispatchWorkItem(block: { [weak self] in
-                self?.pop()
-            })
-            DispatchQueue.main.asyncAfter(deadline: .now()+t, execute: model.durationBlock!)
-        } else {
-            model.durationBlock = nil
+        model.setupDuration(duration: duration) { [weak self] in
+            self?.pop()
         }
         return self
     }
@@ -161,12 +149,10 @@ public extension ProHUD.Toast {
     /// - Parameter scene: 场景
     /// - Parameter title: 标题
     /// - Parameter message: 内容
-    /// - Parameter icon: 图标
-    @discardableResult func update(scene: Scene, title: String? = nil, message: String? = nil, icon: UIImage? = nil) -> ProHUD.Toast {
+    @discardableResult func update(scene: Scene, title: String?, message: String?) -> ProHUD.Toast {
         model.scene = scene
         model.title = title
         model.message = message
-        model.icon = icon
         cfg.toast.reloadData(self)
         return self
     }
@@ -175,7 +161,7 @@ public extension ProHUD.Toast {
     /// - Parameter title: 标题
     @discardableResult func update(title: String?) -> ProHUD.Toast {
         model.title = title
-        titleLabel.text = title
+        cfg.toast.reloadData(self)
         return self
     }
     
@@ -183,7 +169,7 @@ public extension ProHUD.Toast {
     /// - Parameter message: 消息
     @discardableResult func update(message: String?) -> ProHUD.Toast {
         model.message = message
-        bodyLabel.text = message
+        cfg.toast.reloadData(self)
         return self
     }
     
@@ -191,7 +177,7 @@ public extension ProHUD.Toast {
     /// - Parameter icon: 图标
     @discardableResult func update(icon: UIImage?) -> ProHUD.Toast {
         model.icon = icon
-        imageView.image = icon
+        cfg.toast.reloadData(self)
         return self
     }
     
@@ -292,8 +278,8 @@ public extension ProHUD {
     /// - Parameter title: 标题
     /// - Parameter message: 内容
     /// - Parameter icon: 图标
-    @discardableResult func push(toast scene: Toast.Scene, title: String? = nil, message: String? = nil, icon: UIImage? = nil) -> Toast {
-        return push(Toast(scene: scene, title: title, message: message, icon: icon))
+    @discardableResult func push(toast scene: Toast.Scene, title: String? = nil, message: String? = nil) -> Toast {
+        return push(Toast(scene: scene, title: title, message: message))
     }
     
     /// 获取指定的toast
@@ -346,8 +332,8 @@ public extension ProHUD {
     /// - Parameter title: 标题
     /// - Parameter message: 内容
     /// - Parameter icon: 图标
-    @discardableResult class func push(toast: Toast.Scene, title: String? = nil, message: String? = nil, icon: UIImage? = nil) -> Toast {
-        return shared.push(toast: toast, title: title, message: message, icon: icon)
+    @discardableResult class func push(toast: Toast.Scene, title: String? = nil, message: String? = nil) -> Toast {
+        return shared.push(toast: toast, title: title, message: message)
     }
     
     /// 获取指定的toast

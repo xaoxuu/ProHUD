@@ -58,10 +58,10 @@ public extension ProHUD {
             
             view.tintColor = cfg.guard.tintColor
             if let _ = title {
-                loadTitle(title)
+                add(title: title)
             }
             if let _ = message {
-                loadBody(message)
+                add(message: message)
             }
             cfg.guard.loadSubviews(self)
             cfg.guard.reloadData(self)
@@ -71,16 +71,6 @@ public extension ProHUD {
             view.addGestureRecognizer(tap)
             
             
-        }
-        
-        
-        public override func viewDidDisappear(_ animated: Bool) {
-            super.viewDidDisappear(animated)
-            
-        }
-        
-        deinit {
-            debug(self, "deinit")
         }
         
         
@@ -134,13 +124,13 @@ public extension ProHUD.Guard {
     
     /// 加载一个标题
     /// - Parameter text: 文本
-    @discardableResult func loadTitle(_ text: String?) -> UILabel {
+    @discardableResult func add(title: String?) -> UILabel {
         let lb = UILabel()
         lb.font = cfg.guard.titleFont
         lb.textColor = cfg.primaryLabelColor
         lb.numberOfLines = 0
         lb.textAlignment = .justified
-        lb.text = text
+        lb.text = title
         textStack.addArrangedSubview(lb)
         if #available(iOS 11.0, *) {
             let count = textStack.arrangedSubviews.count
@@ -155,13 +145,13 @@ public extension ProHUD.Guard {
     
     /// 加载一段正文
     /// - Parameter text: 文本
-    @discardableResult func loadBody(_ text: String?) -> UILabel {
+    @discardableResult func add(message: String?) -> UILabel {
         let lb = UILabel()
         lb.font = cfg.guard.bodyFont
         lb.textColor = cfg.secondaryLabelColor
         lb.numberOfLines = 0
         lb.textAlignment = .justified
-        lb.text = text
+        lb.text = message
         textStack.addArrangedSubview(lb)
         return lb
     }
@@ -170,7 +160,7 @@ public extension ProHUD.Guard {
     /// - Parameter style: 样式
     /// - Parameter title: 标题
     /// - Parameter action: 事件
-    @discardableResult func loadButton(style: UIAlertAction.Style, title: String?, action: (() -> Void)? = nil) -> UIButton {
+    @discardableResult func add(action style: UIAlertAction.Style, title: String?, action: (() -> Void)? = nil) -> UIButton {
         let btn = Button.actionButton(title: title)
         btn.titleLabel?.font = cfg.guard.buttonFont
         if actionStack.superview == nil {
@@ -187,6 +177,13 @@ public extension ProHUD.Guard {
         return btn
     }
     
+    
+    /// 消失事件
+    /// - Parameter callback: 事件回调
+    @discardableResult func didDisappear(_ callback: (() -> Void)?) -> ProHUD.Guard {
+        disappearCallback = callback
+        return self
+    }
     
 }
 

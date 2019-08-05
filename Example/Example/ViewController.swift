@@ -27,6 +27,28 @@ class ViewController: UIViewController {
         }
         
     }
+    
+    
+    @IBAction func test(_ sender: UIButton) {
+        
+        
+//        testUpdateAction()
+        testGuard()
+        
+    }
+    
+    func testDelete() {
+        let a = ProHUD.push(alert: .delete, title: "确认删除", message: "此操作不可撤销")
+        a.add(action: .destructive, title: "确认", action: { [weak a] in
+            a?.remove(action: 0, 1)
+            a?.update(scene: .loading, title: "正在删除", message: "请稍后片刻")
+            DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                a?.update(scene: .success, title: "删除成功", message: "啊哈哈哈哈").duration(2)
+                ProHUD.push(toast: .success, title: "删除成功", message: "aaa")
+            }
+        }).add(action: .cancel, title: "取消", action: nil)
+        
+    }
     func testToast() {
         let t = ProHUD.Toast(scene: .loading, title: "正在加载", message: "请稍候片刻")
         
@@ -39,60 +61,42 @@ class ViewController: UIViewController {
             let a2 = ProHUD.push(alert: .loading, title: "正在加载", message: "马上就要成功了")
             DispatchQueue.main.asyncAfter(deadline: .now()+1) {
                 let a3 = ProHUD.push(alert: .error, title: "加载失败", message: "点击充实")
-                a3.addAction(style: .default, title: "重新加载") { [weak a3] in
-                    a3?.updateContent(scene: .success, title: "加载成功", message: "马上就要成功了")
-                    a3?.updateAction(index: 0, style: .default, title: "OK", action: { [weak a2, a3] in
-                        a2?.pop()
+                a3.add(action: .default, title: "重新加载") { [weak a3] in
+                    a3?.update(scene: .success, title: "加载成功", message: "马上就要成功了")
+                    a3?.update(action: 0, style: .default, title: "OK", action: { [weak a3] in
                         a3?.pop()
-                    }).removeAction(index: 1).removeAction(index: 1)
-                }.addAction(style: .destructive, title: "终止", action: nil).addAction(style: .cancel, title: "取消", action: nil)
+                    }).remove(action: 1, 2)
+                }.add(action: .destructive, title: "终止", action: nil).add(action: .cancel, title: "取消", action: nil)
                 
             }
             
         }
-    }
-    
-    func testDelete() {
-        let a = ProHUD.push(alert: .delete, title: "确认删除", message: "此操作不可撤销")
-        a.addAction(style: .destructive, title: "确认", action: { [weak a] in
-            a?.removeAction(index: 0).removeAction(index: 0)
-            a?.updateContent(scene: .loading, title: "正在删除", message: "请稍后片刻")
-            DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                a?.updateContent(scene: .success, title: "删除成功", message: "啊哈哈哈哈").duration(2)
-                ProHUD.push(toast: .success, title: "删除成功", message: "aaa")
-            }
-        }).addAction(style: .cancel, title: "取消", action: nil)
+        
+        
         
     }
-    
-    @IBAction func test(_ sender: UIButton) {
-        
-        
-        textUpdateAction()
-        
-    }
-    
     func testGuard() {
         let g = ProHUD.Guard(title: "请求权限", message: "请打开相机权限开关，否则无法进行测量。")
         
-        g.loadTitle("呵呵")
-        g.loadBody("请打开相机权限开关，否则无法进行测量。请打开相机权限开关，否则无法进行测量。")
-        g.loadButton(style: .default, title: "测试弹窗", action: { [weak self] in
+        g.add(title: "呵呵")
+        g.add(message: "请打开相机权限开关，否则无法进行测量。请打开相机权限开关，否则无法进行测量。")
+        g.add(action: .default, title: "测试弹窗", action: { [weak self] in
             self?.testToast()
         })
-        g.loadButton(style: .destructive, title: "测试删除弹窗", action: { [weak self] in
+        g.add(action: .destructive, title: "测试删除弹窗", action: { [weak self] in
             self?.testDelete()
         })
-        g.loadButton(style: .cancel, title: "我知道了")
+        g.add(action: .cancel, title: "我知道了")
+        
         g.push(to: self)
         debugPrint("test: ", g)
     }
     
-    func textUpdateAction() {
+    func testUpdateAction() {
         let a = ProHUD.push(alert: .confirm, title: "确认删除", message: "此操作无法撤销")
-        a.addAction(style: .destructive, title: "删除") {
-            a.removeAction(index: 0, 1).updateContent(scene: .loading, title: "正在删除", message: "请稍后片刻")
-        }.addAction(style: .cancel, title: "取消", action: nil)
+        a.add(action: .destructive, title: "删除") {
+            a.remove(action: 0, 1).update(scene: .loading, title: "正在删除", message: "请稍后片刻")
+        }.add(action: .cancel, title: "取消", action: nil)
         
         
         

@@ -78,12 +78,38 @@ public extension ProHUD.Alert {
         /// 强制退出代码
         internal var forceQuitCallback: (() -> Void)?
         
-        public init(title: String? = nil, message: String? = nil, icon: UIImage? = nil) {
-            self.title = title
-            self.message = message
-            self.icon = icon
+        internal var willLayoutBlock: DispatchWorkItem?
+        
+        internal mutating func setupDuration(duration: TimeInterval?, callback: @escaping () -> Void) {
+            self.duration = duration
+            durationBlock?.cancel()
+            if let t = duration, t > 0 {
+                durationBlock = DispatchWorkItem(block: callback)
+                DispatchQueue.main.asyncAfter(deadline: .now()+t, execute: durationBlock!)
+            } else {
+                durationBlock = nil
+            }
         }
         
+        internal mutating func setupForceQuit(duration: TimeInterval?, callback: @escaping () -> Void) {
+            forceQuitTimerBlock?.cancel()
+            if let t = duration, t > 0 {
+                forceQuitTimerBlock = DispatchWorkItem(block: callback)
+                DispatchQueue.main.asyncAfter(deadline: .now()+t, execute: forceQuitTimerBlock!)
+            } else {
+                forceQuitTimerBlock = nil
+            }
+        }
+        
+        internal mutating func setupWillLayout(duration: TimeInterval?, callback: @escaping () -> Void) {
+            willLayoutBlock?.cancel()
+            if let t = duration, t > 0 {
+                willLayoutBlock = DispatchWorkItem(block: callback)
+                DispatchQueue.main.asyncAfter(deadline: .now()+t, execute: willLayoutBlock!)
+            } else {
+                willLayoutBlock = nil
+            }
+        }
         
     }
     

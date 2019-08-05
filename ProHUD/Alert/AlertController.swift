@@ -75,11 +75,6 @@ public extension ProHUD {
             
         }
         
-        public override func viewDidDisappear(_ animated: Bool) {
-            super.viewDidDisappear(animated)
-            disappearCallback?()
-        }
-        
         
     }
     
@@ -121,19 +116,11 @@ public extension ProHUD.Alert {
     
     // MARK: 设置函数
     
-    /// 设置超时时间
-    /// - Parameter duration: 超时时间
-    @discardableResult func duration(_ duration: TimeInterval?) -> ProHUD.Alert {
-        model.duration = duration
-        willLayoutSubviews()
-        return self
-    }
-    
     /// 添加按钮
     /// - Parameter style: 样式
     /// - Parameter text: 标题
     /// - Parameter action: 事件
-    @discardableResult func addAction(style: UIAlertAction.Style, title: String?, action: (() -> Void)?) -> ProHUD.Alert {
+    @discardableResult func add(action style: UIAlertAction.Style, title: String?, action: (() -> Void)?) -> ProHUD.Alert {
         if let btn = privAddButton(custom: Button.actionButton(title: title), action: action) as? Button {
             btn.update(style: style)
         }
@@ -143,7 +130,7 @@ public extension ProHUD.Alert {
     /// 添加按钮
     /// - Parameter button: 按钮
     /// - Parameter action: 事件
-    @discardableResult func addAction(custom button: UIButton, action: (() -> Void)?) -> ProHUD.Alert {
+    @discardableResult func add(button: UIButton, action: (() -> Void)?) -> ProHUD.Alert {
         privAddButton(custom: button, action: action)
         return self
     }
@@ -162,12 +149,29 @@ public extension ProHUD.Alert {
         return self
     }
     
-    /// 更新标题
+    /// 设置持续时间
+    /// - Parameter duration: 持续时间
+    @discardableResult func duration(_ duration: TimeInterval?) -> ProHUD.Alert {
+        model.duration = duration
+        willLayoutSubviews()
+        return self
+    }
+    
+    /// 更新
+    /// - Parameter scene: 场景
     /// - Parameter title: 标题
-    @discardableResult func updateContent(scene: Scene, title: String? = nil, message: String? = nil, icon: UIImage? = nil) -> ProHUD.Alert {
+    /// - Parameter message: 正文
+    @discardableResult func update(scene: Scene, title: String?, message: String?) -> ProHUD.Alert {
+        model.scene = scene
         model.title = title
         model.message = message
-        model.scene = scene
+        cfg.alert.reloadData(self)
+        return self
+    }
+    
+    /// 更新图标
+    /// - Parameter icon: 图标
+    @discardableResult func update(icon: UIImage?) -> ProHUD.Alert {
         model.icon = icon
         cfg.alert.reloadData(self)
         return self
@@ -178,8 +182,8 @@ public extension ProHUD.Alert {
     /// - Parameter style: 样式
     /// - Parameter title: 标题
     /// - Parameter action: 事件
-    @discardableResult func updateAction(index: Int, style: UIAlertAction.Style, title: String?, action: (() -> Void)?) -> ProHUD.Alert {
-        return updateAction(index: index, button: { (btn) in
+    @discardableResult func update(action index: Int, style: UIAlertAction.Style, title: String?, action: (() -> Void)?) -> ProHUD.Alert {
+        return update(action: index, button: { (btn) in
             btn.setTitle(title, for: .normal)
             if let b = btn as? Button {
                 b.update(style: style)
@@ -192,7 +196,7 @@ public extension ProHUD.Alert {
     /// - Parameter index: 索引
     /// - Parameter button: 按钮
     /// - Parameter action: 事件
-    @discardableResult func updateAction(index: Int, button: (UIButton) -> Void, action: (() -> Void)? = nil) -> ProHUD.Alert {
+    @discardableResult func update(action index: Int, button: (UIButton) -> Void, action: (() -> Void)? = nil) -> ProHUD.Alert {
         if index < self.actionStack.arrangedSubviews.count, let btn = self.actionStack.arrangedSubviews[index] as? UIButton {
             button(btn)
             if let ac = action {
@@ -207,7 +211,7 @@ public extension ProHUD.Alert {
     
     /// 移除按钮
     /// - Parameter index: 索引
-    @discardableResult func removeAction(index: Int...) -> ProHUD.Alert {
+    @discardableResult func remove(action index: Int...) -> ProHUD.Alert {
         for (i, idx) in index.enumerated() {
             privRemoveAction(index: idx-i)
         }
@@ -250,8 +254,8 @@ public extension ProHUD {
     /// - Parameter title: 标题
     /// - Parameter message: 正文
     /// - Parameter icon: 图标
-    @discardableResult func push(alert scene: Alert.Scene, title: String? = nil, message: String? = nil, icon: UIImage? = nil) -> Alert {
-        return push(Alert(scene: scene, title: title, message: message, icon: icon))
+    @discardableResult func push(alert scene: Alert.Scene, title: String? = nil, message: String? = nil) -> Alert {
+        return push(Alert(scene: scene, title: title, message: message))
     }
     
     /// 获取指定的实例
@@ -285,6 +289,7 @@ public extension ProHUD {
             }
         }
     }
+    
 }
 
 
@@ -303,8 +308,8 @@ public extension ProHUD {
     /// - Parameter title: 标题
     /// - Parameter message: 正文
     /// - Parameter icon: 图标
-    @discardableResult class func push(alert: Alert.Scene, title: String? = nil, message: String? = nil, icon: UIImage? = nil) -> Alert {
-        return shared.push(alert: alert, title: title, message: message, icon: icon)
+    @discardableResult class func push(alert: Alert.Scene, title: String? = nil, message: String? = nil) -> Alert {
+        return shared.push(alert: alert, title: title, message: message)
     }
     
     /// 获取指定的实例
@@ -354,35 +359,23 @@ fileprivate extension ProHUD.Alert {
     }
     
     func willLayoutSubviews() {
-        willLayout?.cancel()
-        model.durationBlock?.cancel()
-        model.forceQuitTimerBlock?.cancel()
-        willLayout = DispatchWorkItem(block: { [weak self] in
+        model.setupWillLayout(duration: 0.001) { [weak self] in
             if let a = self {
                 // 布局
                 cfg.alert.loadSubviews(a)
                 cfg.alert.reloadData(a)
-                // 超时
-                if let t = a.model.duration, t > 0 {
-                    a.model.durationBlock = DispatchWorkItem(block: { [weak self] in
-                        self?.pop()
-                    })
-                    DispatchQueue.main.asyncAfter(deadline: .now()+t, execute: a.model.durationBlock!)
-                } else {
-                    a.model.durationBlock = nil
+                // 持续时间
+                a.model.setupDuration(duration: a.model.duration) { [weak self] in
+                    self?.pop()
                 }
                 // 强制退出按钮
-                if cfg.alert.forceQuitTimer > 0 && self?.actionStack.superview == nil {
-                    a.model.forceQuitTimerBlock = DispatchWorkItem(block: { [weak self] in
-                        if let s = self {
-                            cfg.alert.loadForceQuitButton(s)
-                        }
-                    })
-                    DispatchQueue.main.asyncAfter(deadline: .now()+cfg.alert.forceQuitTimer, execute: a.model.forceQuitTimerBlock!)
+                a.model.setupForceQuit(duration: cfg.alert.forceQuitTimer) { [weak self] in
+                    if let aa = self, aa.actionStack.superview == nil {
+                        cfg.alert.loadForceQuitButton(aa)
+                    }
                 }
             }
-        })
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.001, execute: willLayout!)
+        }
     }
     
     @discardableResult func privAddButton(custom button: UIButton, action: (() -> Void)?) -> UIButton {

@@ -9,13 +9,14 @@
 import UIKit
 
 public class HUDController: UIViewController {
-
-    public var identifier = String(Date().timeIntervalSince1970)
     
-    internal var willLayout: DispatchWorkItem?
+    /// ID标识
+    public var identifier = String(Date().timeIntervalSince1970)
     
     /// 消失回调
     internal var disappearCallback: (() -> Void)?
+    
+    /// 按钮事件
     internal var buttonEvents = [UIButton:() -> Void]()
     
     init() {
@@ -38,6 +39,10 @@ public class HUDController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        disappearCallback?()
+    }
     
 }
 
