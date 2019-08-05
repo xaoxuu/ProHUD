@@ -42,8 +42,7 @@ public extension ProHUD {
         /// 是否是强制性的（点击空白处是否可以消失）
         public var force = false
         
-        private let tag = Int(23905340)
-        
+        /// 是否正在显示
         private var displaying = false
         
         // MARK: 生命周期
@@ -102,6 +101,7 @@ public extension ProHUD.Guard {
                 self.translateIn()
             }
         }
+        // FIXME: 如果传入vc为空，则push到根控制器
         
     }
     
@@ -186,6 +186,68 @@ public extension ProHUD.Guard {
     }
     
 }
+
+// MARK: 实例函数
+
+public extension ProHUD {
+    
+    /// 推入屏幕
+    /// - Parameter alert: 实例
+    @discardableResult func push(_ guard: Guard, to viewController: UIViewController? = nil) -> Guard {
+        `guard`.push(to: viewController)
+        return `guard`
+    }
+    
+    /// 推入屏幕
+    /// - Parameter alert: 场景
+    /// - Parameter title: 标题
+    /// - Parameter message: 正文
+    /// - Parameter icon: 图标
+    @discardableResult func push(guard viewController: UIViewController? = nil, title: String? = nil, message: String? = nil) -> Guard {
+        let g = Guard(title: title, message: message)
+        g.push(to: viewController)
+        return g
+    }
+    
+    /// 弹出屏幕
+    /// - Parameter alert: 实例
+    func pop(_ guard: Guard) {
+        `guard`.pop()
+    }
+    
+}
+
+// MARK: 类函数
+
+public extension ProHUD {
+    
+    /// 推入屏幕
+    /// - Parameter alert: 实例
+    @discardableResult class func push(_ guard: Guard, to viewController: UIViewController? = nil) -> Guard {
+        return shared.push(`guard`, to: viewController)
+    }
+    
+    /// 推入屏幕
+    /// - Parameter alert: 场景
+    /// - Parameter title: 标题
+    /// - Parameter message: 正文
+    /// - Parameter icon: 图标
+    @discardableResult class func push(guard viewController: UIViewController? = nil, title: String? = nil, message: String? = nil) -> Guard {
+        return shared.push(guard: viewController, title: title, message: message)
+    }
+    
+    /// 弹出屏幕
+    /// - Parameter alert: 实例
+    class func pop(_ guard: Guard) {
+        shared.pop(`guard`)
+    }
+    
+    
+}
+
+
+
+// MARK: - 私有
 
 fileprivate extension ProHUD.Guard {
     

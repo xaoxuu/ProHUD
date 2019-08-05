@@ -35,7 +35,6 @@ public extension ProHUD {
     
     class StackContainer: UIStackView {
         
-        
         public override init(frame: CGRect) {
             super.init(frame: frame)
             spacing = cfg.alert.margin

@@ -93,6 +93,7 @@ public extension ProHUD.Alert {
     
     /// 弹出屏幕
     func pop() {
+        let hud = ProHUD.shared
         let window = hud.getAlertWindow(self)
         hud.removeItemFromArray(alert: self)
         UIView.animateForAlertBuildOut(animations: {
@@ -260,19 +261,19 @@ public extension ProHUD {
     
     /// 获取指定的实例
     /// - Parameter identifier: 指定实例的标识
-    func alerts(identifier: String?) -> [Alert] {
+    func alert(_ identifier: String?) -> Alert? {
         var aa = [Alert]()
         for a in alerts {
             if a.identifier == identifier {
                 aa.append(a)
             }
         }
-        return aa
+        return aa.last
     }
     
     /// 弹出屏幕
     /// - Parameter alert: 实例
-    func pop(alert: Alert) {
+    func pop(_ alert: Alert) {
         for a in alerts {
             if a == alert {
                 a.pop()
@@ -314,14 +315,14 @@ public extension ProHUD {
     
     /// 获取指定的实例
     /// - Parameter identifier: 指定实例的标识
-    class func alert(identifier: String?) -> [Alert] {
-        return shared.alerts(identifier: identifier)
+    class func alert(_ identifier: String?) -> Alert? {
+        return shared.alert(identifier)
     }
     
     /// 弹出屏幕
     /// - Parameter alert: 实例
-    class func pop(alert: Alert) {
-        shared.pop(alert: alert)
+    class func pop(_ alert: Alert) {
+        shared.pop(alert)
     }
     
     /// 弹出实例

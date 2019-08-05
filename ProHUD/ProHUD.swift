@@ -8,8 +8,6 @@
 
 import UIKit
 
-internal let hud = ProHUD.shared
-
 public class ProHUD {
     
     public static let shared = ProHUD()

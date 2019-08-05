@@ -33,8 +33,8 @@ class ViewController: UIViewController {
         
         
 //        testUpdateAction()
-        testGuard()
-        
+//        testGuard()
+        fastGuard()
     }
     
     func testDelete() {
@@ -99,6 +99,13 @@ class ViewController: UIViewController {
         }.add(action: .cancel, title: "取消", action: nil)
         
         
+        
+    }
+    
+    func fastGuard() {
+        ProHUD.push(guard: self, title: "测试", message: "测试测试").add(action: .cancel, title: "OK", action: {
+            
+        })
         
     }
     

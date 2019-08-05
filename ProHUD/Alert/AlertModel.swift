@@ -29,27 +29,6 @@ public extension ProHUD.Alert {
         /// 错误场景
         case error
         
-        public var backgroundColor: UIColor {
-            switch self {
-            case .success:
-                return UIColor.green
-            case .warning:
-                return UIColor.yellow
-            case .error:
-                return UIColor.red
-            default:
-                return .clear
-            }
-        }
-        
-        public var tintColor: UIColor {
-            switch self {
-            case .success, .error:
-                return .white
-            default:
-                return UIColor.darkGray
-            }
-        }
     }
     
     struct ViewModel {
@@ -72,7 +51,7 @@ public extension ProHUD.Alert {
         /// 持续时间
         internal var durationBlock: DispatchWorkItem?
         
-        /// 显示顶部按钮（最小化）
+        /// 强制退出按钮
         internal var forceQuitTimerBlock: DispatchWorkItem?
         
         /// 强制退出代码

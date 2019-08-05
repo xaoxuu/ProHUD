@@ -109,7 +109,7 @@ public extension ProHUD.Toast {
     
     /// 弹出屏幕
     func pop() {
-        hud.removeItemFromArray(toast: self)
+        ProHUD.shared.removeItemFromArray(toast: self)
         UIView.animateForToast(animations: {
             let frame = self.window?.frame ?? .zero
             self.window?.transform = .init(translationX: 0, y: -200-frame.maxY)
@@ -284,19 +284,19 @@ public extension ProHUD {
     
     /// 获取指定的toast
     /// - Parameter identifier: 标识
-    func toasts(identifier: String?) -> [Toast] {
+    func toast(_ identifier: String?) -> Toast? {
         var tt = [Toast]()
         for t in toasts {
             if t.identifier == identifier {
                 tt.append(t)
             }
         }
-        return tt
+        return tt.last
     }
     
     /// Toast弹出屏幕
     /// - Parameter toast: 实例
-    func pop(toast: Toast) {
+    func pop(_ toast: Toast) {
         for t in toasts {
             if t == toast {
                 t.pop()
@@ -338,14 +338,14 @@ public extension ProHUD {
     
     /// 获取指定的toast
     /// - Parameter identifier: 标识
-    class func toast(identifier: String?) -> [Toast] {
-        return shared.toasts(identifier: identifier)
+    class func toast(_ identifier: String?) -> Toast? {
+        return shared.toast(identifier)
     }
     
     /// Toast弹出屏幕
     /// - Parameter toast: 实例
-    class func pop(toast: Toast) {
-        shared.pop(toast: toast)
+    class func pop(_ toast: Toast) {
+        shared.pop(toast)
     }
     
     /// Toast弹出屏幕
