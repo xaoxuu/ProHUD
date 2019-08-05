@@ -160,7 +160,7 @@ public extension ProHUD.Guard {
     /// - Parameter style: 样式
     /// - Parameter title: 标题
     /// - Parameter action: 事件
-    @discardableResult func add(action style: UIAlertAction.Style, title: String?, action: (() -> Void)? = nil) -> UIButton {
+    @discardableResult func add(action style: UIAlertAction.Style, title: String?, action: (() -> Void)?) -> UIButton {
         let btn = Button.actionButton(title: title)
         btn.titleLabel?.font = cfg.guard.buttonFont
         if actionStack.superview == nil {

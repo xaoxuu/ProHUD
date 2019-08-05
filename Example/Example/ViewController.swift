@@ -33,8 +33,8 @@ class ViewController: UIViewController {
         
         
 //        testUpdateAction()
-//        testGuard()
-        fastGuard()
+        testGuard()
+//        fastGuard()
     }
     
     func testDelete() {
@@ -86,7 +86,7 @@ class ViewController: UIViewController {
         g.add(action: .destructive, title: "测试删除弹窗", action: { [weak self] in
             self?.testDelete()
         })
-        g.add(action: .cancel, title: "我知道了")
+        g.add(action: .cancel, title: "我知道了", action: nil)
         
         g.push(to: self)
         debugPrint("test: ", g)
@@ -103,9 +103,15 @@ class ViewController: UIViewController {
     }
     
     func fastGuard() {
-        ProHUD.push(guard: self, title: "测试", message: "测试测试").add(action: .cancel, title: "OK", action: {
+        let g = ProHUD.push(guard: self, title: "测试", message: "测试测试")
+        g.add(action: .default, title: "默认按钮", action: {
             
         })
+        g.add(action: .cancel, title: "取消", action: nil)
+        g.view.backgroundColor = .clear
+        
+//        g.contentView.backgroundColor = UIColor.white
+        
         
     }
     

@@ -67,6 +67,7 @@ public extension ProHUD {
     }
 }
 
+/// 配置
 internal var cfg = ProHUD.Configuration()
 
 public extension ProHUD {

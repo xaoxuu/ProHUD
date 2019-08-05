@@ -225,7 +225,7 @@ public extension ProHUD {
         let config = cfg.toast
         let isNew: Bool
         if toast.window == nil {
-            let w = ToastWindow(frame: .zero)
+            let w = UIWindow(frame: .zero)
             toast.window = w
             w.windowLevel = UIWindow.Level(5000)
             w.backgroundColor = .clear

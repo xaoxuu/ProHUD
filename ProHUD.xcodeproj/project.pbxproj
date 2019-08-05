@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1AE9C44ABAF3F797A5518CE8 /* Pods_ProHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2011798511AD590A613E54E /* Pods_ProHUD.framework */; };
 		CD16490B22EF09AB0077988C /* AlertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD16490A22EF09AB0077988C /* AlertModel.swift */; };
 		CD16490D22EF09B40077988C /* AlertConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD16490C22EF09B40077988C /* AlertConfig.swift */; };
 		CD16490F22EF09D50077988C /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD16490E22EF09D50077988C /* AlertView.swift */; };
@@ -27,6 +28,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3C95FD2F17A45D13E2AB9306 /* Pods-ProHUD.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ProHUD.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ProHUD/Pods-ProHUD.debug.xcconfig"; sourceTree = "<group>"; };
+		C2011798511AD590A613E54E /* Pods_ProHUD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ProHUD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD16490A22EF09AB0077988C /* AlertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModel.swift; sourceTree = "<group>"; };
 		CD16490C22EF09B40077988C /* AlertConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertConfig.swift; sourceTree = "<group>"; };
 		CD16490E22EF09D50077988C /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
@@ -47,6 +50,7 @@
 		CD95D26A22E72DB3007559A3 /* ProHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProHUD.swift; sourceTree = "<group>"; };
 		CDB6A07A22EEF06500AF6CF0 /* HUDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDController.swift; sourceTree = "<group>"; };
 		CDB6A07C22EEF19D00AF6CF0 /* HUDConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDConfig.swift; sourceTree = "<group>"; };
+		DC31EBFAC56868D6096A233A /* Pods-ProHUD.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ProHUD.release.xcconfig"; path = "Pods/Target Support Files/Pods-ProHUD/Pods-ProHUD.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,12 +58,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1AE9C44ABAF3F797A5518CE8 /* Pods_ProHUD.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		33E080A4BE17176DF10FFA89 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3C95FD2F17A45D13E2AB9306 /* Pods-ProHUD.debug.xcconfig */,
+				DC31EBFAC56868D6096A233A /* Pods-ProHUD.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		BA9A12AB2B7D4F5C9A8C773C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C2011798511AD590A613E54E /* Pods_ProHUD.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		CD16491022EF0A4B0077988C /* Alert */ = {
 			isa = PBXGroup;
 			children = (
@@ -98,6 +120,8 @@
 				CD95D26722E72D68007559A3 /* ProHUD.podspec */,
 				CD95D21E22E72C4C007559A3 /* ProHUD */,
 				CD95D21D22E72C4C007559A3 /* Products */,
+				33E080A4BE17176DF10FFA89 /* Pods */,
+				BA9A12AB2B7D4F5C9A8C773C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -144,10 +168,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CD95D22422E72C4C007559A3 /* Build configuration list for PBXNativeTarget "ProHUD" */;
 			buildPhases = (
+				A54F2DB69A2889EF6E75A3EC /* [CP] Check Pods Manifest.lock */,
 				CD95D21722E72C4C007559A3 /* Headers */,
 				CD95D21822E72C4C007559A3 /* Sources */,
 				CD95D21922E72C4C007559A3 /* Frameworks */,
 				CD95D21A22E72C4C007559A3 /* Resources */,
+				8C88ED8CC1E8972268375748 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -201,6 +227,50 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8C88ED8CC1E8972268375748 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ProHUD/Pods-ProHUD-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A54F2DB69A2889EF6E75A3EC /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ProHUD-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		CD95D21822E72C4C007559A3 /* Sources */ = {
@@ -350,6 +420,7 @@
 		};
 		CD95D22522E72C4C007559A3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3C95FD2F17A45D13E2AB9306 /* Pods-ProHUD.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -376,6 +447,7 @@
 		};
 		CD95D22622E72C4C007559A3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DC31EBFAC56868D6096A233A /* Pods-ProHUD.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;

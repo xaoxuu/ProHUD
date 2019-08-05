@@ -37,6 +37,7 @@ internal extension ProHUD {
         }
         return b
     }
+    
     /// 获取Image
     static func image(named: String) -> UIImage? {
         return UIImage.init(named: named, in: bundle, compatibleWith: nil)
