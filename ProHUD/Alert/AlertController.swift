@@ -64,12 +64,6 @@ public extension ProHUD {
             model.title = title
             model.message = message
             model.icon = icon
-            switch scene {
-            case .loading:
-                model.duration = nil
-            default:
-                model.duration = 2
-            }
             
             willLayoutSubviews()
             
@@ -166,7 +160,7 @@ public extension ProHUD.Alert {
         model.scene = scene
         model.title = title
         model.message = message
-        cfg.alert.reloadData(self)
+        willLayoutSubviews()
         return self
     }
     
@@ -175,6 +169,7 @@ public extension ProHUD.Alert {
     @discardableResult func update(icon: UIImage?) -> ProHUD.Alert {
         model.icon = icon
         cfg.alert.reloadData(self)
+        imageView?.layer.removeAllAnimations()
         return self
     }
     
@@ -230,18 +225,20 @@ public extension ProHUD {
     /// 推入屏幕
     /// - Parameter alert: 实例
     @discardableResult func push(_ alert: Alert) -> Alert {
-        let window = getAlertWindow(alert)
-        window.makeKeyAndVisible()
-        window.resignKey()
-        window.addSubview(alert.view)
-        alert.view.transform = .init(scaleX: 1.2, y: 1.2)
-        alert.view.alpha = 0
-        UIView.animateForAlertBuildIn {
-            alert.view.transform = .identity
-            alert.view.alpha = 1
-            window.backgroundColor = window.backgroundColor?.withAlphaComponent(0.6)
+        if alerts.contains(alert) == false {
+            let window = getAlertWindow(alert)
+            window.makeKeyAndVisible()
+            window.resignKey()
+            window.addSubview(alert.view)
+            alert.view.transform = .init(scaleX: 1.2, y: 1.2)
+            alert.view.alpha = 0
+            UIView.animateForAlertBuildIn {
+                alert.view.transform = .identity
+                alert.view.alpha = 1
+                window.backgroundColor = window.backgroundColor?.withAlphaComponent(0.6)
+            }
+            alerts.append(alert)
         }
-        alerts.append(alert)
         updateAlertsLayout()
         // setup duration
         if let _ = alert.model.duration, alert.model.durationBlock == nil {
@@ -436,7 +433,9 @@ fileprivate extension ProHUD {
         if alerts.count > 1 {
             for (i, a) in alerts.enumerated() {
                 if a == alert {
-                    alerts.remove(at: i)
+                    if i < alerts.count {
+                        alerts.remove(at: i)
+                    }
                 }
             }
             updateAlertsLayout()

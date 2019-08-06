@@ -71,12 +71,6 @@ public extension ProHUD {
             model.title = title
             model.message = message
             model.icon = icon
-            switch scene {
-            case .loading:
-                model.duration = nil
-            default:
-                model.duration = 2
-            }
             
             // 布局
             cfg.toast.loadSubviews(self)

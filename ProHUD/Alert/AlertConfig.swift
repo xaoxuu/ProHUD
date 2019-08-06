@@ -165,7 +165,15 @@ fileprivate var privReloadData: (ProHUD.Alert) -> Void = {
             }
             vc.imageView = icon
         }
-        
+        if vc.model.scene == .loading {
+            let ani = CABasicAnimation(keyPath: "transform.rotation.z")
+            ani.toValue = M_PI*2.0
+            ani.duration = 2
+            ani.repeatCount = 10000
+            vc.imageView?.layer.add(ani, forKey: "rotationAnimation")
+        } else {
+            vc.imageView?.layer.removeAllAnimations()
+        }
         // text
         if vc.model.title?.count ?? 0 > 0 || vc.model.message?.count ?? 0 > 0 {
             vc.contentStack.addArrangedSubview(vc.textStack)
@@ -262,6 +270,15 @@ fileprivate var privReloadData: (ProHUD.Alert) -> Void = {
             UIView.animateForAlert {
                 vc.view.layoutIfNeeded()
             }
+        }
+        switch vc.model.scene {
+        case .loading:
+            vc.model.duration = nil
+        default:
+            vc.model.duration = 2
+        }
+        if vc.actionStack.arrangedSubviews.count > 0 {
+            vc.model.duration = nil
         }
     }
 }()

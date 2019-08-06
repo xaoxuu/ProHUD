@@ -33,8 +33,11 @@ public extension ProHUD {
             
             if #available(iOS 13.0, *) {
                 super.init(effect: UIBlurEffect(style: .systemMaterial))
-            } else {
+            } else if #available(iOS 11.0, *) {
                 super.init(effect: UIBlurEffect(style: .extraLight))
+            } else {
+                super.init(effect: .none)
+                backgroundColor = .white
             }
             
         }
