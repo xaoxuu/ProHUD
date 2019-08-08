@@ -90,6 +90,35 @@ internal extension ProHUD.Configuration.Alert {
     var loadForceQuitButton: (ProHUD.Alert) -> Void {
         return privLoadForceQuitButton
     }
+    
+    var setupDefaultDuration: (ProHUD.Alert) -> Void {
+        return { (vc) in
+            // 如果设置了超时时间，但是增加了按钮
+            if let t = vc.model.duration, t > 0 {
+                if vc.buttonEvents.count > 0 {
+                    vc.duration(nil)
+                }
+            } else if vc.model.duration == nil && vc.model.scene != .loading {
+                // 如果没有设置超时时间
+                vc.duration(2)
+            }
+        }
+    }
+    
+    var reloadStack: (ProHUD.Alert) -> Void {
+        return { (vc) in
+            if vc.textStack.arrangedSubviews.count > 0 {
+                vc.contentStack.addArrangedSubview(vc.textStack)
+            } else {
+                vc.textStack.removeFromSuperview()
+            }
+            if vc.actionStack.arrangedSubviews.count > 0 {
+                vc.contentStack.addArrangedSubview(vc.actionStack)
+            } else {
+                vc.actionStack.removeFromSuperview()
+            }
+        }
+    }
 }
 
 fileprivate var privLoadSubviews: (ProHUD.Alert) -> Void = {
@@ -167,15 +196,8 @@ fileprivate var privReloadData: (ProHUD.Alert) -> Void = {
             }
             vc.imageView = icon
         }
-        if vc.model.scene == .loading {
-            let ani = CABasicAnimation(keyPath: "transform.rotation.z")
-            ani.toValue = M_PI*2.0
-            ani.duration = 2
-            ani.repeatCount = 10000
-            vc.imageView?.layer.add(ani, forKey: "rotationAnimation")
-        } else {
-            vc.imageView?.layer.removeAllAnimations()
-        }
+        vc.imageView?.layer.removeAllAnimations()
+        
         // text
         if vc.model.title?.count ?? 0 > 0 || vc.model.message?.count ?? 0 > 0 {
             vc.contentStack.addArrangedSubview(vc.textStack)
@@ -278,15 +300,8 @@ fileprivate var privReloadData: (ProHUD.Alert) -> Void = {
                 vc.view.layoutIfNeeded()
             }
         }
-        switch vc.model.scene {
-        case .loading:
-            vc.duration(nil)
-        default:
-            vc.duration(2)
-        }
-        if vc.actionStack.arrangedSubviews.count > 0 {
-            vc.duration(nil)
-        }
+        
+        
     }
 }()
 
@@ -326,3 +341,6 @@ fileprivate var privLoadForceQuitButton: (ProHUD.Alert) -> Void = {
         }
     }
 }()
+
+
+

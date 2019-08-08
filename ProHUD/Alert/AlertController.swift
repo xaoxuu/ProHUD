@@ -189,7 +189,21 @@ public extension Alert {
     @discardableResult func update(icon: UIImage?) -> Alert {
         model.icon = icon
         cfg.alert.reloadData(self)
-        imageView?.layer.removeAllAnimations()
+        return self
+    }
+    
+    @discardableResult func animate(rotate: Bool) -> Alert {
+        if rotate {
+            DispatchQueue.main.async {
+                let ani = CABasicAnimation(keyPath: "transform.rotation.z")
+                ani.toValue = M_PI*2.0
+                ani.duration = 2
+                ani.repeatCount = 10000
+                self.imageView?.layer.add(ani, forKey: "rotationAnimation")
+            }
+        } else {
+            imageView?.layer.removeAllAnimations()
+        }
         return self
     }
     
@@ -297,6 +311,7 @@ fileprivate extension Alert {
                 // 布局
                 cfg.alert.loadSubviews(a)
                 cfg.alert.reloadData(a)
+                cfg.alert.setupDefaultDuration(a)
                 // 强制退出按钮
                 a.model.setupForceQuit(duration: cfg.alert.forceQuitTimer) { [weak self] in
                     if let aa = self, aa.actionStack.superview == nil {

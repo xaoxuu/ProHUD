@@ -17,7 +17,7 @@ public class HUDController: UIViewController {
     internal var disappearCallback: (() -> Void)?
     
     /// 按钮事件
-    fileprivate var buttonEvents = [UIButton:() -> Void]()
+    internal var buttonEvents = [UIButton:() -> Void]()
     
     init() {
         super.init(nibName: nil, bundle: nil)
