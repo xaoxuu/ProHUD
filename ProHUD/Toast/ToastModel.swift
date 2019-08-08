@@ -8,7 +8,7 @@
 
 import UIKit
 
-public extension ProHUD.Toast {
+public extension Toast {
     enum Scene {
         /// 默认场景
         case `default`

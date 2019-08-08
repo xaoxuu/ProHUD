@@ -9,8 +9,12 @@
 import UIKit
 import Inspire
 
+public typealias Toast = ProHUD.Toast
+
 public extension ProHUD {
     class Toast: HUDController {
+        
+        internal static var toasts = [Toast]()
         
         public var window: UIWindow?
         
@@ -68,14 +72,14 @@ public extension ProHUD {
         /// - Parameter title: 标题
         /// - Parameter message: 内容
         /// - Parameter icon: 图标
-        public convenience init(scene: Scene = .default, title: String? = nil, message: String? = nil, icon: UIImage? = nil) {
+        public convenience init(scene: Scene = .default, title: String? = nil, message: String? = nil, icon: UIImage? = nil, actions: ((Toast) -> Void)? = nil) {
             self.init()
             
             model.scene = scene
             model.title = title
             model.message = message
             model.icon = icon
-            
+            actions?(self)
             // 布局
             cfg.toast.loadSubviews(self)
             cfg.toast.reloadData(self)
@@ -96,18 +100,66 @@ public extension ProHUD {
 
 // MARK: - 实例函数
 
-public extension ProHUD.Toast {
+public extension Toast {
     
     // MARK: 生命周期函数
     
     /// 推入屏幕
-    func push() {
-        ProHUD.push(self)
+    @discardableResult func push() -> Toast {
+        let config = cfg.toast
+        let isNew: Bool
+        if self.window == nil {
+            let w = UIWindow(frame: .zero)
+            self.window = w
+            w.windowLevel = UIWindow.Level(5000)
+            w.backgroundColor = .clear
+            w.layer.shadowRadius = 8
+            w.layer.shadowOffset = .init(width: 0, height: 5)
+            w.layer.shadowOpacity = 0.2
+            w.isHidden = false
+            isNew = true
+        } else {
+            isNew = false
+        }
+        
+        let window = self.window!
+        // background & frame
+        // 设定正确的宽度，更新子视图
+        let width = CGFloat.minimum(UIScreen.main.bounds.width - 2*config.margin, config.maxWidth)
+        view.frame.size = CGSize(width: width, height: 800)
+        titleLabel.sizeToFit()
+        bodyLabel.sizeToFit()
+        view.layoutIfNeeded()
+        // 更新子视图之后获取正确的高度
+        var height = CGFloat(0)
+        for v in self.view.subviews {
+            height = CGFloat.maximum(v.frame.maxY, height)
+        }
+        height += config.padding
+        // 应用到frame
+        window.frame = CGRect(x: (UIScreen.main.bounds.width - width) / 2, y: 0, width: width, height: height)
+        backgroundView.frame.size = window.frame.size
+        window.insertSubview(backgroundView, at: 0)
+        window.rootViewController = self // 此时toast.view.frame.size会自动更新为window.frame.size
+        // 根据在屏幕中的顺序，确定y坐标
+        if Toast.toasts.contains(self) == false {
+             Toast.toasts.append(self)
+        }
+        Toast.updateToastsLayout()
+        if isNew {
+            window.transform = .init(translationX: 0, y: -window.frame.maxY)
+            UIView.animateForToast {
+                window.transform = .identity
+            }
+        } else {
+            view.layoutIfNeeded()
+        }
+        return self
     }
     
     /// 弹出屏幕
     func pop() {
-        ProHUD.shared.removeItemFromArray(toast: self)
+        Toast.removeItemFromArray(toast: self)
         UIView.animateForToast(animations: {
             let frame = self.window?.frame ?? .zero
             self.window?.transform = .init(translationX: 0, y: -200-frame.maxY)
@@ -122,7 +174,7 @@ public extension ProHUD.Toast {
     
     /// 设置持续时间
     /// - Parameter duration: 持续时间
-    @discardableResult func duration(_ duration: TimeInterval?) -> ProHUD.Toast {
+    @discardableResult func duration(_ duration: TimeInterval?) -> Toast {
         model.setupDuration(duration: duration) { [weak self] in
             self?.pop()
         }
@@ -131,14 +183,14 @@ public extension ProHUD.Toast {
     
     /// 点击事件
     /// - Parameter callback: 事件回调
-    @discardableResult func didTapped(_ callback: (() -> Void)?) -> ProHUD.Toast {
+    @discardableResult func didTapped(_ callback: (() -> Void)?) -> Toast {
         model.tapCallback = callback
         return self
     }
     
     /// 消失事件
     /// - Parameter callback: 事件回调
-    @discardableResult func didDisappear(_ callback: (() -> Void)?) -> ProHUD.Toast {
+    @discardableResult func didDisappear(_ callback: (() -> Void)?) -> Toast {
         disappearCallback = callback
         return self
     }
@@ -147,7 +199,7 @@ public extension ProHUD.Toast {
     /// - Parameter scene: 场景
     /// - Parameter title: 标题
     /// - Parameter message: 内容
-    @discardableResult func update(scene: Scene, title: String?, message: String?) -> ProHUD.Toast {
+    @discardableResult func update(scene: Scene, title: String?, message: String?) -> Toast {
         model.scene = scene
         model.title = title
         model.message = message
@@ -157,7 +209,7 @@ public extension ProHUD.Toast {
     
     /// 更新标题
     /// - Parameter title: 标题
-    @discardableResult func update(title: String?) -> ProHUD.Toast {
+    @discardableResult func update(title: String?) -> Toast {
         model.title = title
         cfg.toast.reloadData(self)
         return self
@@ -165,7 +217,7 @@ public extension ProHUD.Toast {
     
     /// 更新文本
     /// - Parameter message: 消息
-    @discardableResult func update(message: String?) -> ProHUD.Toast {
+    @discardableResult func update(message: String?) -> Toast {
         model.message = message
         cfg.toast.reloadData(self)
         return self
@@ -173,7 +225,7 @@ public extension ProHUD.Toast {
     
     /// 更新图标
     /// - Parameter icon: 图标
-    @discardableResult func update(icon: UIImage?) -> ProHUD.Toast {
+    @discardableResult func update(icon: UIImage?) -> Toast {
         model.icon = icon
         cfg.toast.reloadData(self)
         return self
@@ -181,7 +233,53 @@ public extension ProHUD.Toast {
     
 }
 
-fileprivate extension ProHUD.Toast {
+
+// MARK: 类函数
+
+public extension Toast {
+    
+    /// 推入屏幕
+    /// - Parameter toast: 场景
+    /// - Parameter title: 标题
+    /// - Parameter message: 内容
+    /// - Parameter actions: 更多操作
+    @discardableResult class func push(toast scene: Toast.Scene, title: String? = nil, message: String? = nil, actions: ((Toast) -> Void)? = nil) -> Toast {
+        return Toast(scene: scene, title: title, message: message, actions: actions).push()
+    }
+    
+    /// 获取指定的toast
+    /// - Parameter identifier: 标识
+    class func toasts(_ identifier: String?) -> [Toast] {
+        var tt = [Toast]()
+        for t in toasts {
+            if t.identifier == identifier {
+                tt.append(t)
+            }
+        }
+        return tt
+    }
+    
+    /// 弹出屏幕
+    /// - Parameter toast: 实例
+    class func pop(_ toast: Toast) {
+        toast.pop()
+    }
+    
+    /// 弹出屏幕
+    /// - Parameter identifier: 指定实例的标识
+    class func pop(_ identifier: String?) {
+        for t in toasts(identifier) {
+            t.pop()
+        }
+    }
+    
+}
+
+// MARK: 私有
+
+fileprivate var willUpdateToastsLayout: DispatchWorkItem?
+
+fileprivate extension Toast {
     
     /// 点击事件
     /// - Parameter sender: 手势
@@ -210,159 +308,24 @@ fileprivate extension ProHUD.Toast {
             }
         }
     }
-}
-
-
-// MARK: - 实例函数
-
-public extension ProHUD {
     
-    /// Toast推入屏幕
+    /// 从数组中移除
     /// - Parameter toast: 实例
-    @discardableResult func push(_ toast: Toast) -> Toast {
-        let config = cfg.toast
-        let isNew: Bool
-        if toast.window == nil {
-            let w = UIWindow(frame: .zero)
-            toast.window = w
-            w.windowLevel = UIWindow.Level(5000)
-            w.backgroundColor = .clear
-            w.layer.shadowRadius = 8
-            w.layer.shadowOffset = .init(width: 0, height: 5)
-            w.layer.shadowOpacity = 0.2
-            w.isHidden = false
-            isNew = true
+    class func removeItemFromArray(toast: Toast) {
+        if toasts.count > 1 {
+            for (i, t) in toasts.enumerated() {
+                if t == toast {
+                    toasts.remove(at: i)
+                }
+            }
+            updateToastsLayout()
+        } else if toasts.count == 1 {
+            toasts.removeAll()
         } else {
-            isNew = false
-        }
-        
-        let window = toast.window!
-        // background & frame
-        // 设定正确的宽度，更新子视图
-        let width = CGFloat.minimum(UIScreen.main.bounds.width - 2*config.margin, config.maxWidth)
-        toast.view.frame.size = CGSize(width: width, height: 800)
-        toast.titleLabel.sizeToFit()
-        toast.bodyLabel.sizeToFit()
-        toast.view.layoutIfNeeded()
-        // 更新子视图之后获取正确的高度
-        var height = CGFloat(0)
-        for v in toast.view.subviews {
-            height = CGFloat.maximum(v.frame.maxY, height)
-        }
-        height += config.padding
-        // 应用到frame
-        window.frame = CGRect(x: (UIScreen.main.bounds.width - width) / 2, y: 0, width: width, height: height)
-        toast.backgroundView.frame.size = window.frame.size
-        window.insertSubview(toast.backgroundView, at: 0)
-        window.rootViewController = toast // 此时toast.view.frame.size会自动更新为window.frame.size
-        // 根据在屏幕中的顺序，确定y坐标
-        if toasts.contains(toast) == false {
-            toasts.append(toast)
-        }
-        updateToastsLayout()
-        if isNew {
-            window.transform = .init(translationX: 0, y: -window.frame.maxY)
-            UIView.animateForToast {
-                window.transform = .identity
-            }
-        } else {
-            toast.view.layoutIfNeeded()
-        }
-        return toast
-    }
-    
-    /// Toast推入屏幕
-    /// - Parameter toast: 场景
-    /// - Parameter title: 标题
-    /// - Parameter message: 内容
-    /// - Parameter icon: 图标
-    @discardableResult func push(toast scene: Toast.Scene, title: String? = nil, message: String? = nil, actions: ((Toast) -> Void)? = nil) -> Toast {
-        let t = Toast(scene: scene, title: title, message: message)
-        actions?(t)
-        t.view.layoutIfNeeded()
-        return push(t)
-    }
-    
-    /// 获取指定的toast
-    /// - Parameter identifier: 标识
-    func toast(_ identifier: String?) -> Toast? {
-        var tt = [Toast]()
-        for t in toasts {
-            if t.identifier == identifier {
-                tt.append(t)
-            }
-        }
-        return tt.last
-    }
-    
-    /// Toast弹出屏幕
-    /// - Parameter toast: 实例
-    func pop(_ toast: Toast) {
-        for t in toasts {
-            if t == toast {
-                t.pop()
-            }
+            debug("漏洞：已经没有toast了")
         }
     }
-    
-    /// Toast弹出屏幕
-    /// - Parameter identifier: 需要弹出的Toast的标识
-    func pop(toast identifier: String?) {
-        for t in toasts {
-            if t.identifier == identifier {
-                t.pop()
-            }
-        }
-    }
-    
-}
-
-
-// MARK: 类函数
-
-public extension ProHUD {
-    
-    /// Toast推入屏幕
-    /// - Parameter toast: 实例
-    @discardableResult class func push(_ toast: Toast) -> Toast {
-        return shared.push(toast)
-    }
-    
-    /// Toast推入屏幕
-    /// - Parameter toast: 场景
-    /// - Parameter title: 标题
-    /// - Parameter message: 内容
-    /// - Parameter icon: 图标
-    @discardableResult class func push(toast: Toast.Scene, title: String? = nil, message: String? = nil, actions: ((Toast) -> Void)? = nil) -> Toast {
-        return shared.push(toast: toast, title: title, message: message, actions: actions)
-    }
-    
-    /// 获取指定的toast
-    /// - Parameter identifier: 标识
-    class func toast(_ identifier: String?) -> Toast? {
-        return shared.toast(identifier)
-    }
-    
-    /// Toast弹出屏幕
-    /// - Parameter toast: 实例
-    class func pop(_ toast: Toast) {
-        shared.pop(toast)
-    }
-    
-    /// Toast弹出屏幕
-    /// - Parameter identifier: 需要弹出的Toast的标识
-    class func pop(toast identifier: String?) {
-        shared.pop(toast: identifier)
-    }
-    
-}
-
-// MARK: 私有
-
-fileprivate var willUpdateToastsLayout: DispatchWorkItem?
-
-internal extension ProHUD {
-    func updateToastsLayout() {
+    class func updateToastsLayout() {
         func f() {
             let top = Inspire.shared.screen.updatedSafeAreaInsets.top
             for (i, e) in toasts.enumerated() {
@@ -391,28 +354,6 @@ internal extension ProHUD {
         })
         DispatchQueue.main.asyncAfter(deadline: .now()+0.001, execute: willUpdateToastsLayout!)
     }
-    
-}
-
-internal extension ProHUD {
-    
-    /// 从数组中移除
-    /// - Parameter toast: 实例
-    func removeItemFromArray(toast: Toast) {
-        if toasts.count > 1 {
-            for (i, t) in toasts.enumerated() {
-                if t == toast {
-                    toasts.remove(at: i)
-                }
-            }
-            updateToastsLayout()
-        } else if toasts.count == 1 {
-            toasts.removeAll()
-        } else {
-            debug("漏洞：已经没有toast了")
-        }
-    }
-    
 }
 
 

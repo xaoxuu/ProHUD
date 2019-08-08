@@ -8,7 +8,7 @@
 
 import UIKit
 
-public extension ProHUD.Alert {
+public extension Alert {
     enum Scene {
         /// 默认场景
         case `default`

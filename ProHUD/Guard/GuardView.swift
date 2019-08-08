@@ -8,7 +8,7 @@
 
 import UIKit
 
-internal extension ProHUD.Guard {
+internal extension Guard {
     
     class Button: UIButton {
         class func actionButton(title: String?) -> Button {

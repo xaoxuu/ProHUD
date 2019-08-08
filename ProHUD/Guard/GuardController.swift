@@ -91,7 +91,7 @@ public extension Guard {
     
     /// 推入某个视图控制器
     /// - Parameter viewController: 视图控制器
-    func push(to viewController: UIViewController? = nil) {
+    func push(to viewController: UIViewController? = nil) -> Guard {
         func f(_ vc: UIViewController) {
             view.layoutIfNeeded()
             vc.addChild(self)
@@ -113,31 +113,27 @@ public extension Guard {
         } else {
             debug("请传入需要push到的控制器")
         }
+        return self
     }
     
     /// 从父视图控制器弹出
-    func pop(animated: Bool = true) {
+    func pop() {
         if displaying {
             debug("pop")
             displaying = false
             view.isUserInteractionEnabled = false
             self.removeFromParent()
-            if animated {
-                UIView.animateForGuard(animations: {
-                    self.translateOut()
-                }) { (done) in
-                    if self.displaying == false {
-                        self.view.removeFromSuperview()
-                    }
-                }
-            } else {
+            UIView.animateForGuard(animations: {
                 self.translateOut()
+            }) { (done) in
                 if self.displaying == false {
                     self.view.removeFromSuperview()
                 }
             }
         }
     }
+    
+    // MARK: 设置函数
     
     /// 加载一个标题
     /// - Parameter text: 文本
@@ -231,20 +227,24 @@ public extension Guard {
     /// - Parameter message: 正文
     /// - Parameter icon: 图标
     @discardableResult class func push(to viewController: UIViewController? = nil, actions: ((Guard) -> Void)? = nil) -> Guard {
-        let g = Guard(actions: actions)
-        g.push(to: viewController)
-        return g
+        return Guard(actions: actions).push(to: viewController)
     }
     
     /// 获取指定的实例
     /// - Parameter identifier: 指定实例的标识
-    class func guards(_ identifier: String?, from viewController: UIViewController? = nil) -> [Guard] {
+    class func guards(_ identifier: String? = nil, from viewController: UIViewController? = nil) -> [Guard] {
         var gg = [Guard]()
         if let vc = viewController ?? cfg.rootViewController {
             for child in vc.children {
                 if child.isKind(of: Guard.self) {
                     if let g = child as? Guard {
-                        gg.append(g)
+                        if let id = identifier {
+                            if g.identifier == id {
+                                gg.append(g)
+                            }
+                        } else {
+                            gg.append(g)
+                        }
                     }
                 }
             }
@@ -258,6 +258,13 @@ public extension Guard {
         `guard`.pop()
     }
     
+    /// 弹出屏幕
+    /// - Parameter identifier: 指定实例的标识
+    class func pop(from viewController: UIViewController?) {
+        for g in guards(from: viewController) {
+            g.pop()
+        }
+    }
     
 }
 

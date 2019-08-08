@@ -9,8 +9,14 @@
 import UIKit
 import SnapKit
 
+public typealias Alert = ProHUD.Alert
+
 public extension ProHUD {
     class Alert: HUDController {
+        
+        internal static var alerts = [Alert]()
+        
+        internal static var alertWindow: UIWindow?
         
         /// 内容视图
         public var contentView = BlurView()
@@ -57,14 +63,14 @@ public extension ProHUD {
         /// - Parameter title: 标题
         /// - Parameter message: 内容
         /// - Parameter icon: 图标
-        public convenience init(scene: Scene = .default, title: String? = nil, message: String? = nil, icon: UIImage? = nil) {
+        public convenience init(scene: Scene = .default, title: String? = nil, message: String? = nil, icon: UIImage? = nil, actions: ((Alert) -> Void)? = nil) {
             self.init()
             view.tintColor = cfg.alert.tintColor
             model.scene = scene
             model.title = title
             model.message = message
             model.icon = icon
-            
+            actions?(self)
             willLayoutSubviews()
             
         }
@@ -76,20 +82,40 @@ public extension ProHUD {
 
 // MARK: - 实例函数
 
-public extension ProHUD.Alert {
+public extension Alert {
     
     // MARK: 生命周期函数
     
     /// 推入屏幕
-    @discardableResult func push() -> ProHUD.Alert {
-        return ProHUD.push(self)
+    @discardableResult func push() -> Alert {
+        let hud = ProHUD.shared
+        if Alert.alerts.contains(self) == false {
+            let window = Alert.getAlertWindow(self)
+            window.makeKeyAndVisible()
+            window.resignKey()
+            window.addSubview(view)
+            view.transform = .init(scaleX: 1.2, y: 1.2)
+            view.alpha = 0
+            UIView.animateForAlertBuildIn {
+                self.view.transform = .identity
+                self.view.alpha = 1
+                window.backgroundColor = window.backgroundColor?.withAlphaComponent(0.6)
+            }
+            Alert.alerts.append(self)
+        }
+        Alert.updateAlertsLayout()
+        
+        // setup duration
+        if let _ = model.duration, model.durationBlock == nil {
+            duration(model.duration)
+        }
+        return self
     }
     
     /// 弹出屏幕
     func pop() {
-        let hud = ProHUD.shared
-        let window = hud.getAlertWindow(self)
-        hud.removeItemFromArray(alert: self)
+        let window = Alert.getAlertWindow(self)
+        Alert.removeItemFromArray(alert: self)
         UIView.animateForAlertBuildOut(animations: {
             self.view.alpha = 0
             self.view.transform = .init(scaleX: 1.08, y: 1.08)
@@ -98,12 +124,12 @@ public extension ProHUD.Alert {
             self.removeFromParent()
         }
         // hide window
-        let count = hud.alerts.count
-        if count == 0 && hud.alertWindow != nil {
+        let count = Alert.alerts.count
+        if count == 0 && Alert.alertWindow != nil {
             UIView.animateForAlertBuildOut(animations: {
                 window.backgroundColor = window.backgroundColor?.withAlphaComponent(0)
             }) { (done) in
-                hud.alertWindow = nil
+                Alert.alertWindow = nil
             }
         }
     }
@@ -114,39 +140,32 @@ public extension ProHUD.Alert {
     /// 添加按钮
     /// - Parameter style: 样式
     /// - Parameter text: 标题
-    /// - Parameter action: 事件
-    @discardableResult func add(action style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) -> ProHUD.Alert {
-        if let btn = privAddButton(custom: Button.actionButton(title: title), action: handler) as? Button {
-            btn.update(style: style)
+    /// - Parameter handler: 事件处理
+    @discardableResult func add(action style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) -> UIButton {
+        let btn = privAddButton(custom: Button.actionButton(title: title), action: handler)
+        if let b = btn as? Button {
+            b.update(style: style)
         }
-        return self
-    }
-    
-    /// 添加按钮
-    /// - Parameter button: 按钮
-    /// - Parameter action: 事件
-    @discardableResult func add(button: UIButton, action: (() -> Void)?) -> ProHUD.Alert {
-        privAddButton(custom: button, action: action)
-        return self
+        return btn
     }
     
     /// 最小化事件
     /// - Parameter callback: 事件回调
-    @discardableResult func didForceQuit(_ callback: (() -> Void)?) -> ProHUD.Alert {
+    @discardableResult func didForceQuit(_ callback: (() -> Void)?) -> Alert {
         model.forceQuitCallback = callback
         return self
     }
     
     /// 消失事件
     /// - Parameter callback: 事件回调
-    @discardableResult func didDisappear(_ callback: (() -> Void)?) -> ProHUD.Alert {
+    @discardableResult func didDisappear(_ callback: (() -> Void)?) -> Alert {
         disappearCallback = callback
         return self
     }
     
     /// 设置持续时间
     /// - Parameter duration: 持续时间
-    @discardableResult func duration(_ duration: TimeInterval?) -> ProHUD.Alert {
+    @discardableResult func duration(_ duration: TimeInterval?) -> Alert {
         model.setupDuration(duration: duration) { [weak self] in
             self?.pop()
         }
@@ -157,7 +176,7 @@ public extension ProHUD.Alert {
     /// - Parameter scene: 场景
     /// - Parameter title: 标题
     /// - Parameter message: 正文
-    @discardableResult func update(scene: Scene, title: String?, message: String?) -> ProHUD.Alert {
+    @discardableResult func update(scene: Scene, title: String?, message: String?) -> Alert {
         model.scene = scene
         model.title = title
         model.message = message
@@ -167,7 +186,7 @@ public extension ProHUD.Alert {
     
     /// 更新图标
     /// - Parameter icon: 图标
-    @discardableResult func update(icon: UIImage?) -> ProHUD.Alert {
+    @discardableResult func update(icon: UIImage?) -> Alert {
         model.icon = icon
         cfg.alert.reloadData(self)
         imageView?.layer.removeAllAnimations()
@@ -179,36 +198,23 @@ public extension ProHUD.Alert {
     /// - Parameter style: 样式
     /// - Parameter title: 标题
     /// - Parameter action: 事件
-    @discardableResult func update(action index: Int, style: UIAlertAction.Style, title: String?, action: (() -> Void)?) -> ProHUD.Alert {
-        return update(action: index, button: { (btn) in
+    @discardableResult func update(action index: Int, style: UIAlertAction.Style, title: String?, action: (() -> Void)?) -> Alert {
+        if index < self.actionStack.arrangedSubviews.count, let btn = self.actionStack.arrangedSubviews[index] as? UIButton {
             btn.setTitle(title, for: .normal)
             if let b = btn as? Button {
                 b.update(style: style)
             }
             btn.layoutIfNeeded()
-        }, action: action)
-    }
-    
-    /// 更新按钮
-    /// - Parameter index: 索引
-    /// - Parameter button: 按钮
-    /// - Parameter action: 事件
-    @discardableResult func update(action index: Int, button: (UIButton) -> Void, action: (() -> Void)? = nil) -> ProHUD.Alert {
-        if index < self.actionStack.arrangedSubviews.count, let btn = self.actionStack.arrangedSubviews[index] as? UIButton {
-            button(btn)
             if let ac = action {
                 addTouchUpAction(for: btn, action: ac)
             }
-        }
-        UIView.animateForAlert {
-            self.view.layoutIfNeeded()
         }
         return self
     }
     
     /// 移除按钮
     /// - Parameter index: 索引
-    @discardableResult func remove(action index: Int...) -> ProHUD.Alert {
+    @discardableResult func remove(action index: Int...) -> Alert {
         for (i, idx) in index.enumerated() {
             privRemoveAction(index: idx-i)
         }
@@ -218,130 +224,54 @@ public extension ProHUD.Alert {
 }
 
 
+// MARK: 类函数
 
-// MARK: - 实例函数
-
-public extension ProHUD {
-    
-    /// 推入屏幕
-    /// - Parameter alert: 实例
-    @discardableResult func push(_ alert: Alert) -> Alert {
-        if alerts.contains(alert) == false {
-            let window = getAlertWindow(alert)
-            window.makeKeyAndVisible()
-            window.resignKey()
-            window.addSubview(alert.view)
-            alert.view.transform = .init(scaleX: 1.2, y: 1.2)
-            alert.view.alpha = 0
-            UIView.animateForAlertBuildIn {
-                alert.view.transform = .identity
-                alert.view.alpha = 1
-                window.backgroundColor = window.backgroundColor?.withAlphaComponent(0.6)
-            }
-            alerts.append(alert)
-        }
-        updateAlertsLayout()
-        
-        // setup duration
-        if let _ = alert.model.duration, alert.model.durationBlock == nil {
-            alert.duration(alert.model.duration)
-        }
-        return alert
-    }
+public extension Alert {
     
     /// 推入屏幕
     /// - Parameter alert: 场景
     /// - Parameter title: 标题
     /// - Parameter message: 正文
-    /// - Parameter icon: 图标
-    @discardableResult func push(alert scene: Alert.Scene, title: String? = nil, message: String? = nil, actions: ((Alert) -> Void)? = nil) -> Alert {
-        let a = Alert(scene: scene, title: title, message: message)
-        actions?(a)
-        a.view.layoutIfNeeded()
-        return push(a)
+    /// - Parameter actions: 更多操作
+    @discardableResult class func push(alert scene: Alert.Scene, title: String? = nil, message: String? = nil, actions: ((Alert) -> Void)? = nil) -> Alert {
+        return Alert(scene: scene, title: title, message: message, actions: actions).push()
     }
     
     /// 获取指定的实例
     /// - Parameter identifier: 指定实例的标识
-    func alert(_ identifier: String?) -> Alert? {
+    class func alerts(_ identifier: String?) -> [Alert] {
         var aa = [Alert]()
-        for a in alerts {
+        for a in Alert.alerts {
             if a.identifier == identifier {
                 aa.append(a)
             }
         }
-        return aa.last
-    }
-    
-    /// 弹出屏幕
-    /// - Parameter alert: 实例
-    func pop(_ alert: Alert) {
-        for a in alerts {
-            if a == alert {
-                a.pop()
-            }
-        }
-    }
-    
-    /// 弹出实例
-    /// - Parameter identifier: 指定实例的标识
-    func pop(alert identifier: String?) {
-        for a in alerts {
-            if a.identifier == identifier {
-                a.pop()
-            }
-        }
-    }
-    
-}
-
-
-// MARK: 类函数
-
-public extension ProHUD {
-    
-    /// 推入屏幕
-    /// - Parameter alert: 实例
-    @discardableResult class func push(_ alert: Alert) -> Alert {
-        return shared.push(alert)
-    }
-    
-    /// 推入屏幕
-    /// - Parameter alert: 场景
-    /// - Parameter title: 标题
-    /// - Parameter message: 正文
-    /// - Parameter icon: 图标
-    @discardableResult class func push(alert: Alert.Scene, title: String? = nil, message: String? = nil, actions: ((Alert) -> Void)? = nil) -> Alert {
-        return shared.push(alert: alert, title: title, message: message, actions: actions)
-    }
-    
-    /// 获取指定的实例
-    /// - Parameter identifier: 指定实例的标识
-    class func alert(_ identifier: String?) -> Alert? {
-        return shared.alert(identifier)
+        return aa
     }
     
     /// 弹出屏幕
     /// - Parameter alert: 实例
     class func pop(_ alert: Alert) {
-        shared.pop(alert)
+        alert.pop()
     }
     
-    /// 弹出实例
+    /// 弹出屏幕
     /// - Parameter identifier: 指定实例的标识
-    class func pop(alert identifier: String?) {
-        shared.pop(alert: identifier)
+    class func pop(_ identifier: String?) {
+        for a in alerts(identifier) {
+            a.pop()
+        }
     }
     
 }
 
 // MARK: - 私有
 
-fileprivate extension ProHUD.Alert {
+fileprivate extension Alert {
     
     /// 移除按钮
     /// - Parameter index: 索引
-    @discardableResult func privRemoveAction(index: Int) -> ProHUD.Alert {
+    @discardableResult func privRemoveAction(index: Int) -> Alert {
         if index < 0 {
             for view in self.actionStack.arrangedSubviews {
                 if let btn = view as? UIButton {
@@ -401,9 +331,8 @@ fileprivate extension ProHUD.Alert {
     
 }
 
-internal extension ProHUD {
-    
-    func updateAlertsLayout() {
+fileprivate extension Alert {
+    class func updateAlertsLayout() {
         for (i, a) in alerts.reversed().enumerated() {
             let scale = CGFloat(pow(0.7, CGFloat(i)))
             UIView.animate(withDuration: 1.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.allowUserInteraction, .curveEaseInOut], animations: {
@@ -414,11 +343,7 @@ internal extension ProHUD {
             }
         }
     }
-}
-
-fileprivate extension ProHUD {
-    
-    func getAlertWindow(_ vc: UIViewController) -> UIWindow {
+    class func getAlertWindow(_ vc: UIViewController) -> UIWindow {
         if let w = alertWindow {
             return w
         }
@@ -430,7 +355,7 @@ fileprivate extension ProHUD {
         return w
     }
     
-    func removeItemFromArray(alert: Alert) {
+    class func removeItemFromArray(alert: Alert) {
         if alerts.count > 1 {
             for (i, a) in alerts.enumerated() {
                 if a == alert {

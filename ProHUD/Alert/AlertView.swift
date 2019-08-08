@@ -8,7 +8,7 @@
 
 import UIKit
 
-internal extension ProHUD.Alert {
+internal extension Alert {
     class Button: UIButton {
         class func actionButton(title: String?) -> UIButton {
             let btn = Button(type: .system)

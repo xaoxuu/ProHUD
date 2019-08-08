@@ -16,12 +16,6 @@ public class ProHUD {
         return cfg
     }
     
-    internal var toasts = [Toast]()
-    internal var alerts = [Alert]()
-    
-    internal var alertWindow: UIWindow?
-    
-    
 }
 
 // MARK: - Utilities
@@ -30,7 +24,7 @@ internal extension ProHUD {
     
     /// 获取Bundle
     static var bundle: Bundle {
-        var b = Bundle.init(for: ProHUD.Alert.self)
+        var b = Bundle.init(for: Alert.self)
         let p = b.path(forResource: "ProHUD", ofType: "bundle")
         if let bb = Bundle.init(path: p ?? "") {
             b = bb
