@@ -29,7 +29,7 @@ public class HUDController: UIViewController {
     }
     
     deinit {
-        debug(self, "deinit")
+        debug("👌", self, "deinit")
     }
     
     

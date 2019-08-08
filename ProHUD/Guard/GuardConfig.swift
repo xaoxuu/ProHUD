@@ -29,7 +29,8 @@ public extension ProHUD.Configuration {
         // MARK: 文本样式
         /// 标题字体
         public var titleFont = UIFont.boldSystemFont(ofSize: 22)
-        
+        /// 副标题字体
+        public var subTitleFont = UIFont.boldSystemFont(ofSize: 20)
         /// 正文字体
         public var bodyFont = UIFont.systemFont(ofSize: 18)
         
@@ -64,6 +65,21 @@ internal extension ProHUD.Configuration.Guard {
     var reloadData: (ProHUD.Guard) -> Void {
         return privReloadData
     }
+    var reloadStack: (ProHUD.Guard) -> Void {
+        return { (vc) in
+            if vc.textStack.arrangedSubviews.count > 0 {
+                vc.contentStack.addArrangedSubview(vc.textStack)
+            } else {
+                vc.textStack.removeFromSuperview()
+            }
+            if vc.actionStack.arrangedSubviews.count > 0 {
+                vc.contentStack.addArrangedSubview(vc.actionStack)
+            } else {
+                vc.actionStack.removeFromSuperview()
+            }
+        }
+    }
+    
 }
 
 fileprivate var privLoadSubviews: (ProHUD.Guard) -> Void = {
@@ -75,8 +91,6 @@ fileprivate var privLoadSubviews: (ProHUD.Guard) -> Void = {
         vc.view.backgroundColor = UIColor(white: 0, alpha: 0)
         vc.view.addSubview(vc.contentView)
         vc.contentView.contentView.addSubview(vc.contentStack)
-        vc.contentStack.addArrangedSubview(vc.textStack)
-        vc.contentStack.addArrangedSubview(vc.actionStack)
     }
 }()
 
@@ -116,7 +130,7 @@ fileprivate var privReloadData: (ProHUD.Guard) -> Void = {
             if width == config.cardMaxWidth {
                 mk.bottom.equalToSuperview().offset(-config.padding)
             } else {
-                mk.bottom.equalToSuperview().offset(-config.margin-Inspire.shared.screen.safeAreaInsets.bottom)
+                mk.bottom.equalToSuperview().offset(-config.padding-Inspire.shared.screen.safeAreaInsets.bottom)
             }
             if isPortrait {
                 mk.width.equalToSuperview().offset(-config.padding * 2)
@@ -124,5 +138,6 @@ fileprivate var privReloadData: (ProHUD.Guard) -> Void = {
                 mk.width.equalToSuperview().offset(-config.padding * 4)
             }
         }
+        
     }
 }()

@@ -45,6 +45,9 @@ public extension ProHUD {
         /// 是否正在显示
         private var displaying = false
         
+        /// 背景颜色
+        public var backgroundColor: UIColor? = UIColor(white: 0, alpha: 0.5)
+        
         // MARK: 生命周期
         
         /// 实例化
@@ -64,6 +67,7 @@ public extension ProHUD {
             }
             cfg.guard.loadSubviews(self)
             cfg.guard.reloadData(self)
+            cfg.guard.reloadStack(self)
             
             // 点击
             let tap = UITapGestureRecognizer(target: self, action: #selector(privDidTapped(_:)))
@@ -85,7 +89,8 @@ public extension ProHUD.Guard {
     /// 推入某个视图控制器
     /// - Parameter viewController: 视图控制器
     func push(to viewController: UIViewController? = nil) {
-        if let vc = viewController {
+        func f(_ vc: UIViewController) {
+            ProHUD.pop(guard: vc, animated: false)
             view.layoutIfNeeded()
             vc.addChild(self)
             vc.view.addSubview(view)
@@ -101,20 +106,30 @@ public extension ProHUD.Guard {
                 self.translateIn()
             }
         }
-        // FIXME: 如果传入vc为空，则push到根控制器
-        
+        if let vc = viewController ?? cfg.rootViewController {
+            f(vc)
+        } else {
+            debug("请传入需要push到的控制器")
+        }
     }
     
     /// 从父视图控制器弹出
-    func pop() {
+    func pop(animated: Bool = true) {
         if displaying {
             debug("pop")
             displaying = false
             view.isUserInteractionEnabled = false
             self.removeFromParent()
-            UIView.animateForGuard(animations: {
+            if animated {
+                UIView.animateForGuard(animations: {
+                    self.translateOut()
+                }) { (done) in
+                    if self.displaying == false {
+                        self.view.removeFromSuperview()
+                    }
+                }
+            } else {
                 self.translateOut()
-            }) { (done) in
                 if self.displaying == false {
                     self.view.removeFromSuperview()
                 }
@@ -140,6 +155,15 @@ public extension ProHUD.Guard {
         } else {
             // Fallback on earlier versions
         }
+        cfg.guard.reloadStack(self)
+        return lb
+    }
+    
+    /// 加载一个副标题
+    /// - Parameter text: 文本
+    @discardableResult func add(subTitle: String?) -> UILabel {
+        let lb = add(title: subTitle)
+        lb.font = cfg.guard.subTitleFont
         return lb
     }
     
@@ -153,6 +177,7 @@ public extension ProHUD.Guard {
         lb.textAlignment = .justified
         lb.text = message
         textStack.addArrangedSubview(lb)
+        cfg.guard.reloadStack(self)
         return lb
     }
     
@@ -163,10 +188,8 @@ public extension ProHUD.Guard {
     @discardableResult func add(action style: UIAlertAction.Style, title: String?, action: (() -> Void)?) -> UIButton {
         let btn = Button.actionButton(title: title)
         btn.titleLabel?.font = cfg.guard.buttonFont
-        if actionStack.superview == nil {
-            contentStack.addArrangedSubview(actionStack)
-        }
         actionStack.addArrangedSubview(btn)
+        cfg.guard.reloadStack(self)
         btn.update(style: style)
         addTouchUpAction(for: btn) { [weak self] in
             action?()
@@ -177,6 +200,14 @@ public extension ProHUD.Guard {
         return btn
     }
     
+    /// 移除按钮
+    /// - Parameter index: 索引
+    @discardableResult func remove(action index: Int...) -> ProHUD.Guard {
+        for (i, idx) in index.enumerated() {
+            privRemoveAction(index: idx-i)
+        }
+        return self
+    }
     
     /// 消失事件
     /// - Parameter callback: 事件回调
@@ -203,8 +234,10 @@ public extension ProHUD {
     /// - Parameter title: 标题
     /// - Parameter message: 正文
     /// - Parameter icon: 图标
-    @discardableResult func push(guard viewController: UIViewController? = nil, title: String? = nil, message: String? = nil) -> Guard {
+    @discardableResult func push(guard viewController: UIViewController? = nil, title: String? = nil, message: String? = nil, actions: ((Guard) -> Void)? = nil) -> Guard {
         let g = Guard(title: title, message: message)
+        actions?(g)
+        g.view.layoutIfNeeded()
         g.push(to: viewController)
         return g
     }
@@ -213,6 +246,20 @@ public extension ProHUD {
     /// - Parameter alert: 实例
     func pop(_ guard: Guard) {
         `guard`.pop()
+    }
+    
+    /// 弹出屏幕
+    /// - Parameter alert: 从哪里
+    func pop(guard from: UIViewController?, animated: Bool = true) {
+        if let vc = from {
+            for c in vc.children {
+                if c.isKind(of: Guard.self) {
+                    if let cc = c as? Guard {
+                        cc.pop(animated: animated)
+                    }
+                }
+            }
+        }
     }
     
 }
@@ -232,14 +279,20 @@ public extension ProHUD {
     /// - Parameter title: 标题
     /// - Parameter message: 正文
     /// - Parameter icon: 图标
-    @discardableResult class func push(guard viewController: UIViewController? = nil, title: String? = nil, message: String? = nil) -> Guard {
-        return shared.push(guard: viewController, title: title, message: message)
+    @discardableResult class func push(guard viewController: UIViewController? = nil, title: String? = nil, message: String? = nil, actions: ((Guard) -> Void)? = nil) -> Guard {
+        return shared.push(guard: viewController, title: title, message: message, actions: actions)
     }
     
     /// 弹出屏幕
     /// - Parameter alert: 实例
     class func pop(_ guard: Guard) {
         shared.pop(`guard`)
+    }
+    
+    /// 弹出屏幕
+    /// - Parameter alert: 从哪里
+    class func pop(guard from: UIViewController?, animated: Bool = true) {
+        shared.pop(guard: from, animated: animated)
     }
     
     
@@ -265,13 +318,32 @@ fileprivate extension ProHUD.Guard {
     }
     
     func translateIn() {
-        view.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        view.backgroundColor = backgroundColor
         contentView.transform = .identity
     }
     
     func translateOut() {
         view.backgroundColor = UIColor(white: 0, alpha: 0)
         contentView.transform = .init(translationX: 0, y: view.frame.size.height - contentView.frame.minY + cfg.guard.margin)
+    }
+    
+    /// 移除按钮
+    /// - Parameter index: 索引
+    @discardableResult func privRemoveAction(index: Int) -> ProHUD.Guard {
+        if index < 0 {
+            for view in self.actionStack.arrangedSubviews {
+                if let btn = view as? UIButton {
+                    btn.removeFromSuperview()
+                }
+            }
+        } else if index < self.actionStack.arrangedSubviews.count, let btn = self.actionStack.arrangedSubviews[index] as? UIButton {
+            btn.removeFromSuperview()
+        }
+        cfg.guard.reloadStack(self)
+        UIView.animateForAlert {
+            self.view.layoutIfNeeded()
+        }
+        return self
     }
     
     

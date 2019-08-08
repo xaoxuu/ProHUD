@@ -125,9 +125,9 @@ fileprivate var privReloadData: (ProHUD.Toast) -> Void = {
         vc.view.layoutIfNeeded()
         switch vc.model.scene {
         case .loading:
-            vc.model.duration = nil
+            vc.duration(nil)
         default:
-            vc.model.duration = 3
+            vc.duration(3)
         }
         
     }

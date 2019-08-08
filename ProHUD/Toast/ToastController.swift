@@ -45,9 +45,13 @@ public extension ProHUD {
         public var backgroundView: UIVisualEffectView = {
             let vev = UIVisualEffectView()
             if #available(iOS 13.0, *) {
-                vev.effect = UIBlurEffect.init(style: .systemMaterial)
-            } else {
+//                vev.effect = UIBlurEffect.init(style: .systemMaterial))
                 vev.effect = UIBlurEffect.init(style: .extraLight)
+            } else if #available(iOS 11.0, *) {
+                vev.effect = UIBlurEffect.init(style: .extraLight)
+            } else {
+                vev.effect = .none
+                vev.backgroundColor = .white
             }
             vev.layer.masksToBounds = true
             vev.layer.cornerRadius = cfg.toast.cornerRadius
@@ -272,8 +276,11 @@ public extension ProHUD {
     /// - Parameter title: 标题
     /// - Parameter message: 内容
     /// - Parameter icon: 图标
-    @discardableResult func push(toast scene: Toast.Scene, title: String? = nil, message: String? = nil) -> Toast {
-        return push(Toast(scene: scene, title: title, message: message))
+    @discardableResult func push(toast scene: Toast.Scene, title: String? = nil, message: String? = nil, actions: ((Toast) -> Void)? = nil) -> Toast {
+        let t = Toast(scene: scene, title: title, message: message)
+        actions?(t)
+        t.view.layoutIfNeeded()
+        return push(t)
     }
     
     /// 获取指定的toast
@@ -326,8 +333,8 @@ public extension ProHUD {
     /// - Parameter title: 标题
     /// - Parameter message: 内容
     /// - Parameter icon: 图标
-    @discardableResult class func push(toast: Toast.Scene, title: String? = nil, message: String? = nil) -> Toast {
-        return shared.push(toast: toast, title: title, message: message)
+    @discardableResult class func push(toast: Toast.Scene, title: String? = nil, message: String? = nil, actions: ((Toast) -> Void)? = nil) -> Toast {
+        return shared.push(toast: toast, title: title, message: message, actions: actions)
     }
     
     /// 获取指定的toast

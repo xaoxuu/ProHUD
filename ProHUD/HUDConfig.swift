@@ -14,26 +14,29 @@ public extension ProHUD {
         /// 是否允许Debug模式输出
         public var enableDebugPrint = true
         
+        /// 根控制器
+        public var rootViewController: UIViewController?
+        
         /// 动态颜色（适配iOS13）
         public lazy var dynamicColor: UIColor = {
-            if #available(iOS 13.0, *) {
-                let color = UIColor { (traitCollection: UITraitCollection) -> UIColor in
-                    if traitCollection.userInterfaceStyle == .dark {
-                        return .white
-                    } else {
-                        return .black
-                    }
-                }
-                return color
-            } else {
-                // Fallback on earlier versions
-            }
-            return .init(white: 0.2, alpha: 1)
+//            if #available(iOS 13.0, *) {
+//                let color = UIColor { (traitCollection: UITraitCollection) -> UIColor in
+//                    if traitCollection.userInterfaceStyle == .dark {
+//                        return .white
+//                    } else {
+//                        return .black
+//                    }
+//                }
+//                return color
+//            } else {
+//                // Fallback on earlier versions
+//            }
+            return .init(white: 0.15, alpha: 1)
         }()
         
         /// 主标签文本颜色
         public lazy var primaryLabelColor: UIColor = {
-            return dynamicColor.withAlphaComponent(0.75)
+            return dynamicColor.withAlphaComponent(0.8)
         }()
         
         /// 次级标签文本颜色

@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import Inspire
 
 public extension ProHUD.Configuration {
     struct Alert {
@@ -60,7 +61,7 @@ public extension ProHUD.Configuration {
         }
         
         /// 多少秒后显示强制退出的按钮（只有无按钮的弹窗才会出现）
-        public var forceQuitTimer = TimeInterval(10)
+        public var forceQuitTimer = TimeInterval(30)
         
         /// 强制退出按钮标题
         public var forceQuitTitle = "隐藏窗口"
@@ -104,9 +105,10 @@ fileprivate var privLoadSubviews: (ProHUD.Alert) -> Void = {
             vc.contentView.layer.masksToBounds = true
             vc.contentView.layer.cornerRadius = cfg.alert.cornerRadius
             
+            let maxWidth = CGFloat.maximum(CGFloat.minimum(UIScreen.main.bounds.width * 0.68, cfg.alert.maxWidth), 268)
             vc.contentView.snp.makeConstraints { (mk) in
                 mk.center.equalToSuperview()
-                mk.width.lessThanOrEqualTo(CGFloat.minimum(UIScreen.main.bounds.width * 0.68, cfg.alert.maxWidth))
+                mk.width.lessThanOrEqualTo(maxWidth)
             }
             vc.contentStack.snp.makeConstraints { (mk) in
                 mk.centerX.equalToSuperview()
@@ -180,8 +182,13 @@ fileprivate var privReloadData: (ProHUD.Alert) -> Void = {
             vc.textStack.snp.makeConstraints { (mk) in
                 mk.top.greaterThanOrEqualTo(vc.contentView).offset(config.padding*1.75)
                 mk.bottom.lessThanOrEqualTo(vc.contentView).offset(-config.padding*1.75)
-                mk.leading.greaterThanOrEqualTo(vc.contentView).offset(config.padding*2)
-                mk.trailing.lessThanOrEqualTo(vc.contentView).offset(-config.padding*2)
+                if UIScreen.main.bounds.width < 414 {
+                    mk.leading.greaterThanOrEqualTo(vc.contentView).offset(config.padding*1.5)
+                    mk.trailing.lessThanOrEqualTo(vc.contentView).offset(-config.padding*1.5)
+                } else {
+                    mk.leading.greaterThanOrEqualTo(vc.contentView).offset(config.padding*2)
+                    mk.trailing.lessThanOrEqualTo(vc.contentView).offset(-config.padding*2)
+                }
             }
             if vc.model.title?.count ?? 0 > 0 {
                 if let lb = vc.titleLabel {
@@ -273,12 +280,12 @@ fileprivate var privReloadData: (ProHUD.Alert) -> Void = {
         }
         switch vc.model.scene {
         case .loading:
-            vc.model.duration = nil
+            vc.duration(nil)
         default:
-            vc.model.duration = 2
+            vc.duration(2)
         }
         if vc.actionStack.arrangedSubviews.count > 0 {
-            vc.model.duration = nil
+            vc.duration(nil)
         }
     }
 }()

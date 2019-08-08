@@ -115,8 +115,8 @@ public extension ProHUD.Alert {
     /// - Parameter style: 样式
     /// - Parameter text: 标题
     /// - Parameter action: 事件
-    @discardableResult func add(action style: UIAlertAction.Style, title: String?, action: (() -> Void)?) -> ProHUD.Alert {
-        if let btn = privAddButton(custom: Button.actionButton(title: title), action: action) as? Button {
+    @discardableResult func add(action style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) -> ProHUD.Alert {
+        if let btn = privAddButton(custom: Button.actionButton(title: title), action: handler) as? Button {
             btn.update(style: style)
         }
         return self
@@ -147,8 +147,9 @@ public extension ProHUD.Alert {
     /// 设置持续时间
     /// - Parameter duration: 持续时间
     @discardableResult func duration(_ duration: TimeInterval?) -> ProHUD.Alert {
-        model.duration = duration
-        willLayoutSubviews()
+        model.setupDuration(duration: duration) { [weak self] in
+            self?.pop()
+        }
         return self
     }
     
@@ -240,6 +241,7 @@ public extension ProHUD {
             alerts.append(alert)
         }
         updateAlertsLayout()
+        
         // setup duration
         if let _ = alert.model.duration, alert.model.durationBlock == nil {
             alert.duration(alert.model.duration)
@@ -252,8 +254,11 @@ public extension ProHUD {
     /// - Parameter title: 标题
     /// - Parameter message: 正文
     /// - Parameter icon: 图标
-    @discardableResult func push(alert scene: Alert.Scene, title: String? = nil, message: String? = nil) -> Alert {
-        return push(Alert(scene: scene, title: title, message: message))
+    @discardableResult func push(alert scene: Alert.Scene, title: String? = nil, message: String? = nil, actions: ((Alert) -> Void)? = nil) -> Alert {
+        let a = Alert(scene: scene, title: title, message: message)
+        actions?(a)
+        a.view.layoutIfNeeded()
+        return push(a)
     }
     
     /// 获取指定的实例
@@ -306,8 +311,8 @@ public extension ProHUD {
     /// - Parameter title: 标题
     /// - Parameter message: 正文
     /// - Parameter icon: 图标
-    @discardableResult class func push(alert: Alert.Scene, title: String? = nil, message: String? = nil) -> Alert {
-        return shared.push(alert: alert, title: title, message: message)
+    @discardableResult class func push(alert: Alert.Scene, title: String? = nil, message: String? = nil, actions: ((Alert) -> Void)? = nil) -> Alert {
+        return shared.push(alert: alert, title: title, message: message, actions: actions)
     }
     
     /// 获取指定的实例
@@ -362,10 +367,6 @@ fileprivate extension ProHUD.Alert {
                 // 布局
                 cfg.alert.loadSubviews(a)
                 cfg.alert.reloadData(a)
-                // 持续时间
-                a.model.setupDuration(duration: a.model.duration) { [weak self] in
-                    self?.pop()
-                }
                 // 强制退出按钮
                 a.model.setupForceQuit(duration: cfg.alert.forceQuitTimer) { [weak self] in
                     if let aa = self, aa.actionStack.superview == nil {
