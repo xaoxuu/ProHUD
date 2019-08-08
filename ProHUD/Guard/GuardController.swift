@@ -8,6 +8,8 @@
 
 import SnapKit
 
+public typealias Guard = ProHUD.Guard
+
 public extension ProHUD {
     
     class Guard: HUDController {
@@ -51,11 +53,10 @@ public extension ProHUD {
         // MARK: 生命周期
         
         /// 实例化
-        /// - Parameter scene: 场景
         /// - Parameter title: 标题
         /// - Parameter message: 内容
-        /// - Parameter icon: 图标
-        public convenience init(title: String? = nil, message: String? = nil) {
+        /// - Parameter actions: 更多操作
+        public convenience init(title: String? = nil, message: String? = nil, actions: ((Guard) -> Void)? = nil) {
             self.init()
             
             view.tintColor = cfg.guard.tintColor
@@ -65,11 +66,12 @@ public extension ProHUD {
             if let _ = message {
                 add(message: message)
             }
+            actions?(self)
             cfg.guard.loadSubviews(self)
             cfg.guard.reloadData(self)
             cfg.guard.reloadStack(self)
             
-            // 点击
+            // 点击空白处
             let tap = UITapGestureRecognizer(target: self, action: #selector(privDidTapped(_:)))
             view.addGestureRecognizer(tap)
             
@@ -78,11 +80,12 @@ public extension ProHUD {
         
         
     }
+    
 }
 
 // MARK: - 实例函数
 
-public extension ProHUD.Guard {
+public extension Guard {
     
     // MARK: 生命周期函数
     
@@ -90,7 +93,6 @@ public extension ProHUD.Guard {
     /// - Parameter viewController: 视图控制器
     func push(to viewController: UIViewController? = nil) {
         func f(_ vc: UIViewController) {
-            ProHUD.pop(guard: vc, animated: false)
             view.layoutIfNeeded()
             vc.addChild(self)
             vc.view.addSubview(view)
@@ -185,14 +187,14 @@ public extension ProHUD.Guard {
     /// - Parameter style: 样式
     /// - Parameter title: 标题
     /// - Parameter action: 事件
-    @discardableResult func add(action style: UIAlertAction.Style, title: String?, action: (() -> Void)?) -> UIButton {
+    @discardableResult func add(action style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) -> UIButton {
         let btn = Button.actionButton(title: title)
         btn.titleLabel?.font = cfg.guard.buttonFont
         actionStack.addArrangedSubview(btn)
         cfg.guard.reloadStack(self)
         btn.update(style: style)
         addTouchUpAction(for: btn) { [weak self] in
-            action?()
+            handler?()
             if btn.tag == UIAlertAction.Style.cancel.rawValue {
                 self?.pop()
             }
@@ -202,7 +204,7 @@ public extension ProHUD.Guard {
     
     /// 移除按钮
     /// - Parameter index: 索引
-    @discardableResult func remove(action index: Int...) -> ProHUD.Guard {
+    @discardableResult func remove(action index: Int...) -> Guard {
         for (i, idx) in index.enumerated() {
             privRemoveAction(index: idx-i)
         }
@@ -211,88 +213,49 @@ public extension ProHUD.Guard {
     
     /// 消失事件
     /// - Parameter callback: 事件回调
-    @discardableResult func didDisappear(_ callback: (() -> Void)?) -> ProHUD.Guard {
+    @discardableResult func didDisappear(_ callback: (() -> Void)?) -> Guard {
         disappearCallback = callback
         return self
     }
     
 }
 
-// MARK: 实例函数
 
-public extension ProHUD {
-    
-    /// 推入屏幕
-    /// - Parameter alert: 实例
-    @discardableResult func push(_ guard: Guard, to viewController: UIViewController? = nil) -> Guard {
-        `guard`.push(to: viewController)
-        return `guard`
-    }
+// MARK: 类函数
+
+public extension Guard {
     
     /// 推入屏幕
     /// - Parameter alert: 场景
     /// - Parameter title: 标题
     /// - Parameter message: 正文
     /// - Parameter icon: 图标
-    @discardableResult func push(guard viewController: UIViewController? = nil, title: String? = nil, message: String? = nil, actions: ((Guard) -> Void)? = nil) -> Guard {
-        let g = Guard(title: title, message: message)
-        actions?(g)
-        g.view.layoutIfNeeded()
+    @discardableResult class func push(to viewController: UIViewController? = nil, actions: ((Guard) -> Void)? = nil) -> Guard {
+        let g = Guard(actions: actions)
         g.push(to: viewController)
         return g
     }
     
-    /// 弹出屏幕
-    /// - Parameter alert: 实例
-    func pop(_ guard: Guard) {
-        `guard`.pop()
-    }
-    
-    /// 弹出屏幕
-    /// - Parameter alert: 从哪里
-    func pop(guard from: UIViewController?, animated: Bool = true) {
-        if let vc = from {
-            for c in vc.children {
-                if c.isKind(of: Guard.self) {
-                    if let cc = c as? Guard {
-                        cc.pop(animated: animated)
+    /// 获取指定的实例
+    /// - Parameter identifier: 指定实例的标识
+    class func guards(_ identifier: String?, from viewController: UIViewController? = nil) -> [Guard] {
+        var gg = [Guard]()
+        if let vc = viewController ?? cfg.rootViewController {
+            for child in vc.children {
+                if child.isKind(of: Guard.self) {
+                    if let g = child as? Guard {
+                        gg.append(g)
                     }
                 }
             }
         }
-    }
-    
-}
-
-// MARK: 类函数
-
-public extension ProHUD {
-    
-    /// 推入屏幕
-    /// - Parameter alert: 实例
-    @discardableResult class func push(_ guard: Guard, to viewController: UIViewController? = nil) -> Guard {
-        return shared.push(`guard`, to: viewController)
-    }
-    
-    /// 推入屏幕
-    /// - Parameter alert: 场景
-    /// - Parameter title: 标题
-    /// - Parameter message: 正文
-    /// - Parameter icon: 图标
-    @discardableResult class func push(guard viewController: UIViewController? = nil, title: String? = nil, message: String? = nil, actions: ((Guard) -> Void)? = nil) -> Guard {
-        return shared.push(guard: viewController, title: title, message: message, actions: actions)
+        return gg
     }
     
     /// 弹出屏幕
     /// - Parameter alert: 实例
     class func pop(_ guard: Guard) {
-        shared.pop(`guard`)
-    }
-    
-    /// 弹出屏幕
-    /// - Parameter alert: 从哪里
-    class func pop(guard from: UIViewController?, animated: Bool = true) {
-        shared.pop(guard: from, animated: animated)
+        `guard`.pop()
     }
     
     
@@ -302,7 +265,7 @@ public extension ProHUD {
 
 // MARK: - 私有
 
-fileprivate extension ProHUD.Guard {
+fileprivate extension Guard {
     
     /// 点击事件
     /// - Parameter sender: 手势
@@ -329,7 +292,7 @@ fileprivate extension ProHUD.Guard {
     
     /// 移除按钮
     /// - Parameter index: 索引
-    @discardableResult func privRemoveAction(index: Int) -> ProHUD.Guard {
+    @discardableResult func privRemoveAction(index: Int) -> Guard {
         if index < 0 {
             for view in self.actionStack.arrangedSubviews {
                 if let btn = view as? UIButton {
