@@ -50,23 +50,26 @@ public extension ProHUD {
         /// 背景颜色
         public var backgroundColor: UIColor? = UIColor(white: 0, alpha: 0.5)
         
+        public var vm = ViewModel()
+        
         // MARK: 生命周期
         
         /// 实例化
         /// - Parameter title: 标题
         /// - Parameter message: 内容
         /// - Parameter actions: 更多操作
-        public convenience init(title: String? = nil, message: String? = nil, actions: ((Guard) -> Void)? = nil) {
+        public convenience init(title: String? = nil, message: String? = nil, actions: ((inout ViewModel) -> Void)? = nil) {
             self.init()
-            
-            view.tintColor = cfg.guard.tintColor
+            vm.vc = self
             if let _ = title {
                 add(title: title)
             }
             if let _ = message {
                 add(message: message)
             }
-            actions?(self)
+            actions?(&vm)
+            
+            view.tintColor = cfg.guard.tintColor
             cfg.guard.loadSubviews(self)
             cfg.guard.reloadData(self)
             cfg.guard.reloadStack(self)
@@ -91,7 +94,7 @@ public extension Guard {
     
     /// 推入某个视图控制器
     /// - Parameter viewController: 视图控制器
-    func push(to viewController: UIViewController? = nil) -> Guard {
+    @discardableResult func push(to viewController: UIViewController? = nil) -> Guard {
         func f(_ vc: UIViewController) {
             view.layoutIfNeeded()
             vc.addChild(self)
@@ -226,7 +229,7 @@ public extension Guard {
     /// - Parameter title: 标题
     /// - Parameter message: 正文
     /// - Parameter icon: 图标
-    @discardableResult class func push(to viewController: UIViewController? = nil, actions: ((Guard) -> Void)? = nil) -> Guard {
+    @discardableResult class func push(to viewController: UIViewController? = nil, actions: ((inout ViewModel) -> Void)? = nil) -> Guard {
         return Guard(actions: actions).push(to: viewController)
     }
     
@@ -239,7 +242,7 @@ public extension Guard {
                 if child.isKind(of: Guard.self) {
                     if let g = child as? Guard {
                         if let id = identifier {
-                            if g.identifier == id {
+                            if g.vm.identifier == id {
                                 gg.append(g)
                             }
                         } else {
@@ -272,7 +275,7 @@ public extension Guard {
 
 // MARK: - 私有
 
-fileprivate extension Guard {
+internal extension Guard {
     
     /// 点击事件
     /// - Parameter sender: 手势
@@ -315,7 +318,6 @@ fileprivate extension Guard {
         }
         return self
     }
-    
     
     
 }

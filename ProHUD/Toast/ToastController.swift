@@ -243,7 +243,7 @@ public extension Toast {
     /// - Parameter title: 标题
     /// - Parameter message: 内容
     /// - Parameter actions: 更多操作
-    @discardableResult class func push(toast scene: Toast.Scene, title: String? = nil, message: String? = nil, actions: ((Toast) -> Void)? = nil) -> Toast {
+    @discardableResult class func push(scene: Toast.Scene, title: String? = nil, message: String? = nil, actions: ((Toast) -> Void)? = nil) -> Toast {
         return Toast(scene: scene, title: title, message: message, actions: actions).push()
     }
     
@@ -252,7 +252,7 @@ public extension Toast {
     class func toasts(_ identifier: String?) -> [Toast] {
         var tt = [Toast]()
         for t in toasts {
-            if t.identifier == identifier {
+            if t.model.identifier == identifier {
                 tt.append(t)
             }
         }

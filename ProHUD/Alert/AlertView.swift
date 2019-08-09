@@ -24,6 +24,7 @@ internal extension Alert {
                 backgroundColor = cfg.dynamicColor.withAlphaComponent(0.04)
                 contentEdgeInsets = .init(top: pd*1.5, left: pd*1.5, bottom: pd*1.5, right: pd*1.5)
             } else {
+                backgroundColor = .clear
                 contentEdgeInsets = .init(top: pd*0.5, left: pd*1.5, bottom: pd*0.5, right: pd*1.5)
             }
             switch style {

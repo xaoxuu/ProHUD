@@ -86,11 +86,7 @@ fileprivate var privLoadSubviews: (ProHUD.Guard) -> Void = {
     return { (vc) in
         debug(vc, "loadSubviews")
         let config = cfg.guard
-        // background
-        vc.view.tintColor = config.tintColor
-        vc.view.backgroundColor = UIColor(white: 0, alpha: 0)
-        vc.view.addSubview(vc.contentView)
-        vc.contentView.contentView.addSubview(vc.contentStack)
+        
     }
 }()
 
@@ -98,6 +94,11 @@ fileprivate var privReloadData: (ProHUD.Guard) -> Void = {
     return { (vc) in
         debug(vc, "reloadData")
         let config = cfg.guard
+        // background
+        vc.view.tintColor = config.tintColor
+        vc.view.backgroundColor = UIColor(white: 0, alpha: 0)
+        vc.view.addSubview(vc.contentView)
+        vc.contentView.contentView.addSubview(vc.contentStack)
         // 更新布局
         var width = UIScreen.main.bounds.width
         if width > config.cardMaxWidth {

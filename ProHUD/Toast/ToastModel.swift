@@ -35,6 +35,9 @@ public extension Toast {
     
     struct ViewModel {
         
+        /// ID标识
+        public var identifier = String(Date().timeIntervalSince1970)
+        
         /// 使用场景
         public var scene = Scene.default
         

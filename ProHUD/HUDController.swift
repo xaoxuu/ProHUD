@@ -10,9 +10,6 @@ import UIKit
 
 public class HUDController: UIViewController {
     
-    /// ID标识
-    public var identifier = String(Date().timeIntervalSince1970)
-    
     /// 消失回调
     internal var disappearCallback: (() -> Void)?
     
