@@ -13,6 +13,7 @@ public class HUDController: UIViewController {
     /// ID标识
     public var identifier = String(Date().timeIntervalSince1970)
     
+    internal var willDisappearCallback: (() -> Void)?
     /// 消失回调
     internal var disappearCallback: (() -> Void)?
     
@@ -38,6 +39,7 @@ public class HUDController: UIViewController {
 
         // Do any additional setup after loading the view.
     }
+    
     
     public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)

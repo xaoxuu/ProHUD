@@ -120,6 +120,7 @@ public extension Guard {
     func pop() {
         if displaying {
             debug("pop")
+            willDisappearCallback?()
             displaying = false
             view.isUserInteractionEnabled = false
             self.removeFromParent()
@@ -207,6 +208,12 @@ public extension Guard {
         return self
     }
     
+    /// 消失事件
+    /// - Parameter callback: 事件回调
+    @discardableResult func willDisappear(_ callback: (() -> Void)?) -> Guard {
+        willDisappearCallback = callback
+        return self
+    }
     /// 消失事件
     /// - Parameter callback: 事件回调
     @discardableResult func didDisappear(_ callback: (() -> Void)?) -> Guard {
