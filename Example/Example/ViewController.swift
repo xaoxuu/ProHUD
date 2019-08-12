@@ -15,7 +15,7 @@ class ViewController: BaseListVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
+        title = "ProHUD"
     }
     
     override var titles: [String] {
@@ -25,11 +25,17 @@ class ViewController: BaseListVC {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 0 {
-            navigationController?.pushViewController(TestToastVC(), animated: true)
+            let vc = TestToastVC()
+            vc.title = titles[indexPath.row]
+            navigationController?.pushViewController(vc, animated: true)
         } else if indexPath.row == 1 {
-            navigationController?.pushViewController(TestAlertVC(), animated: true)
+            let vc = TestAlertVC()
+            vc.title = titles[indexPath.row]
+            navigationController?.pushViewController(vc, animated: true)
         } else {
-            navigationController?.pushViewController(TestGuardVC(), animated: true)
+            let vc = TestGuardVC()
+            vc.title = titles[indexPath.row]
+            navigationController?.pushViewController(vc, animated: true)
         }
     }
     

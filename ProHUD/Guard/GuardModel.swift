@@ -10,12 +10,9 @@ import UIKit
 
 public extension Guard {
     
-    class ViewModel {
+    struct ViewModel {
         
-        /// ID标识
-        public var identifier = String(Date().timeIntervalSince1970)
-        
-        public weak var vc: Guard?
+        internal weak var vc: Guard?
         
     }
     
@@ -49,7 +46,7 @@ public extension Guard.ViewModel {
         return vc!.insert(action: nil, style: style, title: title, handler: handler)
     }
     
-    /// 插入按钮
+    /// 插入一个按钮
     /// - Parameter index: 索引
     /// - Parameter style: 样式
     /// - Parameter title: 标题

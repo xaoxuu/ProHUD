@@ -63,7 +63,7 @@ public extension ProHUD {
         /// - Parameter title: 标题
         /// - Parameter message: 内容
         /// - Parameter actions: 更多操作
-        public convenience init(title: String? = nil, message: String? = nil, actions: ((inout ViewModel) -> Void)? = nil) {
+        public convenience init(title: String? = nil, message: String? = nil, actions: ((Guard) -> Void)? = nil) {
             self.init()
             vm.vc = self
             if let _ = title {
@@ -72,7 +72,7 @@ public extension ProHUD {
             if let _ = message {
                 add(message: message)
             }
-            actions?(&vm)
+            actions?(self)
             
             // 点击空白处
             let tap = UITapGestureRecognizer(target: self, action: #selector(privDidTapped(_:)))
@@ -158,20 +158,20 @@ public extension Guard {
     /// - Parameter title: 标题
     /// - Parameter message: 正文
     /// - Parameter icon: 图标
-    @discardableResult class func push(to viewController: UIViewController? = nil, _ actions: ((inout ViewModel) -> Void)? = nil) -> Guard {
+    @discardableResult class func push(to viewController: UIViewController? = nil, _ actions: ((Guard) -> Void)? = nil) -> Guard {
         return Guard(actions: actions).push(to: viewController)
     }
     
     /// 获取指定的实例
     /// - Parameter identifier: 指定实例的标识
-    class func get(_ identifier: String? = nil, from viewController: UIViewController? = nil) -> [Guard] {
+    class func find(_ identifier: String?, from viewController: UIViewController? = nil) -> [Guard] {
         var gg = [Guard]()
         if let vc = viewController ?? cfg.rootViewController {
             for child in vc.children {
                 if child.isKind(of: Guard.self) {
                     if let g = child as? Guard {
                         if let id = identifier {
-                            if g.vm.identifier == id {
+                            if g.identifier == id {
                                 gg.append(g)
                             }
                         } else {
@@ -184,6 +184,19 @@ public extension Guard {
         return gg
     }
     
+    /// 查找指定的实例
+    /// - Parameter identifier: 标识
+    /// - Parameter last: 已经存在（获取最后一个）
+    /// - Parameter none: 不存在
+    class func find(_ identifier: String?, from viewController: UIViewController? = nil, last: ((Guard) -> Void)? = nil, none: (() -> Void)? = nil) {
+        if let t = find(identifier, from: viewController).last {
+            last?(t)
+        } else {
+            none?()
+        }
+    }
+    
+    
     /// 弹出屏幕
     /// - Parameter alert: 实例
     class func pop(_ guard: Guard) {
@@ -192,8 +205,8 @@ public extension Guard {
     
     /// 弹出所有实例
     /// - Parameter identifier: 指定实例的标识
-    class func pop(from viewController: UIViewController?) {
-        for g in get(from: viewController) {
+    class func pop(_ identifier: String?, from viewController: UIViewController?) {
+        for g in find(identifier, from: viewController) {
             g.pop()
         }
     }
@@ -250,7 +263,7 @@ internal extension Guard {
         return lb
     }
     
-    /// 加载一个按钮
+    /// 插入一个按钮
     /// - Parameter index: 索引
     /// - Parameter style: 样式
     /// - Parameter title: 标题
@@ -278,6 +291,12 @@ internal extension Guard {
         }
         return btn
     }
+    
+    /// 更新按钮
+    /// - Parameter index: 索引
+    /// - Parameter style: 样式
+    /// - Parameter title: 标题
+    /// - Parameter handler: 事件
     func update(action index: Int, style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) {
         if index < self.actionStack.arrangedSubviews.count, let btn = self.actionStack.arrangedSubviews[index] as? UIButton {
             btn.setTitle(title, for: .normal)
@@ -320,7 +339,6 @@ internal extension Guard {
         }
         return self
     }
-    
     
 }
 

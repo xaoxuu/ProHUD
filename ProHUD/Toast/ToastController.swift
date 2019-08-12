@@ -65,7 +65,7 @@ public extension ProHUD {
         /// - Parameter title: 标题
         /// - Parameter message: 内容
         /// - Parameter icon: 图标
-        public convenience init(scene: Scene = .default, title: String? = nil, message: String? = nil, icon: UIImage? = nil, duration: TimeInterval? = nil, actions: ((inout ViewModel) -> Void)? = nil) {
+        public convenience init(scene: Scene = .default, title: String? = nil, message: String? = nil, icon: UIImage? = nil, duration: TimeInterval? = nil, actions: ((Toast) -> Void)? = nil) {
             self.init()
             vm.vc = self
             
@@ -74,7 +74,7 @@ public extension ProHUD {
             vm.message = message
             vm.icon = icon
             vm.duration = duration
-            actions?(&vm)
+            actions?(self)
             
             // 点击
             let tap = UITapGestureRecognizer(target: self, action: #selector(privDidTapped(_:)))
@@ -198,20 +198,32 @@ public extension Toast {
     /// - Parameter title: 标题
     /// - Parameter message: 内容
     /// - Parameter actions: 更多操作
-    @discardableResult class func push(scene: Toast.Scene = .default, title: String? = nil, message: String? = nil, duration: TimeInterval? = nil, _ actions: ((inout ViewModel) -> Void)? = nil) -> Toast {
+    @discardableResult class func push(scene: Toast.Scene = .default, title: String? = nil, message: String? = nil, duration: TimeInterval? = nil, _ actions: ((Toast) -> Void)? = nil) -> Toast {
         return Toast(scene: scene, title: title, message: message, duration: duration, actions: actions).push()
     }
     
     /// 获取指定的toast
     /// - Parameter identifier: 标识
-    class func get(_ identifier: String?) -> [Toast] {
+    class func find(_ identifier: String?) -> [Toast] {
         var tt = [Toast]()
         for t in toasts {
-            if t.vm.identifier == identifier {
+            if t.identifier == identifier {
                 tt.append(t)
             }
         }
         return tt
+    }
+    
+    /// 查找指定的实例
+    /// - Parameter identifier: 标识
+    /// - Parameter last: 已经存在（获取最后一个）
+    /// - Parameter none: 不存在
+    class func find(_ identifier: String?, last: ((Toast) -> Void)? = nil, none: (() -> Void)? = nil) {
+        if let t = find(identifier).last {
+            last?(t)
+        } else {
+            none?()
+        }
     }
     
     /// 弹出屏幕
@@ -242,7 +254,7 @@ public extension Toast {
     /// 弹出屏幕
     /// - Parameter identifier: 指定实例的标识
     class func pop(_ identifier: String?) {
-        for t in get(identifier) {
+        for t in find(identifier) {
             t.pop()
         }
     }

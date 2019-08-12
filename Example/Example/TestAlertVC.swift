@@ -18,7 +18,7 @@ class TestAlertVC: BaseListVC {
     }
     
     override var titles: [String] {
-        return ["场景：正在同步（超时）", "场景：同步成功", "场景：同步失败和重试"]
+        return ["场景：正在同步（超时）", "场景：同步成功（写法1）", "场景：同步成功（写法2）", "场景：同步失败和重试"]
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -26,43 +26,68 @@ class TestAlertVC: BaseListVC {
         let row = indexPath.row
         if row == 0 {
             func f() {
-                let a = Alert.push(scene: .loading, title: "正在同步", message: "请稍等片刻") { (vm) in
-                    vm.identifier = "loading"
-                }
-                a.animate(rotate: true)
-                a.didForceQuit { [weak self] in
-                    let t = Toast.push(scene: .loading, title: "正在同步", message: "请稍等片刻（点击展开为Alert）") { (vm) in
-                        vm.identifier = "loading"
+                Alert.push(scene: .loading, title: "正在同步", message: "请稍等片刻") { (a) in
+                    a.identifier = "loading"
+                    a.animate(rotate: true)
+                    a.didForceQuit { [weak self] in
+                        let t = Toast.push(scene: .loading, title: "正在同步", message: "请稍等片刻（点击展开为Alert）") { (vm) in
+                            vm.identifier = "loading"
+                        }
+                        t.animate(rotate: true)
+                        t.didTapped { [weak t] in
+                            t?.pop()
+                            f()
+                        }
+                        self?.simulateSync()
                     }
-                    t.animate(rotate: true)
-                    t.didTapped { [weak t] in
-                        t?.pop()
-                        f()
-                    }
-                    self?.simulateSync()
                 }
                 simulateSync()
             }
             f()
         } else if row == 1 {
-            Alert.push(scene: .loading, title: "正在同步", message: "请稍等片刻") { (vm) in
-                vm.identifier = "loading"
-            }.animate(rotate: true)
+            Alert.push() { (a) in
+                a.identifier = "loading"
+                a.animate(rotate: true)
+                a.update { (vm) in
+                    vm.scene = .loading
+                    vm.title = "正在同步"
+                    vm.message = "请稍等片刻"
+                }
+            }
             DispatchQueue.main.asyncAfter(deadline: .now()+2) {
-                if let a = Alert.get("loading").last {
+                Alert.find("loading", last: { (a) in
                     a.update { (vm) in
                         vm.scene = .success
                         vm.title = "同步成功"
                         vm.message = nil
                     }
-                }
+                })
             }
         } else if row == 2 {
-            Alert.push() { (vm) in
-                vm.identifier = "loading"
+            let a = Alert.push() { (a) in
+                a.identifier = "loading"
+            }
+            a.animate(rotate: true)
+            a.update { (vm) in
+                vm.scene = .loading
+                vm.title = "正在同步"
+                vm.message = "请稍等片刻"
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+                Alert.find("loading", last: { (a) in
+                    a.update { (vm) in
+                        vm.scene = .success
+                        vm.title = "同步成功"
+                        vm.message = nil
+                    }
+                })
+            }
+        } else if row == 3 {
+            Alert.push() { (a) in
+                a.identifier = "loading"
             }
             func loading() {
-                if let a = Alert.get("loading").last {
+                Alert.find("loading", last: { (a) in
                     a.update { (vm) in
                         vm.scene = .loading
                         vm.title = "正在同步"
@@ -81,7 +106,7 @@ class TestAlertVC: BaseListVC {
                             vm.add(action: .cancel, title: "取消", handler: nil)
                         }
                     }
-                }
+                })
             }
             loading()
         }
@@ -89,13 +114,13 @@ class TestAlertVC: BaseListVC {
 
     func simulateSync() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 15) {
-            if let t = Alert.get("loading").last {
-                t.update { (vm) in
+            Alert.find("loading", last: { (a) in
+                a.update { (vm) in
                     vm.scene = .success
                     vm.title = "同步成功"
                     vm.message = "啊哈哈哈哈哈哈哈哈"
                 }
-            }
+            })
         }
     }
     

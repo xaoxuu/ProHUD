@@ -35,9 +35,6 @@ public extension Alert {
     
     class ViewModel {
         
-        /// ID标识
-        public var identifier = String(Date().timeIntervalSince1970)
-        
         /// 使用场景
         public var scene = Scene.default
         

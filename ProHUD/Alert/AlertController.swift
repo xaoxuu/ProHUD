@@ -63,14 +63,14 @@ public extension ProHUD {
         /// - Parameter title: 标题
         /// - Parameter message: 内容
         /// - Parameter icon: 图标
-        public convenience init(scene: Scene = .default, title: String? = nil, message: String? = nil, icon: UIImage? = nil, actions: ((inout ViewModel) -> Void)? = nil) {
+        public convenience init(scene: Scene = .default, title: String? = nil, message: String? = nil, icon: UIImage? = nil, actions: ((Alert) -> Void)? = nil) {
             self.init()
             vm.vc = self
             vm.scene = scene
             vm.title = title
             vm.message = message
             vm.icon = icon
-            actions?(&vm)
+            actions?(self)
         }
         
         public override func viewDidLoad() {
@@ -176,20 +176,32 @@ public extension Alert {
     /// - Parameter title: 标题
     /// - Parameter message: 正文
     /// - Parameter actions: 更多操作
-    @discardableResult class func push(scene: Alert.Scene = .default, title: String? = nil, message: String? = nil, _ actions: ((inout ViewModel) -> Void)? = nil) -> Alert {
+    @discardableResult class func push(scene: Alert.Scene = .default, title: String? = nil, message: String? = nil, _ actions: ((Alert) -> Void)? = nil) -> Alert {
         return Alert(scene: scene, title: title, message: message, actions: actions).push()
     }
     
     /// 获取指定的实例
     /// - Parameter identifier: 指定实例的标识
-    class func get(_ identifier: String?) -> [Alert] {
+    class func find(_ identifier: String?) -> [Alert] {
         var aa = [Alert]()
         for a in Alert.alerts {
-            if a.vm.identifier == identifier {
+            if a.identifier == identifier {
                 aa.append(a)
             }
         }
         return aa
+    }
+    
+    /// 查找指定的实例
+    /// - Parameter identifier: 标识
+    /// - Parameter last: 已经存在（获取最后一个）
+    /// - Parameter none: 不存在
+    class func find(_ identifier: String?, last: ((Alert) -> Void)? = nil, none: (() -> Void)? = nil) {
+        if let t = find(identifier).last {
+            last?(t)
+        } else {
+            none?()
+        }
     }
     
     /// 弹出屏幕
@@ -201,7 +213,7 @@ public extension Alert {
     /// 弹出屏幕
     /// - Parameter identifier: 指定实例的标识
     class func pop(_ identifier: String?) {
-        for a in get(identifier) {
+        for a in find(identifier) {
             a.pop()
         }
     }
@@ -212,8 +224,7 @@ public extension Alert {
 // MARK: - 创建和设置
 internal extension Alert {
     
-    
-    /// 加载一个按钮
+    /// 插入一个按钮
     /// - Parameter style: 样式
     /// - Parameter title: 标题
     /// - Parameter action: 事件
@@ -244,6 +255,11 @@ internal extension Alert {
         return btn
     }
     
+    /// 更新按钮
+    /// - Parameter index: 索引
+    /// - Parameter style: 样式
+    /// - Parameter title: 标题
+    /// - Parameter handler: 事件
     func update(action index: Int, style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) {
         if index < self.actionStack.arrangedSubviews.count, let btn = self.actionStack.arrangedSubviews[index] as? UIButton {
             btn.setTitle(title, for: .normal)
