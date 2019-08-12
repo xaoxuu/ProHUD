@@ -10,16 +10,13 @@
 		1AE9C44ABAF3F797A5518CE8 /* Pods_ProHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2011798511AD590A613E54E /* Pods_ProHUD.framework */; };
 		CD16490B22EF09AB0077988C /* AlertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD16490A22EF09AB0077988C /* AlertModel.swift */; };
 		CD16490D22EF09B40077988C /* AlertConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD16490C22EF09B40077988C /* AlertConfig.swift */; };
-		CD16490F22EF09D50077988C /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD16490E22EF09D50077988C /* AlertView.swift */; };
 		CD16491222EF0D900077988C /* HUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD16491122EF0D900077988C /* HUDView.swift */; };
 		CD16491422EF12220077988C /* ProHUD.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD16491322EF12220077988C /* ProHUD.xcassets */; };
 		CD6CD86C22F1858F00F4FD4A /* ToastModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD86B22F1858F00F4FD4A /* ToastModel.swift */; };
-		CD6CD86E22F185A000F4FD4A /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD86D22F185A000F4FD4A /* ToastView.swift */; };
 		CD6CD87022F185A700F4FD4A /* ToastController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD86F22F185A700F4FD4A /* ToastController.swift */; };
 		CD6CD87222F185AF00F4FD4A /* ToastConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD87122F185AF00F4FD4A /* ToastConfig.swift */; };
 		CD6CD87522F185C200F4FD4A /* GuardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD87422F185C200F4FD4A /* GuardController.swift */; };
 		CD6CD87922F185D000F4FD4A /* GuardConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD87822F185D000F4FD4A /* GuardConfig.swift */; };
-		CD6CD87B22F185D600F4FD4A /* GuardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CD87A22F185D600F4FD4A /* GuardView.swift */; };
 		CD95D22122E72C4C007559A3 /* ProHUD.h in Headers */ = {isa = PBXBuildFile; fileRef = CD95D21F22E72C4C007559A3 /* ProHUD.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CD95D26922E72DA1007559A3 /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD95D26822E72DA1007559A3 /* AlertController.swift */; };
 		CD95D26B22E72DB3007559A3 /* ProHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD95D26A22E72DB3007559A3 /* ProHUD.swift */; };
@@ -33,16 +30,13 @@
 		C2011798511AD590A613E54E /* Pods_ProHUD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ProHUD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD16490A22EF09AB0077988C /* AlertModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModel.swift; sourceTree = "<group>"; };
 		CD16490C22EF09B40077988C /* AlertConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertConfig.swift; sourceTree = "<group>"; };
-		CD16490E22EF09D50077988C /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		CD16491122EF0D900077988C /* HUDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDView.swift; sourceTree = "<group>"; };
 		CD16491322EF12220077988C /* ProHUD.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ProHUD.xcassets; sourceTree = "<group>"; };
 		CD6CD86B22F1858F00F4FD4A /* ToastModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastModel.swift; sourceTree = "<group>"; };
-		CD6CD86D22F185A000F4FD4A /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		CD6CD86F22F185A700F4FD4A /* ToastController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastController.swift; sourceTree = "<group>"; };
 		CD6CD87122F185AF00F4FD4A /* ToastConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastConfig.swift; sourceTree = "<group>"; };
 		CD6CD87422F185C200F4FD4A /* GuardController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardController.swift; sourceTree = "<group>"; };
 		CD6CD87822F185D000F4FD4A /* GuardConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardConfig.swift; sourceTree = "<group>"; };
-		CD6CD87A22F185D600F4FD4A /* GuardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardView.swift; sourceTree = "<group>"; };
 		CD95D21C22E72C4C007559A3 /* ProHUD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ProHUD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD95D21F22E72C4C007559A3 /* ProHUD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProHUD.h; sourceTree = "<group>"; };
 		CD95D22022E72C4C007559A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -90,7 +84,6 @@
 				CD95D26822E72DA1007559A3 /* AlertController.swift */,
 				CD16490A22EF09AB0077988C /* AlertModel.swift */,
 				CD16490C22EF09B40077988C /* AlertConfig.swift */,
-				CD16490E22EF09D50077988C /* AlertView.swift */,
 			);
 			path = Alert;
 			sourceTree = "<group>";
@@ -99,7 +92,6 @@
 			isa = PBXGroup;
 			children = (
 				CD6CD86B22F1858F00F4FD4A /* ToastModel.swift */,
-				CD6CD86D22F185A000F4FD4A /* ToastView.swift */,
 				CD6CD86F22F185A700F4FD4A /* ToastController.swift */,
 				CD6CD87122F185AF00F4FD4A /* ToastConfig.swift */,
 			);
@@ -111,7 +103,6 @@
 			children = (
 				CD6CD87422F185C200F4FD4A /* GuardController.swift */,
 				CD6CD87822F185D000F4FD4A /* GuardConfig.swift */,
-				CD6CD87A22F185D600F4FD4A /* GuardView.swift */,
 				CDC39CFC22FD6DDF0070E914 /* GuardModel.swift */,
 			);
 			path = Guard;
@@ -280,12 +271,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CD6CD87B22F185D600F4FD4A /* GuardView.swift in Sources */,
 				CD95D26922E72DA1007559A3 /* AlertController.swift in Sources */,
 				CD6CD87922F185D000F4FD4A /* GuardConfig.swift in Sources */,
 				CDB6A07D22EEF19D00AF6CF0 /* HUDConfig.swift in Sources */,
-				CD16490F22EF09D50077988C /* AlertView.swift in Sources */,
-				CD6CD86E22F185A000F4FD4A /* ToastView.swift in Sources */,
 				CD6CD87222F185AF00F4FD4A /* ToastConfig.swift in Sources */,
 				CD6CD87522F185C200F4FD4A /* GuardController.swift in Sources */,
 				CD6CD87022F185A700F4FD4A /* ToastController.swift in Sources */,

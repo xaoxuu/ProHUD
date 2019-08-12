@@ -21,10 +21,13 @@ public extension ProHUD.Configuration {
         public var padding = CGFloat(16)
         
         // MARK: 图标样式
-        /// 图标、default按钮的颜色
-        public var tintColor: UIColor?
         /// 图标尺寸
         public var iconSize = CGSize(width: 48, height: 48)
+        /// 某个场景的默认图片
+        /// - Parameter callback: 回调
+        public func iconForScene(_ callback: @escaping (ProHUD.Toast.Scene) -> UIImage?) {
+            privIconForScene = callback
+        }
         
         // MARK: 文本样式
         /// 标题字体
@@ -37,71 +40,49 @@ public extension ProHUD.Configuration {
         /// 正文最多行数
         public var bodyMaxLines = Int(10)
         
-        /// 加载视图（如果需要完全自定义整个View，可以重写这个）
-        /// - Parameter callback: 回调代码
-        public mutating func loadSubviews(_ callback: @escaping (ProHUD.Toast) -> Void) {
-            privLoadSubviews = callback
-        }
-        
         /// 更新视图
         /// - Parameter callback: 回调代码
         public mutating func reloadData(_ callback: @escaping (ProHUD.Toast) -> Void) {
             privReloadData = callback
         }
         
+        /// 非Loading弹窗的默认持续时间
+        public var duration = TimeInterval(3)
+        
     }
 }
 
-// MARK: - 默认实现
 
+// MARK: - 内部调用
 internal extension ProHUD.Configuration.Toast {
-    var loadSubviews: (ProHUD.Toast) -> Void {
-        return privLoadSubviews
-    }
+    
     var reloadData: (ProHUD.Toast) -> Void {
         return privReloadData
     }
+    
 }
 
-fileprivate var privLoadSubviews: (ProHUD.Toast) -> Void = {
-    return { (vc) in
-        debug(vc, "loadSubviews")
-        vc.view.tintColor = cfg.toast.tintColor
-        vc.view.addSubview(vc.titleLabel)
-        vc.view.addSubview(vc.bodyLabel)
-        vc.view.addSubview(vc.imageView)
-    }
-}()
-
+// MARK: - 默认实现
 fileprivate var privReloadData: (ProHUD.Toast) -> Void = {
     return { (vc) in
         debug(vc, "reloadData")
         let config = cfg.toast
-        let scene = vc.model.scene
-        // 设置数据
-        let imgStr: String
-        switch vc.model.scene {
-        case .success:
-            imgStr = "ProHUDSuccess"
-        case .warning:
-            imgStr = "ProHUDWarning"
-        case .error:
-            imgStr = "ProHUDError"
-        case .loading:
-            imgStr = "ProHUDLoading"
-        case .confirm:
-            imgStr = "ProHUDMessage"
-        case .delete:
-            imgStr = "ProHUDTrash"
-        default:
-            imgStr = "ProHUDMessage"
+        let scene = vc.vm.scene
+        if vc.titleLabel.superview == nil {
+            vc.view.addSubview(vc.titleLabel)
         }
-        let img = vc.model.icon ?? ProHUD.image(named: imgStr)
-        vc.imageView.image = img
+        if vc.bodyLabel.superview == nil {
+            vc.view.addSubview(vc.bodyLabel)
+        }
+        if vc.imageView.superview == nil {
+            vc.view.addSubview(vc.imageView)
+        }
+        // 设置数据
+        vc.imageView.image = vc.vm.icon ?? privIconForScene(vc.vm.scene)
         vc.titleLabel.textColor = cfg.primaryLabelColor
-        vc.titleLabel.text = vc.model.title
+        vc.titleLabel.text = vc.vm.title
         vc.bodyLabel.textColor = cfg.secondaryLabelColor
-        vc.bodyLabel.text = vc.model.message
+        vc.bodyLabel.text = vc.vm.message
         
         // 更新布局
         vc.imageView.snp.makeConstraints { (mk) in
@@ -123,13 +104,35 @@ fileprivate var privReloadData: (ProHUD.Toast) -> Void = {
         }
         
         vc.view.layoutIfNeeded()
-        switch vc.model.scene {
-        case .loading:
-            vc.duration(nil)
-        default:
-            vc.duration(3)
+        // 设置默认持续时间
+        if vc.vm.duration == nil {
+            if vc.vm.scene == .loading {
+                vc.vm.duration = 0
+            } else {
+                vc.vm.duration = config.duration
+            }
         }
-        
     }
     
+}()
+
+
+
+fileprivate var privIconForScene: (ProHUD.Toast.Scene) -> UIImage? = {
+    return { (scene) in
+        let imgStr: String
+        switch scene {
+        case .success:
+            imgStr = "ProHUDSuccess"
+        case .warning:
+            imgStr = "ProHUDWarning"
+        case .error:
+            imgStr = "ProHUDError"
+        case .loading:
+            imgStr = "ProHUDLoading"
+        default:
+            imgStr = "ProHUDMessage"
+        }
+        return ProHUD.image(named: imgStr)
+    }
 }()

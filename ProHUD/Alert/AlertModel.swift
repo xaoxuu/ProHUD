@@ -33,7 +33,7 @@ public extension Alert {
         
     }
     
-    struct ViewModel {
+    class ViewModel {
         
         /// ID标识
         public var identifier = String(Date().timeIntervalSince1970)
@@ -67,9 +67,8 @@ public extension Alert {
             didSet {
                 durationBlock?.cancel()
                 if let t = duration, t > 0 {
-                    let v = vc
-                    durationBlock = DispatchWorkItem(block: {
-                        v?.pop()
+                    durationBlock = DispatchWorkItem(block: { [weak self] in
+                        self?.vc?.pop()
                     })
                     DispatchQueue.main.asyncAfter(deadline: .now()+t, execute: durationBlock!)
                 } else {
@@ -79,6 +78,8 @@ public extension Alert {
         }
         
         public weak var vc: Alert?
+        
+        // MARK: 私有
         
         /// 持续时间
         internal var durationBlock: DispatchWorkItem?
@@ -99,13 +100,9 @@ public extension Alert.ViewModel {
     /// - Parameter style: 样式
     /// - Parameter text: 标题
     /// - Parameter handler: 事件处理
-    @discardableResult mutating func add(action style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) -> UIButton {
+    @discardableResult func add(action style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) -> UIButton {
         duration = 0
-        let btn = vc?.privAddButton(custom: Alert.Button.actionButton(title: title), handler: handler)
-        if let b = btn as? Alert.Button {
-            b.update(style: style)
-        }
-        return btn!
+        return vc!.insert(action: nil, style: style, title: title, handler: handler)
     }
     
     /// 插入按钮
@@ -113,13 +110,9 @@ public extension Alert.ViewModel {
     /// - Parameter style: 样式
     /// - Parameter title: 标题
     /// - Parameter handler: 事件处理
-    @discardableResult mutating func insert(action index: Int, style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) -> UIButton {
+    @discardableResult func insert(action index: Int, style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) -> UIButton {
         duration = 0
-        let btn = vc?.privAddButton(custom: Alert.Button.actionButton(title: title), at: index, handler: handler)
-        if let b = btn as? Alert.Button {
-            b.update(style: style)
-        }
-        return btn!
+        return vc!.insert(action: index, style: style, title: title, handler: handler)
     }
     
     /// 更新按钮
@@ -127,16 +120,15 @@ public extension Alert.ViewModel {
     /// - Parameter style: 样式
     /// - Parameter title: 标题
     /// - Parameter handler: 事件处理
-    mutating func update(action index: Int, style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) {
-        vc?.privUpdateButton(action: index, style: style, title: title, handler)
+    func update(action index: Int, style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) {
+        vc?.update(action: index, style: style, title: title, handler: handler)
     }
     
     /// 移除按钮
     /// - Parameter index: 索引
-    mutating func remove(action index: Int...) {
-        guard let alert = self.vc else { return }
+    func remove(action index: Int...) {
         for (i, idx) in index.enumerated() {
-            alert.privRemoveAction(index: idx-i)
+            vc?.remove(action: idx-i)
         }
     }
     

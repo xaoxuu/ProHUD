@@ -22,12 +22,14 @@ public extension ProHUD.Configuration {
         /// 填充：元素内部控件距离元素边界的距离
         public var padding = CGFloat(16)
         
-        // MARK: 图标样式
-        /// 图标、default按钮的颜色
+        /// 颜色
         public var tintColor: UIColor?
+        
+        // MARK: 图标样式
         /// 图标尺寸
         public var iconSize = CGSize(width: 48, height: 48)
-        
+        /// 某个场景的默认图片
+        /// - Parameter callback: 回调
         public func iconForScene(_ callback: @escaping (ProHUD.Alert.Scene) -> UIImage?) {
             privIconForScene = callback
         }
@@ -38,7 +40,7 @@ public extension ProHUD.Configuration {
         /// 标题最多行数
         public var titleMaxLines = Int(1)
         
-        /// 加粗正文字体（如果只有标题或者只有正文，则显示这种字体）
+        /// 加粗字体（如果只有标题或者只有正文，则显示这种字体）
         public var boldTextFont = UIFont.boldSystemFont(ofSize: 18)
         
         /// 正文字体
@@ -78,7 +80,6 @@ public extension ProHUD.Configuration {
 
 
 // MARK: - 内部调用
-
 internal extension ProHUD.Configuration.Alert {
     var reloadData: (ProHUD.Alert) -> Void {
         return privReloadData
@@ -87,7 +88,6 @@ internal extension ProHUD.Configuration.Alert {
 
 
 // MARK: - 默认实现
-
 fileprivate var privLayoutContentView: (ProHUD.Alert) -> Void = {
     return { (vc) in
         if vc.contentView.superview == nil {
@@ -263,7 +263,7 @@ fileprivate var privLoadForceQuitButton: (ProHUD.Alert) -> Void = {
         let config = cfg.alert
         let btn = ProHUD.Alert.Button.forceQuitButton()
         btn.setTitle(cfg.alert.forceQuitTitle, for: .normal)
-        let bg = ProHUD.BlurView()
+        let bg = createBlurView()
         bg.layer.masksToBounds = true
         bg.layer.cornerRadius = config.cornerRadius
         if let last = vc.view.subviews.last {

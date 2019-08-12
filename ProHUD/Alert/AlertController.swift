@@ -19,7 +19,7 @@ public extension ProHUD {
         internal static var alertWindow: UIWindow?
         
         /// 内容视图
-        public var contentView = BlurView()
+        public var contentView = createBlurView()
         
         /// 内容容器（包括icon、textStack、actionStack)
         public var contentStack: StackContainer = {
@@ -88,12 +88,10 @@ public extension ProHUD {
 
 public extension Alert {
     
-    // MARK: 生命周期函数
-    
     /// 推入屏幕
     @discardableResult func push() -> Alert {
         if Alert.alerts.contains(self) == false {
-            let window = Alert.getAlertWindow(self)
+            let window = Alert.privGetAlertWindow(self)
             window.makeKeyAndVisible()
             window.resignKey()
             window.addSubview(view)
@@ -106,14 +104,14 @@ public extension Alert {
             }
             Alert.alerts.append(self)
         }
-        Alert.updateAlertsLayout()
+        Alert.privUpdateAlertsLayout()
         return self
     }
     
     /// 弹出屏幕
     func pop() {
-        let window = Alert.getAlertWindow(self)
-        Alert.removeItemFromArray(alert: self)
+        let window = Alert.privGetAlertWindow(self)
+        Alert.privRemoveItemFromArray(alert: self)
         UIView.animateForAlertBuildOut(animations: {
             self.view.alpha = 0
             self.view.transform = .init(scaleX: 1.08, y: 1.08)
@@ -132,29 +130,24 @@ public extension Alert {
         }
     }
     
-    
-    // MARK: 设置函数
+    /// 更新
+    /// - Parameter callback: 回调
+    func update(_ callback: ((inout ViewModel) -> Void)? = nil) {
+        callback?(&vm)
+        cfg.alert.reloadData(self)
+    }
     
     
     /// 最小化事件
     /// - Parameter callback: 事件回调
-    @discardableResult func didForceQuit(_ callback: (() -> Void)?) -> Alert {
+    func didForceQuit(_ callback: (() -> Void)?) {
         vm.forceQuitCallback = callback
-        return self
     }
     
     /// 消失事件
     /// - Parameter callback: 事件回调
-    @discardableResult func didDisappear(_ callback: (() -> Void)?) -> Alert {
+    func didDisappear(_ callback: (() -> Void)?) {
         disappearCallback = callback
-        return self
-    }
-    
-    /// 更新
-    /// - Parameter callback: 回调
-    func update(_ callback: ((inout Alert.ViewModel) -> Void)? = nil) {
-        callback?(&vm)
-        cfg.alert.reloadData(self)
     }
     
     func animate(rotate: Bool) {
@@ -177,8 +170,7 @@ public extension Alert {
 }
 
 
-// MARK: 类函数
-
+// MARK: - 实例管理器
 public extension Alert {
     
     /// 推入屏幕
@@ -186,7 +178,7 @@ public extension Alert {
     /// - Parameter title: 标题
     /// - Parameter message: 正文
     /// - Parameter actions: 更多操作
-    @discardableResult class func push(scene: Alert.Scene, title: String? = nil, message: String? = nil, actions: ((inout Alert.ViewModel) -> Void)? = nil) -> Alert {
+    @discardableResult class func push(scene: Alert.Scene = .default, title: String? = nil, message: String? = nil, actions: ((inout ViewModel) -> Void)? = nil) -> Alert {
         return Alert(scene: scene, title: title, message: message, actions: actions).push()
     }
     
@@ -218,45 +210,30 @@ public extension Alert {
     
 }
 
-// MARK: - 私有
 
+// MARK: - 创建和设置
 internal extension Alert {
     
-    /// 移除按钮
-    /// - Parameter index: 索引
-    @discardableResult func privRemoveAction(index: Int) -> Alert {
-        if index < 0 {
-            for view in self.actionStack.arrangedSubviews {
-                if let btn = view as? UIButton {
-                    btn.removeFromSuperview()
-                }
-            }
-        } else if index < self.actionStack.arrangedSubviews.count, let btn = self.actionStack.arrangedSubviews[index] as? UIButton {
-            btn.removeFromSuperview()
-        }
-        if self.actionStack.arrangedSubviews.count == 0 {
-            self.actionStack.removeFromSuperview()
-        }
-        UIView.animateForAlert {
-            self.view.layoutIfNeeded()
-        }
-        return self
-    }
     
-    @discardableResult func privAddButton(custom button: UIButton, at index: Int? = nil, handler: (() -> Void)?) -> UIButton {
+    /// 加载一个按钮
+    /// - Parameter style: 样式
+    /// - Parameter title: 标题
+    /// - Parameter action: 事件
+    @discardableResult func insert(action index: Int?, style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) -> UIButton {
+        let btn = Button.actionButton(title: title)
+        if let idx = index, idx < actionStack.arrangedSubviews.count {
+            actionStack.insertArrangedSubview(btn, at: idx)
+        } else {
+            actionStack.addArrangedSubview(btn)
+        }
+        btn.update(style: style)
         if actionStack.superview == nil {
             contentStack.addArrangedSubview(actionStack)
             contentStack.layoutIfNeeded()
         }
-        if let idx = index, idx < actionStack.arrangedSubviews.count {
-            actionStack.insertArrangedSubview(button, at: idx)
-        } else {
-            actionStack.addArrangedSubview(button)
-        }
-        
-        addTouchUpAction(for: button) { [weak self] in
+        addTouchUpAction(for: btn) { [weak self] in
             handler?()
-            if button.tag == UIAlertAction.Style.cancel.rawValue {
+            if btn.tag == UIAlertAction.Style.cancel.rawValue {
                 self?.pop()
             }
         }
@@ -266,10 +243,10 @@ internal extension Alert {
                 self.view.layoutIfNeeded()
             }
         }
-        return button
+        return btn
     }
     
-    func privUpdateButton(action index: Int, style: UIAlertAction.Style, title: String?, _ handler: (() -> Void)?) {
+    func update(action index: Int, style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) {
         if index < self.actionStack.arrangedSubviews.count, let btn = self.actionStack.arrangedSubviews[index] as? UIButton {
             btn.setTitle(title, for: .normal)
             if let b = btn as? Button {
@@ -287,10 +264,30 @@ internal extension Alert {
         }
     }
     
+    /// 移除按钮
+    /// - Parameter index: 索引
+    @discardableResult func remove(action index: Int) -> Alert {
+        if index < 0 {
+            for view in self.actionStack.arrangedSubviews {
+                if let btn = view as? UIButton {
+                    btn.removeFromSuperview()
+                }
+            }
+        } else if index < self.actionStack.arrangedSubviews.count, let btn = self.actionStack.arrangedSubviews[index] as? UIButton {
+            btn.removeFromSuperview()
+        }
+        if self.actionStack.arrangedSubviews.count == 0 {
+            self.actionStack.removeFromSuperview()
+        }
+        UIView.animateForAlert {
+            self.view.layoutIfNeeded()
+        }
+        return self
+    }
 }
 
 fileprivate extension Alert {
-    class func updateAlertsLayout() {
+    class func privUpdateAlertsLayout() {
         for (i, a) in alerts.reversed().enumerated() {
             let scale = CGFloat(pow(0.7, CGFloat(i)))
             UIView.animate(withDuration: 1.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.allowUserInteraction, .curveEaseInOut], animations: {
@@ -301,7 +298,7 @@ fileprivate extension Alert {
             }
         }
     }
-    class func getAlertWindow(_ vc: UIViewController) -> UIWindow {
+    class func privGetAlertWindow(_ vc: UIViewController) -> UIWindow {
         if let w = alertWindow {
             return w
         }
@@ -313,7 +310,7 @@ fileprivate extension Alert {
         return w
     }
     
-    class func removeItemFromArray(alert: Alert) {
+    class func privRemoveItemFromArray(alert: Alert) {
         if alerts.count > 1 {
             for (i, a) in alerts.enumerated() {
                 if a == alert {
@@ -322,7 +319,7 @@ fileprivate extension Alert {
                     }
                 }
             }
-            updateAlertsLayout()
+            privUpdateAlertsLayout()
         } else if alerts.count == 1 {
             alerts.removeAll()
         } else {

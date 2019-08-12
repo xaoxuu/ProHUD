@@ -10,7 +10,7 @@ import UIKit
 
 public extension Guard {
     
-    struct ViewModel {
+    class ViewModel {
         
         /// ID标识
         public var identifier = String(Date().timeIntervalSince1970)
@@ -46,7 +46,7 @@ public extension Guard.ViewModel {
     /// - Parameter title: 标题
     /// - Parameter action: 事件
     @discardableResult func add(action style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) -> UIButton {
-        return vc!.add(action: style, title: title, handler: handler)
+        return vc!.insert(action: nil, style: style, title: title, handler: handler)
     }
     
     /// 插入按钮
@@ -54,9 +54,8 @@ public extension Guard.ViewModel {
     /// - Parameter style: 样式
     /// - Parameter title: 标题
     /// - Parameter handler: 事件处理
-    @discardableResult mutating func insert(action index: Int, style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) -> UIButton {
-        
-        return UIButton()
+    @discardableResult func insert(action index: Int, style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) -> UIButton {
+        return vc!.insert(action: index, style: style, title: title, handler: handler)
     }
     
     /// 更新按钮
@@ -64,15 +63,15 @@ public extension Guard.ViewModel {
     /// - Parameter style: 样式
     /// - Parameter title: 标题
     /// - Parameter handler: 事件处理
-    mutating func update(action index: Int, style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) {
-        //        vc?.privUpdateButton(action: index, style: style, title: title, handler)
+    func update(action index: Int, style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) {
+        vc?.update(action: index, style: style, title: title, handler: handler)
     }
     
     /// 移除按钮
     /// - Parameter index: 索引
     func remove(action index: Int...) {
         for (i, idx) in index.enumerated() {
-            vc!.privRemoveAction(index: idx-i)
+            vc?.remove(index: idx-i)
         }
     }
     
