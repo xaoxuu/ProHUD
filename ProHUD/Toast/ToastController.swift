@@ -65,7 +65,7 @@ public extension ProHUD {
         /// - Parameter title: 标题
         /// - Parameter message: 内容
         /// - Parameter icon: 图标
-        public convenience init(scene: Scene = .default, title: String? = nil, message: String? = nil, icon: UIImage? = nil, actions: ((inout ViewModel) -> Void)? = nil) {
+        public convenience init(scene: Scene = .default, title: String? = nil, message: String? = nil, icon: UIImage? = nil, duration: TimeInterval? = nil, actions: ((inout ViewModel) -> Void)? = nil) {
             self.init()
             vm.vc = self
             
@@ -73,6 +73,7 @@ public extension ProHUD {
             vm.title = title
             vm.message = message
             vm.icon = icon
+            vm.duration = duration
             actions?(&vm)
             
             // 点击
@@ -180,6 +181,20 @@ public extension Toast {
         return self
     }
     
+    func animate(rotate: Bool) {
+        if rotate {
+            DispatchQueue.main.async {
+                let ani = CABasicAnimation(keyPath: "transform.rotation.z")
+                ani.toValue = Double.pi * 2.0
+                ani.duration = 3
+                ani.repeatCount = 10000
+                self.imageView.layer.add(ani, forKey: "rotationAnimation")
+            }
+        } else {
+            imageView.layer.removeAllAnimations()
+        }
+    }
+    
 }
 
 
@@ -191,13 +206,13 @@ public extension Toast {
     /// - Parameter title: 标题
     /// - Parameter message: 内容
     /// - Parameter actions: 更多操作
-    @discardableResult class func push(scene: Toast.Scene = .default, title: String? = nil, message: String? = nil, actions: ((inout ViewModel) -> Void)? = nil) -> Toast {
-        return Toast(scene: scene, title: title, message: message, actions: actions).push()
+    @discardableResult class func push(scene: Toast.Scene = .default, title: String? = nil, message: String? = nil, duration: TimeInterval? = nil, _ actions: ((inout ViewModel) -> Void)? = nil) -> Toast {
+        return Toast(scene: scene, title: title, message: message, duration: duration, actions: actions).push()
     }
     
     /// 获取指定的toast
     /// - Parameter identifier: 标识
-    class func toasts(_ identifier: String?) -> [Toast] {
+    class func get(_ identifier: String?) -> [Toast] {
         var tt = [Toast]()
         for t in toasts {
             if t.vm.identifier == identifier {
@@ -234,7 +249,7 @@ public extension Toast {
     /// 弹出屏幕
     /// - Parameter identifier: 指定实例的标识
     class func pop(_ identifier: String?) {
-        for t in toasts(identifier) {
+        for t in get(identifier) {
             t.pop()
         }
     }

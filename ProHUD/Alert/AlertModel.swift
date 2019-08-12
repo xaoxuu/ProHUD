@@ -65,15 +65,7 @@ public extension Alert {
         /// 持续时间（为空代表根据场景不同的默认配置，为0代表无穷大）
         public var duration: TimeInterval? {
             didSet {
-                durationBlock?.cancel()
-                if let t = duration, t > 0 {
-                    durationBlock = DispatchWorkItem(block: { [weak self] in
-                        self?.vc?.pop()
-                    })
-                    DispatchQueue.main.asyncAfter(deadline: .now()+t, execute: durationBlock!)
-                } else {
-                    durationBlock = nil
-                }
+                updateDuration()
             }
         }
         
@@ -89,6 +81,18 @@ public extension Alert {
         
         /// 强制退出代码
         internal var forceQuitCallback: (() -> Void)?
+        
+        internal func updateDuration() {
+            durationBlock?.cancel()
+            if let t = duration ?? cfg.alert.durationForScene(scene), t > 0 {
+                durationBlock = DispatchWorkItem(block: { [weak self] in
+                    self?.vc?.pop()
+                })
+                DispatchQueue.main.asyncAfter(deadline: .now()+t, execute: durationBlock!)
+            } else {
+                durationBlock = nil
+            }
+        }
         
     }
     

@@ -59,15 +59,7 @@ public extension Toast {
         /// 持续时间
         public var duration: TimeInterval? {
             didSet {
-                durationBlock?.cancel()
-                if let t = duration, t > 0 {
-                    durationBlock = DispatchWorkItem(block: { [weak self] in
-                        self?.vc?.pop()
-                    })
-                    DispatchQueue.main.asyncAfter(deadline: .now()+t, execute: durationBlock!)
-                } else {
-                    durationBlock = nil
-                }
+                updateDuration()
             }
         }
         
@@ -85,6 +77,17 @@ public extension Toast {
         /// 点击事件回调
         internal var tapCallback: (() -> Void)?
         
+        internal func updateDuration() {
+            durationBlock?.cancel()
+            if let t = duration ?? cfg.toast.durationForScene(scene), t > 0 {
+                durationBlock = DispatchWorkItem(block: { [weak self] in
+                    self?.vc?.pop()
+                })
+                DispatchQueue.main.asyncAfter(deadline: .now()+t, execute: durationBlock!)
+            } else {
+                durationBlock = nil
+            }
+        }
         
     }
     

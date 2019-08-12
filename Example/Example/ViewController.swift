@@ -8,8 +8,10 @@
 
 import UIKit
 import ProHUD
+import SnapKit
 
-class ViewController: UIViewController {
+class ViewController: BaseListVC {
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,14 +22,17 @@ class ViewController: UIViewController {
             cfg.rootViewController = self
             
             cfg.alert { (a) in
-                a.duration = 1
+                
+//                a.durationForScene { (s) -> TimeInterval? in
+//                    return 1
+//                }
                 a.forceQuitTimer = 3
 //                a.iconSize = .init(width: 20, height: 80)
 //                a.reloadData
 //                a.iconSize = .init(width: 20, height: 80)
-                a.iconForScene { (s) -> UIImage? in
-                    return UIImage(named: "icon_download")
-                }
+//                a.iconForScene { (s) -> UIImage? in
+//                    return UIImage(named: "icon_download")
+//                }
                 
             }
             cfg.toast { (t) in
@@ -39,15 +44,21 @@ class ViewController: UIViewController {
             }
         }
         
+        
     }
     
+    override var titles: [String] {
+        return ["Toast", "Alert", "Guard"]
+    }
     
-    @IBAction func test(_ sender: UIButton) {
-//        testAlert()
-        testToast()
-//        testUpdateAction()
-//        testGuard()
-//        fastGuard()
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 0 {
+            navigationController?.pushViewController(TestToastVC(), animated: true)
+        } else if indexPath.row == 1 {
+            navigationController?.pushViewController(TestAlertVC(), animated: true)
+        } else {
+            navigationController?.pushViewController(TestGuardVC(), animated: true)
+        }
     }
     
     func testAlert() {
@@ -59,53 +70,6 @@ class ViewController: UIViewController {
             vm.add(action: .default, title: "OK", handler: nil)
             
         }
-//        a.update()
-//        Alert.push(scene: .loading, title: "Loading") { (a) in
-//            a.animate(rotate: true)
-//            DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-//                a.update { (vm) in
-//                    vm.message = "请稍后片刻"
-//                }
-//                a.animate(rotate: true)
-//            }
-//            DispatchQueue.main.asyncAfter(deadline: .now()+2) {
-//                a.update { (vm) in
-//                    vm.message = "请稍后片刻请稍后片刻"
-//                }
-//                a.animate(rotate: true)
-//            }
-//            DispatchQueue.main.asyncAfter(deadline: .now()+3) {
-//                a.update { (vm) in
-//                    vm.scene = .success
-//                    vm.add(action: .default, title: "OK") { [weak a] in
-//                        a?.pop()
-//                    }
-//                }
-//            }
-//            DispatchQueue.main.asyncAfter(deadline: .now()+4) {
-//                a.update { (vm) in
-//                    vm.update(action: 0, style: .cancel, title: "Cancel", handler: nil)
-//                }
-//            }
-//        }
-//        Alert.push(scene: .delete, title: "确认删除", message: "此操作不可撤销！此操作不可撤销！此操作不可撤销！") { (a) in
-//            a.identifier = ""
-//            DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-//                a.update { (vm) in
-//                    vm.add(action: .destructive, title: "确认") { [weak a] in
-//                        a?.update({ (vm) in
-//                            vm.message = "但是饭撒 打算放过"
-//                            vm.remove(action: 1)
-//                            vm.update(action: 0, style: .destructive, title: "确认", handler: {
-//                                a?.pop()
-//                            })
-//                        })
-//                    }
-//                    vm.add(action: .cancel, title: "取消", handler: nil)
-//                }
-//            }
-//
-//        }
     }
     
     func testDelete() {

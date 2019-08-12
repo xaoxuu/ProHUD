@@ -97,6 +97,9 @@ fileprivate var privReloadData: (ProHUD.Guard) -> Void = {
             vc.contentView.layer.shadowOpacity = 0.12
         }
         vc.contentView.snp.makeConstraints { (mk) in
+            if isPortrait && vc.isFullScreen {
+                mk.top.equalToSuperview()
+            }
             mk.centerX.equalToSuperview()
             if UIDevice.current.userInterfaceIdiom == .phone {
                 if width < config.cardMaxWidth {
@@ -111,7 +114,11 @@ fileprivate var privReloadData: (ProHUD.Guard) -> Void = {
         }
         // stack
         vc.contentStack.snp.makeConstraints { (mk) in
-            mk.top.equalToSuperview().offset(config.padding)
+            if isPortrait && vc.isFullScreen {
+                mk.top.equalToSuperview().offset(Inspire.shared.screen.safeAreaInsets.top)
+            } else {
+                mk.top.equalToSuperview().offset(config.padding)
+            }
             mk.centerX.equalToSuperview()
             if width < config.cardMaxWidth {
                 let bottom = Inspire.shared.screen.safeAreaInsets.bottom

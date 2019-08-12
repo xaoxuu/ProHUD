@@ -46,8 +46,10 @@ public extension ProHUD.Configuration {
             privReloadData = callback
         }
         
-        /// 非Loading弹窗的默认持续时间
-        public var duration = TimeInterval(3)
+        /// 默认持续时间（当viewmodel的duration为nil时，会从这里获取）
+        public mutating func durationForScene(_ callback: @escaping (ProHUD.Toast.Scene) -> TimeInterval?) {
+            privDurationForScene = callback
+        }
         
     }
 }
@@ -58,6 +60,10 @@ internal extension ProHUD.Configuration.Toast {
     
     var reloadData: (ProHUD.Toast) -> Void {
         return privReloadData
+    }
+    
+    var durationForScene: (ProHUD.Toast.Scene) -> TimeInterval? {
+        return privDurationForScene
     }
     
 }
@@ -79,6 +85,7 @@ fileprivate var privReloadData: (ProHUD.Toast) -> Void = {
         }
         // 设置数据
         vc.imageView.image = vc.vm.icon ?? privIconForScene(vc.vm.scene)
+        vc.imageView.layer.removeAllAnimations()
         vc.titleLabel.textColor = cfg.primaryLabelColor
         vc.titleLabel.text = vc.vm.title
         vc.bodyLabel.textColor = cfg.secondaryLabelColor
@@ -104,14 +111,10 @@ fileprivate var privReloadData: (ProHUD.Toast) -> Void = {
         }
         
         vc.view.layoutIfNeeded()
-        // 设置默认持续时间
-        if vc.vm.duration == nil {
-            if vc.vm.scene == .loading {
-                vc.vm.duration = 0
-            } else {
-                vc.vm.duration = config.duration
-            }
-        }
+        
+        // 设置持续时间
+        vc.vm.updateDuration()
+        
     }
     
 }()
@@ -134,5 +137,19 @@ fileprivate var privIconForScene: (ProHUD.Toast.Scene) -> UIImage? = {
             imgStr = "ProHUDMessage"
         }
         return ProHUD.image(named: imgStr)
+    }
+}()
+
+
+fileprivate var privDurationForScene: (ProHUD.Toast.Scene) -> TimeInterval? = {
+    return { (scene) in
+        switch scene {
+        case .loading:
+            return nil
+        case .error, .warning:
+            return 5
+        default:
+            return 3
+        }
     }
 }()

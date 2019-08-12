@@ -13,6 +13,8 @@ public class HUDController: UIViewController {
     /// 消失回调
     internal var disappearCallback: (() -> Void)?
     
+    internal var willAppearCallback: (() -> Void)?
+    
     /// 按钮事件
     internal var buttonEvents = [UIButton:() -> Void]()
     
@@ -34,6 +36,11 @@ public class HUDController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+    }
+    
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        willAppearCallback?()
     }
     
     public override func viewDidDisappear(_ animated: Bool) {

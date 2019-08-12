@@ -11,7 +11,7 @@ import SnapKit
 import Inspire
 
 public extension ProHUD.Configuration {
-    class Alert {
+    struct Alert {
         // MARK: 卡片样式
         /// 最大宽度（用于优化横屏或者iPad显示）
         public var maxWidth = CGFloat(400)
@@ -59,8 +59,10 @@ public extension ProHUD.Configuration {
             privReloadData = callback
         }
         
-        /// 非Loading弹窗的默认持续时间
-        public var duration = TimeInterval(2)
+        /// 默认持续时间（当viewmodel的duration为nil时，会从这里获取）
+        public func durationForScene(_ callback: @escaping (ProHUD.Alert.Scene) -> TimeInterval?) {
+            privDurationForScene = callback
+        }
         
         /// 多少秒后显示强制退出的按钮（只有无按钮的弹窗才会出现）
         public var forceQuitTimer = TimeInterval(30)
@@ -81,9 +83,15 @@ public extension ProHUD.Configuration {
 
 // MARK: - 内部调用
 internal extension ProHUD.Configuration.Alert {
+    
     var reloadData: (ProHUD.Alert) -> Void {
         return privReloadData
     }
+    
+    var durationForScene: (ProHUD.Alert.Scene) -> TimeInterval? {
+        return privDurationForScene
+    }
+    
 }
 
 
@@ -233,11 +241,11 @@ fileprivate var privUpdateTextStack: (ProHUD.Alert) -> Void = {
 fileprivate var privUpdateActionStack: (ProHUD.Alert) -> Void = {
     return { (vc) in
         let config = cfg.alert
-        if vc.buttonEvents.count > 0 {
+        if vc.actionStack.arrangedSubviews.count > 0 {
             // 有按钮
             vc.contentStack.addArrangedSubview(vc.actionStack)
             // 适配横竖屏和iPad
-            if isPortrait == false && vc.buttonEvents.count < 4 {
+            if isPortrait == false && vc.actionStack.arrangedSubviews.count < 4 {
                 vc.actionStack.axis = .horizontal
                 vc.actionStack.alignment = .fill
                 vc.actionStack.distribution = .fillEqually
@@ -332,14 +340,8 @@ fileprivate var privReloadData: (ProHUD.Alert) -> Void = {
             }
         }
         
-        // 设置默认持续时间
-        if vc.vm.duration == nil {
-            if vc.vm.scene == .loading {
-                vc.vm.duration = 0
-            } else {
-                vc.vm.duration = config.duration
-            }
-        }
+        // 设置持续时间
+        vc.vm.updateDuration()
         
         // 强制退出按钮
         vc.vm.forceQuitTimerBlock?.cancel()
@@ -356,5 +358,17 @@ fileprivate var privReloadData: (ProHUD.Alert) -> Void = {
             vc.vm.forceQuitTimerBlock = nil
         }
         
+    }
+}()
+
+
+fileprivate var privDurationForScene: (ProHUD.Alert.Scene) -> TimeInterval? = {
+    return { (scene) in
+        switch scene {
+        case .loading:
+            return nil
+        default:
+            return 2
+        }
     }
 }()

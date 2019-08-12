@@ -7,6 +7,7 @@
 //
 
 import SnapKit
+import Inspire
 
 public typealias Guard = ProHUD.Guard
 
@@ -44,11 +45,14 @@ public extension ProHUD {
         /// 是否是强制性的（点击空白处是否可以消失）
         public var force = false
         
+        /// 是否是全屏的（仅手机竖屏有效）
+        public var isFullScreen = false
+        
         /// 是否正在显示
         private var displaying = false
         
         /// 背景颜色
-        public var backgroundColor: UIColor? = UIColor(white: 0, alpha: 0.5)
+        public var backgroundColor: UIColor? = UIColor(white: 0, alpha: 0.4)
         
         public var vm = ViewModel()
         
@@ -142,7 +146,9 @@ public extension Guard {
         cfg.guard.reloadData(self)
     }
     
-    
+    func willAppear(_ callback: (() -> Void)?) {
+        willAppearCallback = callback
+    }
     /// 消失事件
     /// - Parameter callback: 事件回调
     func didDisappear(_ callback: (() -> Void)?) {
@@ -159,13 +165,13 @@ public extension Guard {
     /// - Parameter title: 标题
     /// - Parameter message: 正文
     /// - Parameter icon: 图标
-    @discardableResult class func push(to viewController: UIViewController? = nil, actions: ((inout ViewModel) -> Void)? = nil) -> Guard {
+    @discardableResult class func push(to viewController: UIViewController? = nil, _ actions: ((inout ViewModel) -> Void)? = nil) -> Guard {
         return Guard(actions: actions).push(to: viewController)
     }
     
     /// 获取指定的实例
     /// - Parameter identifier: 指定实例的标识
-    class func guards(_ identifier: String? = nil, from viewController: UIViewController? = nil) -> [Guard] {
+    class func get(_ identifier: String? = nil, from viewController: UIViewController? = nil) -> [Guard] {
         var gg = [Guard]()
         if let vc = viewController ?? cfg.rootViewController {
             for child in vc.children {
@@ -194,7 +200,7 @@ public extension Guard {
     /// 弹出所有实例
     /// - Parameter identifier: 指定实例的标识
     class func pop(from viewController: UIViewController?) {
-        for g in guards(from: viewController) {
+        for g in get(from: viewController) {
             g.pop()
         }
     }
@@ -304,10 +310,16 @@ internal extension Guard {
             for view in self.actionStack.arrangedSubviews {
                 if let btn = view as? UIButton {
                     btn.removeFromSuperview()
+                    if let _ = buttonEvents[btn] {
+                        buttonEvents.removeValue(forKey: btn)
+                    }
                 }
             }
         } else if index < self.actionStack.arrangedSubviews.count, let btn = self.actionStack.arrangedSubviews[index] as? UIButton {
             btn.removeFromSuperview()
+            if let _ = buttonEvents[btn] {
+                buttonEvents.removeValue(forKey: btn)
+            }
         }
         cfg.guard.reloadStack(self)
         UIView.animateForAlert {
