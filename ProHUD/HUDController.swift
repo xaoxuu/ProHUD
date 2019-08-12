@@ -10,10 +10,10 @@ import UIKit
 
 public class HUDController: UIViewController {
     
-    /// 消失回调
-    internal var disappearCallback: (() -> Void)?
-    
     internal var willAppearCallback: (() -> Void)?
+    internal var didAppearCallback: (() -> Void)?
+    internal var willDisappearCallback: (() -> Void)?
+    internal var didDisappearCallback: (() -> Void)?
     
     /// 按钮事件
     internal var buttonEvents = [UIButton:() -> Void]()
@@ -42,10 +42,27 @@ public class HUDController: UIViewController {
         super.viewWillAppear(animated)
         willAppearCallback?()
     }
-    
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        didAppearCallback?()
+    }
     public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        disappearCallback?()
+        didDisappearCallback?()
+    }
+    
+    public func viewWillAppear(_ callback: (() -> Void)?) {
+        willAppearCallback = callback
+    }
+    public func viewDidAppear(_ callback: (() -> Void)?) {
+        didAppearCallback = callback
+    }
+    
+    public func viewWillDisappear(_ callback: (() -> Void)?) {
+        willDisappearCallback = callback
+    }
+    public func viewDidDisappear(_ callback: (() -> Void)?) {
+        didDisappearCallback = callback
     }
     
 }

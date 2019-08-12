@@ -9,8 +9,6 @@
 import UIKit
 import ProHUD
 
-let hud = ProHUD.shared
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -20,7 +18,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
  
-         
+        window = UIWindow.init(frame: UIScreen.main.bounds)
+        window?.rootViewController = RootVC()
+        window?.makeKeyAndVisible()
+        
+        ProHUD.config { (cfg) in
+            cfg.rootViewController = window!.rootViewController
+            cfg.alert { (a) in
+                a.titleFont = .bold(22)
+                a.bodyFont = .regular(17)
+                a.boldTextFont = .bold(18)
+                a.buttonFont = .bold(18)
+                a.forceQuitTimer = 3
+            }
+            cfg.toast { (t) in
+                t.titleFont = .bold(18)
+                t.bodyFont = .regular(16)
+            }
+            cfg.guard { (g) in
+                g.titleFont = .bold(22)
+                g.subTitleFont = .bold(20)
+                g.bodyFont = .regular(17)
+                g.buttonFont = .bold(18)
+            }
+        }
         
         return true
     }

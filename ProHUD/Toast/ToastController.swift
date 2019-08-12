@@ -169,16 +169,8 @@ public extension Toast {
     
     /// 点击事件
     /// - Parameter callback: 事件回调
-    @discardableResult func didTapped(_ callback: (() -> Void)?) -> Toast {
+    func didTapped(_ callback: (() -> Void)?) {
         vm.tapCallback = callback
-        return self
-    }
-    
-    /// 消失事件
-    /// - Parameter callback: 事件回调
-    @discardableResult func didDisappear(_ callback: (() -> Void)?) -> Toast {
-        disappearCallback = callback
-        return self
     }
     
     func animate(rotate: Bool) {
@@ -225,6 +217,7 @@ public extension Toast {
     /// 弹出屏幕
     /// - Parameter toast: 实例
     class func pop(_ toast: Toast) {
+        toast.willDisappearCallback?()
         if toasts.count > 1 {
             for (i, t) in toasts.enumerated() {
                 if t == toast {
@@ -275,7 +268,7 @@ fileprivate extension Toast {
         window?.transform = .init(translationX: 0, y: point.y)
         if sender.state == .recognized {
             let v = sender.velocity(in: sender.view)
-            if vm.removable == true && (((window?.frame.origin.y ?? 0) < 0 && v.y < 0) || v.y < -1200) {
+            if vm.isRemovable == true && (((window?.frame.origin.y ?? 0) < 0 && v.y < 0) || v.y < -1200) {
                 // 移除
                 self.pop()
             } else {

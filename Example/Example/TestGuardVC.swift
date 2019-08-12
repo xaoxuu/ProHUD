@@ -26,12 +26,12 @@ class TestGuardVC: BaseListVC {
         tableView.deselectRow(at: indexPath, animated: true)
         let row = indexPath.row
         if row == 0 {
-            Guard.push(to: self.navigationController) { (vm) in
+            Guard.push() { (vm) in
                 let vc = vm.vc
-                vm.add(action: .destructive, title: "删除") {
+                vm.add(action: .destructive, title: "删除") { [weak vc] in
                     Alert.push(scene: .delete, title: "确认删除", message: "此操作不可撤销") { (vm) in
                         let vc = vm.vc
-                        vm.add(action: .destructive, title: "删除") {
+                        vm.add(action: .destructive, title: "删除") { [weak vc] in
                             vc?.pop()
                         }
                         vm.add(action: .cancel, title: "取消", handler: nil)
@@ -42,8 +42,8 @@ class TestGuardVC: BaseListVC {
             }
         } else if row == 1 {
             // 可以通过id来避免重复
-            if Guard.get("pro", from: self.navigationController).count == 0 {
-                Guard.push(to: self.navigationController) { (vm) in
+            if Guard.get("pro").count == 0 {
+                Guard.push() { (vm) in
                     let vc = vm.vc
                     vm.identifier = "pro"
                     vm.add(title: "升级至专业版")
@@ -74,7 +74,7 @@ class TestGuardVC: BaseListVC {
             }
             
         } else if row == 2 {
-            let g = Guard.push(to: self.navigationController) { (vm) in
+            Guard.push() { (vm) in
                 let vc = vm.vc
                 vc?.isFullScreen = true
                 let titleLabel = vm.add(title: "隐私协议")
@@ -83,6 +83,7 @@ class TestGuardVC: BaseListVC {
                 }
                 let tv = UITextView()
                 tv.backgroundColor = .white
+                tv.isEditable = false
                 vc?.textStack.addArrangedSubview(tv)
                 tv.text = "这里可以插入一个webView"
                 vm.add(message: "请认真阅读以上内容，当您阅读完毕并同意协议内容时点击接受按钮。")

@@ -110,6 +110,7 @@ public extension Alert {
     
     /// 弹出屏幕
     func pop() {
+        willDisappearCallback?()
         let window = Alert.privGetAlertWindow(self)
         Alert.privRemoveItemFromArray(alert: self)
         UIView.animateForAlertBuildOut(animations: {
@@ -146,11 +147,6 @@ public extension Alert {
         vm.forceQuitCallback = callback
     }
     
-    /// 消失事件
-    /// - Parameter callback: 事件回调
-    func didDisappear(_ callback: (() -> Void)?) {
-        disappearCallback = callback
-    }
     
     func animate(rotate: Bool) {
         if rotate {

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		33E2B6CF0D9BD11D8C027DE6 /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB925B38880FB296AF5D219F /* Pods_Example.framework */; };
+		CD4B40AA23017C09005111B9 /* RootVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4B40A923017C09005111B9 /* RootVC.swift */; };
 		CD8BFF1823014850001E08DD /* TestToastVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8BFF1723014850001E08DD /* TestToastVC.swift */; };
 		CD8BFF1A2301485E001E08DD /* TestAlertVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8BFF192301485E001E08DD /* TestAlertVC.swift */; };
 		CD8BFF1C23014867001E08DD /* TestGuardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8BFF1B23014867001E08DD /* TestGuardVC.swift */; };
@@ -24,6 +25,7 @@
 		AB925B38880FB296AF5D219F /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA1A6035F1B9A658B3BB225C /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
 		CA1298266BE89D7950DE99F2 /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
+		CD4B40A923017C09005111B9 /* RootVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootVC.swift; sourceTree = "<group>"; };
 		CD59584620E36DA8000F6427 /* Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Example-Bridging-Header.h"; sourceTree = "<group>"; };
 		CD8BFF1723014850001E08DD /* TestToastVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestToastVC.swift; sourceTree = "<group>"; };
 		CD8BFF192301485E001E08DD /* TestAlertVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAlertVC.swift; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				CDA4E03B20D3935B00CD2A0C /* AppDelegate.swift */,
+				CD4B40A923017C09005111B9 /* RootVC.swift */,
 				CD8BFF1D230148DD001E08DD /* BaseListVC.swift */,
 				CD8BFF1F23014CB5001E08DD /* EmptyVC.swift */,
 				CDA4E03D20D3935B00CD2A0C /* ViewController.swift */,
@@ -242,6 +245,7 @@
 				CDA4E03E20D3935B00CD2A0C /* ViewController.swift in Sources */,
 				CD8BFF2023014CB5001E08DD /* EmptyVC.swift in Sources */,
 				CD8BFF1A2301485E001E08DD /* TestAlertVC.swift in Sources */,
+				CD4B40AA23017C09005111B9 /* RootVC.swift in Sources */,
 				CDA4E03C20D3935B00CD2A0C /* AppDelegate.swift in Sources */,
 				CD8BFF1C23014867001E08DD /* TestGuardVC.swift in Sources */,
 				CD8BFF1E230148DD001E08DD /* BaseListVC.swift in Sources */,

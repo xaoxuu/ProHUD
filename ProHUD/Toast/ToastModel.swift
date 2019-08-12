@@ -66,7 +66,7 @@ public extension Toast {
         public weak var vc: Toast?
         
         /// 是否可以通过手势移除（向上滑出屏幕）
-        public var removable = true
+        public var isRemovable = true
         
         
         // MARK: 私有

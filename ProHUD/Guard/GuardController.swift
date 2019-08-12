@@ -43,7 +43,7 @@ public extension ProHUD {
         }()
         
         /// 是否是强制性的（点击空白处是否可以消失）
-        public var force = false
+        public var isForce = false
         
         /// 是否是全屏的（仅手机竖屏有效）
         public var isFullScreen = false
@@ -126,6 +126,7 @@ public extension Guard {
     func pop() {
         if displaying {
             debug("pop")
+            willDisappearCallback?()
             displaying = false
             view.isUserInteractionEnabled = false
             self.removeFromParent()
@@ -146,14 +147,6 @@ public extension Guard {
         cfg.guard.reloadData(self)
     }
     
-    func willAppear(_ callback: (() -> Void)?) {
-        willAppearCallback = callback
-    }
-    /// 消失事件
-    /// - Parameter callback: 事件回调
-    func didDisappear(_ callback: (() -> Void)?) {
-        disappearCallback = callback
-    }
     
 }
 
@@ -338,7 +331,7 @@ fileprivate extension Guard {
     @objc func privDidTapped(_ sender: UITapGestureRecognizer) {
         let point = sender.location(in: contentView)
         if point.x < 0 || point.y < 0 {
-            if force == false {
+            if isForce == false {
                 // 点击到操作区域外部
                 pop()
             }
