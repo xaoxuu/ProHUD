@@ -54,19 +54,27 @@ class TestGuardVC: BaseListVC {
                         vm.add(subTitle: "价格")
                         vm.add(message: "只需一次性付费$2999即可永久享用。")
                         vm.add(action: .destructive, title: "购买") { [weak vc] in
-                            Alert.push(scene: .confirm, title: "确认购买", message: "一旦购买拒不退款") { (vc) in
+                            Alert.push(scene: .buy) { (vc) in
                                 vc.identifier = "confirm"
                                 vc.update { (vm) in
                                     vm.add(action: .destructive, title: "购买") { [weak vc] in
                                         vc?.update({ (vm) in
-                                            vm.scene = .success
-                                            vm.title = "购买成功"
-                                            vm.message = "感谢您的支持"
-                                            vm.remove(action: 1)
-                                            vm.update(action: 0, style: .default, title: "我知道了") {
-                                                vc?.pop()
-                                            }
+                                            vm.scene = .loading
+                                            vm.title = "正在付款"
+                                            vm.message = "请稍等片刻"
+                                            vm.remove(action: 0, 1)
                                         })
+                                        vc?.rotate()
+                                        DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                                            vc?.update({ (vm) in
+                                                vm.scene = .success
+                                                vm.title = "购买成功"
+                                                vm.message = "感谢您的支持"
+                                                vm.add(action: .default, title: "我知道了") {
+                                                    vc?.pop()
+                                                }
+                                            })
+                                        }
                                     }
                                     vm.add(action: .cancel, title: "取消", handler: nil)
                                 }

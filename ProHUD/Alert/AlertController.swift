@@ -178,7 +178,7 @@ public extension Alert {
     /// - Parameter title: 标题
     /// - Parameter message: 正文
     /// - Parameter actions: 更多操作
-    @discardableResult class func push(scene: Alert.Scene = .default, title: String? = nil, message: String? = nil, _ actions: ((Alert) -> Void)? = nil) -> Alert {
+    @discardableResult class func push(scene: ProHUD.Scene = .default, title: String? = nil, message: String? = nil, _ actions: ((Alert) -> Void)? = nil) -> Alert {
         return Alert(scene: scene, title: title, message: message, actions: actions).push()
     }
     

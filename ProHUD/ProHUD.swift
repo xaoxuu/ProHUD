@@ -16,7 +16,66 @@ public class ProHUD {
         return cfg
     }
     
+    public struct Scene {
+        private var id = "unknown"
+        public var identifier: String {
+            return id
+        }
+        public var image: UIImage?
+        public var alertDuration: TimeInterval?
+        public var toastDuration: TimeInterval? = 3
+        public var title: String?
+        public var message: String?
+        init() {
+            
+        }
+    }
+    
 }
+
+// 默认场景
+public extension ProHUD.Scene {
+    init(identifier: String) {
+        self.init()
+        id = identifier
+    }
+    
+    static var `default`: ProHUD.Scene {
+        var scene = ProHUD.Scene.init(identifier: "default")
+        scene.image = ProHUD.image(named: "ProHUDMessage")
+        return scene
+    }
+    static var loading: ProHUD.Scene {
+        var scene = ProHUD.Scene.init(identifier: "loading")
+        scene.alertDuration = 0
+        scene.toastDuration = 0
+        scene.image = ProHUD.image(named: "ProHUDLoading")
+        return scene
+    }
+    static var success: ProHUD.Scene {
+        var scene = ProHUD.Scene.init(identifier: "success")
+        scene.alertDuration = 2
+        scene.image = ProHUD.image(named: "ProHUDSuccess")
+        return scene
+    }
+    static var warning: ProHUD.Scene {
+        var scene = ProHUD.Scene.init(identifier: "warning")
+        scene.alertDuration = 2
+        scene.toastDuration = 5
+        scene.image = ProHUD.image(named: "ProHUDWarning")
+        return scene
+    }
+    static var error: ProHUD.Scene {
+        var scene = ProHUD.Scene.init(identifier: "error")
+        scene.alertDuration = 2
+        scene.toastDuration = 5
+        scene.image = ProHUD.image(named: "ProHUDError")
+        return scene
+    }
+    
+    
+}
+
 
 // MARK: - Utilities
 

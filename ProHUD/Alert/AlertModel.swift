@@ -9,34 +9,10 @@
 import UIKit
 
 public extension Alert {
-    enum Scene {
-        /// 默认场景
-        case `default`
-        
-        /// 加载中场景
-        case loading
-        
-        /// 确认场景
-        case confirm
-        
-        /// 删除场景
-        case delete
-        
-        /// 成功场景
-        case success
-        
-        /// 警告场景
-        case warning
-        
-        /// 错误场景
-        case error
-        
-    }
-    
     class ViewModel {
         
         /// 使用场景
-        public var scene = Scene.default
+        public var scene = ProHUD.Scene.default
         
         /// 标题
         public var title: String? {
@@ -81,7 +57,7 @@ public extension Alert {
         
         internal func updateDuration() {
             durationBlock?.cancel()
-            if let t = duration ?? cfg.alert.durationForScene(scene), t > 0 {
+            if let t = duration ?? scene.alertDuration, t > 0 {
                 durationBlock = DispatchWorkItem(block: { [weak self] in
                     self?.vc?.pop()
                 })

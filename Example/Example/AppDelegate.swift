@@ -73,3 +73,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+extension ProHUD.Scene {
+    static var confirm: ProHUD.Scene {
+        var scene = ProHUD.Scene(identifier: "confirm")
+        scene.image = UIImage(named: "ProHUDMessage")
+        return scene
+    }
+    static var delete: ProHUD.Scene {
+        var scene = ProHUD.Scene(identifier: "delete")
+        scene.image = UIImage(named: "ProHUDTrash")
+        scene.title = "确认删除"
+        scene.message = "此操作不可撤销"
+        return scene
+    }
+    static var buy: ProHUD.Scene {
+        var scene = ProHUD.Scene(identifier: "buy")
+        scene.image = UIImage(named: "ProHUDBuy")
+        scene.title = "确认付款"
+        scene.message = "一旦购买拒不退款"
+        return scene
+    }
+}

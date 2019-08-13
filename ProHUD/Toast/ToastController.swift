@@ -53,6 +53,9 @@ public extension ProHUD {
             return vev
         }()
         
+        /// 是否可以通过手势移除（向上滑出屏幕）
+        public var isRemovable = true
+        
         /// 视图模型
         public var vm = ViewModel()
         
@@ -215,7 +218,7 @@ public extension Toast {
     /// - Parameter title: 标题
     /// - Parameter message: 内容
     /// - Parameter actions: 更多操作
-    @discardableResult class func push(scene: Toast.Scene = .default, title: String? = nil, message: String? = nil, duration: TimeInterval? = nil, _ actions: ((Toast) -> Void)? = nil) -> Toast {
+    @discardableResult class func push(scene: ProHUD.Scene = .default, title: String? = nil, message: String? = nil, duration: TimeInterval? = nil, _ actions: ((Toast) -> Void)? = nil) -> Toast {
         return Toast(scene: scene, title: title, message: message, duration: duration, actions: actions).push()
     }
     
@@ -297,7 +300,7 @@ fileprivate extension Toast {
         window?.transform = .init(translationX: 0, y: point.y)
         if sender.state == .recognized {
             let v = sender.velocity(in: sender.view)
-            if vm.isRemovable == true && (((window?.frame.origin.y ?? 0) < 0 && v.y < 0) || v.y < -1200) {
+            if isRemovable == true && (((window?.frame.origin.y ?? 0) < 0 && v.y < 0) || v.y < -1200) {
                 // 移除
                 self.pop()
             } else {

@@ -23,11 +23,6 @@ public extension ProHUD.Configuration {
         // MARK: 图标样式
         /// 图标尺寸
         public var iconSize = CGSize(width: 48, height: 48)
-        /// 某个场景的默认图片
-        /// - Parameter callback: 回调
-        public func iconForScene(_ callback: @escaping (ProHUD.Toast.Scene) -> UIImage?) {
-            privIconForScene = callback
-        }
         
         // MARK: 文本样式
         /// 标题字体
@@ -46,10 +41,6 @@ public extension ProHUD.Configuration {
             privReloadData = callback
         }
         
-        /// 默认持续时间（当viewmodel的duration为nil时，会从这里获取）
-        public mutating func durationForScene(_ callback: @escaping (ProHUD.Toast.Scene) -> TimeInterval?) {
-            privDurationForScene = callback
-        }
         
     }
 }
@@ -62,9 +53,6 @@ internal extension ProHUD.Configuration.Toast {
         return privReloadData
     }
     
-    var durationForScene: (ProHUD.Toast.Scene) -> TimeInterval? {
-        return privDurationForScene
-    }
     
 }
 
@@ -84,12 +72,12 @@ fileprivate var privReloadData: (ProHUD.Toast) -> Void = {
             vc.view.addSubview(vc.imageView)
         }
         // 设置数据
-        vc.imageView.image = vc.vm.icon ?? privIconForScene(vc.vm.scene)
+        vc.imageView.image = vc.vm.icon ?? vc.vm.scene.image
         vc.imageView.layer.removeAllAnimations()
         vc.titleLabel.textColor = cfg.primaryLabelColor
-        vc.titleLabel.text = vc.vm.title
+        vc.titleLabel.text = vc.vm.title ?? vc.vm.scene.title
         vc.bodyLabel.textColor = cfg.secondaryLabelColor
-        vc.bodyLabel.text = vc.vm.message
+        vc.bodyLabel.text = vc.vm.message ?? vc.vm.scene.message
         
         // 更新布局
         vc.imageView.snp.makeConstraints { (mk) in
@@ -117,39 +105,4 @@ fileprivate var privReloadData: (ProHUD.Toast) -> Void = {
         
     }
     
-}()
-
-
-
-fileprivate var privIconForScene: (ProHUD.Toast.Scene) -> UIImage? = {
-    return { (scene) in
-        let imgStr: String
-        switch scene {
-        case .success:
-            imgStr = "ProHUDSuccess"
-        case .warning:
-            imgStr = "ProHUDWarning"
-        case .error:
-            imgStr = "ProHUDError"
-        case .loading:
-            imgStr = "ProHUDLoading"
-        default:
-            imgStr = "ProHUDMessage"
-        }
-        return ProHUD.image(named: imgStr)
-    }
-}()
-
-
-fileprivate var privDurationForScene: (ProHUD.Toast.Scene) -> TimeInterval? = {
-    return { (scene) in
-        switch scene {
-        case .loading:
-            return nil
-        case .error, .warning:
-            return 5
-        default:
-            return 3
-        }
-    }
 }()

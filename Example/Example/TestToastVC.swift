@@ -35,7 +35,7 @@ class TestToastVC: BaseListVC {
         if row == 0 {
             Toast.push(scene: .loading, title: "正在同步", message: "请稍等片刻") { (vm) in
                 vm.identifier = "loading"
-            }.animate(rotate: true)
+            }.rotate()
             simulateSync()
         } else if row == 1 {
             let t = Toast.push(scene: .success, title: "同步成功", message: "点击查看详情")
@@ -64,8 +64,8 @@ class TestToastVC: BaseListVC {
             }
         } else if row == 5 {
             Toast.push(scene: .default, title: "禁止手势移除", message: "这条消息无法通过向上滑动移出屏幕。5秒后自动消失，每次拖拽都会刷新倒计时。") { (vc) in
+                vc.isRemovable = false
                 vc.update { (vm) in
-                    vm.isRemovable = false
                     vm.duration = 5
                 }
             }

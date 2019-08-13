@@ -18,7 +18,11 @@ class TestAlertVC: BaseListVC {
     }
     
     override var titles: [String] {
-        return ["场景：正在同步（超时）", "场景：同步成功（写法1）", "场景：同步成功（写法2）", "场景：同步失败和重试"]
+        return ["场景：正在同步（超时）",
+                "场景：同步成功（写法1）",
+                "场景：同步成功（写法2）",
+                "场景：同步失败和重试",
+                "极限场景：多个弹窗重叠"]
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -28,12 +32,12 @@ class TestAlertVC: BaseListVC {
             func f() {
                 Alert.push(scene: .loading, title: "正在同步", message: "请稍等片刻") { (a) in
                     a.identifier = "loading"
-                    a.animate(rotate: true)
+                    a.rotate()
                     a.didForceQuit { [weak self] in
                         let t = Toast.push(scene: .loading, title: "正在同步", message: "请稍等片刻（点击展开为Alert）") { (vm) in
                             vm.identifier = "loading"
                         }
-                        t.animate(rotate: true)
+                        t.rotate()
                         t.didTapped { [weak t] in
                             t?.pop()
                             f()
@@ -47,7 +51,7 @@ class TestAlertVC: BaseListVC {
         } else if row == 1 {
             Alert.push() { (a) in
                 a.identifier = "loading"
-                a.animate(rotate: true)
+                a.rotate()
                 a.update { (vm) in
                     vm.scene = .loading
                     vm.title = "正在同步"
@@ -67,7 +71,7 @@ class TestAlertVC: BaseListVC {
             let a = Alert.push() { (a) in
                 a.identifier = "loading"
             }
-            a.animate(rotate: true)
+            a.rotate()
             a.update { (vm) in
                 vm.scene = .loading
                 vm.title = "正在同步"
@@ -94,7 +98,7 @@ class TestAlertVC: BaseListVC {
                         vm.message = "请稍等片刻"
                         vm.remove(action: 0, 1)
                     }
-                    a.animate(rotate: true)
+                    a.rotate()
                     DispatchQueue.main.asyncAfter(deadline: .now()+2) {
                         a.update { (vm) in
                             vm.scene = .error
@@ -109,6 +113,27 @@ class TestAlertVC: BaseListVC {
                 })
             }
             loading()
+        } else if row == 4 {
+            func f(_ i: Int) {
+                Alert.push() { (a) in
+                    a.rotate()
+                    a.update { (vm) in
+                        vm.scene = .loading
+                        vm.title = "正在同步" + String(i)
+                        vm.message = "请稍等片刻"
+                    }
+                }
+            }
+            f(1)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                f(2)
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                f(3)
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                f(4)
+            }
         }
     }
 

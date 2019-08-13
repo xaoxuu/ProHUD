@@ -28,11 +28,6 @@ public extension ProHUD.Configuration {
         // MARK: 图标样式
         /// 图标尺寸
         public var iconSize = CGSize(width: 48, height: 48)
-        /// 某个场景的默认图片
-        /// - Parameter callback: 回调
-        public func iconForScene(_ callback: @escaping (ProHUD.Alert.Scene) -> UIImage?) {
-            privIconForScene = callback
-        }
         
         // MARK: 文本样式
         /// 标题字体
@@ -59,11 +54,6 @@ public extension ProHUD.Configuration {
             privReloadData = callback
         }
         
-        /// 默认持续时间（当viewmodel的duration为nil时，会从这里获取）
-        public func durationForScene(_ callback: @escaping (ProHUD.Alert.Scene) -> TimeInterval?) {
-            privDurationForScene = callback
-        }
-        
         /// 多少秒后显示强制退出的按钮（只有无按钮的弹窗才会出现）
         public var forceQuitTimer = TimeInterval(30)
         
@@ -86,10 +76,6 @@ internal extension ProHUD.Configuration.Alert {
     
     var reloadData: (ProHUD.Alert) -> Void {
         return privReloadData
-    }
-    
-    var durationForScene: (ProHUD.Alert.Scene) -> TimeInterval? {
-        return privDurationForScene
     }
     
 }
@@ -122,33 +108,10 @@ fileprivate var privLayoutContentView: (ProHUD.Alert) -> Void = {
     }
 }()
 
-fileprivate var privIconForScene: (ProHUD.Alert.Scene) -> UIImage? = {
-    return { (scene) in
-        let imgStr: String
-        switch scene {
-        case .success:
-            imgStr = "ProHUDSuccess"
-        case .warning:
-            imgStr = "ProHUDWarning"
-        case .error:
-            imgStr = "ProHUDError"
-        case .loading:
-            imgStr = "ProHUDLoading"
-        case .confirm:
-            imgStr = "ProHUDMessage"
-        case .delete:
-            imgStr = "ProHUDTrash"
-        default:
-            imgStr = "ProHUDMessage"
-        }
-        return ProHUD.image(named: imgStr)
-    }
-}()
-
 fileprivate var privUpdateImage: (ProHUD.Alert) -> Void = {
     return { (vc) in
         let config = cfg.alert
-        let img = vc.vm.icon ?? privIconForScene(vc.vm.scene)
+        let img = vc.vm.icon ?? vc.vm.scene.image
         if let imgv = vc.imageView {
             imgv.image = img
         } else {
@@ -172,6 +135,12 @@ fileprivate var privUpdateImage: (ProHUD.Alert) -> Void = {
 fileprivate var privUpdateTextStack: (ProHUD.Alert) -> Void = {
     return { (vc) in
         let config = cfg.alert
+        if vc.vm.title == nil {
+            vc.vm.title = vc.vm.scene.title
+        }
+        if vc.vm.message == nil {
+            vc.vm.message = vc.vm.scene.message
+        }
         if vc.vm.title?.count ?? 0 > 0 || vc.vm.message?.count ?? 0 > 0 {
             vc.contentStack.addArrangedSubview(vc.textStack)
             vc.textStack.snp.makeConstraints { (mk) in
@@ -358,17 +327,5 @@ fileprivate var privReloadData: (ProHUD.Alert) -> Void = {
             vc.vm.forceQuitTimerBlock = nil
         }
         
-    }
-}()
-
-
-fileprivate var privDurationForScene: (ProHUD.Alert.Scene) -> TimeInterval? = {
-    return { (scene) in
-        switch scene {
-        case .loading:
-            return nil
-        default:
-            return 2
-        }
     }
 }()
