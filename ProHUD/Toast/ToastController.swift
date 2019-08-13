@@ -173,6 +173,8 @@ public extension Toast {
         vm.tapCallback = callback
     }
     
+    /// 图片旋转效果
+    /// - Parameter rotate: 是否开启
     func animate(rotate: Bool) {
         if rotate {
             DispatchQueue.main.async {
@@ -184,6 +186,21 @@ public extension Toast {
             }
         } else {
             imageView.layer.removeAllAnimations()
+        }
+    }
+    
+    /// 脉冲效果
+    func pulse() {
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: [.allowUserInteraction, .curveEaseOut], animations: {
+                self.window?.transform = .init(scaleX: 1.04, y: 1.04)
+            }) { (done) in
+                UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: [.allowUserInteraction, .curveEaseIn], animations: {
+                    self.window?.transform = .identity
+                }) { (done) in
+                    
+                }
+            }
         }
     }
     
@@ -202,7 +219,7 @@ public extension Toast {
         return Toast(scene: scene, title: title, message: message, duration: duration, actions: actions).push()
     }
     
-    /// 获取指定的toast
+    /// 查找指定的实例
     /// - Parameter identifier: 标识
     class func find(_ identifier: String?) -> [Toast] {
         var tt = [Toast]()

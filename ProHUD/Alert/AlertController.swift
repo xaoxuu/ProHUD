@@ -56,7 +56,7 @@ public extension ProHUD {
         public var vm = ViewModel()
         
         // MARK: 生命周期
-        internal var isLoadFinished = false
+        private var isLoadFinished = false
         
         /// 实例化
         /// - Parameter scene: 场景
@@ -180,7 +180,7 @@ public extension Alert {
         return Alert(scene: scene, title: title, message: message, actions: actions).push()
     }
     
-    /// 获取指定的实例
+    /// 查找指定的实例
     /// - Parameter identifier: 指定实例的标识
     class func find(_ identifier: String?) -> [Alert] {
         var aa = [Alert]()

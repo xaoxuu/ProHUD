@@ -89,7 +89,8 @@ class TestToastVC: BaseListVC {
             }
         } else if row == 7 {
             Toast.find("aaa", last: { (t) in
-                t.update { (vm) in
+                t.pulse()
+                t.update() { (vm) in
                     vm.title = "已经存在了"
                 }
             }) {

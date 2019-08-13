@@ -49,7 +49,7 @@ public extension ProHUD {
         public var isFullScreen = false
         
         /// 是否正在显示
-        private var displaying = false
+        private var isDisplaying = false
         
         /// 背景颜色
         public var backgroundColor: UIColor? = UIColor(white: 0, alpha: 0.4)
@@ -57,7 +57,7 @@ public extension ProHUD {
         public var vm = ViewModel()
         
         // MARK: 生命周期
-        internal var isLoadFinished = false
+        private var isLoadFinished = false
         
         /// 实例化
         /// - Parameter title: 标题
@@ -106,10 +106,10 @@ public extension Guard {
             view.snp.makeConstraints { (mk) in
                 mk.edges.equalToSuperview()
             }
-            if displaying == false {
+            if isDisplaying == false {
                 privTranslateOut()
             }
-            displaying = true
+            isDisplaying = true
             UIView.animateForGuard {
                 self.privTranslateIn()
             }
@@ -124,16 +124,16 @@ public extension Guard {
     
     /// 从父视图控制器弹出
     func pop() {
-        if displaying {
+        if isDisplaying {
             debug("pop")
             willDisappearCallback?()
-            displaying = false
+            isDisplaying = false
             view.isUserInteractionEnabled = false
             self.removeFromParent()
             UIView.animateForGuard(animations: {
                 self.privTranslateOut()
             }) { (done) in
-                if self.displaying == false {
+                if self.isDisplaying == false {
                     self.view.removeFromSuperview()
                 }
             }
@@ -162,7 +162,7 @@ public extension Guard {
         return Guard(actions: actions).push(to: viewController)
     }
     
-    /// 获取指定的实例
+    /// 查找指定的实例
     /// - Parameter identifier: 指定实例的标识
     class func find(_ identifier: String?, from viewController: UIViewController? = nil) -> [Guard] {
         var gg = [Guard]()
