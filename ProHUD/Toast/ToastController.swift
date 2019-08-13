@@ -47,23 +47,16 @@ public extension ProHUD {
         
         /// 背景层
         public var backgroundView: UIVisualEffectView = {
-            let vev = UIVisualEffectView()
-            if #available(iOS 13.0, *) {
-//                vev.effect = UIBlurEffect.init(style: .systemMaterial))
-                vev.effect = UIBlurEffect.init(style: .extraLight)
-            } else if #available(iOS 11.0, *) {
-                vev.effect = UIBlurEffect.init(style: .extraLight)
-            } else {
-                vev.effect = .none
-                vev.backgroundColor = .white
-            }
+            let vev = createBlurView()
             vev.layer.masksToBounds = true
             vev.layer.cornerRadius = cfg.toast.cornerRadius
             return vev
         }()
         
         /// 视图模型
-        public var model = ViewModel()
+        public var vm = ViewModel()
+        
+        internal var maxY = CGFloat(0)
         
         // MARK: 生命周期
         
@@ -72,17 +65,16 @@ public extension ProHUD {
         /// - Parameter title: 标题
         /// - Parameter message: 内容
         /// - Parameter icon: 图标
-        public convenience init(scene: Scene = .default, title: String? = nil, message: String? = nil, icon: UIImage? = nil, actions: ((Toast) -> Void)? = nil) {
+        public convenience init(scene: Scene = .default, title: String? = nil, message: String? = nil, icon: UIImage? = nil, duration: TimeInterval? = nil, actions: ((Toast) -> Void)? = nil) {
             self.init()
+            vm.vc = self
             
-            model.scene = scene
-            model.title = title
-            model.message = message
-            model.icon = icon
+            vm.scene = scene
+            vm.title = title
+            vm.message = message
+            vm.icon = icon
+            vm.duration = duration
             actions?(self)
-            // 布局
-            cfg.toast.loadSubviews(self)
-            cfg.toast.reloadData(self)
             
             // 点击
             let tap = UITapGestureRecognizer(target: self, action: #selector(privDidTapped(_:)))
@@ -94,15 +86,20 @@ public extension ProHUD {
         }
         
         
+        public override func viewDidLoad() {
+            super.viewDidLoad()
+            
+            cfg.toast.reloadData(self)
+            
+        }
+        
+        
     }
     
 }
 
 // MARK: - 实例函数
-
 public extension Toast {
-    
-    // MARK: 生命周期函数
     
     /// 推入屏幕
     @discardableResult func push() -> Toast {
@@ -145,7 +142,7 @@ public extension Toast {
         if Toast.toasts.contains(self) == false {
              Toast.toasts.append(self)
         }
-        Toast.updateToastsLayout()
+        Toast.privUpdateToastsLayout()
         if isNew {
             window.transform = .init(translationX: 0, y: -window.frame.maxY)
             UIView.animateForToast {
@@ -159,83 +156,58 @@ public extension Toast {
     
     /// 弹出屏幕
     func pop() {
-        Toast.removeItemFromArray(toast: self)
-        UIView.animateForToast(animations: {
-            let frame = self.window?.frame ?? .zero
-            self.window?.transform = .init(translationX: 0, y: -200-frame.maxY)
-        }) { (done) in
-            self.view.removeFromSuperview()
-            self.removeFromParent()
-            self.window = nil
-        }
+        Toast.pop(self)
     }
     
-    // MARK: 设置函数
     
-    /// 设置持续时间
-    /// - Parameter duration: 持续时间
-    @discardableResult func duration(_ duration: TimeInterval?) -> Toast {
-        model.setupDuration(duration: duration) { [weak self] in
-            self?.pop()
-        }
-        return self
+    /// 更新
+    /// - Parameter callback: 回调
+    func update(_ callback: ((inout ViewModel) -> Void)? = nil) {
+        callback?(&vm)
+        cfg.toast.reloadData(self)
     }
     
     /// 点击事件
     /// - Parameter callback: 事件回调
-    @discardableResult func didTapped(_ callback: (() -> Void)?) -> Toast {
-        model.tapCallback = callback
-        return self
+    func didTapped(_ callback: (() -> Void)?) {
+        vm.tapCallback = callback
     }
     
-    /// 消失事件
-    /// - Parameter callback: 事件回调
-    @discardableResult func didDisappear(_ callback: (() -> Void)?) -> Toast {
-        disappearCallback = callback
-        return self
+    /// 图片旋转效果
+    /// - Parameter flag: 是否开启
+    func rotate(_ flag: Bool = true) {
+        if flag {
+            DispatchQueue.main.async {
+                let ani = CABasicAnimation(keyPath: "transform.rotation.z")
+                ani.toValue = Double.pi * 2.0
+                ani.duration = 3
+                ani.repeatCount = 10000
+                self.imageView.layer.add(ani, forKey: "rotationAnimation")
+            }
+        } else {
+            imageView.layer.removeAllAnimations()
+        }
     }
     
-    /// 更新
-    /// - Parameter scene: 场景
-    /// - Parameter title: 标题
-    /// - Parameter message: 内容
-    @discardableResult func update(scene: Scene, title: String?, message: String?) -> Toast {
-        model.scene = scene
-        model.title = title
-        model.message = message
-        cfg.toast.reloadData(self)
-        return self
-    }
-    
-    /// 更新标题
-    /// - Parameter title: 标题
-    @discardableResult func update(title: String?) -> Toast {
-        model.title = title
-        cfg.toast.reloadData(self)
-        return self
-    }
-    
-    /// 更新文本
-    /// - Parameter message: 消息
-    @discardableResult func update(message: String?) -> Toast {
-        model.message = message
-        cfg.toast.reloadData(self)
-        return self
-    }
-    
-    /// 更新图标
-    /// - Parameter icon: 图标
-    @discardableResult func update(icon: UIImage?) -> Toast {
-        model.icon = icon
-        cfg.toast.reloadData(self)
-        return self
+    /// 脉冲效果
+    func pulse() {
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: [.allowUserInteraction, .curveEaseOut], animations: {
+                self.window?.transform = .init(scaleX: 1.04, y: 1.04)
+            }) { (done) in
+                UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: [.allowUserInteraction, .curveEaseIn], animations: {
+                    self.window?.transform = .identity
+                }) { (done) in
+                    
+                }
+            }
+        }
     }
     
 }
 
 
-// MARK: 类函数
-
+// MARK: - 实例管理器
 public extension Toast {
     
     /// 推入屏幕
@@ -243,13 +215,13 @@ public extension Toast {
     /// - Parameter title: 标题
     /// - Parameter message: 内容
     /// - Parameter actions: 更多操作
-    @discardableResult class func push(toast scene: Toast.Scene, title: String? = nil, message: String? = nil, actions: ((Toast) -> Void)? = nil) -> Toast {
-        return Toast(scene: scene, title: title, message: message, actions: actions).push()
+    @discardableResult class func push(scene: Toast.Scene = .default, title: String? = nil, message: String? = nil, duration: TimeInterval? = nil, _ actions: ((Toast) -> Void)? = nil) -> Toast {
+        return Toast(scene: scene, title: title, message: message, duration: duration, actions: actions).push()
     }
     
-    /// 获取指定的toast
+    /// 查找指定的实例
     /// - Parameter identifier: 标识
-    class func toasts(_ identifier: String?) -> [Toast] {
+    class func find(_ identifier: String?) -> [Toast] {
         var tt = [Toast]()
         for t in toasts {
             if t.identifier == identifier {
@@ -259,73 +231,87 @@ public extension Toast {
         return tt
     }
     
+    /// 查找指定的实例
+    /// - Parameter identifier: 标识
+    /// - Parameter last: 已经存在（获取最后一个）
+    /// - Parameter none: 不存在
+    class func find(_ identifier: String?, last: ((Toast) -> Void)? = nil, none: (() -> Void)? = nil) {
+        if let t = find(identifier).last {
+            last?(t)
+        } else {
+            none?()
+        }
+    }
+    
     /// 弹出屏幕
     /// - Parameter toast: 实例
     class func pop(_ toast: Toast) {
-        toast.pop()
-    }
-    
-    /// 弹出屏幕
-    /// - Parameter identifier: 指定实例的标识
-    class func pop(_ identifier: String?) {
-        for t in toasts(identifier) {
-            t.pop()
-        }
-    }
-    
-}
-
-// MARK: 私有
-
-fileprivate var willUpdateToastsLayout: DispatchWorkItem?
-
-fileprivate extension Toast {
-    
-    /// 点击事件
-    /// - Parameter sender: 手势
-    @objc func privDidTapped(_ sender: UITapGestureRecognizer) {
-        model.tapCallback?()
-    }
-    
-    /// 拖拽事件
-    /// - Parameter sender: 手势
-    @objc func privDidPan(_ sender: UIPanGestureRecognizer) {
-        model.durationBlock?.cancel()
-        let point = sender.translation(in: sender.view)
-        window?.transform = .init(translationX: 0, y: point.y)
-        if sender.state == .recognized {
-            let v = sender.velocity(in: sender.view)
-            if model.removable == true && (((window?.frame.origin.y ?? 0) < 0 && v.y < 0) || v.y < -1200) {
-                // 移除
-                self.pop()
-            } else {
-                UIView.animateForToast(animations: {
-                    self.window?.transform = .identity
-                }) { (done) in
-                    // FIXME: 重置计时器
-                    
-                }
-            }
-        }
-    }
-    
-    /// 从数组中移除
-    /// - Parameter toast: 实例
-    class func removeItemFromArray(toast: Toast) {
+        toast.willDisappearCallback?()
         if toasts.count > 1 {
             for (i, t) in toasts.enumerated() {
                 if t == toast {
                     toasts.remove(at: i)
                 }
             }
-            updateToastsLayout()
+            privUpdateToastsLayout()
         } else if toasts.count == 1 {
             toasts.removeAll()
         } else {
             debug("漏洞：已经没有toast了")
         }
+        UIView.animateForToast(animations: {
+            toast.window?.transform = .init(translationX: 0, y: -20-toast.maxY)
+        }) { (done) in
+            toast.view.removeFromSuperview()
+            toast.removeFromParent()
+            toast.window = nil
+        }
     }
-    class func updateToastsLayout() {
+    
+    /// 弹出屏幕
+    /// - Parameter identifier: 指定实例的标识
+    class func pop(_ identifier: String?) {
+        for t in find(identifier) {
+            t.pop()
+        }
+    }
+    
+}
+
+// MARK: - 创建和设置
+fileprivate var willprivUpdateToastsLayout: DispatchWorkItem?
+
+fileprivate extension Toast {
+    
+    /// 点击事件
+    /// - Parameter sender: 手势
+    @objc func privDidTapped(_ sender: UITapGestureRecognizer) {
+        vm.tapCallback?()
+    }
+    
+    /// 拖拽事件
+    /// - Parameter sender: 手势
+    @objc func privDidPan(_ sender: UIPanGestureRecognizer) {
+        vm.durationBlock?.cancel()
+        let point = sender.translation(in: sender.view)
+        window?.transform = .init(translationX: 0, y: point.y)
+        if sender.state == .recognized {
+            let v = sender.velocity(in: sender.view)
+            if vm.isRemovable == true && (((window?.frame.origin.y ?? 0) < 0 && v.y < 0) || v.y < -1200) {
+                // 移除
+                self.pop()
+            } else {
+                UIView.animateForToast(animations: {
+                    self.window?.transform = .identity
+                }) { (done) in
+                    let d = self.vm.duration
+                    self.vm.duration = d
+                }
+            }
+        }
+    }
+    
+    class func privUpdateToastsLayout() {
         func f() {
             let top = Inspire.shared.screen.updatedSafeAreaInsets.top
             for (i, e) in toasts.enumerated() {
@@ -342,18 +328,20 @@ fileprivate extension Toast {
                         let lastY = toasts[i-1].window?.frame.maxY ?? .zero
                         y = lastY + config.margin
                     }
+                    e.maxY = y + window.frame.size.height
                     UIView.animateForToast {
-                        e.window?.frame.origin.y = y
+                        window.frame.origin.y = y
                     }
                 }
             }
         }
-        willUpdateToastsLayout?.cancel()
-        willUpdateToastsLayout = DispatchWorkItem(block: {
+        willprivUpdateToastsLayout?.cancel()
+        willprivUpdateToastsLayout = DispatchWorkItem(block: {
             f()
         })
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.001, execute: willUpdateToastsLayout!)
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.001, execute: willprivUpdateToastsLayout!)
     }
+    
 }
 
 

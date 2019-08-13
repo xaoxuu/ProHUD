@@ -19,19 +19,19 @@ public extension ProHUD {
         
         /// 动态颜色（适配iOS13）
         public lazy var dynamicColor: UIColor = {
-//            if #available(iOS 13.0, *) {
-//                let color = UIColor { (traitCollection: UITraitCollection) -> UIColor in
-//                    if traitCollection.userInterfaceStyle == .dark {
-//                        return .white
-//                    } else {
-//                        return .black
-//                    }
-//                }
-//                return color
-//            } else {
-//                // Fallback on earlier versions
-//            }
-            return .init(white: 0.15, alpha: 1)
+            if #available(iOS 13.0, *) {
+                let color = UIColor { (traitCollection: UITraitCollection) -> UIColor in
+                    if traitCollection.userInterfaceStyle == .dark {
+                        return .init(white: 1, alpha: 1)
+                    } else {
+                        return .init(white: 0.1, alpha: 1)
+                    }
+                }
+                return color
+            } else {
+                // Fallback on earlier versions
+            }
+            return .init(white: 0.1, alpha: 1)
         }()
         
         /// 主标签文本颜色
@@ -41,8 +41,12 @@ public extension ProHUD {
         
         /// 次级标签文本颜色
         public lazy var secondaryLabelColor: UIColor = {
-            return dynamicColor.withAlphaComponent(0.6)
+            return dynamicColor.withAlphaComponent(0.66)
         }()
+        
+        public func blurView(_ callback: @escaping () -> UIVisualEffectView) {
+            createBlurView = callback
+        }
         
         
         public var toast = Toast()
@@ -78,3 +82,19 @@ public extension ProHUD {
         config(&cfg)
     }
 }
+
+internal var createBlurView: () -> UIVisualEffectView = {
+    return {
+        let vev = UIVisualEffectView()
+        if #available(iOS 13.0, *) {
+            vev.effect = UIBlurEffect(style: .systemMaterial)
+//            vev.effect = UIBlurEffect(style: .extraLight)
+        } else if #available(iOS 11.0, *) {
+            vev.effect = UIBlurEffect(style: .extraLight)
+        } else {
+            vev.effect = .none
+            vev.backgroundColor = .white
+        }
+        return vev
+    }
+}()

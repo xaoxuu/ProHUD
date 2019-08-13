@@ -22,7 +22,6 @@ public extension ProHUD.Configuration {
         /// 填充：元素内部控件距离元素边界的距离
         public var padding = CGFloat(16)
         
-        // MARK: 图标样式
         /// 颜色
         public var tintColor: UIColor?
         
@@ -41,12 +40,6 @@ public extension ProHUD.Configuration {
         /// 按钮圆角半径
         public var buttonCornerRadius = CGFloat(12)
         
-        /// 加载视图
-        /// - Parameter callback: 回调代码
-        public mutating func loadSubviews(_ callback: @escaping (ProHUD.Guard) -> Void) {
-            privLoadSubviews = callback
-        }
-        
         /// 更新视图
         /// - Parameter callback: 回调代码
         public mutating func reloadData(_ callback: @escaping (ProHUD.Guard) -> Void) {
@@ -56,15 +49,14 @@ public extension ProHUD.Configuration {
     }
 }
 
-// MARK: - 默认实现
 
+// MARK: - 内部调用
 internal extension ProHUD.Configuration.Guard {
-    var loadSubviews: (ProHUD.Guard) -> Void {
-        return privLoadSubviews
-    }
+    
     var reloadData: (ProHUD.Guard) -> Void {
         return privReloadData
     }
+    
     var reloadStack: (ProHUD.Guard) -> Void {
         return { (vc) in
             if vc.textStack.arrangedSubviews.count > 0 {
@@ -82,22 +74,16 @@ internal extension ProHUD.Configuration.Guard {
     
 }
 
-fileprivate var privLoadSubviews: (ProHUD.Guard) -> Void = {
+// MARK: - 默认实现
+fileprivate var privReloadData: (ProHUD.Guard) -> Void = {
     return { (vc) in
-        debug(vc, "loadSubviews")
+        debug(vc, "reloadData")
         let config = cfg.guard
         // background
         vc.view.tintColor = config.tintColor
         vc.view.backgroundColor = UIColor(white: 0, alpha: 0)
         vc.view.addSubview(vc.contentView)
         vc.contentView.contentView.addSubview(vc.contentStack)
-    }
-}()
-
-fileprivate var privReloadData: (ProHUD.Guard) -> Void = {
-    return { (vc) in
-        debug(vc, "reloadData")
-        let config = cfg.guard
         // 更新布局
         var width = UIScreen.main.bounds.width
         if width > config.cardMaxWidth {
@@ -111,12 +97,15 @@ fileprivate var privReloadData: (ProHUD.Guard) -> Void = {
             vc.contentView.layer.shadowOpacity = 0.12
         }
         vc.contentView.snp.makeConstraints { (mk) in
+            if isPortrait && vc.isFullScreen {
+                mk.top.equalToSuperview()
+            }
             mk.centerX.equalToSuperview()
             if UIDevice.current.userInterfaceIdiom == .phone {
-                if width == config.cardMaxWidth {
-                    mk.bottom.equalToSuperview().offset(-Inspire.shared.screen.safeAreaInsets.bottom)
-                } else {
+                if width < config.cardMaxWidth {
                     mk.bottom.equalToSuperview()
+                } else {
+                    mk.bottom.equalToSuperview().offset(-Inspire.shared.screen.safeAreaInsets.bottom)
                 }
             } else if UIDevice.current.userInterfaceIdiom == .pad {
                 mk.centerY.equalToSuperview()
@@ -125,12 +114,21 @@ fileprivate var privReloadData: (ProHUD.Guard) -> Void = {
         }
         // stack
         vc.contentStack.snp.makeConstraints { (mk) in
-            mk.top.equalToSuperview().offset(config.padding + config.margin)
-            mk.centerX.equalToSuperview()
-            if width == config.cardMaxWidth {
-                mk.bottom.equalToSuperview().offset(-config.padding)
+            if isPortrait && vc.isFullScreen {
+                mk.top.equalToSuperview().offset(Inspire.shared.screen.safeAreaInsets.top)
             } else {
-                mk.bottom.equalToSuperview().offset(-config.padding-Inspire.shared.screen.safeAreaInsets.bottom)
+                mk.top.equalToSuperview().offset(config.padding)
+            }
+            mk.centerX.equalToSuperview()
+            if width < config.cardMaxWidth {
+                let bottom = Inspire.shared.screen.safeAreaInsets.bottom
+                if bottom == 0 {
+                    mk.bottom.equalToSuperview().offset(-config.padding)
+                } else {
+                    mk.bottom.equalToSuperview().offset(-config.padding/2 - bottom)
+                }
+            } else {
+                mk.bottom.equalToSuperview().offset(-config.padding)
             }
             if isPortrait {
                 mk.width.equalToSuperview().offset(-config.padding * 2)
@@ -138,6 +136,6 @@ fileprivate var privReloadData: (ProHUD.Guard) -> Void = {
                 mk.width.equalToSuperview().offset(-config.padding * 4)
             }
         }
-        
+        config.reloadStack(vc)
     }
 }()
