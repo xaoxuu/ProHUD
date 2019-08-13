@@ -148,8 +148,10 @@ public extension Alert {
     }
     
     
-    func animate(rotate: Bool) {
-        if rotate {
+    /// 图片旋转效果
+    /// - Parameter flag: 是否开启
+    func rotate(_ flag: Bool = true) {
+        if flag {
             DispatchQueue.main.async {
                 let ani = CABasicAnimation(keyPath: "transform.rotation.z")
                 ani.toValue = Double.pi * 2.0
