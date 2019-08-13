@@ -56,7 +56,11 @@ public extension Toast {
             durationBlock?.cancel()
             if let t = duration ?? scene.toastDuration, t > 0 {
                 durationBlock = DispatchWorkItem(block: { [weak self] in
-                    self?.vc?.pop()
+                    if let vc = self?.vc {
+                        if vc.buttonEvents.count == 0 {
+                            vc.pop()
+                        }
+                    }
                 })
                 DispatchQueue.main.asyncAfter(deadline: .now()+t, execute: durationBlock!)
             } else {

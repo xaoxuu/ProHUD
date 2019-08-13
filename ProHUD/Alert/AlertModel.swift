@@ -59,7 +59,11 @@ public extension Alert {
             durationBlock?.cancel()
             if let t = duration ?? scene.alertDuration, t > 0 {
                 durationBlock = DispatchWorkItem(block: { [weak self] in
-                    self?.vc?.pop()
+                    if let vc = self?.vc {
+                        if vc.buttonEvents.count == 0 {
+                            vc.pop()
+                        }
+                    }
                 })
                 DispatchQueue.main.asyncAfter(deadline: .now()+t, execute: durationBlock!)
             } else {
@@ -78,7 +82,6 @@ public extension Alert.ViewModel {
     /// - Parameter text: 标题
     /// - Parameter handler: 事件处理
     @discardableResult func add(action style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) -> UIButton {
-        duration = 0
         return vc!.insert(action: nil, style: style, title: title, handler: handler)
     }
     
@@ -88,7 +91,6 @@ public extension Alert.ViewModel {
     /// - Parameter title: 标题
     /// - Parameter handler: 事件处理
     @discardableResult func insert(action index: Int, style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) -> UIButton {
-        duration = 0
         return vc!.insert(action: index, style: style, title: title, handler: handler)
     }
     

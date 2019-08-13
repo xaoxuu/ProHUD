@@ -63,13 +63,12 @@ public extension ProHUD {
         /// - Parameter title: 标题
         /// - Parameter message: 内容
         /// - Parameter icon: 图标
-        public convenience init(scene: Scene = .default, title: String? = nil, message: String? = nil, icon: UIImage? = nil, actions: ((Alert) -> Void)? = nil) {
+        public convenience init(scene: Scene = .default, title: String? = nil, message: String? = nil, actions: ((Alert) -> Void)? = nil) {
             self.init()
             vm.vc = self
             vm.scene = scene
             vm.title = title
             vm.message = message
-            vm.icon = icon
             actions?(self)
         }
         
