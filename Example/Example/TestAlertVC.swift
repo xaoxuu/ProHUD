@@ -18,11 +18,11 @@ class TestAlertVC: BaseListVC {
     }
     
     override var titles: [String] {
-        return ["场景：正在同步（超时）",
+        return ["极端场景：正在同步（超时未处理）",
                 "场景：同步成功（写法1）",
                 "场景：同步成功（写法2）",
                 "场景：同步失败和重试",
-                "极限场景：多个弹窗重叠"]
+                "极端场景：多个弹窗重叠"]
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
