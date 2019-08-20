@@ -1,17 +1,19 @@
-<img src="https://i.loli.net/2019/08/19/eoAYptSdankLJHV.png" height="120px">
+<img src="https://i.loli.net/2019/08/20/xzdFg86piMYO4El.png" height="120px">
 
 **简单易用，完全可定制化的HUD** （ProHUD = Toast + Alert + ActionSheet）
+
+文档：<https://xaoxuu.com/wiki/prohud/>
 
 <br>
 
 |                                                             |                                                             |                                                             |                                                             |                                                              |
 | ----------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------ |
-| ![1.PNG](https://i.loli.net/2019/08/19/k8xUQutZKhz1VJB.png) | ![2.PNG](https://i.loli.net/2019/08/19/hWVmjUYL2uvOozl.png) | ![3.PNG](https://i.loli.net/2019/08/19/zGcIoXtFCZrNVd1.png) | ![4.PNG](https://i.loli.net/2019/08/19/SVeRLWstF8K7cd3.png) | ![5.PNG](https://i.loli.net/2019/08/19/JTODEVnHh3yWQx8.png)  |
-| ![6.PNG](https://i.loli.net/2019/08/19/at1nUkQuzAlEKZ3.png) | ![7.PNG](https://i.loli.net/2019/08/19/ZWFRbg3zDUoVfOG.png) | ![8.PNG](https://i.loli.net/2019/08/19/kyp4c3UnOWKFEMC.png) | ![9.PNG](https://i.loli.net/2019/08/19/vNrDAljmhPV7QI6.png) | ![10.PNG](https://i.loli.net/2019/08/19/XFO6J3stKRB7WSe.png) |
+| ![1.PNG](https://i.loli.net/2019/08/20/sgultOmRLXrwfA3.png) | ![2.PNG](https://i.loli.net/2019/08/20/a2mCq871PwfbZEG.png) | ![3.PNG](https://i.loli.net/2019/08/20/Zdz2cTphOlu3XKf.png) | ![4.PNG](https://i.loli.net/2019/08/20/87UdSGaMuevV1iF.png) | ![5.PNG](https://i.loli.net/2019/08/20/HEusSLBgG3XC1nN.png)  |
+| ![6.PNG](https://i.loli.net/2019/08/20/B178IvGZgbzjiuk.png) | ![7.PNG](https://i.loli.net/2019/08/20/YSNEX3fmdtiarjZ.png) | ![8.PNG](https://i.loli.net/2019/08/20/zlDXtWKfR3pLkji.png) | ![9.PNG](https://i.loli.net/2019/08/20/NEewmBV27fhW4yI.png) | ![10.PNG](https://i.loli.net/2019/08/20/XYvCIow2faRtn9P.png) |
 
 |                                                              |                                                              |                                                              |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ![11.PNG](https://i.loli.net/2019/08/19/ciZpRTKv8I7w2aB.png) | ![12.PNG](https://i.loli.net/2019/08/19/MjiUDhTVWOBKtck.png) | ![13.PNG](https://i.loli.net/2019/08/19/RxsmWzoZPU7JtT4.png) |
+| ![11.PNG](https://i.loli.net/2019/08/20/nHqKmNOEejgxbrf.png) | ![12.PNG](https://i.loli.net/2019/08/20/kScIodEnmbpaT5Y.png) | ![13.PNG](https://i.loli.net/2019/08/20/2RomGEC1KfSvIP9.png) |
 
 
 
@@ -342,3 +344,9 @@ ProHUD.config { (cfg) in
     }
 }
 ```
+
+
+
+## 文档
+
+<https://xaoxuu.com/wiki/prohud/>
