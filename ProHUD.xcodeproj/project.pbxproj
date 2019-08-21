@@ -40,7 +40,7 @@
 		CD95D21C22E72C4C007559A3 /* ProHUD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ProHUD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD95D21F22E72C4C007559A3 /* ProHUD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProHUD.h; sourceTree = "<group>"; };
 		CD95D22022E72C4C007559A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CD95D26722E72D68007559A3 /* ProHUD.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = ProHUD.podspec; sourceTree = "<group>"; };
+		CD95D26722E72D68007559A3 /* ProHUD.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = ProHUD.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		CD95D26822E72DA1007559A3 /* AlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
 		CD95D26A22E72DB3007559A3 /* ProHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProHUD.swift; sourceTree = "<group>"; };
 		CDB6A07A22EEF06500AF6CF0 /* HUDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDController.swift; sourceTree = "<group>"; };

@@ -1,10 +1,10 @@
-platform :ios, '10.0'
+platform :ios, '9.0'
 use_frameworks!
 
 target 'ProHUD' do
     
     pod 'SnapKit', '4.2.0'
-    pod 'Inspire', :path => '../Inspire'
+    pod 'Inspire', '1.0.5' # :path => '../Inspire'
     
 end
 

@@ -6,21 +6,24 @@ PODS:
   - SnapKit (4.2.0)
 
 DEPENDENCIES:
-  - Inspire (from `../../Inspire`)
+  - Inspire (= 1.0.5)
   - ProHUD (from `..`)
   - SnapKit (= 4.2.0)
 
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Inspire
+    - SnapKit
+
 EXTERNAL SOURCES:
-  Inspire:
-    :path: ../../Inspire
   ProHUD:
-    :path: ..
+    :path: ".."
 
 SPEC CHECKSUMS:
-  Inspire: a213962fa02d0c4b8e27e389318ff4b47e4565ed
-  ProHUD: 0b027f2e79a53869219703ed3f6ac3a48970fabd
+  Inspire: fcd7b5ed3b30506b7f04645719b52e0a89884cd4
+  ProHUD: 6e5ce4d0599f9b8d2481783368cb08947df7657f
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
 
-PODFILE CHECKSUM: 69a97e50e038f3f68362d4cfd30617688f7824cc
+PODFILE CHECKSUM: 973ed9d97f2f88c3dde66acf49139682be3748eb
 
-COCOAPODS: 1.3.1
+COCOAPODS: 1.7.5

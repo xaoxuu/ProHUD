@@ -12,6 +12,7 @@ Pod::Spec.new do |s|
   s.source_files = 'ProHUD/**/*.swift'
   s.resource_bundles = { 'ProHUD' => ['ProHUD/*.{xcassets,strings,xml,storyboard,xib,xcdatamodeld,gif,lproj}'] }
   s.requires_arc = true
+  s.swift_version = '5.0'
 
   s.dependency 'SnapKit', '4.2.0'
   s.dependency 'Inspire' 
