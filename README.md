@@ -1,4 +1,6 @@
-<img src="https://i.loli.net/2019/08/20/xzdFg86piMYO4El.png" height="120px">
+<br>
+
+<img src="https://img.vim-cn.com/92/807ffd8bab40497971172514294020b6501074.png" height="80px">
 
 **简单易用，完全可定制化的HUD** （ProHUD = Toast + Alert + ActionSheet）
 
