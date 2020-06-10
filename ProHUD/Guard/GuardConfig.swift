@@ -6,6 +6,7 @@
 //  Copyright © 2019 Titan Studio. All rights reserved.
 //
 
+import UIKit
 import SnapKit
 import Inspire
 

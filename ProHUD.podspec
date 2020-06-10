@@ -7,14 +7,14 @@ Pod::Spec.new do |s|
   s.authors = { 'xaoxuu' => 'xaoxuu@gmail.com' }
   s.source = { :git => "https://github.com/xaoxuu/ProHUD.git", :tag => "#{s.version}", :submodules => false}
 
-  s.ios.deployment_target = '9.0'
+  s.ios.deployment_target = '10.0'
 
   s.source_files = 'ProHUD/**/*.swift'
   s.resource_bundles = { 'ProHUD' => ['ProHUD/*.{xcassets,strings,xml,storyboard,xib,xcdatamodeld,gif,lproj}'] }
   s.requires_arc = true
   s.swift_version = '5.0'
 
-  s.dependency 'SnapKit', '4.2.0'
+  s.dependency 'SnapKit', '5.0'
   s.dependency 'Inspire' 
 
 end

@@ -3,8 +3,8 @@ use_frameworks!
 
 target 'ProHUD' do
     
-    pod 'SnapKit', '4.2.0'
-    pod 'Inspire', '1.0.5' # :path => '../Inspire'
+#    pod 'SnapKit', '5.0.1'
+#    pod 'Inspire', '1.1.0' # :path => '../Inspire'
     
 end
 

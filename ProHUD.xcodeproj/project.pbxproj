@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -23,6 +23,8 @@
 		CDB6A07B22EEF06500AF6CF0 /* HUDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB6A07A22EEF06500AF6CF0 /* HUDController.swift */; };
 		CDB6A07D22EEF19D00AF6CF0 /* HUDConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB6A07C22EEF19D00AF6CF0 /* HUDConfig.swift */; };
 		CDC39CFD22FD6DDF0070E914 /* GuardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC39CFC22FD6DDF0070E914 /* GuardModel.swift */; };
+		CDC67BE92490A19100CC6FE6 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = CDC67BE82490A19100CC6FE6 /* SnapKit */; };
+		CDC67BEC2490A1D100CC6FE6 /* Inspire in Frameworks */ = {isa = PBXBuildFile; productRef = CDC67BEB2490A1D100CC6FE6 /* Inspire */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,7 +56,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDC67BEC2490A1D100CC6FE6 /* Inspire in Frameworks */,
 				1AE9C44ABAF3F797A5518CE8 /* Pods_ProHUD.framework in Frameworks */,
+				CDC67BE92490A19100CC6FE6 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,13 +171,16 @@
 				CD95D21822E72C4C007559A3 /* Sources */,
 				CD95D21922E72C4C007559A3 /* Frameworks */,
 				CD95D21A22E72C4C007559A3 /* Resources */,
-				8C88ED8CC1E8972268375748 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = ProHUD;
+			packageProductDependencies = (
+				CDC67BE82490A19100CC6FE6 /* SnapKit */,
+				CDC67BEB2490A1D100CC6FE6 /* Inspire */,
+			);
 			productName = ProHUD;
 			productReference = CD95D21C22E72C4C007559A3 /* ProHUD.framework */;
 			productType = "com.apple.product-type.framework";
@@ -202,6 +209,10 @@
 				Base,
 			);
 			mainGroup = CD95D21222E72C4C007559A3;
+			packageReferences = (
+				CDC67BE72490A19100CC6FE6 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				CDC67BEA2490A1D100CC6FE6 /* XCRemoteSwiftPackageReference "Inspire" */,
+			);
 			productRefGroup = CD95D21D22E72C4C007559A3 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -223,25 +234,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		8C88ED8CC1E8972268375748 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ProHUD/Pods-ProHUD-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		A54F2DB69A2889EF6E75A3EC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -341,7 +333,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -398,7 +390,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -485,6 +477,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CDC67BE72490A19100CC6FE6 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.1;
+			};
+		};
+		CDC67BEA2490A1D100CC6FE6 /* XCRemoteSwiftPackageReference "Inspire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/xaoxuu/Inspire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CDC67BE82490A19100CC6FE6 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CDC67BE72490A19100CC6FE6 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		CDC67BEB2490A1D100CC6FE6 /* Inspire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CDC67BEA2490A1D100CC6FE6 /* XCRemoteSwiftPackageReference "Inspire" */;
+			productName = Inspire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CD95D21322E72C4C007559A3 /* Project object */;
 }
