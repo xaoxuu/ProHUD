@@ -500,7 +500,7 @@
 			repositoryURL = "https://github.com/xaoxuu/Inspire";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.0;
+				minimumVersion = 2.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
