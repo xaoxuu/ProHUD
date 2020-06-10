@@ -116,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				CD95D26722E72D68007559A3 /* ProHUD.podspec */,
+				CDC67BED2490A28500CC6FE6 /* Source */,
 				CD95D21E22E72C4C007559A3 /* ProHUD */,
 				CD95D21D22E72C4C007559A3 /* Products */,
 				33E080A4BE17176DF10FFA89 /* Pods */,
@@ -134,6 +135,14 @@
 		CD95D21E22E72C4C007559A3 /* ProHUD */ = {
 			isa = PBXGroup;
 			children = (
+				CD95D22022E72C4C007559A3 /* Info.plist */,
+			);
+			path = ProHUD;
+			sourceTree = "<group>";
+		};
+		CDC67BED2490A28500CC6FE6 /* Source */ = {
+			isa = PBXGroup;
+			children = (
 				CD95D21F22E72C4C007559A3 /* ProHUD.h */,
 				CD16491322EF12220077988C /* ProHUD.xcassets */,
 				CD95D26A22E72DB3007559A3 /* ProHUD.swift */,
@@ -143,9 +152,8 @@
 				CD6CD87322F185B400F4FD4A /* Toast */,
 				CD16491022EF0A4B0077988C /* Alert */,
 				CD6CD87C22F185DA00F4FD4A /* Guard */,
-				CD95D22022E72C4C007559A3 /* Info.plist */,
 			);
-			path = ProHUD;
+			path = Source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

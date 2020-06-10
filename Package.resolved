@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Inspire",
+        "repositoryURL": "https://github.com/xaoxuu/Inspire.git",
+        "state": {
+          "branch": null,
+          "revision": "fed13e3530ca38f884d190ea5c7b12b8f3b2a41b",
+          "version": "1.1.0"
+        }
+      },
+      {
+        "package": "SnapKit",
+        "repositoryURL": "https://github.com/SnapKit/SnapKit.git",
+        "state": {
+          "branch": null,
+          "revision": "d458564516e5676af9c70b4f4b2a9178294f1bc6",
+          "version": "5.0.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
