@@ -18,7 +18,11 @@ class RootVC: UIViewController {
         let nav = UINavigationController(rootViewController: vc)
         addChild(nav)
         view.addSubview(nav.view)
-        nav.navigationBar.prefersLargeTitles = true
+        if #available(iOS 11.0, *) {
+            nav.navigationBar.prefersLargeTitles = true
+        } else {
+            // Fallback on earlier versions
+        }
     }
     
 

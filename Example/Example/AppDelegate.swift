@@ -18,12 +18,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
  
+        let vc = RootVC()
         window = UIWindow.init(frame: UIScreen.main.bounds)
-        window?.rootViewController = RootVC()
+        window?.rootViewController = vc
         window?.makeKeyAndVisible()
         
         ProHUD.config { (cfg) in
-            cfg.rootViewController = window!.rootViewController
+            cfg.rootViewController = vc
+            if #available(iOS 13.0, *) {
+                cfg.windowScene = window?.windowScene
+            } else {
+                // Fallback on earlier versions
+            }
             cfg.alert { (a) in
                 a.titleFont = .bold(22)
                 a.bodyFont = .regular(17)

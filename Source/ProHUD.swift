@@ -83,17 +83,13 @@ internal extension ProHUD {
     
     /// 获取Bundle
     static var bundle: Bundle {
-        var b = Bundle.init(for: Alert.self)
-        let p = b.path(forResource: "ProHUD", ofType: "bundle")
-        if let bb = Bundle.init(path: p ?? "") {
-            b = bb
-        }
-        return b
+        let path = Bundle(for: HUDController.self).path(forResource: "ProHUD", ofType: "bundle")
+        return Bundle(path: path ?? "") ?? Bundle.main
     }
     
     /// 获取Image
     static func image(named: String) -> UIImage? {
-        return UIImage(named: named) ?? UIImage.init(named: named, in: bundle, compatibleWith: nil)
+        return UIImage(named: named) ?? UIImage(named: named, in: bundle, compatibleWith: nil)
     }
     
     
