@@ -94,6 +94,11 @@ public extension Alert {
             window.makeKeyAndVisible()
             window.resignKey()
             window.addSubview(view)
+            if #available(iOS 13.0, *) {
+                window.windowScene = cfg.windowScene
+            } else {
+                // Fallback on earlier versions
+            }
             view.transform = .init(scaleX: 1.2, y: 1.2)
             view.alpha = 0
             UIView.animateForAlertBuildIn {
@@ -153,7 +158,7 @@ public extension Alert {
         if flag {
             DispatchQueue.main.async {
                 let ani = CABasicAnimation(keyPath: "transform.rotation.z")
-                ani.toValue = Double.pi * 2.0
+                ani.toValue = -Double.pi * 2.0
                 ani.duration = 3
                 ani.repeatCount = 10000
                 self.imageView?.layer.add(ani, forKey: "rotationAnimation")

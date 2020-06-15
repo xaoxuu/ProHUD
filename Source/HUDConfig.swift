@@ -8,6 +8,9 @@
 
 import UIKit
 
+@available(iOS 13.0, *)
+public var sharedWindowScene: UIWindowScene?
+
 public extension ProHUD {
     struct Configuration {
         
@@ -17,20 +20,32 @@ public extension ProHUD {
         /// 根控制器
         public var rootViewController: UIViewController?
         
+        @available(iOS 13.0, *)
+        
+        /// Xcode11 创建的基于 windowScene 的应用必须设置此值
+        public var windowScene: UIWindowScene? {
+            set {
+                sharedWindowScene = newValue
+            }
+            get {
+                return sharedWindowScene
+            }
+        }
+        
         /// 动态颜色（适配iOS13）
         public lazy var dynamicColor: UIColor = {
-//            if #available(iOS 13.0, *) {
-//                let color = UIColor { (traitCollection: UITraitCollection) -> UIColor in
-//                    if traitCollection.userInterfaceStyle == .dark {
-//                        return .init(white: 1, alpha: 1)
-//                    } else {
-//                        return .init(white: 0.1, alpha: 1)
-//                    }
-//                }
-//                return color
-//            } else {
-//                // Fallback on earlier versions
-//            }
+            if #available(iOS 13.0, *) {
+                let color = UIColor { (traitCollection: UITraitCollection) -> UIColor in
+                    if traitCollection.userInterfaceStyle == .dark {
+                        return .init(white: 1, alpha: 1)
+                    } else {
+                        return .init(white: 0.1, alpha: 1)
+                    }
+                }
+                return color
+            } else {
+                // Fallback on earlier versions
+            }
             return .init(white: 0.1, alpha: 1)
         }()
         
@@ -87,8 +102,7 @@ internal var createBlurView: () -> UIVisualEffectView = {
     return {
         let vev = UIVisualEffectView()
         if #available(iOS 13.0, *) {
-//            vev.effect = UIBlurEffect(style: .systemMaterial)
-            vev.effect = UIBlurEffect(style: .extraLight)
+            vev.effect = UIBlurEffect(style: .systemMaterial)
         } else if #available(iOS 11.0, *) {
             vev.effect = UIBlurEffect(style: .extraLight)
         } else {

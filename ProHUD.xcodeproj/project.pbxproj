@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1AE9C44ABAF3F797A5518CE8 /* Pods_ProHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2011798511AD590A613E54E /* Pods_ProHUD.framework */; };
 		CD16490B22EF09AB0077988C /* AlertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD16490A22EF09AB0077988C /* AlertModel.swift */; };
 		CD16490D22EF09B40077988C /* AlertConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD16490C22EF09B40077988C /* AlertConfig.swift */; };
 		CD16491222EF0D900077988C /* HUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD16491122EF0D900077988C /* HUDView.swift */; };
@@ -57,7 +56,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CDC67BEC2490A1D100CC6FE6 /* Inspire in Frameworks */,
-				1AE9C44ABAF3F797A5518CE8 /* Pods_ProHUD.framework in Frameworks */,
 				CDC67BE92490A19100CC6FE6 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -431,6 +429,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.xaoxuu.ProHUD;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -458,6 +457,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.xaoxuu.ProHUD;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

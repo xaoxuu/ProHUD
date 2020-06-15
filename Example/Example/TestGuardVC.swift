@@ -19,7 +19,7 @@ class TestGuardVC: BaseListVC {
     }
     
     override var titles: [String] {
-        return ["场景：删除菜单", "场景：升级至专业版", "场景：隐私协议页面"]
+        return ["场景：删除菜单", "场景：升级至专业版", "场景：隐私协议页面", "对比：原生的ActionSheet", "对比：原生Present效果"]
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -52,6 +52,7 @@ class TestGuardVC: BaseListVC {
                         vm.add(subTitle: "解锁功能")
                         vm.add(message: "功能1功能2...")
                         vm.add(subTitle: "价格")
+                        vm.add(message: "只需一次性付费$2999即可永久享用。")
                         vm.add(message: "只需一次性付费$2999即可永久享用。")
                         vm.add(action: .destructive, title: "购买") { [weak vc] in
                             Alert.push(scene: .buy) { (vc) in
@@ -107,7 +108,20 @@ class TestGuardVC: BaseListVC {
                 
             }
             
+        } else if row == 3 {
+            let ac = UIAlertController(title: "Title", message: "message", preferredStyle: .actionSheet)
+            let ok = UIAlertAction(title: "OK", style: .default, handler: nil)
+            let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            ac.addAction(ok)
+            ac.addAction(cancel)
+            self.present(ac, animated: true, completion: nil)
+        } else if row == 4 {
+            let vc = UIViewController()
+            vc.view.backgroundColor = .white
+            vc.title = "ceshi"
+            present(vc, animated: true, completion: nil)
         }
+    
     }
 
 

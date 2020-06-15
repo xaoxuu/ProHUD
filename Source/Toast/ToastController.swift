@@ -111,6 +111,11 @@ public extension Toast {
         if self.window == nil {
             let w = UIWindow(frame: .zero)
             self.window = w
+            if #available(iOS 13.0, *) {
+                w.windowScene = cfg.windowScene
+            } else {
+                // Fallback on earlier versions
+            }
             w.windowLevel = UIWindow.Level(5000)
             w.backgroundColor = .clear
             w.layer.shadowRadius = 8
@@ -182,7 +187,7 @@ public extension Toast {
         if flag {
             DispatchQueue.main.async {
                 let ani = CABasicAnimation(keyPath: "transform.rotation.z")
-                ani.toValue = Double.pi * 2.0
+                ani.toValue = -Double.pi * 2.0
                 ani.duration = 3
                 ani.repeatCount = 10000
                 self.imageView.layer.add(ani, forKey: "rotationAnimation")

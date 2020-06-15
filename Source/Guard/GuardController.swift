@@ -232,7 +232,8 @@ internal extension Guard {
         if #available(iOS 11.0, *) {
             let count = textStack.arrangedSubviews.count
             if count > 1 {
-                textStack.setCustomSpacing(cfg.guard.margin * 2, after: textStack.arrangedSubviews[count-2])
+                textStack.setCustomSpacing(cfg.guard.margin * 3, after: textStack.arrangedSubviews[count-2])
+                textStack.setCustomSpacing(cfg.guard.margin * 1.5, after: textStack.arrangedSubviews[count-1])
             }
         } else {
             // Fallback on earlier versions

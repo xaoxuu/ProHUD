@@ -18,6 +18,7 @@ class RootVC: UIViewController {
         let nav = UINavigationController(rootViewController: vc)
         addChild(nav)
         view.addSubview(nav.view)
+        nav.navigationBar.prefersLargeTitles = true
     }
     
 
