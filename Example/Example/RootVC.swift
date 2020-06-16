@@ -18,6 +18,7 @@ class RootVC: UIViewController {
         let nav = UINavigationController(rootViewController: vc)
         addChild(nav)
         view.addSubview(nav.view)
+        nav.view.frame = view.bounds
         if #available(iOS 11.0, *) {
             nav.navigationBar.prefersLargeTitles = true
         } else {

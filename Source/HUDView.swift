@@ -26,7 +26,11 @@ public extension ProHUD {
         }
         
     }
-    
+    /// 旋转方向
+    enum RotateDirection: Double {
+        case clockwise = 1
+        case counterclockwise = -1
+    }
 }
 
 internal extension Alert {
@@ -145,5 +149,22 @@ internal extension UIView {
     class func animateForGuard(animations: @escaping () -> Void) {
         animateForGuard(animations: animations, completion: nil)
     }
+    
+    func rotate(flag: Bool, direction: ProHUD.RotateDirection, speed: CFTimeInterval) {
+        if flag == true {
+            if layer.animation(forKey: "rotationAnimation") == nil {
+                let ani = CABasicAnimation(keyPath: "transform.rotation.z")
+                ani.toValue = direction.rawValue * Double.pi * 2.0
+                if speed > 0 {
+                    ani.duration = 4 / speed
+                }
+                ani.repeatDuration = .infinity
+                layer.add(ani, forKey: "rotationAnimation")
+            }
+        } else {
+            layer.removeAnimation(forKey: "rotationAnimation")
+        }
+    }
+    
     
 }

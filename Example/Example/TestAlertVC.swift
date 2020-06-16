@@ -22,6 +22,7 @@ class TestAlertVC: BaseListVC {
                 "场景：同步成功（写法1）",
                 "场景：同步成功（写法2）",
                 "场景：同步失败和重试",
+                "极端场景：短时间内调用了多次同一个弹窗",
                 "极端场景：多个弹窗重叠"]
     }
 
@@ -114,6 +115,50 @@ class TestAlertVC: BaseListVC {
             }
             loading()
         } else if row == 4 {
+            func loading(_ index: Int = 1) {
+                Alert.find("loading", last: { (a) in
+                    Toast.find("loading-tip", last: { (t) in
+                        t.update { (vm) in
+                            vm.title = "此时又调用了一次相同的弹窗 x\(index)"
+                        }
+                        t.pulse()
+                    }) {
+                        Toast.push(title: "此时又调用了一次相同的弹窗 x\(index)", message: "页面应该是没有任何变化的") { (t) in
+                            t.identifier = "loading-tip"
+                            t.update { (vm) in
+                                vm.scene = .default
+                                
+                            }
+                        }
+                    }
+                }) {
+                    Alert.push() { (a) in
+                        a.identifier = "loading"
+                        a.update { (vm) in
+                            vm.scene = .loading
+                            vm.title = "正在加载"
+                        }
+                        a.rotate(direction: .counterclockwise)
+                    }
+                }
+            }
+            loading(1)
+            DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                loading(2)
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+                loading(3)
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now()+3) {
+                loading(4)
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now()+3.5) {
+                loading(5)
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now()+4) {
+                loading(6)
+            }
+        } else if row == 5 {
             func f(_ i: Int) {
                 Alert.push() { (a) in
                     a.rotate()

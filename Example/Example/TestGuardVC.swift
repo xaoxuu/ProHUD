@@ -114,11 +114,13 @@ class TestGuardVC: BaseListVC {
             let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             ac.addAction(ok)
             ac.addAction(cancel)
+            ac.popoverPresentationController?.sourceView =  tableView.cellForRow(at: indexPath)
             self.present(ac, animated: true, completion: nil)
         } else if row == 4 {
             let vc = UIViewController()
             vc.view.backgroundColor = .white
             vc.title = "ceshi"
+            
             present(vc, animated: true, completion: nil)
         }
     

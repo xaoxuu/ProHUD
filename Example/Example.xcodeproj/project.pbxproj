@@ -32,7 +32,7 @@
 		CD8BFF1B23014867001E08DD /* TestGuardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestGuardVC.swift; sourceTree = "<group>"; };
 		CD8BFF1D230148DD001E08DD /* BaseListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseListVC.swift; sourceTree = "<group>"; };
 		CD8BFF1F23014CB5001E08DD /* EmptyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyVC.swift; sourceTree = "<group>"; };
-		CDA4E03820D3935B00CD2A0C /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CDA4E03820D3935B00CD2A0C /* ProHUD (Xcode11之前的老项目).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ProHUD (Xcode11之前的老项目).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDA4E03B20D3935B00CD2A0C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CDA4E03D20D3935B00CD2A0C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		CDA4E04020D3935B00CD2A0C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -83,7 +83,7 @@
 		CDA4E03920D3935B00CD2A0C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CDA4E03820D3935B00CD2A0C /* Example.app */,
+				CDA4E03820D3935B00CD2A0C /* ProHUD (Xcode11之前的老项目).app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -127,7 +127,7 @@
 			);
 			name = Example;
 			productName = Example;
-			productReference = CDA4E03820D3935B00CD2A0C /* Example.app */;
+			productReference = CDA4E03820D3935B00CD2A0C /* ProHUD (Xcode11之前的老项目).app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -373,8 +373,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 34W5TB5KD2;
 				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -383,9 +383,9 @@
 				);
 				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xaoxuu.ProHUDExample;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "ProHUD (Xcode11之前的老项目)";
 				PROVISIONING_PROFILE = "b32d51a3-c20b-408f-aebf-11d2ea3811cd";
-				PROVISIONING_PROFILE_SPECIFIER = "com.xaoxuu.*";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Example/Example-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -399,8 +399,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 34W5TB5KD2;
 				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -409,9 +409,9 @@
 				);
 				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xaoxuu.ProHUDExample;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "ProHUD (Xcode11之前的老项目)";
 				PROVISIONING_PROFILE = "b32d51a3-c20b-408f-aebf-11d2ea3811cd";
-				PROVISIONING_PROFILE_SPECIFIER = "com.xaoxuu.*";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Example/Example-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
