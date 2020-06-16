@@ -156,7 +156,7 @@ internal extension UIView {
                 let ani = CABasicAnimation(keyPath: "transform.rotation.z")
                 ani.toValue = direction.rawValue * Double.pi * 2.0
                 if speed > 0 {
-                    ani.duration = 4 / speed
+                    ani.duration = 2 / speed
                 }
                 ani.repeatDuration = .infinity
                 layer.add(ani, forKey: "rotationAnimation")

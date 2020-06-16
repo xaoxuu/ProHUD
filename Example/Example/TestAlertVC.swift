@@ -138,7 +138,7 @@ class TestAlertVC: BaseListVC {
                             vm.scene = .loading
                             vm.title = "正在加载"
                         }
-                        a.rotate(direction: .counterclockwise)
+                        a.rotate()
                     }
                 }
             }
