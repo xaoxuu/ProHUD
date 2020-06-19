@@ -7,21 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CDD85460249CD681004BCE22 /* TestGuardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD85458249CD681004BCE22 /* TestGuardVC.swift */; };
+		CDD85461249CD681004BCE22 /* BaseListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD85459249CD681004BCE22 /* BaseListVC.swift */; };
+		CDD85462249CD681004BCE22 /* EmptyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD8545A249CD681004BCE22 /* EmptyVC.swift */; };
+		CDD85463249CD681004BCE22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CDD8545B249CD681004BCE22 /* Assets.xcassets */; };
+		CDD85464249CD681004BCE22 /* RootVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD8545C249CD681004BCE22 /* RootVC.swift */; };
+		CDD85465249CD681004BCE22 /* TestToastVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD8545D249CD681004BCE22 /* TestToastVC.swift */; };
+		CDD85466249CD681004BCE22 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD8545E249CD681004BCE22 /* ViewController.swift */; };
+		CDD85467249CD681004BCE22 /* TestAlertVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD8545F249CD681004BCE22 /* TestAlertVC.swift */; };
 		CDF2C8E1249722F800C81274 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF2C8E0249722F800C81274 /* AppDelegate.swift */; };
 		CDF2C8E3249722F800C81274 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF2C8E2249722F800C81274 /* SceneDelegate.swift */; };
 		CDF2C8E8249722F800C81274 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CDF2C8E6249722F800C81274 /* Main.storyboard */; };
-		CDF2C8EA249722F900C81274 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CDF2C8E9249722F900C81274 /* Assets.xcassets */; };
 		CDF2C8ED249722F900C81274 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CDF2C8EB249722F900C81274 /* LaunchScreen.storyboard */; };
 		CDF2C8F8249722F900C81274 /* Example_Xcode11Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF2C8F7249722F900C81274 /* Example_Xcode11Tests.swift */; };
 		CDF2C903249722F900C81274 /* Example_Xcode11UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF2C902249722F900C81274 /* Example_Xcode11UITests.swift */; };
 		CDF2C9152497237300C81274 /* Inspire in Frameworks */ = {isa = PBXBuildFile; productRef = CDF2C9142497237300C81274 /* Inspire */; };
-		CDF2C920249724F700C81274 /* TestAlertVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF2C919249724F600C81274 /* TestAlertVC.swift */; };
-		CDF2C921249724F700C81274 /* BaseListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF2C91A249724F600C81274 /* BaseListVC.swift */; };
-		CDF2C922249724F700C81274 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF2C91B249724F600C81274 /* ViewController.swift */; };
-		CDF2C923249724F700C81274 /* TestToastVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF2C91C249724F600C81274 /* TestToastVC.swift */; };
-		CDF2C924249724F700C81274 /* EmptyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF2C91D249724F600C81274 /* EmptyVC.swift */; };
-		CDF2C925249724F700C81274 /* RootVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF2C91E249724F600C81274 /* RootVC.swift */; };
-		CDF2C926249724F700C81274 /* TestGuardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF2C91F249724F700C81274 /* TestGuardVC.swift */; };
 		CDF2C94A2497577C00C81274 /* ProHUD in Frameworks */ = {isa = PBXBuildFile; productRef = CDF2C9492497577C00C81274 /* ProHUD */; };
 /* End PBXBuildFile section */
 
@@ -43,11 +43,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CDD85458249CD681004BCE22 /* TestGuardVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestGuardVC.swift; path = "../../Example-Old/Example/TestGuardVC.swift"; sourceTree = "<group>"; };
+		CDD85459249CD681004BCE22 /* BaseListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseListVC.swift; path = "../../Example-Old/Example/BaseListVC.swift"; sourceTree = "<group>"; };
+		CDD8545A249CD681004BCE22 /* EmptyVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EmptyVC.swift; path = "../../Example-Old/Example/EmptyVC.swift"; sourceTree = "<group>"; };
+		CDD8545B249CD681004BCE22 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "../../Example-Old/Example/Assets.xcassets"; sourceTree = "<group>"; };
+		CDD8545C249CD681004BCE22 /* RootVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RootVC.swift; path = "../../Example-Old/Example/RootVC.swift"; sourceTree = "<group>"; };
+		CDD8545D249CD681004BCE22 /* TestToastVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestToastVC.swift; path = "../../Example-Old/Example/TestToastVC.swift"; sourceTree = "<group>"; };
+		CDD8545E249CD681004BCE22 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = "../../Example-Old/Example/ViewController.swift"; sourceTree = "<group>"; };
+		CDD8545F249CD681004BCE22 /* TestAlertVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestAlertVC.swift; path = "../../Example-Old/Example/TestAlertVC.swift"; sourceTree = "<group>"; };
 		CDF2C8DD249722F800C81274 /* ProHUD Xcode11.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ProHUD Xcode11.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDF2C8E0249722F800C81274 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CDF2C8E2249722F800C81274 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		CDF2C8E7249722F800C81274 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		CDF2C8E9249722F900C81274 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CDF2C8EC249722F900C81274 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CDF2C8EE249722F900C81274 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CDF2C8F3249722F900C81274 /* Example-Xcode11Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Example-Xcode11Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -56,13 +63,6 @@
 		CDF2C8FE249722F900C81274 /* Example-Xcode11UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Example-Xcode11UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDF2C902249722F900C81274 /* Example_Xcode11UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Example_Xcode11UITests.swift; sourceTree = "<group>"; };
 		CDF2C904249722F900C81274 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CDF2C919249724F600C81274 /* TestAlertVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestAlertVC.swift; path = ../../Example/Example/TestAlertVC.swift; sourceTree = "<group>"; };
-		CDF2C91A249724F600C81274 /* BaseListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseListVC.swift; path = ../../Example/Example/BaseListVC.swift; sourceTree = "<group>"; };
-		CDF2C91B249724F600C81274 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../../Example/Example/ViewController.swift; sourceTree = "<group>"; };
-		CDF2C91C249724F600C81274 /* TestToastVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestToastVC.swift; path = ../../Example/Example/TestToastVC.swift; sourceTree = "<group>"; };
-		CDF2C91D249724F600C81274 /* EmptyVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EmptyVC.swift; path = ../../Example/Example/EmptyVC.swift; sourceTree = "<group>"; };
-		CDF2C91E249724F600C81274 /* RootVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RootVC.swift; path = ../../Example/Example/RootVC.swift; sourceTree = "<group>"; };
-		CDF2C91F249724F700C81274 /* TestGuardVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestGuardVC.swift; path = ../../Example/Example/TestGuardVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,15 +117,15 @@
 			children = (
 				CDF2C8E0249722F800C81274 /* AppDelegate.swift */,
 				CDF2C8E2249722F800C81274 /* SceneDelegate.swift */,
-				CDF2C91F249724F700C81274 /* TestGuardVC.swift */,
-				CDF2C91C249724F600C81274 /* TestToastVC.swift */,
-				CDF2C91A249724F600C81274 /* BaseListVC.swift */,
-				CDF2C91D249724F600C81274 /* EmptyVC.swift */,
-				CDF2C91E249724F600C81274 /* RootVC.swift */,
-				CDF2C919249724F600C81274 /* TestAlertVC.swift */,
-				CDF2C91B249724F600C81274 /* ViewController.swift */,
+				CDD8545B249CD681004BCE22 /* Assets.xcassets */,
+				CDD85459249CD681004BCE22 /* BaseListVC.swift */,
+				CDD8545A249CD681004BCE22 /* EmptyVC.swift */,
+				CDD8545C249CD681004BCE22 /* RootVC.swift */,
+				CDD8545F249CD681004BCE22 /* TestAlertVC.swift */,
+				CDD85458249CD681004BCE22 /* TestGuardVC.swift */,
+				CDD8545D249CD681004BCE22 /* TestToastVC.swift */,
+				CDD8545E249CD681004BCE22 /* ViewController.swift */,
 				CDF2C8E6249722F800C81274 /* Main.storyboard */,
-				CDF2C8E9249722F900C81274 /* Assets.xcassets */,
 				CDF2C8EB249722F900C81274 /* LaunchScreen.storyboard */,
 				CDF2C8EE249722F900C81274 /* Info.plist */,
 			);
@@ -263,7 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CDF2C8ED249722F900C81274 /* LaunchScreen.storyboard in Resources */,
-				CDF2C8EA249722F900C81274 /* Assets.xcassets in Resources */,
+				CDD85463249CD681004BCE22 /* Assets.xcassets in Resources */,
 				CDF2C8E8249722F800C81274 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -289,15 +289,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CDF2C924249724F700C81274 /* EmptyVC.swift in Sources */,
-				CDF2C922249724F700C81274 /* ViewController.swift in Sources */,
-				CDF2C921249724F700C81274 /* BaseListVC.swift in Sources */,
-				CDF2C923249724F700C81274 /* TestToastVC.swift in Sources */,
-				CDF2C920249724F700C81274 /* TestAlertVC.swift in Sources */,
-				CDF2C926249724F700C81274 /* TestGuardVC.swift in Sources */,
-				CDF2C925249724F700C81274 /* RootVC.swift in Sources */,
+				CDD85464249CD681004BCE22 /* RootVC.swift in Sources */,
+				CDD85462249CD681004BCE22 /* EmptyVC.swift in Sources */,
 				CDF2C8E1249722F800C81274 /* AppDelegate.swift in Sources */,
+				CDD85465249CD681004BCE22 /* TestToastVC.swift in Sources */,
+				CDD85460249CD681004BCE22 /* TestGuardVC.swift in Sources */,
+				CDD85467249CD681004BCE22 /* TestAlertVC.swift in Sources */,
 				CDF2C8E3249722F800C81274 /* SceneDelegate.swift in Sources */,
+				CDD85466249CD681004BCE22 /* ViewController.swift in Sources */,
+				CDD85461249CD681004BCE22 /* BaseListVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

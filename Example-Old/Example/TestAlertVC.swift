@@ -36,7 +36,7 @@ class TestAlertVC: BaseListVC {
                 Alert.push(scene: .loading, title: "正在同步", message: "请稍等片刻") { (a) in
                     a.identifier = "loading"
                     a.rotate()
-                    a.didForceQuit { [weak self] in
+                    a.didForceQuit {
                         let t = Toast.push(scene: .loading, title: "正在同步", message: "请稍等片刻（点击展开为Alert）") { (vm) in
                             vm.identifier = "loading"
                         }
