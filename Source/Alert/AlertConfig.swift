@@ -33,7 +33,7 @@ public extension ProHUD.Configuration {
         /// 标题字体
         public var titleFont = UIFont.boldSystemFont(ofSize: 22)
         /// 标题最多行数
-        public var titleMaxLines = Int(1)
+        public var titleMaxLines = Int(5)
         
         /// 加粗字体（如果只有标题或者只有正文，则显示这种字体）
         public var boldTextFont = UIFont.boldSystemFont(ofSize: 18)
@@ -41,7 +41,7 @@ public extension ProHUD.Configuration {
         /// 正文字体
         public var bodyFont = UIFont.systemFont(ofSize: 17)
         /// 正文最多行数
-        public var bodyMaxLines = Int(5)
+        public var bodyMaxLines = Int(20)
         
         // MARK: 按钮样式
         /// 按钮字体

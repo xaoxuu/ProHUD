@@ -29,12 +29,12 @@ public extension ProHUD.Configuration {
         /// 标题字体
         public var titleFont = UIFont.boldSystemFont(ofSize: 18)
         /// 标题最多行数
-        public var titleMaxLines = Int(1)
+        public var titleMaxLines = Int(5)
         
         /// 正文字体
         public var bodyFont = UIFont.systemFont(ofSize: 16)
         /// 正文最多行数
-        public var bodyMaxLines = Int(10)
+        public var bodyMaxLines = Int(20)
         
         /// 更新视图
         /// - Parameter callback: 回调代码

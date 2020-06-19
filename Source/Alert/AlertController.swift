@@ -236,7 +236,7 @@ internal extension Alert {
         }
         addTouchUpAction(for: btn) { [weak self] in
             handler?()
-            if btn.tag == UIAlertAction.Style.cancel.rawValue {
+            if btn.tag == UIAlertAction.Style.cancel.rawValue || handler == nil {
                 self?.pop()
             }
         }

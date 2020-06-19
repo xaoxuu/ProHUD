@@ -23,7 +23,9 @@ class TestAlertVC: BaseListVC {
                 "场景：同步成功（写法2）",
                 "场景：同步失败和重试",
                 "极端场景：短时间内调用了多次同一个弹窗",
-                "极端场景：多个弹窗重叠"]
+                "极端场景：多个弹窗重叠",
+                "测试较长的标题和内容",
+                "测试特别长的标题和内容"]
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -178,6 +180,24 @@ class TestAlertVC: BaseListVC {
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 f(4)
+            }
+        } else if row == 6 {
+            Alert.push() { (a) in
+                a.update { (vm) in
+                    vm.scene = .confirm
+                    vm.title = "正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过"
+                    vm.message = "正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过"
+                    vm.add(action: .default, title: "我知道了", handler: nil)
+                }
+            }
+        } else if row == 7 {
+            Alert.push() { (a) in
+                a.update { (vm) in
+                    vm.scene = .warning
+                    vm.title = "正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过"
+                    vm.message = "正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过"
+                    vm.add(action: .default, title: "我知道了", handler: nil)
+                }
             }
         }
     }
