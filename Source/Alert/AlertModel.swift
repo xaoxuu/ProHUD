@@ -31,7 +31,7 @@ public extension Alert {
         /// 图标
         public var icon: UIImage? {
             didSet {
-                vc?.imageView?.image = icon
+                vc?.imageView.image = icon
             }
         }
         

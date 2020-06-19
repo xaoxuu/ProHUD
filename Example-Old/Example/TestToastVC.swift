@@ -29,6 +29,7 @@ class TestToastVC: BaseListVC {
                 "根据id查找并修改实例",
                 "测试较长的标题和内容",
                 "测试特别长的标题和内容",
+                "测试只有title",
                 "测试只有message"]
     }
 
@@ -62,7 +63,12 @@ class TestToastVC: BaseListVC {
         } else if row == 4 {
             Toast.push(scene: .default, title: "传入指定图标测试", message: "这是消息内容") { (vc) in
                 vc.update { (vm) in
-                    vm.icon = UIImage(named: "icon_download")
+                    if #available(iOS 13.0, *) {
+                        vc.imageView.tintColor = .brown
+                        vm.icon = UIImage(systemName: "icloud.and.arrow.down")
+                    } else {
+                        vm.icon = UIImage(named: "icloud.and.arrow.down")
+                    }
                 }
             }
         } else if row == 5 {
@@ -73,7 +79,7 @@ class TestToastVC: BaseListVC {
                 }
             }
         } else if row == 6 {
-            Toast.push(scene: .default, title: "好友邀请", message: "你收到一条好友邀请，点击查看详情。", duration: 10) { (vc) in
+            Toast.push(scene: .message, title: "好友邀请", message: "你收到一条好友邀请，点击查看详情。", duration: 10) { (vc) in
                 vc.identifier = "xxx"
                 vc.didTapped { [weak vc] in
                     vc?.pop()
@@ -117,7 +123,6 @@ class TestToastVC: BaseListVC {
         } else if row == 9 {
             Toast.push() { (a) in
                 a.update { (vm) in
-                    vm.scene = .warning
                     vm.title = "正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过"
                     vm.message = "正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过"
                    
@@ -126,7 +131,6 @@ class TestToastVC: BaseListVC {
         } else if row == 10 {
             Toast.push() { (a) in
                 a.update { (vm) in
-                    vm.scene = .warning
                     vm.title = "正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过"
                     vm.message = "正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过"
                   
@@ -136,15 +140,23 @@ class TestToastVC: BaseListVC {
             Toast.push() { (a) in
                 a.update { (vm) in
                     vm.scene = .warning
-                    vm.message = "正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过"
+                    vm.title = "正在同步看到了你撒地"
                   
                 }
             }
-        }
+        } else if row == 12 {
+                   Toast.push() { (a) in
+                       a.update { (vm) in
+                           vm.scene = .warning
+                           vm.message = "正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过"
+                         
+                       }
+                   }
+               }
     }
     
     func simulateSync() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
             Toast.find("loading", last: { (t) in
                 t.update { (vm) in
                     vm.scene = .success

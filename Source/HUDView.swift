@@ -31,6 +31,11 @@ public extension ProHUD {
         case clockwise = 1
         case counterclockwise = -1
     }
+    
+}
+
+internal extension String {
+    static let rotateKey = "rotationAnimation"
 }
 
 internal extension Alert {
@@ -150,21 +155,21 @@ internal extension UIView {
         animateForGuard(animations: animations, completion: nil)
     }
     
-    func rotate(flag: Bool, direction: ProHUD.RotateDirection, speed: CFTimeInterval) {
-        if flag == true {
-            if layer.animation(forKey: "rotationAnimation") == nil {
-                let ani = CABasicAnimation(keyPath: "transform.rotation.z")
-                ani.toValue = direction.rawValue * Double.pi * 2.0
-                if speed > 0 {
-                    ani.duration = 2 / speed
-                }
-                ani.repeatDuration = .infinity
-                layer.add(ani, forKey: "rotationAnimation")
+}
+
+extension CALayer {
+    func startRotate(direction: ProHUD.RotateDirection, speed: CFTimeInterval) {
+        if animation(forKey: .rotateKey) == nil {
+            let ani = CABasicAnimation(keyPath: "transform.rotation.z")
+            ani.toValue = direction.rawValue * Double.pi * 2.0
+            if speed > 0 {
+                ani.duration = 2 / speed
             }
-        } else {
-            layer.removeAnimation(forKey: "rotationAnimation")
+            ani.repeatDuration = .infinity
+            add(ani, forKey: .rotateKey)
         }
     }
-    
-    
+    func endRotate() {
+        removeAnimation(forKey: .rotateKey)
+    }
 }

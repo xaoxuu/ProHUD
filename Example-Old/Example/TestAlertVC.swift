@@ -23,7 +23,7 @@ class TestAlertVC: BaseListVC {
                 "场景：同步成功（写法2）",
                 "场景：同步失败和重试",
                 "极端场景：短时间内调用了多次同一个弹窗",
-                "极端场景：多个弹窗重叠",
+                "极端场景：多个不同的弹窗重叠",
                 "测试较长的标题和内容",
                 "测试特别长的标题和内容"]
     }
@@ -45,10 +45,8 @@ class TestAlertVC: BaseListVC {
                             t?.pop()
                             f()
                         }
-                        self?.simulateSync()
                     }
                 }
-                simulateSync()
             }
             f()
         } else if row == 1 {

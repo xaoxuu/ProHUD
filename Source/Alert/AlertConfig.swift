@@ -10,6 +10,10 @@ import UIKit
 import SnapKit
 import Inspire
 
+public extension UIWindow.Level {
+    static let proAlert = UIWindow.Level.alert - 1
+}
+
 public extension ProHUD.Configuration {
     struct Alert {
         // MARK: 卡片样式
@@ -112,23 +116,20 @@ fileprivate var privUpdateImage: (ProHUD.Alert) -> Void = {
     return { (vc) in
         let config = cfg.alert
         let img = vc.vm.icon ?? vc.vm.scene.image
-        if let imgv = vc.imageView {
-            imgv.image = img
-        } else {
-            let icon = UIImageView(image: img)
-            vc.contentStack.addArrangedSubview(icon)
-            icon.contentMode = .scaleAspectFit
-            icon.snp.makeConstraints { (mk) in
-                mk.top.greaterThanOrEqualTo(vc.contentView).offset(config.padding*2.25)
-                mk.bottom.lessThanOrEqualTo(vc.contentView).offset(-config.padding*2.25)
-                mk.leading.greaterThanOrEqualTo(vc.contentView).offset(config.padding*4)
-                mk.trailing.lessThanOrEqualTo(vc.contentView).offset(-config.padding*4)
-                mk.width.equalTo(config.iconSize.width)
-                mk.height.equalTo(config.iconSize.height)
-            }
-            vc.imageView = icon
+        vc.imageView.image = img
+        vc.contentStack.addArrangedSubview(vc.imageView)
+        vc.imageView.contentMode = .scaleAspectFit
+        vc.imageView.snp.makeConstraints { (mk) in
+            mk.top.greaterThanOrEqualTo(vc.contentView).offset(config.padding*2.25)
+            mk.bottom.lessThanOrEqualTo(vc.contentView).offset(-config.padding*2.25)
+            mk.leading.greaterThanOrEqualTo(vc.contentView).offset(config.padding*4)
+            mk.trailing.lessThanOrEqualTo(vc.contentView).offset(-config.padding*4)
+            mk.width.equalTo(config.iconSize.width)
+            mk.height.equalTo(config.iconSize.height)
         }
-        vc.imageView?.layer.removeAllAnimations()
+        vc.imageView.layer.removeAllAnimations()
+        vc.animateLayer = nil
+        vc.animation = nil
     }
 }()
 
@@ -298,10 +299,10 @@ fileprivate var privReloadData: (ProHUD.Alert) -> Void = {
         // 动画
         if isFirstLayout {
             vc.view.layoutIfNeeded()
-            vc.imageView?.transform = .init(scaleX: 0.75, y: 0.75)
+            vc.imageView.transform = .init(scaleX: 0.75, y: 0.75)
             UIView.animateForAlert {
                 vc.view.layoutIfNeeded()
-                vc.imageView?.transform = .identity
+                vc.imageView.transform = .identity
             }
         } else {
             UIView.animateForAlert {

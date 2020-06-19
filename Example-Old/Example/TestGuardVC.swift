@@ -29,7 +29,7 @@ class TestGuardVC: BaseListVC {
             Guard.push() { (vc) in
                 vc.update { (vm) in
                     vm.add(action: .destructive, title: "删除") { [weak vc] in
-                        Alert.push(scene: .delete, title: "确认删除", message: "此操作不可撤销") { (vc) in
+                        Alert.push(scene: .delete) { (vc) in
                             vc.update { (vm) in
                                 vm.add(action: .destructive, title: "删除") { [weak vc] in
                                     vc?.pop()

@@ -120,9 +120,9 @@ public extension Guard {
             return f(vc)
         } else {
             // 尝试获取RootVC
-            let ws = UIApplication.shared.windows.reversed().filter { (w) -> Bool in
+            let ws = UIApplication.shared.windows.filter { (w) -> Bool in
                 // 去除掉诸如 UITextEffectsWindow 这样的类，去掉隐藏的Window
-                if "\(type(of:w))" == "UIWindow" && w.isHidden == false {
+                if "\(type(of:w))" == "UIWindow" && w.isHidden == false && w.windowLevel == .normal {
                     return true
                 } else {
                     return false

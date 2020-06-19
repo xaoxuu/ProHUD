@@ -33,15 +33,19 @@ public class ProHUD {
     
 }
 
-// 默认场景
+// 默认场景，可直接在项目工程中覆写场景参数
 public extension ProHUD.Scene {
     init(identifier: String) {
         self.init()
         id = identifier
     }
-    
     static var `default`: ProHUD.Scene {
         var scene = ProHUD.Scene.init(identifier: "default")
+        scene.image = ProHUD.image(named: "prohud.note")
+        return scene
+    }
+    static var message: ProHUD.Scene {
+        var scene = ProHUD.Scene.init(identifier: "message")
         scene.image = ProHUD.image(named: "prohud.message")
         return scene
     }
@@ -49,27 +53,48 @@ public extension ProHUD.Scene {
         var scene = ProHUD.Scene.init(identifier: "loading")
         scene.alertDuration = 0
         scene.toastDuration = 0
-        scene.image = ProHUD.image(named: "prohud.loading")
+        scene.image = ProHUD.image(named: "prohud.candy")
         return scene
     }
     static var success: ProHUD.Scene {
         var scene = ProHUD.Scene.init(identifier: "success")
         scene.alertDuration = 2
-        scene.image = ProHUD.image(named: "prohud.success")
+        scene.image = ProHUD.image(named: "prohud.checkmark")
         return scene
     }
     static var warning: ProHUD.Scene {
         var scene = ProHUD.Scene.init(identifier: "warning")
         scene.alertDuration = 2
         scene.toastDuration = 5
-        scene.image = ProHUD.image(named: "prohud.warning")
+        scene.image = ProHUD.image(named: "prohud.exclamationmark")
         return scene
     }
     static var error: ProHUD.Scene {
         var scene = ProHUD.Scene.init(identifier: "error")
         scene.alertDuration = 2
         scene.toastDuration = 5
-        scene.image = ProHUD.image(named: "prohud.error")
+        scene.image = ProHUD.image(named: "prohud.xmark")
+        return scene
+    }
+    static var confirm: ProHUD.Scene {
+        var scene = ProHUD.Scene.init(identifier: "confirm")
+        scene.alertDuration = 2
+        scene.toastDuration = 5
+        scene.image = ProHUD.image(named: "prohud.questionmark")
+        return scene
+    }
+    static var privacy: ProHUD.Scene {
+        var scene = ProHUD.Scene.init(identifier: "privacy")
+        scene.alertDuration = 2
+        scene.toastDuration = 5
+        scene.image = ProHUD.image(named: "prohud.privacy")
+        return scene
+    }
+    static var delete: ProHUD.Scene {
+        var scene = ProHUD.Scene.init(identifier: "delete")
+        scene.alertDuration = 2
+        scene.toastDuration = 5
+        scene.image = ProHUD.image(named: "prohud.trash")
         return scene
     }
     

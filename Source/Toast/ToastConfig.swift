@@ -9,6 +9,10 @@
 import UIKit
 import SnapKit
 
+public extension UIWindow.Level {
+    static let proToast = UIWindow.Level.alert + 1000
+}
+
 public extension ProHUD.Configuration {
     struct Toast {
         // MARK: 卡片样式
@@ -24,7 +28,7 @@ public extension ProHUD.Configuration {
         public var lineSpace = CGFloat(4)
         // MARK: 图标样式
         /// 图标尺寸
-        public var iconSize = CGSize(width: 42, height: 42)
+        public var iconSize = CGSize(width: 44, height: 44)
         
         // MARK: 文本样式
         /// 标题字体
@@ -106,17 +110,6 @@ fileprivate var privReloadData: (ProHUD.Toast) -> Void = {
             mk.trailing.equalToSuperview().offset(-config.padding)
             mk.bottom.lessThanOrEqualToSuperview().offset(-config.padding)
         }
-//        vc.titleLabel.snp.makeConstraints { (mk) in
-//            mk.top.equalToSuperview().offset(config.padding)
-//            mk.leading.equalTo(vc.imageView.snp.trailing).offset(config.padding - 4)
-//            mk.leading.greaterThanOrEqualToSuperview().offset(config.padding)
-//            mk.trailing.equalToSuperview().offset(-config.padding)
-//        }
-//        vc.bodyLabel.snp.makeConstraints { (mk) in
-//            mk.top.equalTo(vc.titleLabel.snp.bottom).offset(config.lineSpace)
-//            mk.leading.trailing.equalTo(vc.titleLabel)
-//            mk.bottom.lessThanOrEqualToSuperview().offset(-config.padding)
-//        }
         
         vc.view.layoutIfNeeded()
         

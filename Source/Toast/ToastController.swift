@@ -124,7 +124,7 @@ public extension Toast {
             } else {
                 // Fallback on earlier versions
             }
-            window.windowLevel = UIWindow.Level(5000)
+            window.windowLevel = .proToast
             window.backgroundColor = .clear
             window.layer.shadowRadius = 8
             window.layer.shadowOffset = .init(width: 0, height: 5)
@@ -189,14 +189,6 @@ public extension Toast {
         vm.tapCallback = callback
     }
     
-    /// 图片旋转效果
-    /// - Parameter flag: 是否开启
-    func rotate(_ flag: Bool = true, direction: ProHUD.RotateDirection = .clockwise, speed: CFTimeInterval = 1) {
-        DispatchQueue.main.async {
-            self.imageView.rotate(flag: flag, direction: direction, speed: speed)
-        }
-    }
-    
     /// 脉冲效果
     func pulse() {
         DispatchQueue.main.async {
@@ -214,6 +206,9 @@ public extension Toast {
     
 }
 
+extension Toast: RotateAnimation {
+    
+}
 
 // MARK: - 实例管理器
 public extension Toast {
@@ -351,5 +346,4 @@ fileprivate extension Toast {
     }
     
 }
-
 

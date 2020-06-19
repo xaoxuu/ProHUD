@@ -36,7 +36,7 @@ public extension ProHUD {
         }()
         
         /// 图片
-        public var imageView: UIImageView?
+        public var imageView = UIImageView()
         
         /// 标题
         public var titleLabel: UILabel?
@@ -151,16 +151,11 @@ public extension Alert {
         vm.forceQuitCallback = callback
     }
     
-    
-    /// 图片旋转效果
-    /// - Parameter flag: 是否开启
-    func rotate(_ flag: Bool = true, direction: ProHUD.RotateDirection = .clockwise, speed: CFTimeInterval = 1) {
-        DispatchQueue.main.async {
-            self.imageView?.rotate(flag: flag, direction: direction, speed: speed)
-        }
-    }
 }
 
+extension Alert: RotateAnimation {
+    
+}
 
 // MARK: - 实例管理器
 public extension Alert {
@@ -320,7 +315,7 @@ fileprivate extension Alert {
         alertWindow = w
         w.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0)
         // 比原生alert层级低一点
-        w.windowLevel = UIWindow.Level.alert - 1
+        w.windowLevel = .proAlert
         return w
     }
     
@@ -337,7 +332,7 @@ fileprivate extension Alert {
         } else if alerts.count == 1 {
             alerts.removeAll()
         } else {
-            debug("漏洞：已经没有alert了")
+            debug("‼️代码漏洞：已经没有alert了")
         }
     }
     
