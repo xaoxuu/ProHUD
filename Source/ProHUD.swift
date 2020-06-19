@@ -42,34 +42,34 @@ public extension ProHUD.Scene {
     
     static var `default`: ProHUD.Scene {
         var scene = ProHUD.Scene.init(identifier: "default")
-        scene.image = ProHUD.image(named: "ProHUDMessage")
+        scene.image = ProHUD.image(named: "prohud.message")
         return scene
     }
     static var loading: ProHUD.Scene {
         var scene = ProHUD.Scene.init(identifier: "loading")
         scene.alertDuration = 0
         scene.toastDuration = 0
-        scene.image = ProHUD.image(named: "ProHUDLoading")
+        scene.image = ProHUD.image(named: "prohud.loading")
         return scene
     }
     static var success: ProHUD.Scene {
         var scene = ProHUD.Scene.init(identifier: "success")
         scene.alertDuration = 2
-        scene.image = ProHUD.image(named: "ProHUDSuccess")
+        scene.image = ProHUD.image(named: "prohud.success")
         return scene
     }
     static var warning: ProHUD.Scene {
         var scene = ProHUD.Scene.init(identifier: "warning")
         scene.alertDuration = 2
         scene.toastDuration = 5
-        scene.image = ProHUD.image(named: "ProHUDWarning")
+        scene.image = ProHUD.image(named: "prohud.warning")
         return scene
     }
     static var error: ProHUD.Scene {
         var scene = ProHUD.Scene.init(identifier: "error")
         scene.alertDuration = 2
         scene.toastDuration = 5
-        scene.image = ProHUD.image(named: "ProHUDError")
+        scene.image = ProHUD.image(named: "prohud.error")
         return scene
     }
     
