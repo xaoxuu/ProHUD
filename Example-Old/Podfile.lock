@@ -1,5 +1,5 @@
 PODS:
-  - Inspire (1.1.0)
+  - Inspire (2.0.0)
   - ProHUD (1.0):
     - Inspire
     - SnapKit (= 5.0)
@@ -21,7 +21,7 @@ EXTERNAL SOURCES:
     :path: ".."
 
 SPEC CHECKSUMS:
-  Inspire: 0beb2517cbf0111fe13c6bb1ab9ea791abd1f42b
+  Inspire: 7556357c9c90d5e886f3be5d29fe1e0222b694e1
   ProHUD: 7128b55036885ac4f8b4d0b0783ee6f8eb3a2ea9
   SnapKit: fd22d10eb9aff484d79a8724eab922c1ddf89bcf
 

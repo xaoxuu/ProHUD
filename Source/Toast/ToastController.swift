@@ -25,6 +25,14 @@ public extension ProHUD {
             return imgv
         }()
         
+        /// 文本区容器
+        public var textStack: StackContainer = {
+            let stack = StackContainer()
+            stack.spacing = cfg.toast.lineSpace
+            stack.alignment = .fill
+            return stack
+        }()
+        
         /// 标题
         public lazy var titleLabel: UILabel = {
             let lb = UILabel()

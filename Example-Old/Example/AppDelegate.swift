@@ -26,22 +26,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // 可自动获取根控制器，如果获取失败请主动设置此值
             // cfg.rootViewController = vc
             cfg.alert { (a) in
-                a.titleFont = .bold(22)
-                a.bodyFont = .regular(17)
-                a.boldTextFont = .bold(18)
-                a.buttonFont = .bold(18)
+//                a.titleFont = .bold(22)
+//                a.bodyFont = .regular(17)
+//                a.boldTextFont = .bold(18)
+//                a.buttonFont = .bold(18)
                 a.forceQuitTimer = 3
             }
-            cfg.toast { (t) in
-                t.titleFont = .bold(18)
-                t.bodyFont = .regular(16)
-            }
-            cfg.guard { (g) in
-                g.titleFont = .bold(22)
-                g.subTitleFont = .bold(20)
-                g.bodyFont = .regular(17)
-                g.buttonFont = .bold(18)
-            }
+//            cfg.toast { (t) in
+//                t.titleFont = .bold(18)
+//                t.bodyFont = .regular(16)
+//                t.iconSize = .init(width: 42, height: 42)
+//            }
+//            cfg.guard { (g) in
+//                g.titleFont = .bold(22)
+//                g.subTitleFont = .bold(20)
+//                g.bodyFont = .regular(17)
+//                g.buttonFont = .bold(18)
+//            }
         }
         
         return true

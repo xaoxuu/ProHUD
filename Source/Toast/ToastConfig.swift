@@ -20,10 +20,11 @@ public extension ProHUD.Configuration {
         public var margin = CGFloat(8)
         /// 填充：元素内部控件距离元素边界的距离
         public var padding = CGFloat(16)
-        
+        /// 行间距
+        public var lineSpace = CGFloat(4)
         // MARK: 图标样式
         /// 图标尺寸
-        public var iconSize = CGSize(width: 48, height: 48)
+        public var iconSize = CGSize(width: 24, height: 24)
         
         // MARK: 文本样式
         /// 标题字体
@@ -63,15 +64,15 @@ fileprivate var privReloadData: (ProHUD.Toast) -> Void = {
         debug(vc, "reloadData")
         let config = cfg.toast
         let scene = vc.vm.scene
-        if vc.titleLabel.superview == nil {
-            vc.view.addSubview(vc.titleLabel)
-        }
-        if vc.bodyLabel.superview == nil {
-            vc.view.addSubview(vc.bodyLabel)
-        }
         if vc.imageView.superview == nil {
             vc.view.addSubview(vc.imageView)
         }
+        if vc.textStack.superview == nil {
+            vc.view.addSubview(vc.textStack)
+            vc.textStack.addArrangedSubview(vc.titleLabel)
+            vc.textStack.addArrangedSubview(vc.bodyLabel)
+        }
+        
         // 设置数据
         vc.imageView.image = vc.vm.icon ?? vc.vm.scene.image
         vc.imageView.layer.removeAllAnimations()
@@ -80,6 +81,17 @@ fileprivate var privReloadData: (ProHUD.Toast) -> Void = {
         vc.bodyLabel.textColor = cfg.secondaryLabelColor
         vc.bodyLabel.text = vc.vm.message ?? vc.vm.scene.message
         
+        if let count = vc.titleLabel.text?.count, count > 0 {
+            vc.textStack.insertArrangedSubview(vc.titleLabel, at: 0)
+        } else {
+            vc.titleLabel.removeFromSuperview()
+        }
+        if let count = vc.bodyLabel.text?.count, count > 0 {
+            vc.textStack.addArrangedSubview(vc.bodyLabel)
+        } else {
+            vc.bodyLabel.removeFromSuperview()
+        }
+        
         // 更新布局
         vc.imageView.snp.makeConstraints { (mk) in
             mk.top.equalToSuperview().offset(config.padding)
@@ -87,17 +99,24 @@ fileprivate var privReloadData: (ProHUD.Toast) -> Void = {
             mk.bottom.lessThanOrEqualToSuperview().offset(-config.padding)
             mk.width.height.equalTo(config.iconSize)
         }
-        vc.titleLabel.snp.makeConstraints { (mk) in
+        vc.textStack.snp.makeConstraints { (mk) in
             mk.top.equalToSuperview().offset(config.padding)
-            mk.leading.equalTo(vc.imageView.snp.trailing).offset(config.margin)
+            mk.leading.equalTo(vc.imageView.snp.trailing).offset(config.padding - 4)
             mk.leading.greaterThanOrEqualToSuperview().offset(config.padding)
             mk.trailing.equalToSuperview().offset(-config.padding)
-        }
-        vc.bodyLabel.snp.makeConstraints { (mk) in
-            mk.top.equalTo(vc.titleLabel.snp.bottom).offset(config.margin)
-            mk.leading.trailing.equalTo(vc.titleLabel)
             mk.bottom.lessThanOrEqualToSuperview().offset(-config.padding)
         }
+//        vc.titleLabel.snp.makeConstraints { (mk) in
+//            mk.top.equalToSuperview().offset(config.padding)
+//            mk.leading.equalTo(vc.imageView.snp.trailing).offset(config.padding - 4)
+//            mk.leading.greaterThanOrEqualToSuperview().offset(config.padding)
+//            mk.trailing.equalToSuperview().offset(-config.padding)
+//        }
+//        vc.bodyLabel.snp.makeConstraints { (mk) in
+//            mk.top.equalTo(vc.titleLabel.snp.bottom).offset(config.lineSpace)
+//            mk.leading.trailing.equalTo(vc.titleLabel)
+//            mk.bottom.lessThanOrEqualToSuperview().offset(-config.padding)
+//        }
         
         vc.view.layoutIfNeeded()
         
