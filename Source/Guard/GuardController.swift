@@ -99,7 +99,7 @@ public extension Guard {
     /// 推入某个视图控制器
     /// - Parameter viewController: 视图控制器
     @discardableResult func push(to viewController: UIViewController? = nil) -> Guard {
-        func f(_ vc: UIViewController) {
+        func f(_ vc: UIViewController) -> Guard {
             view.layoutIfNeeded()
             vc.addChild(self)
             vc.view.addSubview(view)
@@ -114,10 +114,25 @@ public extension Guard {
             UIView.animateForGuard {
                 self.privTranslateIn()
             }
+            return self
         }
         if let vc = viewController ?? cfg.rootViewController {
-            f(vc)
+            return f(vc)
         } else {
+            // 尝试获取RootVC
+            let ws = UIApplication.shared.windows.reversed().filter { (w) -> Bool in
+                // 去除掉诸如 UITextEffectsWindow 这样的类，去掉隐藏的Window
+                if "\(type(of:w))" == "UIWindow" && w.isHidden == false {
+                    return true
+                } else {
+                    return false
+                }
+            }
+            for w in ws {
+                if let vc = w.rootViewController {
+                    return f(vc)
+                }
+            }
             debug("请传入需要push到的控制器")
         }
         return self

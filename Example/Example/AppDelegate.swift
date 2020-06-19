@@ -22,14 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow.init(frame: UIScreen.main.bounds)
         window?.rootViewController = vc
         window?.makeKeyAndVisible()
-        
         ProHUD.config { (cfg) in
-            cfg.rootViewController = vc
-            if #available(iOS 13.0, *) {
-                cfg.windowScene = window?.windowScene
-            } else {
-                // Fallback on earlier versions
-            }
+            // 可自动获取根控制器，如果获取失败请主动设置此值
+            // cfg.rootViewController = vc
             cfg.alert { (a) in
                 a.titleFont = .bold(22)
                 a.bodyFont = .regular(17)

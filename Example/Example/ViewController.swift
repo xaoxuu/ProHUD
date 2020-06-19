@@ -15,7 +15,7 @@ class ViewController: BaseListVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        title = "ProHUD"
+        title = "\(Bundle.main.infoDictionary?["CFBundleName"] ?? "ProHUD")"
     }
     
     override var titles: [String] {

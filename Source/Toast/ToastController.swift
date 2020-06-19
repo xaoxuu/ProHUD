@@ -109,19 +109,19 @@ public extension Toast {
         let config = cfg.toast
         let isNew: Bool
         if self.window == nil {
-            let w = UIWindow(frame: .zero)
-            self.window = w
+            let window = UIWindow(frame: .zero)
+            self.window = window
             if #available(iOS 13.0, *) {
-                w.windowScene = cfg.windowScene
+                window.windowScene = cfg.windowScene ?? UIApplication.shared.windows.last?.windowScene
             } else {
                 // Fallback on earlier versions
             }
-            w.windowLevel = UIWindow.Level(5000)
-            w.backgroundColor = .clear
-            w.layer.shadowRadius = 8
-            w.layer.shadowOffset = .init(width: 0, height: 5)
-            w.layer.shadowOpacity = 0.2
-            w.isHidden = false
+            window.windowLevel = UIWindow.Level(5000)
+            window.backgroundColor = .clear
+            window.layer.shadowRadius = 8
+            window.layer.shadowOffset = .init(width: 0, height: 5)
+            window.layer.shadowOpacity = 0.2
+            window.isHidden = false
             isNew = true
         } else {
             isNew = false
