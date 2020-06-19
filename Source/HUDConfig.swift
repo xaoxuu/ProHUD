@@ -9,20 +9,20 @@
 import UIKit
 
 @available(iOS 13.0, *)
-public var sharedWindowScene: UIWindowScene?
+
+fileprivate var sharedWindowScene: UIWindowScene?
 
 public extension ProHUD {
     struct Configuration {
         
-        /// 是否允许Debug模式输出
-        public var enableDebugPrint = true
+        /// 是否允许log输出
+        public var enablePrint = true
         
-        /// 根控制器
+        /// 根控制器，默认可以自动获取，如果获取失败请主动设置
         public var rootViewController: UIViewController?
         
         @available(iOS 13.0, *)
-        
-        /// Xcode11 创建的基于 windowScene 的应用必须设置此值
+        /// iOS13必须设置此值，默认可以自动获取，如果获取失败请主动设置
         public var windowScene: UIWindowScene? {
             set {
                 sharedWindowScene = newValue

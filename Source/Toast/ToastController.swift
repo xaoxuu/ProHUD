@@ -257,7 +257,7 @@ public extension Toast {
         } else if toasts.count == 1 {
             toasts.removeAll()
         } else {
-            debug("漏洞：已经没有toast了")
+            debug("‼️代码漏洞：已经没有toast了")
         }
         UIView.animateForToast(animations: {
             toast.window?.transform = .init(translationX: 0, y: -20-toast.maxY)

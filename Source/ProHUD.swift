@@ -113,8 +113,8 @@ internal var isPortrait: Bool {
 
 /// 可控Debug输出
 internal func debug(_ items: Any..., separator: String = " ", terminator: String = "\n") {
-    if cfg.enableDebugPrint {
-        debugPrint(items, separator: separator, terminator: terminator)
+    if cfg.enablePrint {
+        print(items, separator: separator, terminator: terminator)
     }
 }
 

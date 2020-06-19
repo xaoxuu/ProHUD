@@ -133,7 +133,7 @@ public extension Guard {
                     return f(vc)
                 }
             }
-            debug("请传入需要push到的控制器")
+            debug("⚠️自动获取根控制器失败，请设置根控制器或者传入需要push到的控制器")
         }
         return self
     }
