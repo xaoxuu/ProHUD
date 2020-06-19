@@ -24,7 +24,7 @@ public extension ProHUD.Configuration {
         public var lineSpace = CGFloat(4)
         // MARK: 图标样式
         /// 图标尺寸
-        public var iconSize = CGSize(width: 24, height: 24)
+        public var iconSize = CGSize(width: 42, height: 42)
         
         // MARK: 文本样式
         /// 标题字体

@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "CDA4E03720D3935B00CD2A0C"
-               BuildableName = "ProHUD (Xcode11&#x4e4b;&#x524d;&#x7684;&#x8001;&#x9879;&#x76ee;).app"
+               BuildableName = "ProHUD &#x8001;&#x9879;&#x76ee;.app"
                BlueprintName = "Example"
                ReferencedContainer = "container:Example.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CDA4E03720D3935B00CD2A0C"
-            BuildableName = "ProHUD (Xcode11&#x4e4b;&#x524d;&#x7684;&#x8001;&#x9879;&#x76ee;).app"
+            BuildableName = "ProHUD &#x8001;&#x9879;&#x76ee;.app"
             BlueprintName = "Example"
             ReferencedContainer = "container:Example.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CDA4E03720D3935B00CD2A0C"
-            BuildableName = "ProHUD (Xcode11&#x4e4b;&#x524d;&#x7684;&#x8001;&#x9879;&#x76ee;).app"
+            BuildableName = "ProHUD &#x8001;&#x9879;&#x76ee;.app"
             BlueprintName = "Example"
             ReferencedContainer = "container:Example.xcodeproj">
          </BuildableReference>
