@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Inspire
 
 public typealias Toast = ProHUD.Toast
 
@@ -316,7 +315,7 @@ fileprivate extension Toast {
     
     class func privUpdateToastsLayout() {
         func f() {
-            let top = Inspire.shared.screen.updatedSafeAreaInsets.top
+            let top = ProHUD.safeAreaInsets.top
             for (i, e) in toasts.enumerated() {
                 let config = cfg.toast
                 if let window = e.window {

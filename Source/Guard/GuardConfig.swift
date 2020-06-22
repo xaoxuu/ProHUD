@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import Inspire
 
 public extension ProHUD.Configuration {
     struct Guard {
@@ -106,7 +105,7 @@ fileprivate var privReloadData: (ProHUD.Guard) -> Void = {
                 if width < config.cardMaxWidth {
                     mk.bottom.equalToSuperview()
                 } else {
-                    mk.bottom.equalToSuperview().offset(-Inspire.shared.screen.safeAreaInsets.bottom)
+                    mk.bottom.equalToSuperview().offset(-ProHUD.safeAreaInsets.bottom)
                 }
             } else if UIDevice.current.userInterfaceIdiom == .pad {
                 mk.centerY.equalToSuperview()
@@ -116,13 +115,13 @@ fileprivate var privReloadData: (ProHUD.Guard) -> Void = {
         // stack
         vc.contentStack.snp.makeConstraints { (mk) in
             if isPortrait && vc.isFullScreen {
-                mk.top.equalToSuperview().offset(Inspire.shared.screen.safeAreaInsets.top)
+                mk.top.equalToSuperview().offset(ProHUD.safeAreaInsets.top)
             } else {
                 mk.top.equalToSuperview().offset(config.padding)
             }
             mk.centerX.equalToSuperview()
             if width < config.cardMaxWidth {
-                let bottom = Inspire.shared.screen.safeAreaInsets.bottom
+                let bottom = ProHUD.safeAreaInsets.bottom
                 if bottom == 0 {
                     mk.bottom.equalToSuperview().offset(-config.padding)
                 } else {

@@ -8,10 +8,8 @@
 
 import UIKit
 
-@available(iOS 13.0, *)
 
-fileprivate var sharedWindowScene: UIWindowScene?
-
+/// HUD配置
 public extension ProHUD {
     struct Configuration {
         
@@ -21,14 +19,18 @@ public extension ProHUD {
         /// 根控制器，默认可以自动获取，如果获取失败请主动设置
         public var rootViewController: UIViewController?
         
-        @available(iOS 13.0, *)
         /// iOS13必须设置此值，默认可以自动获取，如果获取失败请主动设置
+        @available(iOS 13.0, *)
+        private static var sharedWindowScene: UIWindowScene?
+        
+        /// iOS13必须设置此值，默认可以自动获取，如果获取失败请主动设置
+        @available(iOS 13.0, *)
         public var windowScene: UIWindowScene? {
             set {
-                sharedWindowScene = newValue
+                Configuration.sharedWindowScene = newValue
             }
             get {
-                return sharedWindowScene
+                return Configuration.sharedWindowScene
             }
         }
         

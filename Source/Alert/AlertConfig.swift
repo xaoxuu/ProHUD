@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import Inspire
 
 public extension UIWindow.Level {
     static let proAlert = UIWindow.Level.alert - 1

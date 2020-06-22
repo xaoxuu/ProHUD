@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Inspire
 
 public extension ProHUD {
     
@@ -171,5 +172,11 @@ extension CALayer {
     }
     func endRotate() {
         removeAnimation(forKey: .rotateKey)
+    }
+}
+
+extension ProHUD {
+    static var safeAreaInsets: UIEdgeInsets {
+        return Inspire.shared.screen.updatedSafeAreaInsets
     }
 }
