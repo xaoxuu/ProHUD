@@ -5,12 +5,12 @@
       "scale" : "1x"
     },
     {
-      "filename" : "prohud.candy@2x.png",
+      "filename" : "prohud.rainbow.circle@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "prohud.candy@3x.png",
+      "filename" : "prohud.rainbow.circle@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

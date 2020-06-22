@@ -116,7 +116,7 @@ public protocol RotateAnimation: HUDController {
 
 public extension RotateAnimation {
     
-    func rotate(_ layer: CALayer? = nil, direction: ProHUD.RotateDirection = .clockwise, speed: CFTimeInterval = 1) {
+    func rotate(_ layer: CALayer? = nil, direction: ProHUD.RotateDirection = .clockwise, speed: CFTimeInterval = 2) {
         DispatchQueue.main.async {
             let l = layer ?? self.imageView.layer
             self.animateLayer = l

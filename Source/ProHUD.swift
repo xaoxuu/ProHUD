@@ -53,7 +53,7 @@ public extension ProHUD.Scene {
         var scene = ProHUD.Scene.init(identifier: "loading")
         scene.alertDuration = 0
         scene.toastDuration = 0
-        scene.image = ProHUD.image(named: "prohud.candy")
+        scene.image = ProHUD.image(named: "prohud.rainbow.circle")
         return scene
     }
     static var success: ProHUD.Scene {

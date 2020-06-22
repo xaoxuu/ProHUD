@@ -30,7 +30,8 @@ class TestToastVC: BaseListVC {
                 "测试较长的标题和内容",
                 "测试特别长的标题和内容",
                 "测试只有title",
-                "测试只有message"]
+                "测试只有message",
+                "自定义旋转的图片"]
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -145,14 +146,27 @@ class TestToastVC: BaseListVC {
                 }
             }
         } else if row == 12 {
-                   Toast.push() { (a) in
-                       a.update { (vm) in
-                           vm.scene = .warning
-                           vm.message = "正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过"
-                         
-                       }
-                   }
-               }
+            Toast.push() { (a) in
+                a.update { (vm) in
+                    vm.scene = .warning
+                    vm.message = "正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过"
+                  
+                }
+            }
+        } else if row == 13 {
+            
+            Toast.push(scene: .privacy, title: "正在授权", message: "请稍等片刻") { (t) in
+                t.identifier = "loading"
+                let imgv = UIImageView(image: UIImage(named: "prohud.rainbow.circle"))
+                t.imageView.addSubview(imgv)
+                imgv.snp.makeConstraints { (mk) in
+                    mk.center.equalToSuperview()
+                    mk.width.height.equalTo(18)
+                }
+                t.rotate(imgv.layer, speed: 4)
+            }
+            simulateSync()
+        }
     }
     
     func simulateSync() {
