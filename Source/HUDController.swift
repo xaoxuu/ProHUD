@@ -19,8 +19,10 @@ public class HUDController: UIViewController {
     internal var didDisappearCallback: (() -> Void)?
 
     /// 执行动画的图层
-    var animateLayer: CALayer?
+    internal var animateLayer: CALayer?
     internal var animation: CAAnimation?
+    
+    internal var progressView: ProHUD.ProgressView?
     
     /// 按钮事件
     internal var buttonEvents = [UIButton:() -> Void]()
@@ -96,7 +98,28 @@ internal extension HUDController {
 public protocol LoadingAnimationView: HUDController {
     var imageView: UIImageView { get }
 }
-
+public extension LoadingAnimationView {
+    
+    /// 更新进度（如果需要显示进度，需要先调用一次 updateProgress(0) 来初始化）
+    /// - Parameter progress: 进度（0~1）
+    func update(progress: CGFloat) {
+        if let spv = imageView.superview {
+            if progressView == nil {
+                let v = ProHUD.ProgressView()
+                spv.addSubview(v)
+                v.snp.makeConstraints { (mk) in
+                    mk.center.equalTo(imageView)
+                    mk.width.height.equalTo(28)
+                }
+                progressView = v
+            }
+            if let v = progressView {
+                v.updateProgress(progress: progress)
+            }
+        }
+        
+    }
+}
 /// 旋转动画
 public protocol LoadingRotateAnimation: LoadingAnimationView {}
 public extension LoadingRotateAnimation {

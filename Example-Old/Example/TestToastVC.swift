@@ -19,6 +19,7 @@ class TestToastVC: BaseListVC {
     
     override var titles: [String] {
         return ["场景：正在同步",
+                "场景：正在同步（更新进度）",
                 "场景：同步成功",
                 "场景：同步失败",
                 "场景：设备电量过低",
@@ -43,12 +44,44 @@ class TestToastVC: BaseListVC {
             }.startRotate()
             simulateSync()
         } else if row == 1 {
+            Toast.push("progress") { (t) in
+                t.update { (vm) in
+                    vm.scene = .loading
+                    vm.title = "正在同步"
+                    vm.message = "请稍等片刻"
+                }
+                t.startRotate()
+                t.update(progress: 0)
+                let s = DispatchSemaphore(value: 1)
+                DispatchQueue.global().async {
+                    for i in 0 ... 5 {
+                        s.wait()
+                        DispatchQueue.main.async {
+                            Toast.find("progress", last: { (t) in
+                                t.update(progress: CGFloat(i)/5)
+                                print("\(CGFloat(i)/5)")
+                                if i == 5 {
+                                    t.update { (vm) in
+                                        vm.scene = .success
+                                        vm.title = "同步成功"
+                                        vm.message = "xxx"
+                                    }
+                                }
+                            })
+                            DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                                s.signal()
+                            }
+                        }
+                    }
+                }
+            }
+       } else if row == 2 {
             let t = Toast.push(scene: .success, title: "同步成功", message: "点击查看详情")
             t.didTapped { [weak self, weak t] in
                 self?.presentEmptyVC(title: "详情")
                 t?.pop()
             }
-        } else if row == 2 {
+        } else if row == 3 {
             Toast.push(scene: .error, title: "同步失败", message: "请稍后重试。点击查看详情") { (vc) in
                 vc.update { (vm) in
                     vm.duration = 0
@@ -58,10 +91,10 @@ class TestToastVC: BaseListVC {
                     vc?.pop()
                 }
             }
-        } else if row == 3 {
+        } else if row == 4 {
             Toast.push(scene: .warning, title: "设备电量过低", message: "请及时对设备进行充电，以免影响使用。")
             
-        } else if row == 4 {
+        } else if row == 5 {
             Toast.push(scene: .default, title: "传入指定图标测试", message: "这是消息内容") { (vc) in
                 vc.update { (vm) in
                     if #available(iOS 13.0, *) {
@@ -72,14 +105,14 @@ class TestToastVC: BaseListVC {
                     }
                 }
             }
-        } else if row == 5 {
+        } else if row == 6 {
             Toast.push(scene: .default, title: "禁止手势移除", message: "这条消息无法通过向上滑动移出屏幕。5秒后自动消失，每次拖拽都会刷新倒计时。") { (vc) in
                 vc.isRemovable = false
                 vc.update { (vm) in
                     vm.duration = 5
                 }
             }
-        } else if row == 6 {
+        } else if row == 7 {
             Toast.push(scene: .message, title: "好友邀请", message: "你收到一条好友邀请，点击查看详情。", duration: 10) { (vc) in
                 vc.identifier = "xxx"
                 vc.didTapped { [weak vc] in
@@ -97,7 +130,7 @@ class TestToastVC: BaseListVC {
                     }
                 }
             }
-        } else if row == 7 {
+        } else if row == 8 {
             if let t = Toast.find("aaa").last {
                 t.pulse()
                 t.update() { (vm) in
@@ -112,7 +145,7 @@ class TestToastVC: BaseListVC {
                     }
                 }
             }
-        } else if row == 8 {
+        } else if row == 9 {
             Toast.push("aaa") { (t) in
                 t.update { (vm) in
                     vm.scene = .success
@@ -121,7 +154,7 @@ class TestToastVC: BaseListVC {
                 }
                 t.pulse()
             }
-        } else if row == 9 {
+        } else if row == 10 {
             Toast.push() { (a) in
                 a.update { (vm) in
                     vm.title = "正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过"
@@ -129,7 +162,7 @@ class TestToastVC: BaseListVC {
                    
                 }
             }
-        } else if row == 10 {
+        } else if row == 11 {
             Toast.push() { (a) in
                 a.update { (vm) in
                     vm.title = "正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过"
@@ -137,7 +170,7 @@ class TestToastVC: BaseListVC {
                   
                 }
             }
-        } else if row == 11 {
+        } else if row == 12 {
             Toast.push() { (a) in
                 a.update { (vm) in
                     vm.scene = .warning
@@ -145,7 +178,7 @@ class TestToastVC: BaseListVC {
                   
                 }
             }
-        } else if row == 12 {
+        } else if row == 13 {
             Toast.push() { (a) in
                 a.update { (vm) in
                     vm.scene = .warning
@@ -153,7 +186,7 @@ class TestToastVC: BaseListVC {
                   
                 }
             }
-        } else if row == 13 {
+        } else if row == 14 {
             
             Toast.push(scene: .privacy, title: "正在授权", message: "请稍等片刻") { (t) in
                 t.identifier = "loading"

@@ -25,7 +25,8 @@ class TestAlertVC: BaseListVC {
                 "极端场景：短时间内调用了多次同一个弹窗",
                 "极端场景：多个不同的弹窗重叠",
                 "测试较长的标题和内容",
-                "测试特别长的标题和内容"]
+                "测试特别长的标题和内容",
+                "场景：正在同步（更新进度）"]
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -186,6 +187,38 @@ class TestAlertVC: BaseListVC {
                     vm.title = "正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过"
                     vm.message = "正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过正在同步看到了你撒地方快乐撒的肌肤轮廓啊就是；来的跨省的人格人格离开那地方离开过"
                     vm.add(action: .default, title: "我知道了", handler: nil)
+                }
+            }
+        } else if row == 8 {
+            Alert.push("progress") { (a) in
+                a.update { (vm) in
+                    vm.scene = .loading
+                    vm.title = "正在同步"
+                    vm.message = "请稍等片刻"
+                }
+                a.startRotate()
+                a.update(progress: 0)
+                let s = DispatchSemaphore(value: 1)
+                DispatchQueue.global().async {
+                    for i in 0 ... 5 {
+                        s.wait()
+                        DispatchQueue.main.async {
+                            Alert.find("progress", last: { (a) in
+                                a.update(progress: CGFloat(i)/5)
+                                print("\(CGFloat(i)/5)")
+                                if i == 5 {
+                                    a.update { (vm) in
+                                        vm.scene = .success
+                                        vm.title = "同步成功"
+                                        vm.message = nil
+                                    }
+                                }
+                            })
+                            DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                                s.signal()
+                            }
+                        }
+                    }
                 }
             }
         }

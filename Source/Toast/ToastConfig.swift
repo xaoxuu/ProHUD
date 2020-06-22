@@ -116,6 +116,8 @@ fileprivate var privReloadData: (ProHUD.Toast) -> Void = {
         // 设置持续时间
         vc.vm.updateDuration()
         
+        vc.progressView?.removeFromSuperview()
+        
     }
     
 }()
