@@ -19,7 +19,7 @@ public class HUDController: UIViewController {
     internal var didDisappearCallback: (() -> Void)?
 
     /// 执行动画的图层
-    public var animateLayer: CALayer?
+    var animateLayer: CALayer?
     internal var animation: CAAnimation?
     
     /// 按钮事件
@@ -74,6 +74,7 @@ public class HUDController: UIViewController {
     
 }
 
+// MARK: - 事件
 internal extension HUDController {
     
     func addTouchUpAction(for button: UIButton, action: @escaping () -> Void) {
@@ -89,15 +90,55 @@ internal extension HUDController {
     
 }
 
+// MARK: - 动画
+
+/// 图片动画
+public protocol LoadingAnimationView: HUDController {
+    var imageView: UIImageView { get }
+}
+
+/// 旋转动画
+public protocol LoadingRotateAnimation: LoadingAnimationView {}
+public extension LoadingRotateAnimation {
+    
+    /// 旋转动画
+    /// - Parameters:
+    ///   - layer: 图层
+    ///   - direction: 方向
+    ///   - speed: 速度
+    func startRotate(_ layer: CALayer? = nil, direction: ProHUD.RotateDirection = .clockwise, speed: CFTimeInterval = 2) {
+        DispatchQueue.main.async {
+            let l = layer ?? self.imageView.layer
+            self.animateLayer = l
+            l.startRotate(direction: direction, speed: speed)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(self.willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        }
+    }
+    
+    /// 停止旋转
+    /// - Parameter layer: 图层
+    func endRotate(_ layer: CALayer? = nil) {
+        DispatchQueue.main.async {
+            self.animateLayer = nil
+            (layer ?? self.imageView.layer)?.endRotate()
+            NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
+        }
+    }
+    
+}
+
+/// 动画扩展
 extension HUDController {
-    @objc func pauseAnimation() {
+    @objc func didEnterBackground() {
         if let layer = animateLayer {
             animation = layer.animation(forKey: .rotateKey)
             layer.timeOffset = layer.convertTime(CACurrentMediaTime(), from: nil)
             layer.speed = 0
         }
     }
-    @objc func resumeAnimation() {
+    @objc func willEnterForeground() {
         if let layer = animateLayer, let ani = animation, layer.speed == 0 {
             let pauseTime = layer.timeOffset
             layer.timeOffset = 0
@@ -109,29 +150,3 @@ extension HUDController {
     }
 }
 
-public protocol RotateAnimation: HUDController {
-    var imageView: UIImageView { get }
-    var animateLayer: CALayer? { get set }
-}
-
-public extension RotateAnimation {
-    
-    func rotate(_ layer: CALayer? = nil, direction: ProHUD.RotateDirection = .clockwise, speed: CFTimeInterval = 2) {
-        DispatchQueue.main.async {
-            let l = layer ?? self.imageView.layer
-            self.animateLayer = l
-            l.startRotate(direction: direction, speed: speed)
-            NotificationCenter.default.addObserver(self, selector: #selector(self.pauseAnimation), name: UIApplication.didEnterBackgroundNotification, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(self.resumeAnimation), name: UIApplication.willEnterForegroundNotification, object: nil)
-        }
-    }
-    func rotate(_ layer: CALayer? = nil, _ flag: Bool) {
-        DispatchQueue.main.async {
-            self.animateLayer = nil
-            (layer ?? self.imageView.layer)?.endRotate()
-            NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
-            NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
-        }
-    }
-    
-}

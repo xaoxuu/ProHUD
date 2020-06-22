@@ -90,6 +90,7 @@ public extension Alert {
     /// 推入屏幕
     @discardableResult func push() -> Alert {
         if Alert.alerts.contains(self) == false {
+            willAppearCallback?()
             let window = Alert.privGetAlertWindow(self)
             window.makeKeyAndVisible()
             window.resignKey()
@@ -107,6 +108,7 @@ public extension Alert {
                 window.backgroundColor = window.backgroundColor?.withAlphaComponent(0.6)
             }
             Alert.alerts.append(self)
+            didAppearCallback?()
         }
         Alert.privUpdateAlertsLayout()
         return self
@@ -123,6 +125,7 @@ public extension Alert {
         }) { (done) in
             self.view.removeFromSuperview()
             self.removeFromParent()
+            self.didDisappearCallback?()
         }
         // hide window
         let count = Alert.alerts.count
@@ -153,9 +156,9 @@ public extension Alert {
     
 }
 
-extension Alert: RotateAnimation {
-    
-}
+
+// MARK: 支持加载动画
+extension Alert: LoadingRotateAnimation {}
 
 // MARK: - 实例管理器
 public extension Alert {
@@ -218,7 +221,7 @@ internal extension Alert {
     /// - Parameter title: 标题
     /// - Parameter action: 事件
     @discardableResult func insert(action index: Int?, style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) -> UIButton {
-        let btn = Button.actionButton(title: title)
+        let btn = Button.createActionButton(title: title)
         if let idx = index, idx < actionStack.arrangedSubviews.count {
             actionStack.insertArrangedSubview(btn, at: idx)
         } else {

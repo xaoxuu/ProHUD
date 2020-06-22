@@ -35,12 +35,12 @@ class TestAlertVC: BaseListVC {
             func f() {
                 Alert.push(scene: .loading, title: "正在同步", message: "请稍等片刻") { (a) in
                     a.identifier = "loading"
-                    a.rotate()
+                    a.startRotate()
                     a.didForceQuit {
                         let t = Toast.push(scene: .loading, title: "正在同步", message: "请稍等片刻（点击展开为Alert）") { (vm) in
                             vm.identifier = "loading"
                         }
-                        t.rotate()
+                        t.startRotate()
                         t.didTapped { [weak t] in
                             t?.pop()
                             f()
@@ -52,7 +52,7 @@ class TestAlertVC: BaseListVC {
         } else if row == 1 {
             Alert.push() { (a) in
                 a.identifier = "loading"
-                a.rotate()
+                a.startRotate()
                 a.update { (vm) in
                     vm.scene = .loading
                     vm.title = "正在同步"
@@ -72,7 +72,7 @@ class TestAlertVC: BaseListVC {
             let a = Alert.push() { (a) in
                 a.identifier = "loading"
             }
-            a.rotate()
+            a.startRotate()
             a.update { (vm) in
                 vm.scene = .loading
                 vm.title = "正在同步"
@@ -99,7 +99,7 @@ class TestAlertVC: BaseListVC {
                         vm.message = "请稍等片刻"
                         vm.remove(action: 0, 1)
                     }
-                    a.rotate()
+                    a.startRotate()
                     DispatchQueue.main.asyncAfter(deadline: .now()+2) {
                         a.update { (vm) in
                             vm.scene = .error
@@ -138,7 +138,7 @@ class TestAlertVC: BaseListVC {
                             vm.scene = .loading
                             vm.title = "正在加载"
                         }
-                        a.rotate()
+                        a.startRotate()
                     }
                 }
             }
@@ -161,7 +161,7 @@ class TestAlertVC: BaseListVC {
         } else if row == 5 {
             func f(_ i: Int) {
                 Alert.push() { (a) in
-                    a.rotate()
+                    a.startRotate()
                     a.update { (vm) in
                         vm.scene = .loading
                         vm.title = "正在同步" + String(i)

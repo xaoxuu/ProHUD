@@ -40,7 +40,7 @@ class TestToastVC: BaseListVC {
         if row == 0 {
             Toast.push(scene: .loading, title: "正在同步", message: "请稍等片刻") { (vm) in
                 vm.identifier = "loading"
-            }.rotate()
+            }.startRotate()
             simulateSync()
         } else if row == 1 {
             let t = Toast.push(scene: .success, title: "同步成功", message: "点击查看详情")
@@ -163,7 +163,7 @@ class TestToastVC: BaseListVC {
                     mk.center.equalToSuperview()
                     mk.width.height.equalTo(18)
                 }
-                t.rotate(imgv.layer, speed: 4)
+                t.startRotate(imgv.layer, speed: 4)
             }
             simulateSync()
         }

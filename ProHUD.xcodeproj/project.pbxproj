@@ -24,6 +24,7 @@
 		CDC39CFD22FD6DDF0070E914 /* GuardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC39CFC22FD6DDF0070E914 /* GuardModel.swift */; };
 		CDC67BE92490A19100CC6FE6 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = CDC67BE82490A19100CC6FE6 /* SnapKit */; };
 		CDC67BEC2490A1D100CC6FE6 /* Inspire in Frameworks */ = {isa = PBXBuildFile; productRef = CDC67BEB2490A1D100CC6FE6 /* Inspire */; };
+		CDF2C58924A0572C002ECDD5 /* HUDUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF2C58824A0572C002ECDD5 /* HUDUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 		CDB6A07A22EEF06500AF6CF0 /* HUDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDController.swift; sourceTree = "<group>"; };
 		CDB6A07C22EEF19D00AF6CF0 /* HUDConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDConfig.swift; sourceTree = "<group>"; };
 		CDC39CFC22FD6DDF0070E914 /* GuardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardModel.swift; sourceTree = "<group>"; };
+		CDF2C58824A0572C002ECDD5 /* HUDUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDUtils.swift; sourceTree = "<group>"; };
 		DC31EBFAC56868D6096A233A /* Pods-ProHUD.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ProHUD.release.xcconfig"; path = "Pods/Target Support Files/Pods-ProHUD/Pods-ProHUD.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -147,6 +149,7 @@
 				CDB6A07C22EEF19D00AF6CF0 /* HUDConfig.swift */,
 				CDB6A07A22EEF06500AF6CF0 /* HUDController.swift */,
 				CD16491122EF0D900077988C /* HUDView.swift */,
+				CDF2C58824A0572C002ECDD5 /* HUDUtils.swift */,
 				CD6CD87322F185B400F4FD4A /* Toast */,
 				CD16491022EF0A4B0077988C /* Alert */,
 				CD6CD87C22F185DA00F4FD4A /* Guard */,
@@ -280,6 +283,7 @@
 				CD6CD86C22F1858F00F4FD4A /* ToastModel.swift in Sources */,
 				CD16490B22EF09AB0077988C /* AlertModel.swift in Sources */,
 				CD16491222EF0D900077988C /* HUDView.swift in Sources */,
+				CDF2C58924A0572C002ECDD5 /* HUDUtils.swift in Sources */,
 				CDB6A07B22EEF06500AF6CF0 /* HUDController.swift in Sources */,
 				CDC39CFD22FD6DDF0070E914 /* GuardModel.swift in Sources */,
 			);

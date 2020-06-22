@@ -99,6 +99,7 @@ public extension Guard {
     /// - Parameter viewController: 视图控制器
     @discardableResult func push(to viewController: UIViewController? = nil) -> Guard {
         func f(_ vc: UIViewController) -> Guard {
+            willAppearCallback?()
             view.layoutIfNeeded()
             vc.addChild(self)
             vc.view.addSubview(view)
@@ -113,6 +114,7 @@ public extension Guard {
             UIView.animateForGuard {
                 self.privTranslateIn()
             }
+            didAppearCallback?()
             return self
         }
         if let vc = viewController ?? cfg.rootViewController {
@@ -150,6 +152,7 @@ public extension Guard {
             }) { (done) in
                 if self.isDisplaying == false {
                     self.view.removeFromSuperview()
+                    self.didDisappearCallback?()
                 }
             }
         }
@@ -285,7 +288,7 @@ internal extension Guard {
     /// - Parameter title: 标题
     /// - Parameter action: 事件
     @discardableResult func insert(action index: Int?, style: UIAlertAction.Style, title: String?, handler: (() -> Void)?) -> UIButton {
-        let btn = Button.actionButton(title: title)
+        let btn = Button.createActionButton(title: title)
         btn.titleLabel?.font = cfg.guard.buttonFont
         if let idx = index, idx < actionStack.arrangedSubviews.count {
             actionStack.insertArrangedSubview(btn, at: idx)

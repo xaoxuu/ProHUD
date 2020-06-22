@@ -65,8 +65,8 @@ public extension ProHUD.Configuration {
         
         /// 加载强制退出按钮
         /// - Parameter callback: 回调代码
-        public func loadForceQuitButton(_ callback: @escaping (ProHUD.Alert) -> Void) {
-            privLoadForceQuitButton = callback
+        public func loadHideButton(_ callback: @escaping (ProHUD.Alert) -> Void) {
+            privLoadHideButton = callback
         }
         
         
@@ -234,11 +234,11 @@ fileprivate var privUpdateActionStack: (ProHUD.Alert) -> Void = {
     }
 }()
 
-fileprivate var privLoadForceQuitButton: (ProHUD.Alert) -> Void = {
+fileprivate var privLoadHideButton: (ProHUD.Alert) -> Void = {
     return { (vc) in
         debug(vc, "showNavButtons")
         let config = cfg.alert
-        let btn = ProHUD.Alert.Button.forceQuitButton()
+        let btn = ProHUD.Alert.Button.createHideButton()
         btn.setTitle(cfg.alert.forceQuitTitle, for: .normal)
         let bg = createBlurView()
         bg.layer.masksToBounds = true
@@ -312,19 +312,19 @@ fileprivate var privReloadData: (ProHUD.Alert) -> Void = {
         // 设置持续时间
         vc.vm.updateDuration()
         
-        // 强制退出按钮
-        vc.vm.forceQuitTimerBlock?.cancel()
+        // 「隐藏」按钮出现的时间
+        vc.vm.hideTimerBlock?.cancel()
         if vc.buttonEvents.count == 0 {
-            vc.vm.forceQuitTimerBlock = DispatchWorkItem(block: { [weak vc] in
+            vc.vm.hideTimerBlock = DispatchWorkItem(block: { [weak vc] in
                 if let vc = vc {
                     if vc.buttonEvents.count == 0 {
-                        privLoadForceQuitButton(vc)
+                        privLoadHideButton(vc)
                     }
                 }
             })
-            DispatchQueue.main.asyncAfter(deadline: .now() + config.forceQuitTimer, execute: vc.vm.forceQuitTimerBlock!)
+            DispatchQueue.main.asyncAfter(deadline: .now() + config.forceQuitTimer, execute: vc.vm.hideTimerBlock!)
         } else {
-            vc.vm.forceQuitTimerBlock = nil
+            vc.vm.hideTimerBlock = nil
         }
         
     }

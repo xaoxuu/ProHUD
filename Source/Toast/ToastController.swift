@@ -116,6 +116,7 @@ public extension Toast {
         let config = cfg.toast
         let isNew: Bool
         if self.window == nil {
+            willAppearCallback?()
             let window = UIWindow(frame: .zero)
             self.window = window
             if #available(iOS 13.0, *) {
@@ -166,6 +167,7 @@ public extension Toast {
         } else {
             view.layoutIfNeeded()
         }
+        didAppearCallback?()
         return self
     }
     
@@ -205,9 +207,8 @@ public extension Toast {
     
 }
 
-extension Toast: RotateAnimation {
-    
-}
+// MARK: 支持加载动画
+extension Toast: LoadingRotateAnimation {}
 
 // MARK: - 实例管理器
 public extension Toast {
@@ -267,6 +268,7 @@ public extension Toast {
             toast.view.removeFromSuperview()
             toast.removeFromParent()
             toast.window = nil
+            toast.didDisappearCallback?()
         }
     }
     
@@ -288,6 +290,7 @@ fileprivate extension Toast {
     /// 点击事件
     /// - Parameter sender: 手势
     @objc func privDidTapped(_ sender: UITapGestureRecognizer) {
+        pulse()
         vm.tapCallback?()
     }
     

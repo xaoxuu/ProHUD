@@ -7,10 +7,12 @@
 //
 
 import UIKit
-import Inspire
+
+// MARK: - public
 
 public extension ProHUD {
     
+    /// 堆栈视图容器
     class StackContainer: UIStackView {
         
         public override init(frame: CGRect) {
@@ -27,21 +29,29 @@ public extension ProHUD {
         }
         
     }
+    
     /// 旋转方向
     enum RotateDirection: Double {
+        /// 顺时针
         case clockwise = 1
+        /// 逆时针
         case counterclockwise = -1
     }
     
 }
 
-internal extension String {
-    static let rotateKey = "rotationAnimation"
-}
+// MARK: - internal
 
+// MARK: 弹窗
 internal extension Alert {
+    
+    /// 弹窗的按钮
     class Button: UIButton {
-        class func actionButton(title: String?) -> Button {
+        
+        /// 创建操作按钮
+        /// - Parameter title: 标题
+        /// - Returns: 按钮
+        static func createActionButton(title: String?) -> Button {
             let btn = Button(type: .system)
             btn.setTitle(title, for: .normal)
             btn.layer.cornerRadius = cfg.alert.cornerRadius / 2
@@ -49,6 +59,8 @@ internal extension Alert {
             return btn
         }
         
+        /// 更新按钮
+        /// - Parameter style: 样式
         func update(style: UIAlertAction.Style) {
             let pd = CGFloat(8)
             if style != .cancel {
@@ -71,7 +83,9 @@ internal extension Alert {
             tag = style.rawValue
         }
         
-        class func forceQuitButton() -> UIButton {
+        /// 创建隐藏按钮
+        /// - Returns: 按钮
+        static func createHideButton() -> UIButton {
             let btn = Button(type: .system)
             let pd = cfg.alert.padding/2
             btn.contentEdgeInsets = .init(top: pd*1.5, left: pd*1.5, bottom: pd*1.5, right: pd*1.5)
@@ -85,10 +99,16 @@ internal extension Alert {
     
 }
 
+// MARK: 操作表
 internal extension Guard {
     
+    /// 操作表的按钮
     class Button: UIButton {
-        class func actionButton(title: String?) -> Button {
+        
+        /// 创建操作按钮
+        /// - Parameter title: 标题
+        /// - Returns: 按钮
+        static func createActionButton(title: String?) -> Button {
             let btn = Button(type: .system)
             btn.setTitle(title, for: .normal)
             btn.layer.cornerRadius = cfg.guard.buttonCornerRadius
@@ -121,6 +141,8 @@ internal extension Guard {
         
     }
 }
+
+// MARK: - 动画
 
 internal extension UIView {
     
@@ -158,7 +180,13 @@ internal extension UIView {
     
 }
 
+
 extension CALayer {
+    
+    /// 开始旋转
+    /// - Parameters:
+    ///   - direction: 方向
+    ///   - speed: 速度
     func startRotate(direction: ProHUD.RotateDirection, speed: CFTimeInterval) {
         if animation(forKey: .rotateKey) == nil {
             let ani = CABasicAnimation(keyPath: "transform.rotation.z")
@@ -170,13 +198,10 @@ extension CALayer {
             add(ani, forKey: .rotateKey)
         }
     }
+    
+    /// 结束旋转
     func endRotate() {
         removeAnimation(forKey: .rotateKey)
     }
-}
-
-extension ProHUD {
-    static var safeAreaInsets: UIEdgeInsets {
-        return Inspire.shared.screen.updatedSafeAreaInsets
-    }
+    
 }

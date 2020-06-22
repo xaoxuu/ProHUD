@@ -65,7 +65,7 @@ class TestGuardVC: BaseListVC {
                                             vm.message = "请稍等片刻"
                                             vm.remove(action: 0, 1)
                                         })
-                                        vc?.rotate()
+                                        vc?.startRotate()
                                         DispatchQueue.main.asyncAfter(deadline: .now()+1) {
                                             vc?.update({ (vm) in
                                                 vm.scene = .success

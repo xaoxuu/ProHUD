@@ -50,7 +50,7 @@ public extension Alert {
         internal var durationBlock: DispatchWorkItem?
         
         /// 强制退出按钮
-        internal var forceQuitTimerBlock: DispatchWorkItem?
+        internal var hideTimerBlock: DispatchWorkItem?
         
         /// 强制退出代码
         internal var forceQuitCallback: (() -> Void)?
