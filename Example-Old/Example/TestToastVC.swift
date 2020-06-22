@@ -98,12 +98,12 @@ class TestToastVC: BaseListVC {
                 }
             }
         } else if row == 7 {
-            Toast.find("aaa", last: { (t) in
+            if let t = Toast.find("aaa").last {
                 t.pulse()
                 t.update() { (vm) in
                     vm.title = "已经存在了"
                 }
-            }) {
+            } else {
                 Toast.push(title: "这是一条id为aaa的横幅", message: "避免重复发布同一条信息") { (t) in
                     t.identifier = "aaa"
                     t.update { (vm) in
@@ -113,14 +113,14 @@ class TestToastVC: BaseListVC {
                 }
             }
         } else if row == 8 {
-            Toast.find("aaa", last: { (t) in
+            Toast.push("aaa") { (t) in
                 t.update { (vm) in
                     vm.scene = .success
                     vm.title = "找到了哈哈"
                     vm.message = "根据id查找并修改实例"
                 }
-            })
-            
+                t.pulse()
+            }
         } else if row == 9 {
             Toast.push() { (a) in
                 a.update { (vm) in

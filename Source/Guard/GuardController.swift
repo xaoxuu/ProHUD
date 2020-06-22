@@ -180,6 +180,23 @@ public extension Guard {
         return Guard(actions: actions).push(to: viewController)
     }
     
+    /// 创建实例并推入屏幕
+    /// - Parameters:
+    ///   - identifier: 唯一标识
+    ///   - toast: 实例对象
+    /// - Returns: 回调
+    @discardableResult class func push(_ identifier: String, to viewController: UIViewController? = nil, _ instance: @escaping (Guard) -> Void) -> Guard {
+        if let g = find(identifier).last {
+            instance(g)
+            return g
+        } else {
+            return Guard() { (gg) in
+                gg.identifier = identifier
+                instance(gg)
+            }.push(to: viewController)
+        }
+    }
+    
     /// 查找指定的实例
     /// - Parameter identifier: 指定实例的标识
     class func find(_ identifier: String?, from viewController: UIViewController? = nil) -> [Guard] {
@@ -206,11 +223,9 @@ public extension Guard {
     /// - Parameter identifier: 标识
     /// - Parameter last: 已经存在（获取最后一个）
     /// - Parameter none: 不存在
-    class func find(_ identifier: String?, from viewController: UIViewController? = nil, last: ((Guard) -> Void)? = nil, none: (() -> Void)? = nil) {
+    class func find(_ identifier: String?, from viewController: UIViewController? = nil, last: @escaping (Guard) -> Void) {
         if let t = find(identifier, from: viewController).last {
-            last?(t)
-        } else {
-            none?()
+            last(t)
         }
     }
     

@@ -213,7 +213,7 @@ extension Toast: LoadingRotateAnimation {}
 // MARK: - 实例管理器
 public extension Toast {
     
-    /// 推入屏幕
+    /// 创建实例并推入屏幕
     /// - Parameter toast: 场景
     /// - Parameter title: 标题
     /// - Parameter message: 内容
@@ -222,9 +222,26 @@ public extension Toast {
         return Toast(scene: scene, title: title, message: message, duration: duration, actions: actions).push()
     }
     
+    /// 创建实例并推入屏幕
+    /// - Parameters:
+    ///   - identifier: 唯一标识
+    ///   - toast: 实例对象
+    /// - Returns: 回调
+    @discardableResult class func push(_ identifier: String, instance: @escaping (Toast) -> Void) -> Toast {
+        if let t = find(identifier).last {
+            instance(t)
+            return t
+        } else {
+            return Toast() { (tt) in
+                tt.identifier = identifier
+                instance(tt)
+            }.push()
+        }
+    }
+    
     /// 查找指定的实例
     /// - Parameter identifier: 标识
-    class func find(_ identifier: String?) -> [Toast] {
+    class func find(_ identifier: String) -> [Toast] {
         var tt = [Toast]()
         for t in toasts {
             if t.identifier == identifier {
@@ -236,13 +253,10 @@ public extension Toast {
     
     /// 查找指定的实例
     /// - Parameter identifier: 标识
-    /// - Parameter last: 已经存在（获取最后一个）
-    /// - Parameter none: 不存在
-    class func find(_ identifier: String?, last: ((Toast) -> Void)? = nil, none: (() -> Void)? = nil) {
+    /// - Parameter last: 已经存在（获取最后一个） 
+    class func find(_ identifier: String, last: @escaping (Toast) -> Void) {
         if let t = find(identifier).last {
-            last?(t)
-        } else {
-            none?()
+            last(t)
         }
     }
     
@@ -274,7 +288,7 @@ public extension Toast {
     
     /// 弹出屏幕
     /// - Parameter identifier: 指定实例的标识
-    class func pop(_ identifier: String?) {
+    class func pop(_ identifier: String) {
         for t in find(identifier) {
             t.pop()
         }
@@ -290,8 +304,11 @@ fileprivate extension Toast {
     /// 点击事件
     /// - Parameter sender: 手势
     @objc func privDidTapped(_ sender: UITapGestureRecognizer) {
-        pulse()
-        vm.tapCallback?()
+        if let cb = vm.tapCallback {
+            cb()
+        } else {
+            pulse()
+        }
     }
     
     /// 拖拽事件

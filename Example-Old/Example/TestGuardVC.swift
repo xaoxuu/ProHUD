@@ -26,7 +26,7 @@ class TestGuardVC: BaseListVC {
         tableView.deselectRow(at: indexPath, animated: true)
         let row = indexPath.row
         if row == 0 {
-            Guard.push() { (vc) in
+            Guard.push("del") { (vc) in
                 vc.update { (vm) in
                     vm.add(action: .destructive, title: "删除") { [weak vc] in
                         Alert.push(scene: .delete) { (vc) in
@@ -44,50 +44,48 @@ class TestGuardVC: BaseListVC {
             }
         } else if row == 1 {
             // 可以通过id来避免重复
-            Guard.find("pro") {
-                Guard.push() { (vc) in
-                    vc.identifier = "pro"
-                    vc.update { (vm) in
-                        vm.add(title: "升级至专业版")
-                        vm.add(subTitle: "解锁功能")
-                        vm.add(message: "功能1功能2...")
-                        vm.add(subTitle: "价格")
-                        vm.add(message: "只需一次性付费$2999即可永久享用。")
-                        vm.add(message: "只需一次性付费$2999即可永久享用。")
-                        vm.add(action: .destructive, title: "购买") { [weak vc] in
-                            Alert.push(scene: .buy) { (vc) in
-                                vc.identifier = "confirm"
-                                vc.update { (vm) in
-                                    vm.add(action: .destructive, title: "购买") { [weak vc] in
+            Guard.push("pro") { (vc) in
+                vc.identifier = "pro"
+                vc.update { (vm) in
+                    vm.add(title: "升级至专业版")
+                    vm.add(subTitle: "解锁功能")
+                    vm.add(message: "功能1功能2...")
+                    vm.add(subTitle: "价格")
+                    vm.add(message: "只需一次性付费$2999即可永久享用。")
+                    vm.add(message: "只需一次性付费$2999即可永久享用。")
+                    vm.add(action: .destructive, title: "购买") { [weak vc] in
+                        Alert.push(scene: .buy) { (vc) in
+                            vc.identifier = "confirm"
+                            vc.update { (vm) in
+                                vm.add(action: .destructive, title: "购买") { [weak vc] in
+                                    vc?.update({ (vm) in
+                                        vm.scene = .loading
+                                        vm.title = "正在付款"
+                                        vm.message = "请稍等片刻"
+                                        vm.remove(action: 0, 1)
+                                    })
+                                    vc?.startRotate()
+                                    DispatchQueue.main.asyncAfter(deadline: .now()+1) {
                                         vc?.update({ (vm) in
-                                            vm.scene = .loading
-                                            vm.title = "正在付款"
-                                            vm.message = "请稍等片刻"
-                                            vm.remove(action: 0, 1)
+                                            vm.scene = .success
+                                            vm.title = "购买成功"
+                                            vm.message = "感谢您的支持"
+                                            vm.add(action: .default, title: "我知道了") {
+                                                vc?.pop()
+                                            }
                                         })
-                                        vc?.startRotate()
-                                        DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                                            vc?.update({ (vm) in
-                                                vm.scene = .success
-                                                vm.title = "购买成功"
-                                                vm.message = "感谢您的支持"
-                                                vm.add(action: .default, title: "我知道了") {
-                                                    vc?.pop()
-                                                }
-                                            })
-                                        }
                                     }
-                                    vm.add(action: .cancel, title: "取消", handler: nil)
                                 }
+                                vm.add(action: .cancel, title: "取消", handler: nil)
                             }
-                            vc?.pop()
                         }
-                        vm.add(action: .cancel, title: "取消", handler: nil)
+                        vc?.pop()
                     }
+                    vm.add(action: .cancel, title: "取消", handler: nil)
                 }
             }
         } else if row == 2 {
-            Guard.push() { (vc) in
+            Guard.push("license") { (vc) in
                 vc.isFullScreen = true
                 vc.update { (vm) in
                     let titleLabel = vm.add(title: "隐私协议")
@@ -105,9 +103,7 @@ class TestGuardVC: BaseListVC {
                         vc?.pop()
                     }
                 }
-                
             }
-            
         } else if row == 3 {
             let ac = UIAlertController(title: "Title", message: "message", preferredStyle: .actionSheet)
             let ok = UIAlertAction(title: "OK", style: .default, handler: nil)
@@ -120,7 +116,6 @@ class TestGuardVC: BaseListVC {
             let vc = UIViewController()
             vc.view.backgroundColor = .white
             vc.title = "ceshi"
-            
             present(vc, animated: true, completion: nil)
         }
     

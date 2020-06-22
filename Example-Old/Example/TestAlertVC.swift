@@ -116,24 +116,15 @@ class TestAlertVC: BaseListVC {
             loading()
         } else if row == 4 {
             func loading(_ index: Int = 1) {
-                Alert.find("loading", last: { (a) in
-                    Toast.find("loading-tip", last: { (t) in
+                if let _ = Alert.find("loading").last {
+                    Toast.push("loading-tip") { (t) in
                         t.update { (vm) in
                             vm.title = "此时又调用了一次相同的弹窗 x\(index)"
                         }
                         t.pulse()
-                    }) {
-                        Toast.push(title: "此时又调用了一次相同的弹窗 x\(index)", message: "页面应该是没有任何变化的") { (t) in
-                            t.identifier = "loading-tip"
-                            t.update { (vm) in
-                                vm.scene = .default
-                                
-                            }
-                        }
                     }
-                }) {
-                    Alert.push() { (a) in
-                        a.identifier = "loading"
+                } else {
+                    Alert.push("loading") { (a) in
                         a.update { (vm) in
                             vm.scene = .loading
                             vm.title = "正在加载"

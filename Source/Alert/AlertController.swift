@@ -172,9 +172,26 @@ public extension Alert {
         return Alert(scene: scene, title: title, message: message, actions: actions).push()
     }
     
+    /// 创建实例并推入屏幕
+    /// - Parameters:
+    ///   - identifier: 唯一标识
+    ///   - toast: 实例对象
+    /// - Returns: 回调
+    @discardableResult class func push(_ identifier: String, instance: @escaping (Alert) -> Void) -> Alert {
+        if let a = find(identifier).last {
+            instance(a)
+            return a
+        } else {
+            return Alert() { (aa) in
+                aa.identifier = identifier
+                instance(aa)
+            }.push()
+        }
+    }
+    
     /// 查找指定的实例
     /// - Parameter identifier: 指定实例的标识
-    class func find(_ identifier: String?) -> [Alert] {
+    class func find(_ identifier: String) -> [Alert] {
         var aa = [Alert]()
         for a in Alert.alerts {
             if a.identifier == identifier {
@@ -188,11 +205,9 @@ public extension Alert {
     /// - Parameter identifier: 标识
     /// - Parameter last: 已经存在（获取最后一个）
     /// - Parameter none: 不存在
-    class func find(_ identifier: String?, last: ((Alert) -> Void)? = nil, none: (() -> Void)? = nil) {
+    class func find(_ identifier: String, last: @escaping (Alert) -> Void) {
         if let t = find(identifier).last {
-            last?(t)
-        } else {
-            none?()
+            last(t)
         }
     }
     
@@ -204,7 +219,7 @@ public extension Alert {
     
     /// 弹出屏幕
     /// - Parameter identifier: 指定实例的标识
-    class func pop(_ identifier: String?) {
+    class func pop(_ identifier: String) {
         for a in find(identifier) {
             a.pop()
         }
