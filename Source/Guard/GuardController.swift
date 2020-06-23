@@ -185,14 +185,14 @@ public extension Guard {
     ///   - identifier: 唯一标识
     ///   - toast: 实例对象
     /// - Returns: 回调
-    @discardableResult class func push(_ identifier: String, to viewController: UIViewController? = nil, _ instance: @escaping (Guard) -> Void) -> Guard {
+    @discardableResult class func push(_ identifier: String, to viewController: UIViewController? = nil, _ instance: ( (Guard) -> Void)? = nil) -> Guard {
         if let g = find(identifier).last {
-            instance(g)
+            instance?(g)
             return g
         } else {
             return Guard() { (gg) in
                 gg.identifier = identifier
-                instance(gg)
+                instance?(gg)
             }.push(to: viewController)
         }
     }

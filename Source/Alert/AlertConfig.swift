@@ -313,6 +313,11 @@ fileprivate var privReloadData: (ProHUD.Alert) -> Void = {
         // 设置持续时间
         vc.vm.updateDuration()
         
+        // id 包含 .rotate 的会自动旋转
+        if vc.vm.scene.identifier.contains(".rotate") {
+            vc.startRotate()
+        }
+        
         // 「隐藏」按钮出现的时间
         vc.vm.hideTimerBlock?.cancel()
         if vc.buttonEvents.count == 0 {

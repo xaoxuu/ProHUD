@@ -18,3 +18,13 @@ extension ProHUD {
         return Inspire.shared.screen.safeAreaInsets
     }
 }
+
+
+func == (left: ProHUD.Scene, right: ProHUD.Scene) -> Bool {
+    return left.identifier == right.identifier
+}
+
+
+func != (left: ProHUD.Scene, right: ProHUD.Scene) -> Bool {
+    return left.identifier != right.identifier
+}

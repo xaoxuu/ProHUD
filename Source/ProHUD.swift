@@ -40,61 +40,76 @@ public extension ProHUD.Scene {
         id = identifier
     }
     static var `default`: ProHUD.Scene {
-        var scene = ProHUD.Scene.init(identifier: "default")
+        var scene = ProHUD.Scene.init(identifier: "prohud.default")
         scene.image = ProHUD.image(named: "prohud.note")
         return scene
     }
     static var message: ProHUD.Scene {
-        var scene = ProHUD.Scene.init(identifier: "message")
+        var scene = ProHUD.Scene.init(identifier: "prohud.message")
         scene.image = ProHUD.image(named: "prohud.message")
         return scene
     }
     static var loading: ProHUD.Scene {
-        var scene = ProHUD.Scene.init(identifier: "loading")
+        var scene = ProHUD.Scene.init(identifier: "prohud.loading.rotate")
+        scene.image = ProHUD.image(named: "prohud.rainbow.circle")
+        scene.title = "Loading"
         scene.alertDuration = 0
         scene.toastDuration = 0
-        scene.image = ProHUD.image(named: "prohud.rainbow.circle")
         return scene
     }
     static var success: ProHUD.Scene {
-        var scene = ProHUD.Scene.init(identifier: "success")
-        scene.alertDuration = 2
+        var scene = ProHUD.Scene.init(identifier: "prohud.success")
         scene.image = ProHUD.image(named: "prohud.checkmark")
+        scene.title = "Success"
+        scene.alertDuration = 2
         return scene
     }
     static var warning: ProHUD.Scene {
-        var scene = ProHUD.Scene.init(identifier: "warning")
+        var scene = ProHUD.Scene.init(identifier: "prohud.warning")
+        scene.image = ProHUD.image(named: "prohud.exclamationmark")
+        scene.title = "Warning"
+        scene.message = "Something happened."
         scene.alertDuration = 2
         scene.toastDuration = 5
-        scene.image = ProHUD.image(named: "prohud.exclamationmark")
         return scene
     }
     static var error: ProHUD.Scene {
-        var scene = ProHUD.Scene.init(identifier: "error")
+        var scene = ProHUD.Scene.init(identifier: "prohud.error")
+        scene.image = ProHUD.image(named: "prohud.xmark")
+        scene.title = "Error"
+        scene.message = "Please try again later."
         scene.alertDuration = 2
         scene.toastDuration = 5
+        return scene
+    }
+    static var failure: ProHUD.Scene {
+        var scene = ProHUD.Scene.init(identifier: "prohud.failure")
         scene.image = ProHUD.image(named: "prohud.xmark")
+        scene.title = "Failure"
+        scene.message = "Please try again later."
+        scene.alertDuration = 2
+        scene.toastDuration = 5
         return scene
     }
     static var confirm: ProHUD.Scene {
-        var scene = ProHUD.Scene.init(identifier: "confirm")
+        var scene = ProHUD.Scene.init(identifier: "prohud.confirm")
+        scene.image = ProHUD.image(named: "prohud.questionmark")
         scene.alertDuration = 2
         scene.toastDuration = 5
-        scene.image = ProHUD.image(named: "prohud.questionmark")
         return scene
     }
     static var privacy: ProHUD.Scene {
-        var scene = ProHUD.Scene.init(identifier: "privacy")
+        var scene = ProHUD.Scene.init(identifier: "prohud.privacy")
+        scene.image = ProHUD.image(named: "prohud.privacy")
         scene.alertDuration = 2
         scene.toastDuration = 5
-        scene.image = ProHUD.image(named: "prohud.privacy")
         return scene
     }
     static var delete: ProHUD.Scene {
-        var scene = ProHUD.Scene.init(identifier: "delete")
+        var scene = ProHUD.Scene.init(identifier: "prohud.delete")
+        scene.image = ProHUD.image(named: "prohud.trash")
         scene.alertDuration = 2
         scene.toastDuration = 5
-        scene.image = ProHUD.image(named: "prohud.trash")
         return scene
     }
     
