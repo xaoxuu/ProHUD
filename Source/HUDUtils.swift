@@ -15,6 +15,6 @@ extension String {
 
 extension ProHUD {
     static var safeAreaInsets: UIEdgeInsets {
-        return Inspire.shared.screen.updatedSafeAreaInsets
+        return Inspire.shared.screen.safeAreaInsets
     }
 }

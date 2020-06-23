@@ -44,37 +44,42 @@ class TestToastVC: BaseListVC {
             }.startRotate()
             simulateSync()
         } else if row == 1 {
-            Toast.push("progress") { (t) in
-                t.update { (vm) in
-                    vm.scene = .loading
-                    vm.title = "正在同步"
-                    vm.message = "请稍等片刻"
-                }
-                t.startRotate()
-                t.update(progress: 0)
-                let s = DispatchSemaphore(value: 1)
-                DispatchQueue.global().async {
-                    for i in 0 ... 5 {
-                        s.wait()
-                        DispatchQueue.main.async {
-                            Toast.find("progress", last: { (t) in
-                                t.update(progress: CGFloat(i)/5)
-                                print("\(CGFloat(i)/5)")
-                                if i == 5 {
-                                    t.update { (vm) in
-                                        vm.scene = .success
-                                        vm.title = "同步成功"
-                                        vm.message = "xxx"
+            if let _ = Toast.find("progress").last {
+                 
+            } else {
+                Toast.push("progress") { (t) in
+                    t.update { (vm) in
+                        vm.scene = .loading
+                        vm.title = "正在同步"
+                        vm.message = "请稍等片刻"
+                    }
+                    t.startRotate()
+                    t.update(progress: 0)
+                    let s = DispatchSemaphore(value: 1)
+                    DispatchQueue.global().async {
+                        for i in 0 ... 5 {
+                            s.wait()
+                            DispatchQueue.main.async {
+                                Toast.find("progress", last: { (t) in
+                                    t.update(progress: CGFloat(i)/5)
+                                    print("\(CGFloat(i)/5)")
+                                    if i == 5 {
+                                        t.update { (vm) in
+                                            vm.scene = .success
+                                            vm.title = "同步成功"
+                                            vm.message = "xxx"
+                                        }
                                     }
+                                })
+                                DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                                    s.signal()
                                 }
-                            })
-                            DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                                s.signal()
                             }
                         }
                     }
                 }
             }
+            
        } else if row == 2 {
             let t = Toast.push(scene: .success, title: "同步成功", message: "点击查看详情")
             t.didTapped { [weak self, weak t] in
