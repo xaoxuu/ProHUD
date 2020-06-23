@@ -141,10 +141,10 @@ public extension LoadingRotateAnimation {
     
     /// 停止旋转
     /// - Parameter layer: 图层
-    func endRotate(_ layer: CALayer? = nil) {
+    func stopRotate(_ layer: CALayer? = nil) {
         DispatchQueue.main.async {
             self.animateLayer = nil
-            (layer ?? self.imageView.layer)?.endRotate()
+            (layer ?? self.imageView.layer)?.stopRotate()
             NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
             NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
         }

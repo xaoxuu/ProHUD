@@ -245,8 +245,8 @@ extension CALayer {
         }
     }
     
-    /// 结束旋转
-    func endRotate() {
+    /// 停止旋转
+    func stopRotate() {
         removeAnimation(forKey: .rotateKey)
     }
     
