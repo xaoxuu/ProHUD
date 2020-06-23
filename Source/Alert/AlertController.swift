@@ -63,10 +63,10 @@ public extension ProHUD {
         /// - Parameter title: 标题
         /// - Parameter message: 内容
         /// - Parameter icon: 图标
-        public convenience init(scene: Scene = .default, title: String? = nil, message: String? = nil, actions: ((Alert) -> Void)? = nil) {
+        public convenience init(scene: Scene?, title: String? = nil, message: String? = nil, actions: ((Alert) -> Void)? = nil) {
             self.init()
             vm.vc = self
-            vm.scene = scene
+            vm.scene = scene ?? .default
             vm.title = title
             vm.message = message
             actions?(self)
@@ -148,7 +148,7 @@ public extension Alert {
     }
     
     
-    /// 最小化事件
+    /// 强制关闭弹窗的事件
     /// - Parameter callback: 事件回调
     func didForceQuit(_ callback: (() -> Void)?) {
         vm.forceQuitCallback = callback
@@ -177,14 +177,19 @@ public extension Alert {
     ///   - identifier: 唯一标识
     ///   - toast: 实例对象
     /// - Returns: 回调
-    @discardableResult class func push(_ identifier: String, instance: @escaping (Alert) -> Void) -> Alert {
+    @discardableResult class func push(_ identifier: String, scene: ProHUD.Scene? = nil, instance: ((Alert) -> Void)? = nil) -> Alert {
         if let a = find(identifier).last {
-            instance(a)
+            if let s = scene, s != a.vm.scene {
+                a.update { (vm) in
+                    vm.scene = s
+                }
+            }
+            instance?(a)
             return a
         } else {
-            return Alert() { (aa) in
+            return Alert(scene: scene) { (aa) in
                 aa.identifier = identifier
-                instance(aa)
+                instance?(aa)
             }.push()
         }
     }

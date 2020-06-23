@@ -16,27 +16,25 @@ class ViewController: BaseListVC {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         title = "\(Bundle.main.infoDictionary?["CFBundleName"] ?? "ProHUD")"
-    }
-    
-    override var titles: [String] {
-        return ["Toast", "Alert", "Guard"]
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.row == 0 {
-            let vc = TestToastVC()
-            vc.title = titles[indexPath.row]
-            navigationController?.pushViewController(vc, animated: true)
-        } else if indexPath.row == 1 {
-            let vc = TestAlertVC()
-            vc.title = titles[indexPath.row]
-            navigationController?.pushViewController(vc, animated: true)
-        } else {
-            let vc = TestGuardVC()
-            vc.title = titles[indexPath.row]
-            navigationController?.pushViewController(vc, animated: true)
+
+        vm.addSection(title: "") { (sec) in
+            sec.addRow(title: "Toast") {
+                let vc = TestToastVC()
+                vc.title = "Toast"
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+            sec.addRow(title: "Alert") {
+                let vc = TestAlertVC()
+                vc.title = "Alert"
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+            sec.addRow(title: "Guard") {
+                let vc = TestGuardVC()
+                vc.title = "Guard"
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
         }
+        
     }
     
 }

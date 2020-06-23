@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                a.bodyFont = .regular(17)
 //                a.boldTextFont = .bold(18)
 //                a.buttonFont = .bold(18)
-                a.forceQuitTimer = 3
+                a.forceQuitTimer = 5 // 多少秒后可以强制关闭弹窗（为了方便测试，一般不要设置这么小）
             }
 //            cfg.toast { (t) in
 //                t.titleFont = .bold(18)
@@ -78,7 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension ProHUD.Scene {
     
     static var delete: ProHUD.Scene {
-        var scene = ProHUD.Scene(identifier: "delete")
+        var scene = ProHUD.Scene(identifier: "prohud.delete")
         scene.image = UIImage(named: "prohud.trash")
         scene.title = "确认删除"
         scene.message = "此操作不可撤销"

@@ -75,11 +75,11 @@ public extension ProHUD {
         /// - Parameter title: 标题
         /// - Parameter message: 内容
         /// - Parameter icon: 图标
-        public convenience init(scene: Scene = .default, title: String? = nil, message: String? = nil, icon: UIImage? = nil, duration: TimeInterval? = nil, actions: ((Toast) -> Void)? = nil) {
+        public convenience init(scene: Scene?, title: String? = nil, message: String? = nil, icon: UIImage? = nil, duration: TimeInterval? = nil, actions: ((Toast) -> Void)? = nil) {
             self.init()
             vm.vc = self
-            
-            vm.scene = scene
+
+            vm.scene = scene ?? .default
             vm.title = title
             vm.message = message
             vm.icon = icon
@@ -227,14 +227,19 @@ public extension Toast {
     ///   - identifier: 唯一标识
     ///   - toast: 实例对象
     /// - Returns: 回调
-    @discardableResult class func push(_ identifier: String, instance: @escaping (Toast) -> Void) -> Toast {
+    @discardableResult class func push(_ identifier: String, scene: ProHUD.Scene? = nil, instance: ((Toast) -> Void)? = nil) -> Toast {
         if let t = find(identifier).last {
-            instance(t)
+            if let s = scene, s != t.vm.scene {
+                t.update { (vm) in
+                    vm.scene = s
+                }
+            }
+            instance?(t)
             return t
         } else {
-            return Toast() { (tt) in
+            return Toast(scene: scene) { (tt) in
                 tt.identifier = identifier
-                instance(tt)
+                instance?(tt)
             }.push()
         }
     }
