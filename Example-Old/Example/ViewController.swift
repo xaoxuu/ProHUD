@@ -50,6 +50,8 @@ class ViewController: BaseListVC {
             }
             sec.addRow(title: "持续时间", subtitle: "设置 duration 来指定持续时间，设置为 0 可以永久持续。\n原生提供的 loading 场景持续时间为永久。\n如果弹窗添加了按钮，则持续时间会自动变成永久，除非手动设置。") {
             }
+            sec.addRow(title: "支持深色模式", subtitle: "切换一下模式看看") {
+            }
         }
         
     }
