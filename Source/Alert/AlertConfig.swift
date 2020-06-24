@@ -129,6 +129,8 @@ fileprivate var privUpdateImage: (ProHUD.Alert) -> Void = {
         vc.imageView.layer.removeAllAnimations()
         vc.animateLayer = nil
         vc.animation = nil
+        
+        // 移除进度
         vc.progressView?.removeFromSuperview()
     }
 }()
