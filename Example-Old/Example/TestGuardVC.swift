@@ -9,6 +9,7 @@
 import UIKit
 import ProHUD
 import Inspire
+import WebKit
 
 class TestGuardVC: BaseListVC {
 
@@ -16,8 +17,8 @@ class TestGuardVC: BaseListVC {
         super.viewDidLoad()
         
         vm.addSection(title: "简单使用") { (sec) in
-            // MARK: 场景：删除菜单
-            sec.addRow(title: "场景：删除菜单") {
+            // MARK: 删除菜单
+            sec.addRow(title: "示例：删除菜单") {
                 Guard.push("del") { (vc) in
                     vc.update { (vm) in
                         vm.add(action: .destructive, title: "删除") { [weak vc] in
@@ -36,8 +37,8 @@ class TestGuardVC: BaseListVC {
                 }
             }
             
-            // MARK: 场景：升级至专业版
-            sec.addRow(title: "场景：升级至专业版") {
+            // MARK: 升级至专业版
+            sec.addRow(title: "示例：升级至专业版") {
                 // 可以通过id来避免重复
                 Guard.push("pro") { (vc) in
                     vc.identifier = "pro"
@@ -84,10 +85,9 @@ class TestGuardVC: BaseListVC {
         }
         
         vm.addSection(title: "添加自定义视图") { (sec) in
-            // MARK: 场景：选项切换
-            sec.addRow(title: "场景：选项切换", subtitle: "很方便地添加自定义控件") {
+            // MARK: 选项切换
+            sec.addRow(title: "示例：修改背景蒙版", subtitle: "很方便地添加自定义控件") {
                 Guard.push() { (vc) in
-                    
                     if #available(iOS 13.0, *) {
                         let imgv = UIImageView(image: UIImage(systemName: "photo.fill.on.rectangle.fill"))
                         vc.textStack.addArrangedSubview(imgv)
@@ -99,15 +99,20 @@ class TestGuardVC: BaseListVC {
                         // Fallback on earlier versions
                     }
                     
+                    // 添加标题
                     vc.vm.add(title: "背景蒙版")
+                    // 添加标题
                     vc.vm.add(subTitle: "选择一种模糊效果")
+                    // 添加控件
                     let seg = UISegmentedControl(items: ["extraLight", "light", "dark", "none"])
                     seg.selectedSegmentIndex = 1
                     vc.textStack.addArrangedSubview(seg)
                     seg.snp.makeConstraints { (mk) in
                         mk.height.equalTo(40)
                     }
+                    // 添加标题
                     vc.vm.add(subTitle: "设置蒙版透明度")
+                    // 添加控件
                     let slider = UISlider()
                     slider.minimumValue = 0
                     slider.maximumValue = 100
@@ -116,31 +121,39 @@ class TestGuardVC: BaseListVC {
                     slider.snp.makeConstraints { (mk) in
                         mk.height.equalTo(40)
                     }
+                    // 添加按钮
                     vc.vm.add(action: .default, title: "OK") { [weak vc] in
                         vc?.pop()
                     }
                 }
             }
              
-            // MARK: 场景：隐私协议页面
-            sec.addRow(title: "场景：隐私协议页面", subtitle: "也可以完全控制整个页面") {
+            // MARK: 隐私协议页面
+            sec.addRow(title: "示例：弹出隐私协议页面", subtitle: "也可以完全控制整个页面") {
                 Guard.push("license") { (vc) in
+                    // 全屏
                     vc.isFullScreen = true
-                    vc.update { (vm) in
-                        let titleLabel = vm.add(title: "隐私协议")
-                        titleLabel.snp.makeConstraints { (mk) in
-                            mk.height.equalTo(44)
-                        }
-                        let tv = UITextView()
-                        tv.backgroundColor = .white
-                        tv.isEditable = false
-                        vc.textStack.addArrangedSubview(tv)
-                        tv.text = "这里可以插入一个webView"
-                        vm.add(message: "请认真阅读以上内容，当您阅读完毕并同意协议内容时点击接受按钮。")
-                        
-                        vm.add(action: .default, title: "接受") { [weak vc] in
-                            vc?.pop()
-                        }
+                    // 添加标题
+                    vc.vm.add(title: "隐私协议").snp.makeConstraints { (mk) in
+                        mk.height.equalTo(44)
+                    }
+                    // 添加网页
+                    let web = WKWebView.init(frame: .zero)
+                    web.layer.masksToBounds = true
+                    web.layer.cornerRadius = ProHUD.shared.config.guard.buttonCornerRadius
+                    web.scrollView.showsHorizontalScrollIndicator = false
+                    if let url = URL(string: "https://xaoxuu.com/wiki/prohud/") {
+                        web.load(URLRequest(url: url))
+                    }
+                    vc.textStack.addArrangedSubview(web)
+                    web.snp.makeConstraints { (mk) in
+                        mk.leading.trailing.equalToSuperview()
+                    }
+                    // 添加文本
+                    vc.vm.add(message: "请认真阅读以上内容，当您阅读完毕并同意协议内容时点击接受按钮。")
+                    // 添加按钮
+                    vc.vm.add(action: .default, title: "接受") { [weak vc] in
+                        vc?.pop()
                     }
                 }
             }

@@ -9,6 +9,7 @@
 import UIKit
 import ProHUD
 import SnapKit
+import WebKit
 
 class ViewController: BaseListVC {
     
@@ -17,6 +18,7 @@ class ViewController: BaseListVC {
         // Do any additional setup after loading the view.
         title = "\(Bundle.main.infoDictionary?["CFBundleName"] ?? "ProHUD")"
 
+        
         vm.addSection(title: "测试项目") { (sec) in
             sec.addRow(title: "Toast", subtitle: "横幅控件，支持图片、标题和正文。\n不支持添加按钮，但可以接受一个点击事件。") {
                 let vc = TestToastVC()
@@ -51,6 +53,35 @@ class ViewController: BaseListVC {
             sec.addRow(title: "持续时间", subtitle: "设置 duration 来指定持续时间，设置为 0 可以永久持续。\n原生提供的 loading 场景持续时间为永久。\n如果弹窗添加了按钮，则持续时间会自动变成永久，除非手动设置。") {
             }
             sec.addRow(title: "支持深色模式", subtitle: "切换一下模式看看") {
+            }
+        }
+        
+        vm.addSection(title: "更多") { (sec) in
+            sec.addRow(title: "查看在线文档", subtitle: "https://xaoxuu.com/wiki/prohud/") {
+                Guard.push("license") { (vc) in
+                    // 全屏
+                    vc.isFullScreen = true
+                    // 添加标题
+                    vc.vm.add(title: "ProHUD").snp.makeConstraints { (mk) in
+                        mk.height.equalTo(44)
+                    }
+                    // 添加网页
+                    let web = WKWebView.init(frame: .zero)
+                    web.layer.masksToBounds = true
+                    web.layer.cornerRadius = ProHUD.shared.config.guard.buttonCornerRadius
+                    web.scrollView.showsHorizontalScrollIndicator = false
+                    if let url = URL(string: "https://xaoxuu.com/wiki/prohud/") {
+                        web.load(URLRequest(url: url))
+                    }
+                    vc.textStack.addArrangedSubview(web)
+                    web.snp.makeConstraints { (mk) in
+                        mk.leading.trailing.equalToSuperview()
+                    }
+                    // 添加按钮
+                    vc.vm.add(action: .default, title: "关闭") { [weak vc] in
+                        vc?.pop()
+                    }
+                }
             }
         }
         
