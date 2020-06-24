@@ -126,7 +126,8 @@ fileprivate var privUpdateImage: (ProHUD.Alert) -> Void = {
             mk.width.equalTo(config.iconSize.width)
             mk.height.equalTo(config.iconSize.height)
         }
-        vc.imageView.layer.removeAllAnimations()
+        // 移除动画
+        vc.stopRotate(vc.animateLayer)
         vc.animateLayer = nil
         vc.animation = nil
         

@@ -116,12 +116,18 @@ fileprivate var privReloadData: (ProHUD.Toast) -> Void = {
         // 设置持续时间
         vc.vm.updateDuration()
         
+        // 移除动画
+        vc.stopRotate(vc.animateLayer)
+        vc.animateLayer = nil
+        vc.animation = nil
+        
+        // 移除进度
+        vc.progressView?.removeFromSuperview()
+        
         // id 包含 .rotate 的会自动旋转
         if vc.vm.scene.identifier.contains(".rotate") {
             vc.startRotate()
         }
-        // 移除进度
-        vc.progressView?.removeFromSuperview()
         
     }
     
