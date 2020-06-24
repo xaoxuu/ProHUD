@@ -80,7 +80,7 @@ extension BaseListVC: UITableViewDataSource, UITableViewDelegate {
             cell.textLabel?.numberOfLines = 0
             cell.detailTextLabel?.textColor = .gray
             cell.detailTextLabel?.numberOfLines = 0
-            
+            cell.accessoryType = .disclosureIndicator 
         }
         cell.textLabel?.text = vm.sections[indexPath.section].rows[indexPath.row].title
         cell.detailTextLabel?.text = vm.sections[indexPath.section].rows[indexPath.row].subtitle

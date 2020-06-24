@@ -92,4 +92,32 @@ extension ProHUD.Scene {
         scene.message = "一旦购买拒不退款"
         return scene
     }
+    
+    /// 重写的loading场景
+    static var loading: ProHUD.Scene {
+        var scene = ProHUD.Scene.init(identifier: "prohud.loading.rotate")
+        scene.image = UIImage(named: "prohud.rainbow.circle")
+        scene.title = "坐和放宽"
+        scene.message = "正在处理一些事情"
+        scene.alertDuration = 0
+        scene.toastDuration = 0
+        return scene
+    }
+    
+    static var sync: ProHUD.Scene {
+        var scene = ProHUD.Scene.init(identifier: "sync.rotate")
+        scene.image = UIImage(named: "prohud.rainbow.circle")
+        scene.title = "正在同步"
+        scene.alertDuration = 0
+        scene.toastDuration = 0
+        return scene
+    }
+    static var sync2: ProHUD.Scene {
+        var scene = ProHUD.Scene.init(identifier: "sync.rotate")
+        scene.image = UIImage(named: "prohud.rainbow.circle")
+        scene.alertDuration = 0
+        scene.toastDuration = 0
+        return scene
+    }
+    
 }

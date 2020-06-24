@@ -15,7 +15,7 @@ class TestGuardVC: BaseListVC {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        vm.addSection(title: "") { (sec) in
+        vm.addSection(title: "简单使用") { (sec) in
             // MARK: 场景：删除菜单
             sec.addRow(title: "场景：删除菜单") {
                 Guard.push("del") { (vc) in
@@ -81,8 +81,49 @@ class TestGuardVC: BaseListVC {
                 }
             }
             
+        }
+        
+        vm.addSection(title: "添加自定义视图") { (sec) in
+            // MARK: 场景：选项切换
+            sec.addRow(title: "场景：选项切换", subtitle: "很方便地添加自定义控件") {
+                Guard.push() { (vc) in
+                    
+                    if #available(iOS 13.0, *) {
+                        let imgv = UIImageView(image: UIImage(systemName: "photo.fill.on.rectangle.fill"))
+                        vc.textStack.addArrangedSubview(imgv)
+                        imgv.contentMode = .scaleAspectFit
+                        imgv.snp.makeConstraints { (mk) in
+                            mk.height.equalTo(80)
+                        }
+                    } else {
+                        // Fallback on earlier versions
+                    }
+                    
+                    vc.vm.add(title: "背景蒙版")
+                    vc.vm.add(subTitle: "选择一种模糊效果")
+                    let seg = UISegmentedControl(items: ["extraLight", "light", "dark", "none"])
+                    seg.selectedSegmentIndex = 1
+                    vc.textStack.addArrangedSubview(seg)
+                    seg.snp.makeConstraints { (mk) in
+                        mk.height.equalTo(40)
+                    }
+                    vc.vm.add(subTitle: "设置蒙版透明度")
+                    let slider = UISlider()
+                    slider.minimumValue = 0
+                    slider.maximumValue = 100
+                    slider.value = 100
+                    vc.textStack.addArrangedSubview(slider)
+                    slider.snp.makeConstraints { (mk) in
+                        mk.height.equalTo(40)
+                    }
+                    vc.vm.add(action: .default, title: "OK") { [weak vc] in
+                        vc?.pop()
+                    }
+                }
+            }
+             
             // MARK: 场景：隐私协议页面
-            sec.addRow(title: "场景：隐私协议页面") {
+            sec.addRow(title: "场景：隐私协议页面", subtitle: "也可以完全控制整个页面") {
                 Guard.push("license") { (vc) in
                     vc.isFullScreen = true
                     vc.update { (vm) in
@@ -103,7 +144,9 @@ class TestGuardVC: BaseListVC {
                     }
                 }
             }
-            
+        }
+        
+        vm.addSection(title: "对比效果") { (sec) in
             // MARK: 对比：原生的ActionSheet
             sec.addRow(title: "对比：原生的ActionSheet") {
                 let ac = UIAlertController(title: "Title", message: "message", preferredStyle: .actionSheet)
@@ -122,8 +165,6 @@ class TestGuardVC: BaseListVC {
                 self.present(vc, animated: true, completion: nil)
             }
         }
-        
-        
     }
     
 

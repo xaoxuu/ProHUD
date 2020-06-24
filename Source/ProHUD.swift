@@ -47,6 +47,8 @@ public extension ProHUD.Scene {
     static var message: ProHUD.Scene {
         var scene = ProHUD.Scene.init(identifier: "prohud.message")
         scene.image = ProHUD.image(named: "prohud.message")
+        scene.alertDuration = 2
+        scene.toastDuration = 5
         return scene
     }
     static var loading: ProHUD.Scene {
