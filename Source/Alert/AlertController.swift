@@ -96,7 +96,7 @@ public extension Alert {
             window.resignKey()
             window.addSubview(view)
             if #available(iOS 13.0, *) {
-                window.windowScene = cfg.windowScene ?? UIApplication.shared.windows.last?.windowScene
+                window.windowScene = cfg.windowScene ?? UIApplication.shared.windows.first?.windowScene
             } else {
                 // Fallback on earlier versions
             }

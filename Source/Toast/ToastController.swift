@@ -120,7 +120,7 @@ public extension Toast {
             let window = UIWindow(frame: .zero)
             self.window = window
             if #available(iOS 13.0, *) {
-                window.windowScene = cfg.windowScene ?? UIApplication.shared.windows.last?.windowScene
+                window.windowScene = cfg.windowScene ?? UIApplication.shared.windows.first?.windowScene
             } else {
                 // Fallback on earlier versions
             }
