@@ -51,7 +51,7 @@
 		CDD8545D249CD681004BCE22 /* TestToastVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestToastVC.swift; path = "../../Example-Old/Example/TestToastVC.swift"; sourceTree = "<group>"; };
 		CDD8545E249CD681004BCE22 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = "../../Example-Old/Example/ViewController.swift"; sourceTree = "<group>"; };
 		CDD8545F249CD681004BCE22 /* TestAlertVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestAlertVC.swift; path = "../../Example-Old/Example/TestAlertVC.swift"; sourceTree = "<group>"; };
-		CDF2C8DD249722F800C81274 /* ProHUD Xcode11.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ProHUD Xcode11.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CDF2C8DD249722F800C81274 /* ProHUD Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ProHUD Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDF2C8E0249722F800C81274 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CDF2C8E2249722F800C81274 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		CDF2C8E7249722F800C81274 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -105,7 +105,7 @@
 		CDF2C8DE249722F800C81274 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CDF2C8DD249722F800C81274 /* ProHUD Xcode11.app */,
+				CDF2C8DD249722F800C81274 /* ProHUD Demo.app */,
 				CDF2C8F3249722F900C81274 /* Example-Xcode11Tests.xctest */,
 				CDF2C8FE249722F900C81274 /* Example-Xcode11UITests.xctest */,
 			);
@@ -171,7 +171,7 @@
 				CDF2C9492497577C00C81274 /* ProHUD */,
 			);
 			productName = "Example-Xcode11";
-			productReference = CDF2C8DD249722F800C81274 /* ProHUD Xcode11.app */;
+			productReference = CDF2C8DD249722F800C81274 /* ProHUD Demo.app */;
 			productType = "com.apple.product-type.application";
 		};
 		CDF2C8F2249722F900C81274 /* Example-Xcode11Tests */ = {
@@ -478,7 +478,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.xaoxuu.Example-Xcode11";
-				PRODUCT_NAME = "ProHUD Xcode11";
+				PRODUCT_NAME = "ProHUD Demo";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -496,7 +496,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.xaoxuu.Example-Xcode11";
-				PRODUCT_NAME = "ProHUD Xcode11";
+				PRODUCT_NAME = "ProHUD Demo";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
