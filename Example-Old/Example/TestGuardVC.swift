@@ -48,7 +48,6 @@ class TestGuardVC: BaseListVC {
                         vm.add(message: "功能1功能2...")
                         vm.add(subTitle: "价格")
                         vm.add(message: "只需一次性付费$2999即可永久享用。")
-                        vm.add(message: "只需一次性付费$2999即可永久享用。")
                         vm.add(action: .destructive, title: "购买") { [weak vc] in
                             Alert.push(scene: .buy) { (vc) in
                                 vc.identifier = "confirm"

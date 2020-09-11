@@ -64,7 +64,11 @@ class TestAlertVC: BaseListVC {
         vm.addSection(title: "常用示例") { (sec) in
             // MARK: 同步成功（写法1）
             sec.addRow(title: "正在同步（写法1）", subtitle: "创建的时候就布局好了。") {
-                Alert.push("loading", scene: .sync)
+                Alert.push("loading", scene: .sync2) { (vc) in
+                    vc.update { (vm) in
+                        vm.title = "正在同步"
+                    }
+                }
                 loadingSuccessAfter2Seconds()
             }
             // MARK: 同步成功（写法2）

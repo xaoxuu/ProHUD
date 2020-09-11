@@ -31,6 +31,11 @@ class TestToastVC: BaseListVC {
         // Do any additional setup after loading the view.
         
         vm.addSection(title: "简单的例子") { (sec) in
+            // MARK: Hello World
+            sec.addRow(title: "Hello World") {
+                Toast.push(title: "Hello World", message: "This is a test message from ProHUD.")
+            }
+            
             // MARK: 场景：正在加载（没有进度显示）
             sec.addRow(title: "场景：正在加载（没有进度显示）") {
                 Toast.push(scene: .loading).startRotate()
