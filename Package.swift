@@ -1,4 +1,4 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.3
 
 import PackageDescription
 
@@ -16,7 +16,8 @@ let package = Package(
         .target(
             name: "ProHUD",
             dependencies: ["SnapKit", "Inspire"],
-            path: "Source"
+            path: "Source",
+            resources: [.process("ProHUD.xcassets")]
         )
     ],
     swiftLanguageVersions: [.v5]
