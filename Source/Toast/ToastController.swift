@@ -13,7 +13,7 @@ public typealias Toast = ProHUD.Toast
 public extension ProHUD {
     class Toast: HUDController {
         
-        internal static var toasts = [Toast]()
+        static var toasts = [Toast]()
         
         public var window: UIWindow?
         
@@ -66,7 +66,7 @@ public extension ProHUD {
         /// 视图模型
         public var vm = ViewModel()
         
-        internal var maxY = CGFloat(0)
+        var maxY = CGFloat(0)
         
         // MARK: 生命周期
         
@@ -120,9 +120,7 @@ public extension Toast {
             let window = UIWindow(frame: .zero)
             self.window = window
             if #available(iOS 13.0, *) {
-                window.windowScene = cfg.windowScene ?? UIApplication.shared.windows.first?.windowScene
-            } else {
-                // Fallback on earlier versions
+                window.windowScene = cfg.windowScene ?? .currentWindowScene
             }
             window.windowLevel = .proToast
             window.backgroundColor = .clear
@@ -270,11 +268,7 @@ public extension Toast {
     class func pop(_ toast: Toast) {
         toast.willDisappearCallback?()
         if toasts.count > 1 {
-            for (i, t) in toasts.enumerated() {
-                if t == toast {
-                    toasts.remove(at: i)
-                }
-            }
+            toasts.removeAll { $0 == toast }
             privUpdateToastsLayout()
         } else if toasts.count == 1 {
             toasts.removeAll()

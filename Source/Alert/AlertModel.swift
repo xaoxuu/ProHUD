@@ -47,15 +47,15 @@ public extension Alert {
         // MARK: 私有
         
         /// 持续时间
-        internal var durationBlock: DispatchWorkItem?
+        var durationBlock: DispatchWorkItem?
         
         /// 强制退出按钮
-        internal var hideTimerBlock: DispatchWorkItem?
+        var hideTimerBlock: DispatchWorkItem?
         
         /// 强制退出代码
-        internal var forceQuitCallback: (() -> Void)?
+        var forceQuitCallback: (() -> Void)?
         
-        internal func updateDuration() {
+        func updateDuration() {
             durationBlock?.cancel()
             if let t = duration ?? scene.alertDuration, t > 0 {
                 durationBlock = DispatchWorkItem(block: { [weak self] in

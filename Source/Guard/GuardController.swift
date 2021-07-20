@@ -119,21 +119,8 @@ public extension Guard {
         }
         if let vc = viewController ?? cfg.rootViewController {
             return f(vc)
-        } else {
-            // 尝试获取RootVC
-            let ws = UIApplication.shared.windows.filter { (w) -> Bool in
-                // 去除掉诸如 UITextEffectsWindow 这样的类，去掉隐藏的Window
-                if "\(type(of:w))" == "UIWindow" && w.isHidden == false && w.windowLevel == .normal {
-                    return true
-                } else {
-                    return false
-                }
-            }
-            for w in ws {
-                if let vc = w.rootViewController {
-                    return f(vc)
-                }
-            }
+        } else if let vc = UIViewController.currentRootViewController {
+            return f(vc)
             debug("⚠️自动获取根控制器失败，请设置根控制器或者传入需要push到的控制器")
         }
         return self
@@ -200,23 +187,15 @@ public extension Guard {
     /// 查找指定的实例
     /// - Parameter identifier: 指定实例的标识
     class func find(_ identifier: String?, from viewController: UIViewController? = nil) -> [Guard] {
-        var gg = [Guard]()
-        if let vc = viewController ?? cfg.rootViewController {
-            for child in vc.children {
-                if child.isKind(of: Guard.self) {
-                    if let g = child as? Guard {
-                        if let id = identifier {
-                            if g.identifier == id {
-                                gg.append(g)
-                            }
-                        } else {
-                            gg.append(g)
-                        }
-                    }
-                }
+        guard let vc = viewController ?? cfg.rootViewController ?? UIViewController.currentRootViewController else { return [] }
+        return vc.children.compactMap { (child) -> Guard? in
+            guard let child = child as? Guard else { return nil }
+            if let id = identifier, child.identifier == id {
+                return child
+            } else {
+                return child
             }
         }
-        return gg
     }
     
     /// 查找指定的实例
@@ -249,7 +228,7 @@ public extension Guard {
 
 
 // MARK: - 创建和设置
-internal extension Guard {
+extension Guard {
     
     /// 加载一个标题
     /// - Parameter text: 文本

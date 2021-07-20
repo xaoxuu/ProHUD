@@ -12,7 +12,7 @@ public extension Guard {
     
     struct ViewModel {
         
-        internal weak var vc: Guard?
+        weak var vc: Guard?
         
     }
     

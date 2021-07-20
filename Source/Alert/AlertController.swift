@@ -14,9 +14,9 @@ public typealias Alert = ProHUD.Alert
 public extension ProHUD {
     class Alert: HUDController {
         
-        internal static var alerts = [Alert]()
+        static var alerts = [Alert]()
         
-        internal static var alertWindow: UIWindow?
+        static var alertWindow: UIWindow?
         
         /// 内容视图
         public var contentView = createBlurView()
@@ -96,9 +96,7 @@ public extension Alert {
             window.resignKey()
             window.addSubview(view)
             if #available(iOS 13.0, *) {
-                window.windowScene = cfg.windowScene ?? UIApplication.shared.windows.first?.windowScene
-            } else {
-                // Fallback on earlier versions
+                window.windowScene = cfg.windowScene ?? .currentWindowScene
             }
             view.transform = .init(scaleX: 1.2, y: 1.2)
             view.alpha = 0
@@ -234,7 +232,7 @@ public extension Alert {
 
 
 // MARK: - 创建和设置
-internal extension Alert {
+extension Alert {
     
     /// 插入一个按钮
     /// - Parameter style: 样式
@@ -338,19 +336,13 @@ fileprivate extension Alert {
         alertWindow = w
         w.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0)
         // 比原生alert层级低一点
-        w.windowLevel = .proAlert
+        w.windowLevel = .alertForProHUD
         return w
     }
     
     class func privRemoveItemFromArray(alert: Alert) {
         if alerts.count > 1 {
-            for (i, a) in alerts.enumerated() {
-                if a == alert {
-                    if i < alerts.count {
-                        alerts.remove(at: i)
-                    }
-                }
-            }
+            alerts.removeAll { $0 == alert }
             privUpdateAlertsLayout()
         } else if alerts.count == 1 {
             alerts.removeAll()

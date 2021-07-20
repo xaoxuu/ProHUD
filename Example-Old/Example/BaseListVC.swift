@@ -43,8 +43,13 @@ class BaseListVC: UIViewController {
     var secs = [Section]()
     
     lazy var tableView: UITableView = {
-        let tv = UITableView(frame: .zero, style: .insetGrouped)
-        
+        let tv: UITableView
+        if #available(iOS 13.0, *) {
+            tv = UITableView(frame: .zero, style: .insetGrouped)
+        } else {
+            // Fallback on earlier versions
+            tv = UITableView(frame: .zero, style: .grouped)
+        }
         return tv
     }()
     

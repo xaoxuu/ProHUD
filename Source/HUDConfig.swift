@@ -8,6 +8,7 @@
 
 import UIKit
 
+@available(iOS 13.0, *) fileprivate var sharedWindowScene: UIWindowScene?
 
 /// HUD配置
 public extension ProHUD {
@@ -21,20 +22,12 @@ public extension ProHUD {
         
         /// iOS13必须设置此值，默认可以自动获取，如果获取失败请主动设置
         @available(iOS 13.0, *)
-        private static var sharedWindowScene: UIWindowScene?
-        
-        /// iOS13必须设置此值，默认可以自动获取，如果获取失败请主动设置
-        @available(iOS 13.0, *)
         public var windowScene: UIWindowScene? {
-            set {
-                Configuration.sharedWindowScene = newValue
-            }
-            get {
-                return Configuration.sharedWindowScene
-            }
+            set { sharedWindowScene = newValue }
+            get { sharedWindowScene }
         }
         
-        /// 动态颜色（适配iOS13）
+        /// 动态颜色
         public lazy var dynamicColor: UIColor = {
             if #available(iOS 13.0, *) {
                 let color = UIColor { (traitCollection: UITraitCollection) -> UIColor in

@@ -12,22 +12,23 @@ public class ProHUD {
     
     public static let shared = ProHUD()
     
-    public var config: Configuration {
-        return cfg
-    }
+    public var config: Configuration { cfg }
     
-    public struct Scene {
-        private var id = "unknown"
-        public var identifier: String {
-            return id
-        }
+    
+}
+
+// MARK: - Scene
+public extension ProHUD {
+    
+    struct Scene {
+        public let identifier: String
         public var image: UIImage?
         public var alertDuration: TimeInterval?
         public var toastDuration: TimeInterval? = 3
         public var title: String?
         public var message: String?
-        init() {
-            
+        public init(identifier: String) {
+            self.identifier = identifier
         }
     }
     
@@ -35,10 +36,6 @@ public class ProHUD {
 
 // 默认场景，可直接在项目工程中覆写场景参数
 public extension ProHUD.Scene {
-    init(identifier: String) {
-        self.init()
-        id = identifier
-    }
     static var `default`: ProHUD.Scene {
         var scene = ProHUD.Scene.init(identifier: "prohud.default")
         scene.image = ProHUD.image(named: "prohud.note")

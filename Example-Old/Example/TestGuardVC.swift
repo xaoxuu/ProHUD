@@ -35,6 +35,11 @@ class TestGuardVC: BaseListVC {
                         vm.add(action: .cancel, title: "取消", handler: nil)
                     }
                 }
+                DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+                    Guard.find("del") { vc in
+                        vc.pop()
+                    }
+                }
             }
             
             // MARK: 升级至专业版

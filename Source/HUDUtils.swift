@@ -15,16 +15,16 @@ extension String {
 
 extension ProHUD {
     static var safeAreaInsets: UIEdgeInsets {
-        return Inspire.shared.screen.safeAreaInsets
+        Inspire.shared.screen.safeAreaInsets
     }
 }
 
 
 func == (left: ProHUD.Scene, right: ProHUD.Scene) -> Bool {
-    return left.identifier == right.identifier
+    left.identifier == right.identifier
 }
 
 
 func != (left: ProHUD.Scene, right: ProHUD.Scene) -> Bool {
-    return left.identifier != right.identifier
+    left.identifier != right.identifier
 }

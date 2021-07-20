@@ -53,7 +53,7 @@ public extension ProHUD.Configuration {
 
 
 // MARK: - 内部调用
-internal extension ProHUD.Configuration.Toast {
+extension ProHUD.Configuration.Toast {
     
     var reloadData: (ProHUD.Toast) -> Void {
         return privReloadData

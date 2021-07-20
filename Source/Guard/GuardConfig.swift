@@ -51,7 +51,7 @@ public extension ProHUD.Configuration {
 
 
 // MARK: - 内部调用
-internal extension ProHUD.Configuration.Guard {
+extension ProHUD.Configuration.Guard {
     
     var reloadData: (ProHUD.Guard) -> Void {
         return privReloadData

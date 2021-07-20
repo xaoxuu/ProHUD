@@ -47,12 +47,12 @@ public extension Toast {
         // MARK: 私有
         
         /// 持续时间
-        internal var durationBlock: DispatchWorkItem?
+        var durationBlock: DispatchWorkItem?
         
         /// 点击事件回调
-        internal var tapCallback: (() -> Void)?
+        var tapCallback: (() -> Void)?
         
-        internal func updateDuration() {
+        func updateDuration() {
             durationBlock?.cancel()
             if let t = duration ?? scene.toastDuration, t > 0 {
                 durationBlock = DispatchWorkItem(block: { [weak self] in

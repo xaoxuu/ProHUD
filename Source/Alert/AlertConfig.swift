@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 public extension UIWindow.Level {
-    static let proAlert = UIWindow.Level.alert - 1
+    static let alertForProHUD = UIWindow.Level.alert - 1
 }
 
 public extension ProHUD.Configuration {
@@ -75,7 +75,7 @@ public extension ProHUD.Configuration {
 
 
 // MARK: - 内部调用
-internal extension ProHUD.Configuration.Alert {
+extension ProHUD.Configuration.Alert {
     
     var reloadData: (ProHUD.Alert) -> Void {
         return privReloadData

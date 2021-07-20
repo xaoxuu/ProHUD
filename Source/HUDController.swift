@@ -85,9 +85,7 @@ internal extension HUDController {
     }
 
     @objc func didTappedButton(_ sender: UIButton) {
-        if let ac = buttonEvents[sender] {
-            ac()
-        }
+        buttonEvents[sender]?()
     }
     
 }
@@ -117,8 +115,8 @@ public extension LoadingAnimationView {
                 v.updateProgress(progress: progress)
             }
         }
-        
     }
+    
 }
 /// 旋转动画
 public protocol LoadingRotateAnimation: LoadingAnimationView {}

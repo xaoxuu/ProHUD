@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let scene = (scene as? UIWindowScene) else { return }
         
-        
+        print(scene.statusBarManager?.statusBarFrame)
         let rootVC = RootVC()
         window?.rootViewController = rootVC
         window?.makeKeyAndVisible()
