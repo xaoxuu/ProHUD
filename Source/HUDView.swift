@@ -114,7 +114,7 @@ internal extension Alert {
                 contentEdgeInsets = .init(top: pd*1.5, left: pd*1.5, bottom: pd*1.5, right: pd*1.5)
             } else {
                 backgroundColor = .clear
-                contentEdgeInsets = .init(top: pd*0.5, left: pd*1.5, bottom: pd*0.5, right: pd*1.5)
+                contentEdgeInsets = .init(top: pd*1, left: pd*1.5, bottom: pd*1, right: pd*1.5)
             }
             switch style {
             case .default:
