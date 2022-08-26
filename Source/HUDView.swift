@@ -218,7 +218,7 @@ internal extension UIView {
     }
     
     class func animateForGuard(animations: @escaping () -> Void, completion: ((Bool) -> Void)? = nil) {
-        animateEaseOut(duration: 0.6, delay: 0, animations: animations, completion: completion)
+        animateEaseOut(duration: 0.45, delay: 0, animations: animations, completion: completion)
     }
     class func animateForGuard(animations: @escaping () -> Void) {
         animateForGuard(animations: animations, completion: nil)
