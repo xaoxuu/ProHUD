@@ -90,7 +90,7 @@ Toast.push(scene: .warning, title: "设备电量过低", message: "请及时对�
     toast.isRemovable = false
     // 监听点击事件
     toast.didTapped {
-        debugPrint("点击了这条横幅")
+        print("点击了这条横幅")
     }
 }
 ```

@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/xaoxuu/Inspire.git",
         "state": {
           "branch": null,
-          "revision": "cad0c64e6995a06ee3bf3ed7c632ad27c1b8ffb1",
-          "version": "2.0.0"
+          "revision": "05bdbf23e380b7b283f9ef5c5115e1c1e1d1ad97",
+          "version": "2.2.0"
         }
       },
       {
@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/SnapKit/SnapKit.git",
         "state": {
           "branch": null,
-          "revision": "d458564516e5676af9c70b4f4b2a9178294f1bc6",
-          "version": "5.0.1"
+          "revision": "f222cbdf325885926566172f6f5f06af95473158",
+          "version": "5.6.0"
         }
       }
     ]

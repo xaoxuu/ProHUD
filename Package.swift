@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.6
 
 import PackageDescription
 
@@ -10,15 +10,13 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/SnapKit/SnapKit.git", "5.0.0" ..< "6.0.0"),
-        .package(url: "https://github.com/xaoxuu/Inspire.git", "2.1.0" ..< "3.0.0"),
+        .package(url: "https://github.com/xaoxuu/Inspire.git", "3.0.0" ..< "4.0.0"),
     ],
     targets: [
         .target(
             name: "ProHUD",
             dependencies: ["SnapKit", "Inspire"],
-            path: "Source",
-            resources: [.process("ProHUD.xcassets")]
+            resources: [.process("Resources/ProHUD.xcassets")]
         )
-    ],
-    swiftLanguageVersions: [.v5]
+    ]
 )
