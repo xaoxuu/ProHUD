@@ -40,28 +40,23 @@ extension Toast {
     
     /// 更新HUD实例
     /// - Parameter callback: 实例更新代码
-    public func update(callback: @escaping (_ toast: Toast) -> Void) {
-        callback(self)
-    }
-    
-    /// 更新HUD实例
-    /// - Parameters:
-    ///   - identifier: 唯一标识符
-    ///   - callback: 实例更新代码
-    public static func update(identifier: String, callback: @escaping (_ toast: Toast) -> Void) {
-        guard let vc = ToastWindow.windows.last(where: { $0.toast.identifier == identifier })?.toast else {
-            return
+    func update(handler: @escaping (_ toast: Toast) -> Void) {
+        handler(self)
+        reloadData()
+        UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
+            self.view.layoutIfNeeded()
         }
-        callback(vc)
-        vc.reloadData()
     }
     
     /// 查找HUD实例
     /// - Parameter identifier: 唯一标识符
     /// - Returns: HUD实例
-    public static func find(identifier: String) -> Toast? {
+    @discardableResult public static func find(identifier: String, update handler: ((_ toast: Toast) -> Void)? = nil) -> Toast? {
         guard let vc = ToastWindow.windows.last(where: { $0.toast.identifier == identifier })?.toast else {
             return nil
+        }
+        if let handler = handler {
+            vc.update(handler: handler)
         }
         return vc
     }

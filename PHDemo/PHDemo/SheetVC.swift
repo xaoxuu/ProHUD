@@ -63,18 +63,10 @@ class SheetVC: ListVC {
                 }
             }
             
-            section.add(title: "全屏") {
-                Sheet { sheet in
-                    sheet.config.isFullScreen = true
-                    sheet.add(title: "ProHUD")
-                    sheet.add(action: "OK")
-                }
-            }
-            
         }
         
         list.add(title: "事件管理") { section in
-            section.add(title: "拦截返回事件") {
+            section.add(title: "拦截点击背景事件") {
                 Sheet { sheet in
                     sheet.add(title: "ProHUD")
                     sheet.add(message: "点击背景将不会dismiss，必须在下方做出选择才能关掉")
@@ -84,7 +76,7 @@ class SheetVC: ListVC {
                 } onTappedBackground: { sheet in
                     print("点击了背景")
                     Toast.lazyPush(identifier: "alert") { toast in
-                        toast.vm = .note
+                        toast.vm = .error
                         toast.vm.title = "点击了背景"
                         toast.vm.message = "点击背景将不会dismiss，必须在下方做出选择才能关掉"
                         toast.vm.duration = 2
@@ -206,6 +198,15 @@ class SheetVC: ListVC {
                     }
                 }
             }
+            
+            section.add(title: "全屏Sheet") {
+                Sheet { sheet in
+                    sheet.config.isFullScreen = true
+                    sheet.add(title: "ProHUD")
+                    sheet.add(action: "OK")
+                }
+            }
+            
         }
         
     }

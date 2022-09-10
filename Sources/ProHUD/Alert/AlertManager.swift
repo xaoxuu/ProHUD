@@ -85,28 +85,23 @@ extension Alert {
     
     /// 更新HUD实例
     /// - Parameter callback: 实例更新代码
-    public func update(callback: @escaping (_ alert: Alert) -> Void) {
-        callback(self)
-    }
-    
-    /// 更新HUD实例
-    /// - Parameters:
-    ///   - identifier: 唯一标识符
-    ///   - callback: 实例更新代码
-    public static func update(identifier: String, callback: @escaping (_ alert: Alert) -> Void) {
-        guard let vc = AlertWindow.alerts.last(where: { $0.identifier == identifier }) else {
-            return
+    func update(handler: @escaping (_ alert: Alert) -> Void) {
+        handler(self)
+        reloadData()
+        UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
+            self.view.layoutIfNeeded()
         }
-        callback(vc)
-        vc.reloadData()
     }
     
     /// 查找HUD实例
     /// - Parameter identifier: 唯一标识符
     /// - Returns: HUD实例
-    public static func find(identifier: String) -> Alert? {
+    public static func find(identifier: String, update handler: ((_ alert: Alert) -> Void)? = nil) -> Alert? {
         guard let vc = AlertWindow.alerts.last(where: { $0.identifier == identifier }) else {
             return nil
+        }
+        if let handler = handler {
+            vc.update(handler: handler)
         }
         return vc
     }

@@ -108,8 +108,8 @@ class AlertVC: ListVC {
                 }
             }
         }
-        list.add(title: "控件动态管理") { section in
-            section.add(title: "按钮增删") {
+        list.add(title: "控件管理") { section in
+            section.add(title: "按钮增删改查") {
                 Alert(.note) { alert in
                     alert.vm.message = "可以动态增加、删除按钮"
                     alert.add(action: "在底部增加按钮", style: .filled(color: .systemGreen)) { alert in
@@ -172,7 +172,7 @@ class AlertVC: ListVC {
                 }
             }
         }
-        list.add(title: "多实例管理") { section in
+        list.add(title: "实例管理") { section in
             section.add(title: "多层级弹窗") {
                 func f(i: Int) {
                     Alert { alert in
@@ -186,7 +186,7 @@ class AlertVC: ListVC {
                 }
                 f(i: 1)
             }
-            section.add(title: "弹出loading，如果有就不重复弹") {
+            section.add(title: "弹出loading，如果已经存在就更新") {
                 func f(i: Int) {
                     Alert.lazyPush(identifier: "haha") { alert in
                         if i < 2 {
@@ -209,7 +209,7 @@ class AlertVC: ListVC {
             }
         }
         list.add(title: "放在特定页面") { [weak self] section in
-            section.add(title: "放在特定页面") {
+            section.add(title: "放在一个VC中") {
                 let vc = UIViewController()
                 vc.title = "页面"
                 vc.view.backgroundColor = .systemYellow

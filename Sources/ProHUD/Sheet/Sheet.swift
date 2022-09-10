@@ -73,29 +73,6 @@ public class Sheet: Controller {
 }
 
 extension Sheet {
-    func translateIn(completion: (() -> Void)?) {
-        UIView.animateEaseOut(duration: config.animateDurationForBuildInByDefault) {
-            self._translateIn()
-        } completion: { done in
-            completion?()
-        }
-    }
-    func translateOut(completion: (() -> Void)?) {
-        UIView.animateEaseOut(duration: config.animateDurationForBuildOutByDefault) {
-            self._translateOut()
-        } completion: { done in
-            completion?()
-        }
-    }
-    
-    func _translateIn() {
-        backgroundView.alpha = 1
-        contentView.transform = .identity
-    }
-    func _translateOut() {
-        backgroundView.alpha = 0
-        contentView.transform = .init(translationX: 0, y: view.frame.size.height - contentView.frame.minY + config.margin)
-    }
     @objc func _onTappedBackground(_ sender: UITapGestureRecognizer) {
         if let act = onTappedBackground {
             act(self)

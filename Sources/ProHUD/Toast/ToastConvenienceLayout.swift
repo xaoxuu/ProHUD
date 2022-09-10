@@ -9,12 +9,12 @@ import UIKit
 
 public extension Toast {
     
-    @discardableResult func add(customView: UIView) -> UIView {
+    @discardableResult func add(subview: UIView) -> UIView {
         if contentStack.superview != nil {
             contentStack.removeFromSuperview()
         }
-        contentView.addSubview(customView)
-        return customView
+        contentView.addSubview(subview)
+        return subview
     }
     
     @discardableResult func add(action: Action) -> Button {

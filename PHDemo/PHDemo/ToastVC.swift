@@ -39,7 +39,7 @@ class ToastVC: ListVC {
                     toast.update(progress: 1)
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                    Toast.update(identifier: "loading") { toast in
+                    Toast.find(identifier: "loading") { toast in
                         toast.vm = .success(2).title("加载成功").message("这条通知2s后消失")
                     }
                 }
@@ -106,19 +106,78 @@ class ToastVC: ListVC {
             }
         }
         
+        list.add(title: "实例管理") { section in
+            var i = 0
+            section.add(title: "多实例共存") {
+                Toast(.loading.title("多实例共存").message("直接创建的实例，以平铺方式排列").duration(2)).push()
+            }
+            section.add(title: "不存在就创建，存在就更新") {
+                i += 1
+                Toast.lazyPush(identifier: "loading") { toast in
+                    toast.vm = .loading.title("正在加载\(i)").message("这条消息不会重复显示多条")
+                }
+            }
+            section.add(title: "如果存在就更新，如果不存在就忽略") {
+                i += 1
+                Toast.find(identifier: "loading") { toast in
+                    toast.vm = .success.title("加载完成\(i)").message("这条消息不会重复显示多条").duration(2)
+                }
+            }
+            section.add(title: "移除指定实例") {
+                Toast.find(identifier: "loading")?.pop()
+            }
+        }
+        
         list.add(title: "自定义视图") { section in
             section.add(title: "图片") {
                 Toast { toast in
                     toast.config.cardMaxHeight = 200 // 自定义视图时需手动指定高度
                     let imgv = UIImageView(image: UIImage(named: "landscape"))
                     imgv.contentMode = .scaleAspectFill
-                    toast.add(customView: imgv).snp.makeConstraints { make in
+                    toast.add(subview: imgv).snp.makeConstraints { make in
                         make.edges.equalToSuperview()
                     }
                     toast.onTapped { toast in
                         toast.pop()
                     }
                 }
+            }
+            
+            section.add(title: "圆角半径") {
+                func foo() {
+                    Toast { toast in
+                        toast.vm = .title("圆角半径").message("可以在共享配置中设置，则全局生效")
+                        toast.add(action: "8", style: .gray) { toast in
+                            Toast.Configuration.shared { config in
+                                config.cardCornerRadius = 8
+                            }
+                            toast.pop()
+                            foo()
+                        }
+                        toast.add(action: "16", style: .gray) { toast in
+                            Toast.Configuration.shared { config in
+                                config.cardCornerRadius = 16
+                            }
+                            toast.pop()
+                            foo()
+                        }
+                        toast.add(action: "24", style: .gray) { toast in
+                            Toast.Configuration.shared { config in
+                                config.cardCornerRadius = 24
+                            }
+                            toast.pop()
+                            foo()
+                        }
+                        toast.add(action: "32", style: .gray) { toast in
+                            Toast.Configuration.shared { config in
+                                config.cardCornerRadius = 32
+                            }
+                            toast.pop()
+                            foo()
+                        }
+                    }
+                }
+                foo()
             }
             
             section.add(title: "其它控件") {
@@ -158,7 +217,7 @@ class ToastVC: ListVC {
                         make.height.equalTo(40)
                     }
                     
-                    toast.add(customView: stack).snp.makeConstraints { make in
+                    toast.add(subview: stack).snp.makeConstraints { make in
                         make.edges.equalToSuperview().inset(8)
                     }
                     toast.onTapped { toast in
