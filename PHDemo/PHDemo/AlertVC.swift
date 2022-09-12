@@ -91,20 +91,34 @@ class AlertVC: ListVC {
             }
         }
         list.add(title: "图标 + 文字 + 按钮") { section in
-            section.add(title: "图标 + 一段文字 + 自定义浅色按钮") {
-                Alert(.confirm) { alert in
-                    alert.vm.title = "自定义浅色按钮"
+            section.add(title: "操作成功") {
+                Alert(.success(3).title("操作成功").message("这条消息将在3s后消失")).push()
+            }
+            section.add(title: "操作失败") {
+                Alert { alert in
+                    alert.vm = .error.title("操作失败").message("请稍后重试")
+                    alert.add(action: "取消", style: .gray)
+                    alert.add(action: "重试")
+                }
+            }
+            section.add(title: "警告") {
+                Alert(.warning.message("电量不足，请立即充电")) { alert in
+                    let btn = alert.add(action: "我知道了", style: .filled(color: UIColor.systemYellow))
+                    btn.setTitleColor(.black, for: .normal)
+                }
+            }
+            section.add(title: "确认选择") {
+                Alert(.confirm.title("请选择颜色")) { alert in
                     alert.add(action: "红色", style: .light(color: .systemRed))
                     alert.add(action: "蓝色", style: .light(color: .systemBlue))
                 }
             }
-            section.add(title: "图标 + 标题 + 正文 + 自定义深色按钮") {
-                Alert(.note) { alert in
-                    alert.vm.title = "自定义深色按钮"
-                    alert.vm.message = "这是一段正文，长度超出最大宽度时会自动换行"
-                    alert.add(action: "橙色", style: .filled(color: .systemOrange))
-                    alert.add(action: "粉色", style: .filled(color: .systemPink))
-                    alert.add(action: "默认灰色", style: .gray)
+            section.add(title: "确认删除") {
+                Alert(.delete) { alert in
+                    alert.vm.title = "确认删除"
+                    alert.vm.message = "此操作无法撤销"
+                    alert.add(action: "取消", style: .gray)
+                    alert.add(action: "删除", style: .destructive)
                 }
             }
         }
@@ -213,9 +227,13 @@ class AlertVC: ListVC {
                 let vc = UIViewController()
                 vc.title = "页面"
                 vc.view.backgroundColor = .systemYellow
-                let alert = Alert(.loading.title("正在加载").message("这个弹窗被放在指定的容器中"))
+                let alert = Alert(.loading.title("正在加载").message("这个弹窗被放在指定容器中"))
+                alert.add(action: "返回上一页") { alert in
+                    vc.dismiss(animated: true)
+                }
                 alert.config.enableShadow = false
                 self?.present(vc, animated: true)
+                vc.addChild(alert)
                 vc.view.addSubview(alert.view)
                 alert.view.snp.makeConstraints { make in
                     make.edges.equalToSuperview()

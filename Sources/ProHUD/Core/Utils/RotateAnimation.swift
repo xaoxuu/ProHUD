@@ -12,13 +12,16 @@ extension LoadingAnimation {
     /// 更新进度（如果需要显示进度，需要先调用一次 updateProgress(0) 来初始化）
     /// - Parameter progress: 进度（0~1）
     public func update(progress: CGFloat) {
+        guard isViewLoaded else { return }
         guard let superview = imageView.superview else { return }
         if progressView == nil {
-            let v = ProgressView()
+            let width = imageView.frame.size.width + ProgressView.lineWidth * 2
+            let v = ProgressView(frame: .init(origin: .zero, size: .init(width: width, height: width)))
             superview.addSubview(v)
+            v.tintColor = superview.tintColor
             v.snp.remakeConstraints { (mk) in
                 mk.center.equalTo(imageView)
-                mk.width.height.equalTo(28)
+                mk.width.height.equalTo(width)
             }
             progressView = v
         }

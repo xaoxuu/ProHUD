@@ -104,7 +104,7 @@ public class Configuration: NSObject {
     
     // MARK: 图标样式
     /// 图标尺寸
-    public var iconSize = CGSize(width: 48, height: 48)
+    public var iconSize = CGSize(width: 44, height: 44)
     
     // MARK: 文本样式
     /// 标题字体

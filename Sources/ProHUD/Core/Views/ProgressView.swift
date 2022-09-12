@@ -12,23 +12,41 @@ public class ProgressView: UIView {
     
     var progressLayer = CAShapeLayer()
     
+    static var lineWidth: CGFloat { 4 }
+    
+    public override var tintColor: UIColor! {
+        didSet {
+            progressLayer.strokeColor = tintColor.cgColor
+        }
+    }
+    
     override init(frame: CGRect) {
+        let lineWidth = Self.lineWidth
         // 容器宽度
-        let maxSize = CGFloat(28)
-        super.init(frame: .init(x: 0, y: 0, width: maxSize, height: maxSize))
-        layer.cornerRadius = maxSize / 2
+        let size = CGFloat.maximum(frame.height, frame.width)
+        super.init(frame: .init(x: 0, y: 0, width: size, height: size))
+        layer.cornerRadius = size / 2
         layer.masksToBounds = true
-        // 进度圆半径
-        let radius = maxSize / 2 - 4
-        backgroundColor = .white
+        // 圆环路径
+        let path = UIBezierPath(arcCenter: CGPoint(x: size / 2, y: size / 2), radius: (size - lineWidth) / 2, startAngle: -CGFloat.pi*0.5, endAngle: CGFloat.pi * 1.5, clockwise: true)
         
-        let path = UIBezierPath(arcCenter: CGPoint(x: 14, y: 14), radius: radius/2, startAngle: -CGFloat.pi*0.5, endAngle: CGFloat.pi * 1.5, clockwise: true)
+        // 轨道
+        let bgLayer = CAShapeLayer()
+        bgLayer.fillColor = UIColor.clear.cgColor
+        bgLayer.path = path.cgPath
+        bgLayer.strokeColor = UIColor.white.cgColor
+        bgLayer.lineWidth = lineWidth
+        bgLayer.lineCap = .round
+        bgLayer.strokeStart = 0
+        bgLayer.strokeEnd = 1
+        layer.addSublayer(bgLayer)
         
+        // 进度
         progressLayer.fillColor = UIColor.clear.cgColor
         progressLayer.path = path.cgPath
-        
         progressLayer.strokeColor = tintColor.cgColor
-        progressLayer.lineWidth = radius
+        progressLayer.lineWidth = lineWidth
+        progressLayer.lineCap = .round
         progressLayer.strokeStart = 0
         progressLayer.strokeEnd = 0
         layer.addSublayer(progressLayer)

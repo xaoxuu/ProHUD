@@ -40,7 +40,7 @@ extension Toast {
     
     /// 更新HUD实例
     /// - Parameter callback: 实例更新代码
-    func update(handler: @escaping (_ toast: Toast) -> Void) {
+    public func update(handler: @escaping (_ toast: Toast) -> Void) {
         handler(self)
         reloadData()
         UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
@@ -51,14 +51,12 @@ extension Toast {
     /// 查找HUD实例
     /// - Parameter identifier: 唯一标识符
     /// - Returns: HUD实例
-    @discardableResult public static func find(identifier: String, update handler: ((_ toast: Toast) -> Void)? = nil) -> Toast? {
-        guard let vc = ToastWindow.windows.last(where: { $0.toast.identifier == identifier })?.toast else {
-            return nil
-        }
+    @discardableResult public static func find(identifier: String, update handler: ((_ toast: Toast) -> Void)? = nil) -> [Toast] {
+        let arr = ToastWindow.windows.compactMap({ $0.toast }).filter({ $0.identifier == identifier })
         if let handler = handler {
-            vc.update(handler: handler)
+            arr.forEach({ $0.update(handler: handler) })
         }
-        return vc
+        return arr
     }
     
 }

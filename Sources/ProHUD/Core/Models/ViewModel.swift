@@ -105,21 +105,14 @@ public extension ViewModel {
         return obj
     }
     
-    // MARK: note
-    static var note: ViewModel {
-        .init(icon: UIImage(inProHUD: "prohud.note"))
-    }
-    static func note(_ seconds: TimeInterval) -> ViewModel {
-        .init(icon: UIImage(inProHUD: "prohud.note"), duration: seconds)
-    }
     // MARK: loading
     static var loading: ViewModel {
-        let obj = ViewModel(icon: UIImage(inProHUD: "prohud.rainbow.circle"))
+        let obj = ViewModel(icon: UIImage(inProHUD: "prohud.windmill"))
         obj.rotation = .init(repeatCount: .infinity)
         return obj
     }
     static func loading(_ seconds: TimeInterval) -> ViewModel {
-        let obj = ViewModel(icon: UIImage(inProHUD: "prohud.rainbow.circle"), duration: seconds)
+        let obj = ViewModel(icon: UIImage(inProHUD: "prohud.windmill"), duration: seconds)
         obj.rotation = .init(repeatCount: .infinity)
         return obj
     }
@@ -147,13 +140,5 @@ public extension ViewModel {
     // MARK: failure
     static var failure: ViewModel { error }
     static func failure(_ seconds: TimeInterval) -> ViewModel { error(seconds) }
-    
-    // MARK: confirm
-    static var confirm: ViewModel {
-        .init(icon: UIImage(inProHUD: "prohud.questionmark"))
-    }
-    static func confirm(_ seconds: TimeInterval) -> ViewModel {
-        .init(icon: UIImage(inProHUD: "prohud.questionmark"), duration: seconds)
-    }
     
 }

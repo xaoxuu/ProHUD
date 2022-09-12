@@ -29,6 +29,7 @@ extension Alert: DefaultLayout {
             return
         }
         // default layout
+        
         // 更新图片
         setupImageView()
         
@@ -53,14 +54,6 @@ extension Alert: DefaultLayout {
                 self.view.layoutIfNeeded()
             }
         }
-        // id 包含 .rotate 的会自动旋转
-        if let rotation = vm.rotation {
-            startRotate(rotation)
-        }
-        // 设置持续时间
-        vm.timeoutHandler = DispatchWorkItem(block: { [weak self] in
-            self?.pop()
-        })
         
     }
     
@@ -133,16 +126,6 @@ extension Alert: DefaultLayout {
 extension Alert {
     
     func setupImageView() {
-        guard let icon = vm.icon else { return }
-        imageView.image = icon
-        contentStack.insertArrangedSubview(imageView, at: 0)
-        imageView.contentMode = .scaleAspectFit
-        imageView.snp.remakeConstraints { (mk) in
-            mk.top.left.greaterThanOrEqualTo(contentView).inset(config.padding*2.25)
-            mk.right.bottom.lessThanOrEqualTo(contentView).inset(config.padding*2.25)
-            mk.width.equalTo(config.iconSize.width)
-            mk.height.equalTo(config.iconSize.height)
-        }
         // 移除动画
         stopRotate(animateLayer)
         animateLayer = nil
@@ -150,6 +133,28 @@ extension Alert {
         
         // 移除进度
         progressView?.removeFromSuperview()
+        
+        if vm.icon != nil {
+            imageView.image = vm.icon
+            if imageView.superview == nil {
+                contentStack.insertArrangedSubview(imageView, at: 0)
+                imageView.snp.remakeConstraints { (mk) in
+                    mk.top.left.greaterThanOrEqualTo(contentView).inset(config.padding*2.25)
+                    mk.right.bottom.lessThanOrEqualTo(contentView).inset(config.padding*2.25)
+                    mk.width.equalTo(config.iconSize.width)
+                    mk.height.equalTo(config.iconSize.height)
+                }
+            }
+            if let rotation = vm.rotation {
+                startRotate(rotation)
+            }
+        } else {
+            if contentStack.arrangedSubviews.contains(imageView) {
+                contentStack.removeArrangedSubview(imageView)
+            }
+            imageView.removeFromSuperview()
+        }
+        
     }
     func setupTextStack() {
         let titleCount = vm.title?.count ?? 0

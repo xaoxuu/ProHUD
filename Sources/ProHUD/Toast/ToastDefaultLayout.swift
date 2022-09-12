@@ -77,17 +77,7 @@ extension Toast: DefaultLayout {
             self?.pop()
         })
         
-        // 移除动画
-        stopRotate(animateLayer)
-        animateLayer = nil
-        animation = nil
-        
-        // 移除进度
-        progressView?.removeFromSuperview()
-        // 开始动画
-        if let rotation = vm.rotation {
-            startRotate(rotation)
-        }
+        setupImageView()
         
     }
     
@@ -125,5 +115,21 @@ extension Toast {
             sup.addArrangedSubview(actionStack)
             contentStack.addArrangedSubview(sup)
         }
+    }
+    
+    func setupImageView() {
+        // 移除动画
+        stopRotate(animateLayer)
+        animateLayer = nil
+        animation = nil
+        
+        // 移除进度
+        progressView?.removeFromSuperview()
+        
+        imageView.image = vm.icon
+        if let rotation = vm.rotation {
+            startRotate(rotation)
+        }
+        
     }
 }

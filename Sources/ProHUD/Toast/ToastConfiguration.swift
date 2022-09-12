@@ -31,15 +31,15 @@ public extension Toast {
         }
         
         override var titleFontByDefault: UIFont {
-            titleFont ?? .systemFont(ofSize: 19, weight: .bold)
+            titleFont ?? .systemFont(ofSize: 18, weight: .bold)
         }
         
         override var boldTextFontByDefault: UIFont {
-            boldTextFont ?? .systemFont(ofSize: 17, weight: .bold)
+            boldTextFont ?? .systemFont(ofSize: 16, weight: .bold)
         }
         
         override var bodyFontByDefault: UIFont {
-            bodyFont ?? .systemFont(ofSize: 17, weight: .regular)
+            bodyFont ?? .systemFont(ofSize: 16, weight: .regular)
         }
         
         override var animateDurationForBuildInByDefault: CGFloat {

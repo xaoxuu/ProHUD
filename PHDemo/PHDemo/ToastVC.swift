@@ -18,6 +18,14 @@ class ToastVC: ListVC {
         header.titleLabel.text = "ProHUD.Toast"
         header.detailLabel.text = message
         
+        Toast.Configuration.shared { config in
+            config.contentViewMask { mask in
+                mask.backgroundColor = .clear
+                mask.effect = UIBlurEffect(style: .systemChromeMaterial)
+            }
+        }
+        
+        
         list.add(title: "默认布局") { section in
             section.add(title: "标题 + 正文") {
                 Toast(.title(title).message(message)).push()
@@ -29,7 +37,6 @@ class ToastVC: ListVC {
                 let s1 = "正在加载"
                 let s2 = "这条通知4s后消失"
                 let toast = Toast(.loading(4).title(s1).message(s2))
-                toast.identifier = "loading"
                 toast.push()
                 toast.update(progress: 0)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -39,8 +46,8 @@ class ToastVC: ListVC {
                     toast.update(progress: 1)
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                    Toast.find(identifier: "loading") { toast in
-                        toast.vm = .success(2).title("加载成功").message("这条通知2s后消失")
+                    toast.update { toast in
+                        toast.vm = .success(10).title("加载成功").message("这条通知10s后消失")
                     }
                 }
             }
@@ -50,13 +57,13 @@ class ToastVC: ListVC {
         }
         
         list.add(title: "事件管理") { section in
-            section.add(title: "全局点击事件") {
+            section.add(title: "点击事件") {
                 let title = "您收到了一条消息"
-                let message = "这条消息5s后消失，点击回复"
-                Toast(.msg(5).title(title).message(message)) { toast in
+                let message = "点击通知横幅任意处即可回复"
+                Toast(.msg.title(title).message(message)) { toast in
                     toast.onTapped { toast in
                         toast.pop()
-                        testAlert()
+                        Alert(.success(1).message("操作成功")).push()
                     }
                 }
             }
@@ -87,8 +94,11 @@ class ToastVC: ListVC {
                         }
                     }
                     toast.add(action: "同意") { toast in
-                        Alert.find(identifier: "Dracarys")?.pop()
+                        Alert.find(identifier: "Dracarys", update: { alert in
+                            alert.pop()
+                        })
                         toast.pop()
+                        Alert(.success(1).message("Good choice!")).push()
                     }
                 }
             }
@@ -124,7 +134,9 @@ class ToastVC: ListVC {
                 }
             }
             section.add(title: "移除指定实例") {
-                Toast.find(identifier: "loading")?.pop()
+                Toast.find(identifier: "loading") { toast in
+                    toast.pop()
+                }
             }
         }
         

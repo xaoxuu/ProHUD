@@ -33,8 +33,13 @@ public class Alert: ProHUD.Controller {
         return stack
     }()
     
-    /// 图片
-    public var imageView = UIImageView()
+    /// 图标
+    public lazy var imageView: UIImageView = {
+        let imgv = UIImageView()
+        imgv.contentMode = .scaleAspectFit
+        imgv.tintColor = view.tintColor
+        return imgv
+    }()
     
     /// 标题
     public lazy var titleLabel: UILabel = {

@@ -85,7 +85,7 @@ extension Alert {
     
     /// 更新HUD实例
     /// - Parameter callback: 实例更新代码
-    func update(handler: @escaping (_ alert: Alert) -> Void) {
+    public func update(handler: @escaping (_ alert: Alert) -> Void) {
         handler(self)
         reloadData()
         UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
@@ -96,14 +96,12 @@ extension Alert {
     /// 查找HUD实例
     /// - Parameter identifier: 唯一标识符
     /// - Returns: HUD实例
-    public static func find(identifier: String, update handler: ((_ alert: Alert) -> Void)? = nil) -> Alert? {
-        guard let vc = AlertWindow.alerts.last(where: { $0.identifier == identifier }) else {
-            return nil
-        }
+    @discardableResult public static func find(identifier: String, update handler: ((_ alert: Alert) -> Void)? = nil) -> [Alert] {
+        let arr = AlertWindow.alerts.filter({ $0.identifier == identifier })
         if let handler = handler {
-            vc.update(handler: handler)
+            arr.forEach({ $0.update(handler: handler) })
         }
-        return vc
+        return arr
     }
     
 }
