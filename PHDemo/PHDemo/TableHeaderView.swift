@@ -38,7 +38,7 @@ class TableHeaderView: UIView {
         addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(24)
-            make.top.equalToSuperview().offset(20)
+            make.top.equalToSuperview().offset(28)
         }
         detailLabel.snp.makeConstraints { make in
             make.left.right.equalTo(titleLabel)

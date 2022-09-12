@@ -8,6 +8,29 @@
 import UIKit
 import ProHUD
 
+
+func updateProgress(in duration: TimeInterval, callback: @escaping (_ percent: CGFloat) -> Void, completion: (() -> Void)?) {
+    let s = DispatchSemaphore(value: 1)
+    DispatchQueue.global().async {
+        let total = 50
+        for i in 0 ... total {
+            s.wait()
+            DispatchQueue.main.async {
+                callback(CGFloat(i)/CGFloat(total))
+                DispatchQueue.main.asyncAfter(deadline: .now() + (duration / TimeInterval(total))) {
+                    s.signal()
+                    if i == total {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            completion?()
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 class ToastVC: ListVC {
 
     override func viewDidLoad() {
@@ -25,7 +48,6 @@ class ToastVC: ListVC {
             }
         }
         
-        let vm: ViewModel = .loading
         list.add(title: "默认布局") { section in
             section.add(title: "标题 + 正文") {
                 Toast(.title(title).message(message)).push()
@@ -34,20 +56,29 @@ class ToastVC: ListVC {
                 Toast(.message(message)).push()
             }
             section.add(title: "图标 + 标题 + 正文") {
-                let s1 = "正在加载"
-                let s2 = "这条通知4s后消失"
-                let toast = Toast(.loading(4).title(s1).message(s2))
+                let s1 = "笑容正在加载"
+                let s2 = "这通常不会太久"
+                let toast = Toast(.loading.title(s1).message(s2))
                 toast.push()
                 toast.update(progress: 0)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    toast.update(progress: 0.5)
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    toast.update(progress: 1)
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                updateProgress(in: 4) { percent in
+                    toast.update(progress: percent)
+                } completion: {
                     toast.update { toast in
-                        toast.vm = .success(10).title("加载成功").message("这条通知10s后消失")
+                        toast.vm = .success(5).title("加载成功").message("这条通知5s后消失")
+                        toast.vm.icon = UIImage(named: "twemoji")
+                    }
+                }
+            }
+            section.add(title: "倒计时") {
+                let s1 = "笑容正在消失"
+                let s2 = "这通常不会太久"
+                Toast { toast in
+                    toast.vm = .title(s1).message(s2).icon(UIImage(named: "twemoji"))
+                    updateProgress(in: 5) { percent in
+                        toast.update(progress: 1 - percent)
+                    } completion: {
+                        toast.pop()
                     }
                 }
             }

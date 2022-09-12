@@ -41,6 +41,8 @@ public extension Sheet {
         
         override var cardMaxWidthByDefault: CGFloat { cardMaxWidth ?? 500 }
         
+        override var cardMaxHeightByDefault: CGFloat { cardMaxHeight ?? (UIScreen.main.bounds.height - 50) }
+        
         override var titleFontByDefault: UIFont {
             titleFont ?? .systemFont(ofSize: 24, weight: .bold)
         }

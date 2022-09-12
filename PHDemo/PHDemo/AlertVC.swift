@@ -46,19 +46,17 @@ class AlertVC: ListVC {
                 Alert(.loading(3)).push()
             }
             section.add(title: "图标 + 文字") {
-                Alert(.loading(4).message("正在加载")) { alert in
-                    alert.update(progress: 0)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-                        alert.update(progress: 0.01)
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        alert.update(progress: 0.33)
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                        alert.update(progress: 0.67)
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                        alert.update(progress: 1)
+                Alert(.loading.message("正在加载")) { alert in
+                    updateProgress(in: 4) { percent in
+                        alert.update(progress: percent)
+                    } completion: {
+                        alert.update { alert in
+                            alert.vm = .success.message("加载成功")
+                            alert.add(action: "OK")
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+                            alert.pop()
+                        }
                     }
                 }
             }
