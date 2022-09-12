@@ -1,352 +1,371 @@
+# ProHUD
+
 <br>
 
-<img src="https://img.vim-cn.com/92/807ffd8bab40497971172514294020b6501074.png" height="80px">
-
-**简单易用，完全可定制化的HUD** （ProHUD = Toast + Alert + ActionSheet）
+**一个易于上手又完全可定制化的专业HUD库**（内含Toast、Alert、Sheet三件套）
 
 文档：<https://xaoxuu.com/wiki/prohud/>
 
 <br>
 
-|                                                             |                                                             |                                                             |                                                             |                                                              |
-| ----------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------ |
-| ![1.PNG](https://i.loli.net/2019/08/20/sgultOmRLXrwfA3.png) | ![2.PNG](https://i.loli.net/2019/08/20/a2mCq871PwfbZEG.png) | ![3.PNG](https://i.loli.net/2019/08/20/Zdz2cTphOlu3XKf.png) | ![4.PNG](https://i.loli.net/2019/08/20/87UdSGaMuevV1iF.png) | ![5.PNG](https://i.loli.net/2019/08/20/HEusSLBgG3XC1nN.png)  |
-| ![6.PNG](https://i.loli.net/2019/08/20/B178IvGZgbzjiuk.png) | ![7.PNG](https://i.loli.net/2019/08/20/YSNEX3fmdtiarjZ.png) | ![8.PNG](https://i.loli.net/2019/08/20/zlDXtWKfR3pLkji.png) | ![9.PNG](https://i.loli.net/2019/08/20/NEewmBV27fhW4yI.png) | ![10.PNG](https://i.loli.net/2019/08/20/XYvCIow2faRtn9P.png) |
-
-|                                                              |                                                              |                                                              |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ![11.PNG](https://i.loli.net/2019/08/20/nHqKmNOEejgxbrf.png) | ![12.PNG](https://i.loli.net/2019/08/20/kScIodEnmbpaT5Y.png) | ![13.PNG](https://i.loli.net/2019/08/20/2RomGEC1KfSvIP9.png) |
-
-
 
 
 ## 特性
 
-#### 使用简单
+**易于上手**
 
-- 用相似的接口调用**Toast**、**Alert**、**Guard**。
+- 用极少的参数就可以创建并显示一个实例。
+- 用相似的接口调用**Toast**、**Alert**、**Sheet**。
 
-#### 功能丰富
+**功能丰富**
 
-- 用简便的方法拿到已发布的实例，避免重复发布实例。
+- 具有完善的实例管理（多实例共存方案、查找与更新方案）。
 - 可对已发布的实例进行数据更新。
 - 横竖屏和iPad布局优化。
-- 可对所有实例设置监听事件。
-- 对多实例并存堆叠的极端情况做了优化。
 
-#### 完全可定制化
+**完全可定制化**
 
-- 字体、颜色、边距等可配置。
-- 可扩展场景。
-- 程序初始化时配置自定义UI样式，快速调用。
-- 易于扩展，可以很方便的添加任意控件，并处理好布局。
-
-### Toast（顶部通知横幅）
-
-- 多个Toast并存策略（平铺）。
-- 只接收一个点击事件。
-- 可以预先对不同的场景配置不同的默认值（图标、持续时间）。
+- 支持只使用ProHUD的容器，而容器内容可完全自定义。
+- 程序初始化时配置自定义UI样式，调用的时候只需要关注数据。
+- 易于扩展，可以很方便的添加任意控件。
 
 
+## Toast（顶部通知横幅）
 
-### Alert（页面中心弹窗）
+通知条控件，用于非阻塞性事件通知。显示效果如同原生通知，默认会自动消失，可以支持手势移除，有多条通知可以平铺并列显示。
 
-- 多个Alert并存策略（具有景深效果的堆叠）。
-- 可以预先对不同的场景配置不同的默认值（图标、持续时间）。
-- 可快速创建具有预先配置的默认样式（Default、Destructive、Cancel）的按钮。
-- 对已发布的实例进行文本和按钮的更新，包括新增、修改、删除文本和按钮。
-- 强制退出按钮（防止超时导致页面卡死）。
+### 方式一：传入ViewModel生成实例
 
-
-
-### Guard（底部操作表）
-
-- 快速创建具有预先配置的默认样式的文本元素（标题、副标题、正文）。
-- 可快速创建具有预先配置的默认样式（Default、Destructive、Cancel）的按钮。
-
-
-## 基本使用
-
-以下示例中，scene、title、message等参数都是非必填项，如果不需要可以省略。
-
-
-### Toast 横幅
-
-默认提供的场景有：`default, loading, success, warning, error`。
-
-示例1：发布一个警告
+这种方式创建的实例在调用`push()`之后才会显示出来，结构为： 
 
 ```swift
-Toast.push(scene: .warning, title: "设备电量过低", message: "请及时对设备进行充电，以免影响使用。")
+let 实例 = Toast(视图模型)
+实例.push()
 ```
 
-示例2：发布一个警告并设置其他属性
+也可以连在一起写，例如：
 
 ```swift
-Toast.push(scene: .warning, title: "设备电量过低", message: "请及时对设备进行充电，以免影响使用。") { (toast) in
-    // 设置identifier
-    toast.identifier = "这是唯一标识"
-    // 禁止通过手势将其移出屏幕
+Toast(.message("要显示的消息内容")).push()
+```
+
+#### 如何创建ViewModel
+
+ViewModel有多种创建方式，也可以自行扩展更多常用场景，例如：
+
+```swift
+// 纯文本
+let vm = .message("要显示的消息内容")
+// 持续2s的文本
+let vm = .message("要显示的消息内容").duration(2)
+// 标题 + 正文
+let vm = .title("标题").message("正文")
+```
+
+内置了几种常见的场景扩展，例如正在加载的场景：
+```swift
+static var loading: ViewModel {
+    let obj = ViewModel(icon: UIImage(inProHUD: "prohud.windmill"))
+    obj.rotation = .init(repeatCount: .infinity)
+    return obj
+}
+static func loading(_ seconds: TimeInterval) -> ViewModel {
+    let obj = ViewModel(icon: UIImage(inProHUD: "prohud.windmill"), duration: seconds)
+    obj.rotation = .init(repeatCount: .infinity)
+    return obj
+}
+```
+
+使用的时候可以：
+```swift
+// 无限持续时间
+let vm = .loading
+// 无限持续时间, 带有文字
+let vm = .loading.message("正在加载")
+// 持续10s
+let vm = .loading(10)
+// 持续10s, 带有文字
+let vm = .loading(10).message("正在加载")
+```
+
+### 方式二：以闭包形式创建并显示实例
+
+对于复杂实例，建议以这种方式使用，例如给实例增加事件响应：
+
+```swift
+let title = "您收到了一条消息"
+let message = "点击通知横幅任意处即可回复"
+Toast { toast in
+    toast.vm = .msg.title(title).message(message)
+    toast.onTapped { toast in
+        toast.pop()
+        Alert(.success(1).message("操作成功")).push()
+    }
+}
+```
+
+也可以增加多个按钮，横向平铺，在这个例子中，左侧图标位置自定义为头像：
+```swift
+let title = "您收到了一条好友申请"
+let message = "丹妮莉丝·坦格利安申请添加您为好友，是否同意？"
+Toast(.title(title).message(message)) { toast in
     toast.isRemovable = false
-    // 监听点击事件
-    toast.didTapped {
-        print("点击了这条横幅")
+    toast.vm.icon = UIImage(named: "avatar")
+    toast.imageView.layer.masksToBounds = true
+    toast.imageView.layer.cornerRadius = toast.config.iconSize.width / 2
+    toast.add(action: "拒绝", style: .destructive) { toast in
+        // 按钮点击事件回调
+        ...
+    }
+    toast.add(action: "同意") { toast in
+        // 按钮点击事件回调
+        toast.pop()
+        Alert(.success(1).message("Good choice!")).push()
     }
 }
 ```
 
+### 如果存在就更新，不存在就创建新的实例
 
-
-### Alert 弹窗
-
-示例1：发布一个Loading
+例如弹出一个loading，有多个地方需要更新这个loading，为了避免重复弹出多个实例，可以使用 `lazyPush` 方法：
 
 ```swift
-// 写法1（最简）
-let a = Alert.push(scene: .loading, title: "正在加载", message: "请稍等片刻").rotate()
-
-// 写法2（标准）
-Alert.push() { (a) in
-    a.identifier = "loading"
-    a.rotate()
-    a.update { (vm) in
-        vm.scene = .loading
-        vm.title = "正在同步"
-        vm.message = "请稍等片刻"
-    }
-}
-
-// 写法3（飞入效果）
-let a = Alert.push() { (a) in
-    a.identifier = "loading"
-}
-a.rotate()
-a.update { (vm) in
-    vm.scene = .loading
-    vm.title = "正在同步"
-    vm.message = "请稍等片刻"
+Toast.lazyPush(identifier: "loading") { toast in
+    toast.vm = .loading.title("正在加载\(i)").message("这条消息不会重复显示多条")
 }
 ```
 
-示例2：发布一个可交互弹窗
+### 如果存在就更新，不存在就忽略指令
+
+如果要对一个已经存在的实例进行更新，假如实例已经结束显示了，那就不进行任何操作，这时候可以使用 `find` 方法：
 
 ```swift
-Alert.push() { (a) in
-    a.identifier = "error"
-    a.update { (vm) in
-        vm.scene = .error
-        vm.title = "同步失败"
-        vm.message = "请检查网络是否连接"
-        vm.add(action: .default, title: "重试") {
-            // do something
-        }
-        vm.add(action: .cancel, title: "取消", handler: nil)
-    }
+Toast.find(identifier: "loading") { toast in
+    toast.vm = .success(2).message("加载成功")
 }
 ```
 
+## Alert（页面中心弹窗）
 
-### Guard 操作表
+弹窗控件，用于强阻塞性交互，用户必须做出选择或者等待结果才能进入下一步，当多个实例出现时，会以堆叠的形式显示，新的实例会在覆盖旧的实例上层。
 
-`Guard`控件使用更加灵活：
+Alert和Toast一样有两种创建方法，不再赘述。
+
+### 修改实例内容
+
+在实例弹出后仍然可以修改实例内容：
 
 ```swift
-Guard.push { (g) in
-    g.update { (vm) in
-        vm.add(title: "大标题")
-        vm.add(subTitle: "副标题")
-        vm.add(message: "正文")
-        vm.add(action: .default, title: "确定") {
-            // do something
-        }
-        vm.add(action: .destructive, title: "删除") {
-            // do something
-        }
-        vm.add(action: .cancel, title: "取消") {
-
-        }
+// 持有实例的情况下：
+Alert(.note) { alert in
+    alert.vm.message = "可以动态增加、删除、更新文字"
+    alert.add(action: "增加标题") { alert in
+        alert.vm.title = "这是标题"
+        alert.reloadTextStack()
     }
+    alert.add(action: "增加正文") { alert in
+        alert.vm.message = "可以动态增加、删除、更新文字"
+        alert.reloadTextStack()
+    }
+    alert.add(action: "删除标题", style: .destructive) { alert in
+        alert.vm.title = nil
+        alert.reloadTextStack()
+    }
+    alert.add(action: "删除正文", style: .destructive) { alert in
+        alert.vm.message = nil
+        alert.reloadTextStack()
+    }
+    alert.add(action: "取消", style: .gray)
+}
+// 未持有实例时，可通过 identifier 查找并更新：
+Alert.find(identifier: "my-alert") { alert in
+    alert.vm.title = "这是标题"
+    alert.reloadTextStack()
 }
 ```
 
-示例1：弹出一个删除的操作表
+### 按钮的增删改查
 
 ```swift
-Guard.push() { (g) in
-    g.update { (vm) in
-        // 添加一个删除按钮
-        vm.add(action: .destructive, title: "删除") { [weak g] in
-            // 确认弹窗
-            Alert.push(scene: .delete, title: "确认删除", message: "此操作不可撤销") { (a) in
-                a.update { (vm) in
-                    vm.add(action: .destructive, title: "删除") { [weak a] in
-                        // 删除操作
-                        a?.pop()
-                    }
-                    vm.add(action: .cancel, title: "取消", handler: nil)
-                }
-            }
-            g?.pop()
-        }
-        // 添加一个取消按钮
-        vm.add(action: .cancel, title: "取消", handler: nil)
+Alert(.note) { alert in
+    alert.vm.message = "可以动态增加、删除按钮"
+    alert.add(action: "在底部增加按钮", style: .filled(color: .systemGreen)) { alert in
+        alert.add(action: "哈哈1", identifier: "haha1")
     }
-}
-```
-
-示例2：弹出一个全屏的隐私政策页面
-
-```swift
-Guard.push() { (vc) in
-    vc.isFullScreen = true
-    vc.update { (vm) in
-        let titleLabel = vm.add(title: "隐私协议")
-        titleLabel.snp.makeConstraints { (mk) in
-            mk.height.equalTo(44)
-        }
-        let tv = UITextView()
-        tv.backgroundColor = .white
-        tv.isEditable = false
-        vc.textStack.addArrangedSubview(tv)
-        tv.text = "这里可以插入一个webView"
-        vm.add(message: "请认真阅读以上内容，当您阅读完毕并同意协议内容时点击接受按钮。")
-        vm.add(action: .default, title: "接受") { [weak vc] in
-            vc?.pop()
-        }
-    }  
-}
-```
-
-## 高级用法
-
-### 更新已有实例
-
-示例：获取刚才弹出的Loading，把它更新为加载成功。
-
-```swift
-Alert.find("loading", last: { (a) in
-    a.update { (vm) in
-        vm.scene = .success
-        vm.title = "同步成功"
-        vm.message = nil
+    alert.add(action: "在当前按钮下方增加", style: .filled(color: .systemIndigo), identifier: "add") { alert in
+        alert.insert(action: .init(identifier: "haha2", style: .light(color: .systemOrange), title: "哈哈2", handler: nil), after: "add")
     }
-})
-```
-
-### 避免重复发布
-
-示例：发布一个横幅或者弹窗，如果已经有了就更新标题。
-
-```swift
-Toast.find("aaa", last: { (t) in
-    t.update() { (vm) in
-        vm.title = "已经存在了"
+    alert.add(action: "修改当前按钮文字", identifier: "edit") { alert in
+        alert.update(action: "已修改", for: "edit")
     }
-}) {
-    Toast.push(title: "这是一条id为aaa的横幅", message: "避免重复发布同一条信息") { (t) in
-        t.identifier = "aaa"
-        t.update { (vm) in
-            vm.scene = .warning
-            vm.duration = 0
+    alert.add(action: "删除「哈哈1」", style: .destructive) { alert in
+        alert.remove(actions: .identifiers("haha1"))
+    }
+    alert.add(action: "删除「哈哈1」和「哈哈2」", style: .destructive) { alert in
+        alert.remove(actions: .identifiers("haha1", "haha2"))
+    }
+    alert.add(action: "删除全部按钮", style: .destructive) { alert in
+        alert.remove(actions: .all)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            alert.pop()
         }
     }
+    alert.add(action: "取消", style: .gray)
+}
+```
+
+### 添加自定义控件
+
+```swift
+Alert { alert in
+    alert.vm.title = "自定义控件"
+    // 图片
+    let imgv = UIImageView(image: UIImage(named: "landscape"))
+    imgv.contentMode = .scaleAspectFill
+    imgv.clipsToBounds = true
+    imgv.layer.cornerRadiusWithContinuous = 12
+    alert.add(subview: imgv).snp.makeConstraints { make in
+        make.height.equalTo(120)
+    }
+    // seg
+    let seg = UISegmentedControl(items: ["开发", "测试", "预发", "生产"])
+    seg.selectedSegmentIndex = 0
+    alert.add(subview: seg).snp.makeConstraints { make in
+        make.height.equalTo(40)
+        make.width.equalTo(400)
+    }
+    // slider
+    let slider = UISlider()
+    slider.minimumValue = 0
+    slider.maximumValue = 100
+    slider.value = 50
+    alert.add(subview: slider)
+    alert.add(spacing: 24)
+    alert.add(action: "取消", style: .gray)
 }
 ```
 
 
-### 修改样式
+## Sheet（底部操作表）
 
-你可以在AppDelegate中配置好颜色、字体、间距等
+操作表控件，用于弱阻塞性交互。显示区域为从屏幕底部向上弹出的新图层，可以放置丰富的内容，自由度较高。
 
-```swift
-ProHUD.config { (cfg) in
-    cfg.rootViewController = window!.rootViewController
-    cfg.primaryLabelColor = .black // 标题颜色
-    cfg.secondaryLabelColor = .darkGray // 正文颜色
-    cfg.alert { (a) in
-        a.titleFont = .bold(22)
-        a.bodyFont = .regular(17)
-        a.boldTextFont = .bold(18)
-        a.buttonFont = .bold(18)
-        a.forceQuitTimer = 3
-        a.iconSize = .init(width: 48, height: 48)
-        a.margin = 8
-        a.padding = 16
-    }
-    cfg.toast { (t) in
-        t.titleFont = .bold(18)
-        t.bodyFont = .regular(16)
-    }
-    cfg.guard { (g) in
-        g.titleFont = .bold(22)
-        g.subTitleFont = .bold(20)
-        g.bodyFont = .regular(17)
-        g.buttonFont = .bold(18)
-    }
-}
-```
+### 布局
 
-### 场景及其扩展
-
-你可以在一个文件中扩展场景，例如：
+操作表控件空间较大，可以放置更多的文字、按钮和其它任何控件。
 
 ```swift
-extension ProHUD.Scene {
-    static var confirm: ProHUD.Scene {
-        var scene = ProHUD.Scene(identifier: "confirm")
-        scene.image = UIImage(named: "ProHUDMessage")
-        return scene
-    }
-    static var delete: ProHUD.Scene {
-        var scene = ProHUD.Scene(identifier: "delete")
-        scene.image = UIImage(named: "ProHUDTrash")
-        scene.title = "确认删除"
-        scene.message = "此操作不可撤销"
-        return scene
-    }
-    static var buy: ProHUD.Scene {
-        var scene = ProHUD.Scene(identifier: "buy")
-        scene.image = UIImage(named: "ProHUDBuy")
-        scene.title = "确认付款"
-        scene.message = "一旦购买拒不退款"
-        return scene
-    }
-}
-```
-
-这样你在发布横幅或者弹窗的时候，scene参数就可以填写`.confirm, .delete, .buy`这三种了。例如：
-
-```swift
-Alert.push(scene: .delete) { (a) in
-    a.update() { (vm) in
-        vm.add(action: .destructive, title: "删除") { [weak a] in
-            // 删除操作
-            a?.pop()
+Sheet { sheet in
+    sheet.add(title: "ProHUD")
+    sheet.add(subTitle: "什么是操作表控件")
+    sheet.add(message: "操作表控件，用于弱阻塞性交互。显示区域为从屏幕底部向上弹出的新图层，可以放置丰富的内容，自由度较高。")
+    sheet.add(spacing: 24)
+    sheet.add(action: "确认", style: .destructive) { sheet in
+        Alert(.confirm) { alert in
+            alert.vm.title = "处理点击事件"
+            alert.add(action: "我知道了")
         }
-        vm.add(action: .cancel, title: "取消", handler: nil)
+    }
+    sheet.add(action: "取消", style: .gray)
+}
+```
+
+同样支持添加任意其它视图：
+
+```swift
+Sheet { sheet in
+    sheet.add(title: "ProHUD")
+    // 图片
+    let imgv = UIImageView(image: UIImage(named: "landscape"))
+    imgv.contentMode = .scaleAspectFill
+    imgv.clipsToBounds = true
+    imgv.layer.cornerRadiusWithContinuous = 16
+    sheet.add(subview: imgv).snp.makeConstraints { make in
+        make.height.equalTo(200)
+    }
+    // seg
+    let seg = UISegmentedControl(items: ["开发", "测试", "预发", "生产"])
+    seg.selectedSegmentIndex = 0
+    sheet.add(subview: seg).snp.makeConstraints { make in
+        make.height.equalTo(40)
+        make.width.equalTo(400)
+    }
+    // slider
+    let slider = UISlider()
+    slider.minimumValue = 0
+    slider.maximumValue = 100
+    slider.value = 50
+    sheet.add(subview: slider).snp.makeConstraints { make in
+        make.height.equalTo(50)
     }
 }
 ```
 
-这样就可以弹出一个预先配置好的确认删除样式的弹窗。
+### 拦截背景点击事件
 
+有时候如果不希望点击背景直接`pop`掉，可以实现 `onTappedBackground` 以拦截背景点击事件
+
+```swift
+Sheet { sheet in
+    sheet.add(title: "ProHUD")
+    sheet.add(message: "点击背景将不会dismiss，必须在下方做出选择才能关掉")
+    sheet.add(spacing: 24)
+    sheet.add(action: "确认")
+    sheet.add(action: "取消", style: .gray)
+} onTappedBackground: { sheet in
+    print("点击了背景")
+    Toast.lazyPush(identifier: "alert") { toast in
+        toast.vm = .error
+        toast.vm.title = "点击了背景"
+        toast.vm.message = "点击背景将不会dismiss，必须在下方做出选择才能关掉"
+        toast.vm.duration = 2
+    }
+}
+```
+
+## 个性化设置
 
 ### 完全自定义布局
 
+ProHUD支持完全自定义布局，即将整个容器交给使用者来布局，在 `Alert.Configuration.shared` 中配置了 `reloadData` 规则之后，实例在显示前以及更新内容时都会进入此函数，执行自定义的 `reloadData` 代码。也可以指定部分 `identifier` 走自定义布局代码，其余走内置布局代码，例如：
+
 ```swift
-ProHUD.config { (cfg) in
-    cfg.alert { (config) in
-        config.reloadData { (vc) in
-            // 这是数据模型
-            vc.vm
-            // 这是要弹出的vc
-            vc
-            // 你可以在这里完全自由布局
+Alert.Configuration.shared { config in
+    config.reloadData { vc in
+        if vc.identifier == "custom" {
+            return true
         }
+        return false
+    }
+}
+Alert { alert in
+    alert.identifier = "custom"
+    alert.contentView.backgroundColor = .systemYellow
+    alert.view.addSubview(alert.contentView)
+    alert.contentView.layer.cornerRadiusWithContinuous = 32
+    alert.contentView.snp.makeConstraints { make in
+        make.width.equalTo(UIScreen.main.bounds.width - 100)
+        make.height.equalTo(UIScreen.main.bounds.height - 200)
+        make.center.equalToSuperview()
+    }
+    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        alert.pop()
     }
 }
 ```
 
+### 个性化选项
+
+ProHUD内置的布局也支持丰富的个性化参数，例如：
+
+- 标题、正文、按钮字体字号
+- 背景颜色、模糊效果
+- 文字颜色
+- 图标大小
+- 卡片圆角
+- Sheet组件卡片距离屏幕的边距
+
+具体请探索 `ProHUD.Configuration` 类代码。
 
 
 ## 文档

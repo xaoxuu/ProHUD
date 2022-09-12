@@ -98,13 +98,6 @@ public extension ViewModel {
         return obj
     }
     
-    static func text(title: String?, message: String?) -> ViewModel {
-        let obj = ViewModel()
-        obj.title = title
-        obj.message = message
-        return obj
-    }
-    
     // MARK: loading
     static var loading: ViewModel {
         let obj = ViewModel(icon: UIImage(inProHUD: "prohud.windmill"))

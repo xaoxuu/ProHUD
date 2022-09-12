@@ -35,7 +35,7 @@ class AlertVC: ListVC {
                 let title = "这是标题"
                 let message = "这是正文，文字支持自动换行，可设置最小宽度和最大宽度。这个弹窗将会持续4秒。"
                 Alert { alert in
-                    alert.vm = .text(title: title, message: message)
+                    alert.vm = .title(title).message(message)
                     alert.vm.duration = 4
                 }
             }

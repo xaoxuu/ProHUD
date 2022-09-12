@@ -25,7 +25,7 @@ class ToastVC: ListVC {
             }
         }
         
-        
+        let vm: ViewModel = .loading
         list.add(title: "默认布局") { section in
             section.add(title: "标题 + 正文") {
                 Toast(.title(title).message(message)).push()
@@ -99,6 +99,9 @@ class ToastVC: ListVC {
                         })
                         toast.pop()
                         Alert(.success(1).message("Good choice!")).push()
+                    }
+                    Toast.find(identifier: "loading") { toast in
+                        toast.vm = .success(2).message("加载成功")
                     }
                 }
             }

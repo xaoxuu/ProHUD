@@ -66,7 +66,7 @@ class SheetVC: ListVC {
         }
         
         list.add(title: "事件管理") { section in
-            section.add(title: "拦截点击背景事件") {
+            section.add(title: "拦截背景点击事件") {
                 Sheet { sheet in
                     sheet.add(title: "ProHUD")
                     sheet.add(message: "点击背景将不会dismiss，必须在下方做出选择才能关掉")
