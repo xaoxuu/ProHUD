@@ -25,11 +25,10 @@ public extension Sheet {
     /// - Parameters:
     ///   - identifier: 实例唯一标识符（如果为空，则以代码位置为唯一标识符）
     ///   - handler: 实例创建代码
-    static func lazyPush(identifier: String? = nil, file: String = #file, line: Int = #line, handler: @escaping (_ sheet: Sheet) -> Void) {
+    static func lazyPush(identifier: String? = nil, file: String = #file, line: Int = #line, handler: @escaping (_ sheet: Sheet) -> Void, onExists: ((_ sheet: Sheet) -> Void)? = nil) {
         let id = identifier ?? (file + "#\(line)")
         if let vc = find(identifier: id).last {
-            handler(vc)
-            vc.reloadData()
+            onExists?(vc)
         } else {
             Sheet { sheet in
                 sheet.identifier = id

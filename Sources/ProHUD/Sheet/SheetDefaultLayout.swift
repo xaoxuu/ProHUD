@@ -81,16 +81,7 @@ extension Sheet: DefaultLayout {
                 } else {
                     make.top.equalToSuperview().offset(config.padding * 2)
                 }
-                if width < maxWidth {
-                    let bottom = screenSafeAreaInsets.bottom
-                    if bottom == 0 {
-                        make.bottom.equalToSuperview().inset(config.padding * 2)
-                    } else {
-                        make.bottom.equalToSuperview().inset(bottom - config.padding / 2)
-                    }
-                } else {
-                    make.bottom.equalToSuperview().inset(config.padding * 2)
-                }
+                make.bottom.equalToSuperview().inset(config.padding * 2)
                 if isPortrait {
                     make.left.right.equalToSuperview().inset(config.padding)
                 } else {

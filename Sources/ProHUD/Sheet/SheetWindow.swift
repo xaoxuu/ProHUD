@@ -15,9 +15,14 @@ class SheetWindow: Window {
     
     init(sheet: Sheet) {
         self.sheet = sheet
-        super.init(frame: .zero)
         if #available(iOS 13.0, *) {
-            windowScene = sheet.config.windowScene ?? UIApplication.shared.windows.last?.windowScene
+            if let scene = sheet.config.windowScene ?? UIApplication.shared.windows.last?.windowScene {
+                super.init(windowScene: scene)
+            } else {
+                super.init(frame: UIScreen.main.bounds)
+            }
+        } else {
+            super.init(frame: UIScreen.main.bounds)
         }
         sheet.window = self
         windowLevel = .init(rawValue: UIWindow.Level.alert.rawValue - 2)
@@ -38,7 +43,7 @@ class SheetWindow: Window {
             window = SheetWindow(sheet: sheet)
             isNew = true
         }
-        window.rootViewController = sheet // 此时toast.view.frame.size会自动更新为window.frame.size
+        window.rootViewController = sheet
         if windows.contains(window) == false {
             windows.append(window)
         }

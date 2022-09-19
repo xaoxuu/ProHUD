@@ -58,14 +58,11 @@ public class ProgressView: UIView {
     }
     
     func updateProgress(progress: CGFloat) {
-        if progress <= 1 {
-            // 初始化
-            if progressLayer.superlayer == nil {
-                progressLayer.strokeEnd = 0
-                layer.addSublayer(progressLayer)
-            }
-            progressLayer.strokeEnd = progress
+        if progressLayer.superlayer == nil {
+            progressLayer.strokeEnd = 0
+            layer.addSublayer(progressLayer)
         }
+        progressLayer.strokeEnd = max(min(progress, 1), 0)
     }
     
 }

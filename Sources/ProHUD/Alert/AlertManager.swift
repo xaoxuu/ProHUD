@@ -70,11 +70,10 @@ public extension Alert {
     /// - Parameters:
     ///   - identifier: 实例唯一标识符（如果为空，则以代码位置为唯一标识符）
     ///   - handler: 实例创建代码
-    static func lazyPush(identifier: String? = nil, file: String = #file, line: Int = #line, handler: @escaping (_ alert: Alert) -> Void) {
+    static func lazyPush(identifier: String? = nil, file: String = #file, line: Int = #line, handler: @escaping (_ alert: Alert) -> Void, onExists: ((_ alert: Alert) -> Void)? = nil) {
         let id = identifier ?? (file + "#\(line)")
         if let vc = AlertWindow.alerts.last(where: { $0.identifier == id }) {
-            handler(vc)
-            vc.reloadData()
+            onExists?(vc)
         } else {
             Alert { alert in
                 alert.identifier = id
