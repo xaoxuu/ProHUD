@@ -79,22 +79,22 @@ public class Alert: ProHUD.Controller {
         }
     }
     
-    @discardableResult public init(_ vm: ViewModel?, callback: ((_ alert: Alert) -> Void)? = nil) {
+    @discardableResult public init(_ vm: ViewModel?, handler: ((_ alert: Alert) -> Void)? = nil) {
         super.init()
         if let vm = vm {
             self.vm = vm
         }
-        callback?(self)
+        handler?(self)
         DispatchQueue.main.async {
-            if callback != nil {
+            if handler != nil {
                 self.setDefaultAxis()
                 self.push()
             }
         }
     }
     
-    @discardableResult public convenience init(callback: ((_ alert: Alert) -> Void)?) {
-        self.init(nil, callback: callback)
+    @discardableResult public convenience init(handler: ((_ alert: Alert) -> Void)?) {
+        self.init(nil, handler: handler)
     }
     
     public override func viewDidLoad() {

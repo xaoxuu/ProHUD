@@ -92,21 +92,21 @@ public class Toast: Controller {
     }
     
     
-    @discardableResult public init(_ vm: ViewModel?, callback: ((_ toast: Toast) -> Void)? = nil) {
+    @discardableResult public init(_ vm: ViewModel?, handler: ((_ toast: Toast) -> Void)? = nil) {
         super.init()
         if let vm = vm {
             self.vm = vm
         }
-        callback?(self)
+        handler?(self)
         DispatchQueue.main.async {
-            if callback != nil {
+            if handler != nil {
                 ToastWindow.push(toast: self)
             }
         }
     }
     
-    @discardableResult public convenience init(callback: ((_ toast: Toast) -> Void)?) {
-        self.init(nil, callback: callback)
+    @discardableResult public convenience init(handler: ((_ toast: Toast) -> Void)?) {
+        self.init(nil, handler: handler)
     }
     
     required public init?(coder: NSCoder) {
