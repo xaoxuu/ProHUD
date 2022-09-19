@@ -21,7 +21,7 @@ public extension Toast {
         insert(action: action, at: actionStack.arrangedSubviews.count)
     }
     
-    func insert(action: Action, at index: Int) -> Button {
+    @discardableResult func insert(action: Action, at index: Int) -> Button {
         let btn = ToastButton(config: config, action: action)
         if index < actionStack.arrangedSubviews.count {
             actionStack.insertArrangedSubview(btn, at: index)

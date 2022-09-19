@@ -13,7 +13,7 @@ extension Alert: InternalConvenienceLayout {
     @discardableResult public func add(action: Action) -> Button {
         insert(action: action, at: actionStack.arrangedSubviews.count)
     }
-    public func insert(action: Action, at index: Int) -> Button {
+    @discardableResult public func insert(action: Action, at index: Int) -> Button {
         let btn = Button(config: config, action: action)
         if index < actionStack.arrangedSubviews.count {
             actionStack.insertArrangedSubview(btn, at: index)
@@ -106,7 +106,7 @@ extension Alert: InternalConvenienceLayout {
     
     // MARK: 完全自定义布局
     
-    public func set(customView: UIView) -> UIView {
+    @discardableResult public func set(customView: UIView) -> UIView {
         self.customView = customView
         contentView.subviews.forEach({ $0.removeFromSuperview() })
         contentView.addSubview(customView)
