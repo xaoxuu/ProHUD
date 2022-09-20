@@ -52,3 +52,15 @@ class Window: UIWindow {
     }
     
 }
+
+@available(iOS 13.0, *)
+extension UIWindowScene {
+    
+    static var mainWindowScene: UIWindowScene? {
+        UIApplication.shared.connectedScenes.first(where: { scene in
+            guard let ws = scene as? UIWindowScene else { return false }
+            return ws.activationState == .foregroundActive
+        }) as? UIWindowScene
+    }
+    
+}

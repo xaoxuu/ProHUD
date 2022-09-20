@@ -19,7 +19,7 @@ class ToastWindow: Window {
         self.toast = toast
         super.init(frame: .zero)
         if #available(iOS 13.0, *) {
-            windowScene = toast.config.windowScene ?? UIApplication.shared.windows.last?.windowScene
+            windowScene = toast.config.windowScene ?? UIWindowScene.mainWindowScene
         }
         toast.window = self
         windowLevel = .init(rawValue: UIWindow.Level.alert.rawValue + 1000)

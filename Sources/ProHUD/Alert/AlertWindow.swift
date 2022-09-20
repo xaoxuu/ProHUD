@@ -21,7 +21,7 @@ class AlertWindow: Window {
         }
         let w: AlertWindow
         if #available(iOS 13.0, *) {
-            if let scene = config.windowScene ?? UIApplication.shared.windows.last?.windowScene {
+            if let scene = config.windowScene ?? UIWindowScene.mainWindowScene {
                 w = .init(windowScene: scene)
             } else {
                 w = .init(frame: UIScreen.main.bounds)

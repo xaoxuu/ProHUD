@@ -16,7 +16,7 @@ class SheetWindow: Window {
     init(sheet: Sheet) {
         self.sheet = sheet
         if #available(iOS 13.0, *) {
-            if let scene = sheet.config.windowScene ?? UIApplication.shared.windows.last?.windowScene {
+            if let scene = sheet.config.windowScene ?? UIWindowScene.mainWindowScene {
                 super.init(windowScene: scene)
             } else {
                 super.init(frame: UIScreen.main.bounds)
