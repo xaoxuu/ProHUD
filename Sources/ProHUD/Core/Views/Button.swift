@@ -60,7 +60,7 @@ open class Button: UIButton {
             setTitleColor(textColor, for: .normal)
             backgroundColor = .none
             contentEdgeInsets.top = 0
-            contentEdgeInsets.bottom = 4
+            contentEdgeInsets.bottom = 0
         }
     }
     
