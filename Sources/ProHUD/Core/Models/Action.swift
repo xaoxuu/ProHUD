@@ -28,6 +28,7 @@ open class Action: NSObject {
         case destructive // red button, background with systemRed
         case filled(color: UIColor) // background with custom color
         case light(color: UIColor) // light background with custom color, text with custom color
+        case plain(textColor: UIColor) // plain text
     }
     
     public private(set) var identifier: String?

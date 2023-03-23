@@ -106,7 +106,7 @@ extension Alert: DefaultLayout {
     
     func setDefaultAxis() {
         guard isViewDisplayed == false && config.actionAxis == nil else { return }
-        let count = actionStack.arrangedSubviews.count
+        let count = actionStack.arrangedSubviews.filter({ $0.isKind(of: UIControl.self )}).count
         guard count < 4 else { return }
         if isPortrait && count < 3 || !isPortrait {
             actionStack.axis = .horizontal

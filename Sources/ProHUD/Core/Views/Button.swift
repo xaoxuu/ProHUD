@@ -56,6 +56,11 @@ open class Button: UIButton {
         case .light(let color):
             setTitleColor(color, for: .normal)
             backgroundColor = color.withAlphaComponent(0.15)
+        case .plain(let textColor):
+            setTitleColor(textColor, for: .normal)
+            backgroundColor = .none
+            contentEdgeInsets.top = 0
+            contentEdgeInsets.bottom = 4
         }
     }
     

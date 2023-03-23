@@ -89,17 +89,30 @@ extension Alert: InternalConvenienceLayout {
     // MARK: 自定义控件
     
     @discardableResult public func add(subview: UIView) -> UIView {
+        contentStack.addArrangedSubview(subview)
+        if #available(iOS 11.0, *) {
+            if let last = contentStack.arrangedSubviews.last {
+                contentStack.setCustomSpacing(0, after: last)
+            }
+        }
+        return subview
+    }
+    
+    @discardableResult public func add(action subview: UIView) -> UIView {
         actionStack.addArrangedSubview(subview)
         return subview
     }
     
-    
     // MARK: 布局工具
     
     public func add(spacing: CGFloat) {
+        add(spacing: spacing, for: contentStack)
+    }
+    
+    public func add(spacing: CGFloat, for stack: UIStackView) {
         if #available(iOS 11.0, *) {
-            if let last = actionStack.arrangedSubviews.last {
-                actionStack.setCustomSpacing(spacing, after: last)
+            if let last = stack.arrangedSubviews.last {
+                stack.setCustomSpacing(spacing, after: last)
             }
         }
     }

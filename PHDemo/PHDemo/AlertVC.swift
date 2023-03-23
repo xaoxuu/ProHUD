@@ -69,6 +69,24 @@ class AlertVC: ListVC {
             }
         }
         list.add(title: "文字 + 按钮") { section in
+            section.add(title: "只有一段文字 + 无背景色按钮") {
+                Alert { alert in
+                    alert.config.boldTextFont = .systemFont(ofSize: 15)
+                    alert.config.buttonFont = .systemFont(ofSize: 15)
+                    alert.config.cardCornerRadius = 12
+                    
+                    alert.vm.title = "为了维护社区氛围，上麦用户需进行主播认证"
+                    let v = UIView()
+                    v.backgroundColor = UIColor("#F7F7F7")
+                    alert.add(subview: v).snp.makeConstraints { make in
+                        make.left.right.equalToSuperview()
+                        make.height.equalTo(1)
+                    }
+                    alert.add(spacing: 16)
+                    alert.add(action: "取消", style: .plain(textColor: UIColor("#939999")))
+                    alert.add(action: "确定", style: .plain(textColor: UIColor("#14cccc")))
+                }
+            }
             section.add(title: "只有一段文字 + 按钮") {
                 Alert { alert in
                     alert.vm.title = "只有一段文字"
@@ -247,13 +265,13 @@ class AlertVC: ListVC {
                     imgv.contentMode = .scaleAspectFill
                     imgv.clipsToBounds = true
                     imgv.layer.cornerRadiusWithContinuous = 12
-                    alert.add(subview: imgv).snp.makeConstraints { make in
+                    alert.add(action: imgv).snp.makeConstraints { make in
                         make.height.equalTo(120)
                     }
                     // seg
                     let seg = UISegmentedControl(items: ["开发", "测试", "预发", "生产"])
                     seg.selectedSegmentIndex = 0
-                    alert.add(subview: seg).snp.makeConstraints { make in
+                    alert.add(action: seg).snp.makeConstraints { make in
                         make.height.equalTo(40)
                         make.width.equalTo(400)
                     }
@@ -262,8 +280,8 @@ class AlertVC: ListVC {
                     slider.minimumValue = 0
                     slider.maximumValue = 100
                     slider.value = 50
-                    alert.add(subview: slider)
-                    alert.add(spacing: 24)
+                    alert.add(action: slider)
+                    alert.add(spacing: 24, for: alert.actionStack)
                     alert.add(action: "取消", style: .gray)
                 }
             }
@@ -275,7 +293,7 @@ class AlertVC: ListVC {
                     s1.minimumValue = 0
                     s1.maximumValue = 40
                     s1.value = Float(alert.config.cardCornerRadius ?? 16)
-                    alert.add(subview: s1).snp.makeConstraints { make in
+                    alert.add(action: s1).snp.makeConstraints { make in
                         make.height.equalTo(50)
                     }
                     if #available(iOS 14.0, *) {
@@ -287,7 +305,7 @@ class AlertVC: ListVC {
                         // Fallback on earlier versions
                     }
                     alert.config.actionAxis = .vertical
-                    alert.add(spacing: 24)
+                    alert.add(spacing: 24, for: alert.actionStack)
                     alert.add(action: "OK", style: .gray)
                 }
             }
