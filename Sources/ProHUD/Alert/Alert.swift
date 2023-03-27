@@ -65,7 +65,7 @@ public class Alert: ProHUD.Controller {
     public lazy var actionStack: StackView = {
         let stack = StackView()
         stack.alignment = .fill
-        stack.distribution = .fill
+        stack.distribution = .fillEqually
         stack.spacing = config.margin
         return stack
     }()
