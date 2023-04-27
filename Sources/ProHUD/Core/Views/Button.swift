@@ -31,13 +31,13 @@ open class Button: UIButton {
     
     public convenience init(config: ProHUD.Configuration, action: Action) {
         self.init(frame: .zero)
+        layer.cornerRadiusWithContinuous = 8
         self.update(config: config, action: action)
     }
     
     /// 更新按钮
     /// - Parameter style: 样式
     open func update(config: ProHUD.Configuration, action: Action) {
-        layer.cornerRadiusWithContinuous = config.buttonCornerRadiusByDefault
         self.action = action
         setTitle(action.title, for: .normal)
         switch action.style {

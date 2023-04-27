@@ -15,6 +15,7 @@ public class AlertButton: Button {
     
     public override func update(config: ProHUD.Configuration, action: Action) {
         titleLabel?.font = .boldSystemFont(ofSize: 15)
+        layer.cornerRadiusWithContinuous = 8
         super.update(config: config, action: action)
     }
     

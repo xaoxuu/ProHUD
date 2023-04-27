@@ -20,16 +20,18 @@ public class Alert: ProHUD.Controller {
     /// 内容容器（包括icon、textStack、actionStack)
     public lazy var contentStack: StackView = {
         let stack = StackView(axis: .vertical)
-        stack.spacing = config.margin
+        stack.spacing = 24
         stack.alignment = .center
+        config.customContentStack?(stack)
         return stack
     }()
     
     /// 文本区容器
     public lazy var textStack: StackView = {
         let stack = StackView(axis: .vertical)
-        stack.spacing = config.margin
+        stack.spacing = 8
         stack.alignment = .center
+        config.customTextStack?(stack)
         return stack
     }()
     
@@ -66,7 +68,8 @@ public class Alert: ProHUD.Controller {
         let stack = StackView()
         stack.alignment = .fill
         stack.distribution = .fillEqually
-        stack.spacing = config.margin
+        stack.spacing = 8
+        config.customActionStack?(stack)
         return stack
     }()
     

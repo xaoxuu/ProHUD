@@ -96,8 +96,11 @@ extension Toast: DefaultLayout {
         // stacks
         if contentStack.superview != contentView {
             contentView.addSubview(contentStack)
-            contentStack.snp.remakeConstraints { (mk) in
-                mk.edges.equalToSuperview().inset(config.padding)
+            contentStack.snp.remakeConstraints { make in
+                make.top.equalToSuperview().inset(config.cardEdgeInsets.top)
+                make.left.equalToSuperview().inset(config.cardEdgeInsets.left)
+                make.bottom.equalToSuperview().inset(config.cardEdgeInsets.bottom)
+                make.right.equalToSuperview().inset(config.cardEdgeInsets.right)
             }
         }
         contentStack.insertArrangedSubview(infoStack, at: 0)

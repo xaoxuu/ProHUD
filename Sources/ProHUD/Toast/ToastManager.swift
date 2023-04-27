@@ -28,7 +28,7 @@ public extension Toast {
     static func lazyPush(identifier: String? = nil, file: String = #file, line: Int = #line, handler: @escaping (_ toast: Toast) -> Void, onExists: ((_ toast: Toast) -> Void)? = nil) {
         let id = identifier ?? (file + "#\(line)")
         if let vc = find(identifier: id).last {
-            onExists?(vc)
+            vc.update(handler: onExists ?? handler)
         } else {
             Toast { toast in
                 toast.identifier = id

@@ -50,7 +50,7 @@ class ToastWindow: Window {
         }
         let config = toast.config
         // frame
-        let width = CGFloat.minimum(UIScreen.main.bounds.width - 2*config.margin, config.cardMaxWidthByDefault)
+        let width = CGFloat.minimum(UIScreen.main.bounds.width - config.cardEdgeInsets.left - config.cardEdgeInsets.right, config.cardMaxWidthByDefault)
         toast.view.frame.size = CGSize(width: width, height: config.cardMaxHeightByDefault)
         toast.titleLabel.sizeToFit()
         toast.bodyLabel.sizeToFit()
@@ -164,7 +164,7 @@ fileprivate extension Toast {
             height = CGFloat.maximum(v.frame.maxY, height)
         }
         // 上下边间距
-        height += 2 * config.padding
+        height += config.cardEdgeInsets.top + config.cardEdgeInsets.bottom
         return height
     }
 }

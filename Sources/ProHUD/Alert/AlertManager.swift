@@ -73,7 +73,7 @@ public extension Alert {
     static func lazyPush(identifier: String? = nil, file: String = #file, line: Int = #line, handler: @escaping (_ alert: Alert) -> Void, onExists: ((_ alert: Alert) -> Void)? = nil) {
         let id = identifier ?? (file + "#\(line)")
         if let vc = AlertWindow.alerts.last(where: { $0.identifier == id }) {
-            onExists?(vc)
+            vc.update(handler: onExists ?? handler)
         } else {
             Alert { alert in
                 alert.identifier = id

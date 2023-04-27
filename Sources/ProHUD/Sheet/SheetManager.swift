@@ -28,7 +28,7 @@ public extension Sheet {
     static func lazyPush(identifier: String? = nil, file: String = #file, line: Int = #line, handler: @escaping (_ sheet: Sheet) -> Void, onExists: ((_ sheet: Sheet) -> Void)? = nil) {
         let id = identifier ?? (file + "#\(line)")
         if let vc = find(identifier: id).last {
-            onExists?(vc)
+            vc.update(handler: onExists ?? handler)
         } else {
             Sheet { sheet in
                 sheet.identifier = id
@@ -86,7 +86,7 @@ extension Sheet {
     
     func _translateOut() {
         backgroundView.alpha = 0
-        contentView.transform = .init(translationX: 0, y: view.frame.size.height - contentView.frame.minY + config.margin)
+        contentView.transform = .init(translationX: 0, y: view.frame.size.height - contentView.frame.minY + config.screenEdgeInset)
     }
     
 }

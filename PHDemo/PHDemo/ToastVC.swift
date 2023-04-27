@@ -155,7 +155,9 @@ class ToastVC: ListVC {
         list.add(title: "实例管理") { section in
             var i = 0
             section.add(title: "多实例共存") {
-                Toast(.loading.title("多实例共存").message("直接创建的实例，以平铺方式排列").duration(2)).push()
+                Toast(.loading.title("多实例共存").message("直接创建的实例，以平铺方式排列").duration(2)) { toast in
+                    toast.config.cardEdgeInsets = .init(top: 32, left: 20, bottom: 32, right: 20)
+                }
             }
             section.add(title: "不存在就创建，存在就更新") {
                 i += 1
@@ -244,12 +246,12 @@ class ToastVC: ListVC {
                     lb.textAlignment = .center
                     stack.addArrangedSubview(lb)
                     
-                    let btn1 = ProHUD.Button(config: toast.config, action: .init(style: .gray, title: "取消"))
+                    let btn1 = ProHUD.ToastButton(config: toast.config, action: .init(style: .gray, title: "取消"))
                     btn1.onTouchUpInside { action in
                         print("点击了取消")
                         testAlert()
                     }
-                    let btn2 = ProHUD.Button(config: toast.config, action: .init(style: .tinted, title: "确定"))
+                    let btn2 = ProHUD.ToastButton(config: toast.config, action: .init(style: .tinted, title: "确定"))
                     btn2.onTouchUp { action in
                         print("点击了确定")
                         testAlert()

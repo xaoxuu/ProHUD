@@ -90,17 +90,39 @@ public class Configuration: NSObject {
     /// 最小高度
     public var cardMinHeight = CGFloat(32)
     
+    /// 卡片内边距
+    public var cardEdgeInsets: UIEdgeInsets = {
+        .init(top: 16, left: 16, bottom: 16, right: 16)
+    }()
+    
+    /// 文字区域内边距
+    public var textEdgeInsets: UIEdgeInsets = {
+        .init(top: 16, left: 16, bottom: 16, right: 16)
+    }()
+    
     /// 卡片圆角
     public var cardCornerRadius: CGFloat?
     var cardCornerRadiusByDefault: CGFloat { cardCornerRadius ?? 16 }
     
-    /// 余量：元素与元素之间的距离
-    public var margin = CGFloat(8)
     /// 填充：元素内部控件距离元素边界的距离
     public var padding = CGFloat(16)
     
     /// 颜色
     public var tintColor: UIColor?
+    
+    
+    var customContentStack: ((_ stack: StackView) -> Void)?
+    public func customContentStack(handler: @escaping (_ stack: StackView) -> Void) {
+        customContentStack = handler
+    }
+    var customTextStack: ((_ stack: StackView) -> Void)?
+    public func customTextStack(handler: @escaping (_ stack: StackView) -> Void) {
+        customTextStack = handler
+    }
+    var customActionStack: ((_ stack: StackView) -> Void)?
+    public func customActionStack(handler: @escaping (_ stack: StackView) -> Void) {
+        customActionStack = handler
+    }
     
     // MARK: 图标样式
     /// 图标尺寸
@@ -143,10 +165,6 @@ public class Configuration: NSObject {
     public func customButton(handler: @escaping (_ button: Button) -> Void) {
         customButton = handler
     }
-    
-    /// 按钮圆角
-    public var buttonCornerRadius: CGFloat?
-    var buttonCornerRadiusByDefault: CGFloat { buttonCornerRadius ?? 8 }
     
     // MARK: 动画
     

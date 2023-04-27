@@ -27,8 +27,9 @@ public class Sheet: Controller {
     /// 内容容器（包括icon、textStack、actionStack)
     public lazy var contentStack: StackView = {
         let stack = StackView()
-        stack.spacing = config.margin
+        stack.spacing = 8
         stack.alignment = .fill
+        config.customContentStack?(stack)
         return stack
     }()
     

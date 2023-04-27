@@ -11,6 +11,13 @@ public extension Toast {
     
     class Configuration: ProHUD.Configuration {
         
+        /// 元素与元素之间的距离
+        public var margin = CGFloat(8)
+        
+        var customInfoStack: ((_ stack: StackView) -> Void)?
+        public func customInfoStack(handler: @escaping (_ stack: StackView) -> Void) {
+            customInfoStack = handler
+        }
         /// 行间距
         public var lineSpace = CGFloat(4)
         

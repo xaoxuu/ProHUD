@@ -81,7 +81,6 @@ class SheetVC: ListVC {
                         toast.vm.message = "点击背景将不会dismiss，必须在下方做出选择才能关掉"
                         toast.vm.duration = 2
                     }
-
                 }
             }
         }
@@ -112,13 +111,13 @@ class SheetVC: ListVC {
                     let s2 = UISlider()
                     s2.minimumValue = 0
                     s2.maximumValue = 40
-                    s2.value = Float(sheet.config.edgeInset)
+                    s2.value = Float(sheet.config.screenEdgeInset)
                     sheet.add(subview: s2).snp.makeConstraints { make in
                         make.height.equalTo(50)
                     }
                     if #available(iOS 14.0, *) {
                         s2.addAction(.init(handler: { [unowned s2] act in
-                            sheet.config.edgeInset = CGFloat(s2.value)
+                            sheet.config.screenEdgeInset = CGFloat(s2.value)
                             sheet.reloadData()
                         }), for: .valueChanged)
                     } else {

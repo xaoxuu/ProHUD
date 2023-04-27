@@ -71,14 +71,17 @@ class AlertVC: ListVC {
         list.add(title: "文字 + 按钮") { section in
             section.add(title: "只有一小段文字 + 无背景色按钮") {
                 Alert { alert in
+                    alert.config.cardMinWidth = 270
+                    alert.config.cardEdgeInsets = .init(top: 0, left: 0, bottom: 16, right: 0)
+                    alert.config.textEdgeInsets = .init(top: 30, left: 32, bottom: 30, right: 32)
                     alert.config.cardCornerRadius = 12
-                    alert.vm.title = "你正在使用移动网络观看"
                     alert.config.customTextLabel { label in
                         label.font = .systemFont(ofSize: 15)
                     }
                     alert.config.customButton { button in
                         button.titleLabel?.font = .systemFont(ofSize: 15)
                     }
+                    alert.vm.title = "你正在使用移动网络观看"
                 } .onViewDidLoad { vc in
                     guard let alert = vc as? Alert else {
                         return
@@ -97,14 +100,17 @@ class AlertVC: ListVC {
             }
             section.add(title: "只有一段文字 + 无背景色按钮") {
                 Alert { alert in
+                    alert.config.cardMinWidth = 270
+                    alert.config.cardEdgeInsets = .init(top: 0, left: 0, bottom: 16, right: 0)
+                    alert.config.textEdgeInsets = .init(top: 30, left: 32, bottom: 30, right: 32)
                     alert.config.cardCornerRadius = 12
-                    alert.vm.title = "为了维护社区氛围，上麦用户需进行主播认证"
-                    alert.config.customBodyLabel { label in
+                    alert.config.customTextLabel { label in
                         label.font = .systemFont(ofSize: 15)
                     }
                     alert.config.customButton { button in
                         button.titleLabel?.font = .systemFont(ofSize: 15)
                     }
+                    alert.vm.message = "为了维护社区氛围，上麦用户需进行主播认证"
                 } .onViewDidLoad { vc in
                     guard let alert = vc as? Alert else {
                         return
@@ -315,7 +321,7 @@ class AlertVC: ListVC {
                     slider.maximumValue = 100
                     slider.value = 50
                     alert.add(action: slider)
-                    alert.add(actionSpacing: 124)
+                    alert.add(actionSpacing: 24)
                     alert.add(action: "取消", style: .gray)
                 }
             }

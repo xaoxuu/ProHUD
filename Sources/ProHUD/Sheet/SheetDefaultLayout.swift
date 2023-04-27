@@ -44,7 +44,7 @@ extension Sheet: DefaultLayout {
         loadContentMaskViewIfNeeded()
         // layout
         let maxWidth = config.cardMaxWidthByDefault
-        var width = UIScreen.main.bounds.width - config.edgeInset * 2
+        var width = UIScreen.main.bounds.width - config.screenEdgeInset * 2
         if width > maxWidth {
             // landscape iPhone or iPad
             width = maxWidth
@@ -56,7 +56,7 @@ extension Sheet: DefaultLayout {
                 make.centerX.equalToSuperview()
                 if UIDevice.current.userInterfaceIdiom == .phone {
                     if width < maxWidth {
-                        make.bottom.equalToSuperview().inset(config.edgeInset)
+                        make.bottom.equalToSuperview().inset(config.screenEdgeInset)
                     } else {
                         make.bottom.equalToSuperview().inset(screenSafeAreaInsets.bottom)
                     }
@@ -78,16 +78,20 @@ extension Sheet: DefaultLayout {
         if contentStack.superview == nil {
             contentView.addSubview(contentStack)
             contentStack.snp.remakeConstraints { make in
+                let safeArea: UIEdgeInsets
                 if config.isFullScreen {
-                    make.top.equalToSuperview().offset(screenSafeAreaInsets.top)
+                    safeArea = screenSafeAreaInsets
                 } else {
-                    make.top.equalToSuperview().offset(config.padding * 2)
+                    safeArea = .zero
                 }
-                make.bottom.equalToSuperview().inset(config.padding * 2)
+                make.top.equalToSuperview().offset(safeArea.top + config.cardEdgeInsets.top)
+                make.bottom.equalToSuperview().inset(safeArea.bottom + config.cardEdgeInsets.bottom)
                 if isPortrait {
-                    make.left.right.equalToSuperview().inset(config.padding)
+                    make.left.equalToSuperview().inset(safeArea.left + config.cardEdgeInsets.left)
+                    make.right.equalToSuperview().inset(safeArea.right + config.cardEdgeInsets.right)
                 } else {
-                    make.left.right.equalToSuperview().inset(config.padding * 2)
+                    make.left.equalToSuperview().inset(safeArea.left + config.cardEdgeInsets.left * 2)
+                    make.right.equalToSuperview().inset(safeArea.right + config.cardEdgeInsets.right * 2)
                 }
             }
         }

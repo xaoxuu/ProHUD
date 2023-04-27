@@ -84,17 +84,19 @@ extension Alert: DefaultLayout {
         contentView.snp.remakeConstraints { make in
             make.center.equalToSuperview()
             if customView == nil {
-                make.width.greaterThanOrEqualTo(config.cardMinWidth).priority(.low)
+                make.width.greaterThanOrEqualTo(config.cardMinWidth)
                 make.width.lessThanOrEqualTo(config.cardMaxWidthByDefault)
-                make.height.greaterThanOrEqualTo(config.cardMinHeight).priority(.low)
+                make.height.greaterThanOrEqualTo(config.cardMinHeight)
                 make.height.lessThanOrEqualTo(config.cardMaxHeightByDefault)
             }
         }
         if contentStack.superview == nil {
             contentView.addSubview(contentStack)
-            contentStack.spacing = config.margin + config.padding
             contentStack.snp.remakeConstraints { make in
-                make.edges.equalTo(contentView).inset(config.padding)
+                make.top.equalToSuperview().inset(config.cardEdgeInsets.top)
+                make.left.equalToSuperview().inset(config.cardEdgeInsets.left)
+                make.bottom.equalToSuperview().inset(config.cardEdgeInsets.bottom)
+                make.right.equalToSuperview().inset(config.cardEdgeInsets.right)
             }
         }
         // card background
@@ -144,8 +146,8 @@ extension Alert {
             if imageView.superview == nil {
                 contentStack.insertArrangedSubview(imageView, at: 0)
                 imageView.snp.remakeConstraints { (mk) in
-                    mk.top.left.greaterThanOrEqualTo(contentView).inset(config.padding*2.25)
-                    mk.right.bottom.lessThanOrEqualTo(contentView).inset(config.padding*2.25)
+                    mk.top.left.greaterThanOrEqualTo(contentView).inset(config.cardEdgeInsets.top * 2)
+                    mk.right.bottom.lessThanOrEqualTo(contentView).inset(config.cardEdgeInsets.right * 2)
                     mk.width.equalTo(config.iconSize.width)
                     mk.height.equalTo(config.iconSize.height)
                 }
@@ -172,15 +174,10 @@ extension Alert {
                     contentStack.insertArrangedSubview(textStack, at: 0)
                 }
                 textStack.snp.remakeConstraints { (mk) in
-                    mk.top.greaterThanOrEqualTo(contentView).inset(config.padding*1.875)
-                    mk.bottom.lessThanOrEqualTo(contentView).inset(config.padding*1.875)
-                    if UIScreen.main.bounds.width < 414 {
-                        mk.left.greaterThanOrEqualTo(contentView).inset(config.padding*2)
-                        mk.right.lessThanOrEqualTo(contentView).inset(config.padding*2)
-                    } else {
-                        mk.left.greaterThanOrEqualTo(contentView).inset(config.padding*3)
-                        mk.right.lessThanOrEqualTo(contentView).inset(config.padding*3)
-                    }
+                    mk.left.greaterThanOrEqualToSuperview().inset(config.textEdgeInsets.left)
+                    mk.right.lessThanOrEqualToSuperview().inset(config.textEdgeInsets.right)
+                    mk.top.greaterThanOrEqualTo(contentView).inset(config.cardEdgeInsets.top + config.textEdgeInsets.top)
+                    mk.bottom.lessThanOrEqualTo(contentView).inset(config.cardEdgeInsets.bottom + config.textEdgeInsets.bottom)
                 }
             }
             if titleCount > 0 {

@@ -153,10 +153,10 @@ public extension Sheet {
         if #available(iOS 11.0, *) {
             let count = contentStack.arrangedSubviews.count
             if count > 0 {
-                contentStack.setCustomSpacing(config.margin * 1.5, after: contentStack.arrangedSubviews[count-1])
+                contentStack.setCustomSpacing(12, after: contentStack.arrangedSubviews[count-1])
             }
             if count > 1 {
-                contentStack.setCustomSpacing(config.margin * 2, after: contentStack.arrangedSubviews[count-2])
+                contentStack.setCustomSpacing(16, after: contentStack.arrangedSubviews[count-2])
             }
         } else {
             // Fallback on earlier versions

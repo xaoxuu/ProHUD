@@ -22,15 +22,17 @@ public class Toast: Controller {
     /// 内容容器（包括icon、textStack、actionStack)
     public lazy var contentStack: StackView = {
         let stack = StackView(axis: .vertical)
-        stack.spacing = config.margin * 2
+        stack.spacing = 16
+        config.customContentStack?(stack)
         return stack
     }()
     
     /// 信息容器（image+text）
     public lazy var infoStack: StackView = {
         let stack = StackView(axis: .horizontal)
-        stack.spacing = config.margin
+        stack.spacing = 8
         stack.alignment = .top
+        config.customInfoStack?(stack)
         return stack
     }()
     
@@ -39,13 +41,15 @@ public class Toast: Controller {
         let stack = StackView(axis: .vertical)
         stack.spacing = config.lineSpace
         stack.distribution = .equalSpacing
+        config.customTextStack?(stack)
         return stack
     }()
     
     /// 按钮容器
     public lazy var actionStack: StackView = {
         let stack = StackView(axis: .horizontal)
-        stack.spacing = config.margin
+        stack.spacing = 8
+        config.customActionStack?(stack)
         return stack
     }()
     

@@ -12,7 +12,7 @@ public extension Sheet {
     class Configuration: ProHUD.Configuration {
         
         /// 卡片距离屏幕的间距
-        public var edgeInset: CGFloat = 4
+        public var screenEdgeInset: CGFloat = 4
         
         /// 是否是全屏的页面
         public var isFullScreen = false
@@ -44,8 +44,6 @@ public extension Sheet {
         override var cardMaxWidthByDefault: CGFloat { cardMaxWidth ?? 500 }
         
         override var cardMaxHeightByDefault: CGFloat { cardMaxHeight ?? (UIScreen.main.bounds.height - 50) }
-        
-        override var buttonCornerRadiusByDefault: CGFloat { buttonCornerRadius ?? 12 }
         
         override var animateDurationForBuildInByDefault: CGFloat {
             animateDurationForBuildIn ?? 0.5
