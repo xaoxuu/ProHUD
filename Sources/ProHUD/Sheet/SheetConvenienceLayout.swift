@@ -132,8 +132,10 @@ public extension Sheet {
     /// - Parameter text: 文本
     @discardableResult func add(title text: String?) -> UILabel {
         let lb = add(subTitle: text)
-        lb.font = config.titleFontByDefault
+        lb.font = .boldSystemFont(ofSize: 24)
+        lb.textColor = config.primaryLabelColor
         lb.textAlignment = .center
+        config.customTitleLabel?(lb)
         return lb
     }
     
@@ -141,10 +143,11 @@ public extension Sheet {
     /// - Parameter text: 文本
     @discardableResult func add(subTitle text: String?) -> UILabel {
         let lb = UILabel()
-        lb.font = config.subTitleFontByDefault
+        lb.font = .boldSystemFont(ofSize: 20)
         lb.textColor = config.primaryLabelColor
         lb.numberOfLines = 0
         lb.textAlignment = .justified
+        config.customSubtitleLabel?(lb)
         lb.text = text
         contentStack.addArrangedSubview(lb)
         if #available(iOS 11.0, *) {
@@ -165,10 +168,11 @@ public extension Sheet {
     /// - Parameter text: 文本
     @discardableResult func add(message text: String?) -> UILabel {
         let lb = UILabel()
-        lb.font = config.bodyFontByDefault
+        lb.font = .systemFont(ofSize: 16)
         lb.textColor = config.primaryLabelColor
         lb.numberOfLines = 0
         lb.textAlignment = .justified
+        config.customTitleLabel?(lb)
         lb.text = text
         contentStack.addArrangedSubview(lb)
         return lb

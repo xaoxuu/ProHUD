@@ -30,18 +30,6 @@ public extension Toast {
             cardMaxHeight ?? (UIScreen.main.bounds.height / 3)
         }
         
-        override var titleFontByDefault: UIFont {
-            titleFont ?? .systemFont(ofSize: 18, weight: .bold)
-        }
-        
-        override var boldTextFontByDefault: UIFont {
-            boldTextFont ?? .systemFont(ofSize: 16, weight: .bold)
-        }
-        
-        override var bodyFontByDefault: UIFont {
-            bodyFont ?? .systemFont(ofSize: 16, weight: .regular)
-        }
-        
         override var animateDurationForBuildInByDefault: CGFloat {
             animateDurationForBuildIn ?? 0.8
         }

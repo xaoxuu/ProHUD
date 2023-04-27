@@ -45,10 +45,10 @@ extension Toast: DefaultLayout {
         let bodyCount = vm.message?.count ?? 0
         if titleCount > 0 {
             textStack.insertArrangedSubview(titleLabel, at: 0)
-            if bodyCount == 0 {
-                titleLabel.font = config.boldTextFontByDefault
+            if bodyCount > 0 {
+                config.customTitleLabel?(titleLabel)
             } else {
-                titleLabel.font = config.titleFontByDefault
+                config.customTextLabel?(bodyLabel)
             }
         } else {
             if textStack.arrangedSubviews.contains(titleLabel) {
@@ -58,10 +58,10 @@ extension Toast: DefaultLayout {
         }
         if bodyCount > 0 {
             textStack.addArrangedSubview(bodyLabel)
-            if titleCount == 0 {
-                bodyLabel.font = config.boldTextFontByDefault
+            if titleCount > 0 {
+                config.customBodyLabel?(bodyLabel)
             } else {
-                bodyLabel.font = config.bodyFontByDefault
+                config.customTextLabel?(bodyLabel)
             }
         } else {
             if textStack.arrangedSubviews.contains(bodyLabel) {

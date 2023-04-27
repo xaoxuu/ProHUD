@@ -37,7 +37,6 @@ open class Button: UIButton {
     /// 更新按钮
     /// - Parameter style: 样式
     open func update(config: ProHUD.Configuration, action: Action) {
-        titleLabel?.font = config.buttonFontByDefault
         layer.cornerRadiusWithContinuous = config.buttonCornerRadiusByDefault
         self.action = action
         setTitle(action.title, for: .normal)
@@ -63,6 +62,7 @@ open class Button: UIButton {
             contentEdgeInsets.top = 0
             contentEdgeInsets.bottom = 0
         }
+        config.customButton?(self)
     }
     
     var onTouchDown: ((_ action: Button) -> Void)?

@@ -189,11 +189,9 @@ extension Alert {
                     textStack.insertArrangedSubview(titleLabel, at: 0)
                 }
                 if bodyCount > 0 {
-                    // 有message
-                    titleLabel.font = config.titleFontByDefault
+                    config.customTitleLabel?(titleLabel)
                 } else {
-                    // 没有message
-                    titleLabel.font = config.boldTextFontByDefault
+                    config.customTextLabel?(titleLabel)
                 }
             } else {
                 if textStack.arrangedSubviews.contains(titleLabel) {
@@ -207,11 +205,9 @@ extension Alert {
                     textStack.addArrangedSubview(bodyLabel)
                 }
                 if titleCount > 0 {
-                    // 有title
-                    bodyLabel.font = config.bodyFontByDefault
+                    config.customBodyLabel?(bodyLabel)
                 } else {
-                    // 没有title
-                    bodyLabel.font = config.boldTextFontByDefault
+                    config.customTextLabel?(bodyLabel)
                 }
             } else {
                 if textStack.arrangedSubviews.contains(bodyLabel) {

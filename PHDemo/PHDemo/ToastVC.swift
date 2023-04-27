@@ -120,8 +120,10 @@ class ToastVC: ListVC {
                                 mask.backgroundColor = .systemRed
                             }
                             alert.config.iconSize = .init(width: 64, height: 64)
-                            alert.config.boldTextFont = .init(name: "Papyrus", size: 40)
                             alert.config.dynamicTextColor = .white
+                            alert.config.customBodyLabel { label in
+                                label.font = .init(name: "Papyrus", size: 40)
+                            }
                         }
                     }
                     toast.add(action: "同意") { toast in
@@ -298,14 +300,18 @@ class ToastVC: ListVC {
                         toast.vm.message = "建议在App启动后进行通用配置设置，所有实例都会先拉取通用配置为默认值，修改这些配置会影响到所有实例。"
                         toast.add(action: "默认", style: .gray) { toast in
                             Toast.Configuration.shared { config in
-                                config.titleFont = .systemFont(ofSize: 19, weight: .bold)
+                                config.customTitleLabel { titleLabel in
+                                    titleLabel.font = .systemFont(ofSize: 19, weight: .bold)
+                                }
                             }
                             toast.pop()
                             foo()
                         }
                         toast.add(action: "大号标题") { toast in
                             Toast.Configuration.shared { config in
-                                config.titleFont = .systemFont(ofSize: 28, weight: .medium)
+                                config.customTitleLabel { titleLabel in
+                                    titleLabel.font = .systemFont(ofSize: 28, weight: .medium)
+                                }
                             }
                             toast.pop()
                             foo()

@@ -45,9 +45,9 @@ public class Alert: ProHUD.Controller {
     public lazy var titleLabel: UILabel = {
         let lb = UILabel()
         lb.textColor = config.primaryLabelColor
-        lb.font = config.titleFontByDefault
+        lb.font = .boldSystemFont(ofSize: 20)
         lb.textAlignment = .left
-        lb.numberOfLines = config.titleMaxLines
+        lb.numberOfLines = 5
         return lb
     }()
     
@@ -55,9 +55,9 @@ public class Alert: ProHUD.Controller {
     public lazy var bodyLabel: UILabel = {
         let lb = UILabel()
         lb.textColor = config.primaryLabelColor
-        lb.font = config.bodyFontByDefault
+        lb.font = .systemFont(ofSize: 17)
         lb.textAlignment = .left
-        lb.numberOfLines = config.bodyMaxLines
+        lb.numberOfLines = 20
         return lb
     }()
     

@@ -60,9 +60,9 @@ public class Toast: Controller {
     public lazy var titleLabel: UILabel = {
         let lb = UILabel()
         lb.textColor = config.primaryLabelColor
-        lb.font = config.titleFontByDefault
+        lb.font = .boldSystemFont(ofSize: 18)
         lb.textAlignment = .justified
-        lb.numberOfLines = config.titleMaxLines
+        lb.numberOfLines = 5
         return lb
     }()
     
@@ -70,9 +70,9 @@ public class Toast: Controller {
     public lazy var bodyLabel: UILabel = {
         let lb = UILabel()
         lb.textColor = config.primaryLabelColor
-        lb.font = config.bodyFontByDefault
+        lb.font = .systemFont(ofSize: 16)
         lb.textAlignment = .justified
-        lb.numberOfLines = config.bodyMaxLines
+        lb.numberOfLines = 20
         return lb
     }()
     

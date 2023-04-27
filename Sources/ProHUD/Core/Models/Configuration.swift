@@ -107,28 +107,42 @@ public class Configuration: NSObject {
     public var iconSize = CGSize(width: 44, height: 44)
     
     // MARK: 文本样式
-    /// 标题字体
-    public var titleFont: UIFont?
-    var titleFontByDefault: UIFont { titleFont ?? .boldSystemFont(ofSize: 20) }
     
-    /// 标题最多行数
-    public var titleMaxLines = Int(5)
+    var customTextLabel: ((_ label: UILabel) -> Void)? = { label in
+        label.font = .boldSystemFont(ofSize: 18)
+    }
     
-    /// 加粗字体（如果只有标题或者只有正文，则显示这种字体）
-    public var boldTextFont: UIFont?
-    var boldTextFontByDefault: UIFont { boldTextFont ?? .boldSystemFont(ofSize: 18) }
+    /// 自定义文本标签（标题或正文）
+    /// - Parameter handler: 自定义文本标签（标题或正文）
+    public func customTextLabel(handler: @escaping (_ label: UILabel) -> Void) {
+        customTextLabel = handler
+    }
     
-    /// 正文字体
-    public var bodyFont: UIFont?
-    var bodyFontByDefault: UIFont { bodyFont ?? .systemFont(ofSize: 17) }
+    var customTitleLabel: ((_ label: UILabel) -> Void)?
     
-    /// 正文最多行数
-    public var bodyMaxLines = Int(20)
+    /// 自定义标题标签
+    /// - Parameter handler: 自定义标题标签
+    public func customTitleLabel(handler: @escaping (_ label: UILabel) -> Void) {
+        customTitleLabel = handler
+    }
+    
+    /// 正文
+    var customBodyLabel: ((_ label: UILabel) -> Void)?
+    
+    /// 自定义正文标签
+    /// - Parameter handler: 自定义正文标签
+    public func customBodyLabel(handler: @escaping (_ label: UILabel) -> Void) {
+        customBodyLabel = handler
+    }
     
     // MARK: 按钮样式
-    /// 按钮字体
-    public var buttonFont: UIFont?
-    var buttonFontByDefault: UIFont { buttonFont ?? .boldSystemFont(ofSize: 15) }
+    var customButton: ((_ button: Button) -> Void)?
+    
+    /// 自定义按钮
+    /// - Parameter handler: 自定义按钮
+    public func customButton(handler: @escaping (_ button: Button) -> Void) {
+        customButton = handler
+    }
     
     /// 按钮圆角
     public var buttonCornerRadius: CGFloat?

@@ -18,9 +18,11 @@ public extension Sheet {
         public var isFullScreen = false
         
         /// 副标题字体
-        public var subTitleFont: UIFont?
-        var subTitleFontByDefault: UIFont {
-            subTitleFont ?? .systemFont(ofSize: 20, weight: .bold)
+        
+        var customSubtitleLabel: ((_ label: UILabel) -> Void)?
+        
+        public func customSubtitleLabel(handler: @escaping (_ label: UILabel) -> Void) {
+            customSubtitleLabel = handler
         }
         
         static var customShared: ((_ config: Configuration) -> Void)?
@@ -43,17 +45,6 @@ public extension Sheet {
         
         override var cardMaxHeightByDefault: CGFloat { cardMaxHeight ?? (UIScreen.main.bounds.height - 50) }
         
-        override var titleFontByDefault: UIFont {
-            titleFont ?? .systemFont(ofSize: 24, weight: .bold)
-        }
-        
-        override var bodyFontByDefault: UIFont {
-            bodyFont ?? .systemFont(ofSize: 16, weight: .regular)
-        }
-        
-        override var buttonFontByDefault: UIFont {
-            buttonFont ?? .systemFont(ofSize: 18, weight: .bold)
-        }
         override var buttonCornerRadiusByDefault: CGFloat { buttonCornerRadius ?? 12 }
         
         override var animateDurationForBuildInByDefault: CGFloat {

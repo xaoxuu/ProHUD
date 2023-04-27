@@ -8,7 +8,14 @@
 import UIKit
 
 public class SheetButton: Button {
+    
     override var customEdgeInset: UIEdgeInsets {
         .init(top: 14, left: 28, bottom: 14, right: 28)
     }
+    
+    public override func update(config: ProHUD.Configuration, action: Action) {
+        titleLabel?.font = .boldSystemFont(ofSize: 18)
+        super.update(config: config, action: action)
+    }
+    
 }

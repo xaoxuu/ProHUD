@@ -71,10 +71,14 @@ class AlertVC: ListVC {
         list.add(title: "文字 + 按钮") { section in
             section.add(title: "只有一小段文字 + 无背景色按钮") {
                 Alert { alert in
-                    alert.config.boldTextFont = .systemFont(ofSize: 15)
-                    alert.config.buttonFont = .systemFont(ofSize: 15)
                     alert.config.cardCornerRadius = 12
                     alert.vm.title = "你正在使用移动网络观看"
+                    alert.config.customTextLabel { label in
+                        label.font = .systemFont(ofSize: 15)
+                    }
+                    alert.config.customButton { button in
+                        button.titleLabel?.font = .systemFont(ofSize: 15)
+                    }
                 } .onViewDidLoad { vc in
                     guard let alert = vc as? Alert else {
                         return
@@ -93,10 +97,14 @@ class AlertVC: ListVC {
             }
             section.add(title: "只有一段文字 + 无背景色按钮") {
                 Alert { alert in
-                    alert.config.boldTextFont = .systemFont(ofSize: 15)
-                    alert.config.buttonFont = .systemFont(ofSize: 15)
                     alert.config.cardCornerRadius = 12
                     alert.vm.title = "为了维护社区氛围，上麦用户需进行主播认证"
+                    alert.config.customBodyLabel { label in
+                        label.font = .systemFont(ofSize: 15)
+                    }
+                    alert.config.customButton { button in
+                        button.titleLabel?.font = .systemFont(ofSize: 15)
+                    }
                 } .onViewDidLoad { vc in
                     guard let alert = vc as? Alert else {
                         return
