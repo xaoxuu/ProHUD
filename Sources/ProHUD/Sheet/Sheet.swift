@@ -64,9 +64,11 @@ public class Sheet: Controller {
         let tap = UITapGestureRecognizer(target: self, action: #selector(_onTappedBackground(_:)))
         backgroundView.addGestureRecognizer(tap)
         
-        reloadData()
+        reloadData(animated: false)
         
         _translateOut()
+        
+        navEvents[.onViewDidLoad]?(self)
         
     }
     

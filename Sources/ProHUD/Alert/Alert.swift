@@ -46,7 +46,7 @@ public class Alert: ProHUD.Controller {
         let lb = UILabel()
         lb.textColor = config.primaryLabelColor
         lb.font = config.titleFontByDefault
-        lb.textAlignment = .justified
+        lb.textAlignment = .left
         lb.numberOfLines = config.titleMaxLines
         return lb
     }()
@@ -56,7 +56,7 @@ public class Alert: ProHUD.Controller {
         let lb = UILabel()
         lb.textColor = config.primaryLabelColor
         lb.font = config.bodyFontByDefault
-        lb.textAlignment = .justified
+        lb.textAlignment = .left
         lb.numberOfLines = config.bodyMaxLines
         return lb
     }()
@@ -100,7 +100,8 @@ public class Alert: ProHUD.Controller {
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.tintColor = config.tintColor
-        reloadData()
+        reloadData(animated: false)
+        navEvents[.onViewDidLoad]?(self)
     }
     
     required init?(coder: NSCoder) {

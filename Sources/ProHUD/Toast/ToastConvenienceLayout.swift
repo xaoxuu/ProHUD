@@ -7,21 +7,35 @@
 
 import UIKit
 
-public extension Toast {
+extension Toast: ConvenienceLayout {
     
-    @discardableResult func add(subview: UIView) -> UIView {
-        if contentStack.superview != nil {
-            contentStack.removeFromSuperview()
+    // MARK: 增加
+    
+    /// 增加一个按钮
+    /// - Parameters:
+    ///   - title: 标题
+    ///   - style: 样式
+    ///   - identifier: 唯一标识符
+    ///   - handler: 点击事件
+    /// - Returns: 按钮实例
+    @discardableResult public func add(action title: String, style: Action.Style = .tinted, identifier: String? = nil, handler: ((_ toast: Toast) -> Void)? = nil) -> Button {
+        if let handler = handler {
+            let action = Action(identifier: identifier, style: style, title: title) { vc in
+                if let vc = vc as? Toast {
+                    handler(vc)
+                }
+            }
+            return add(action: action)
+        } else {
+            return add(action: .init(identifier: identifier, style: style, title: title, handler: nil))
         }
-        contentView.addSubview(subview)
-        return subview
     }
     
-    @discardableResult func add(action: Action) -> Button {
+    @discardableResult public func add(action: Action) -> Button {
         insert(action: action, at: actionStack.arrangedSubviews.count)
     }
     
-    @discardableResult func insert(action: Action, at index: Int) -> Button {
+    @discardableResult public func insert(action: Action, at index: Int) -> Button {
         let btn = ToastButton(config: config, action: action)
         if index < actionStack.arrangedSubviews.count {
             actionStack.insertArrangedSubview(btn, at: index)
@@ -37,7 +51,7 @@ public extension Toast {
                 self?.pop()
             }
         }
-        if isViewLoaded {
+        if isViewDisplayed {
             self.actionStack.layoutIfNeeded()
             UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
                 self.view.layoutIfNeeded()
@@ -46,36 +60,111 @@ public extension Toast {
         return btn
     }
     
-    // MARK: 布局工具
     
-    func add(spacing: CGFloat) {
-        if #available(iOS 11.0, *) {
-            if let last = contentStack.arrangedSubviews.last {
-                contentStack.setCustomSpacing(spacing, after: last)
+    // MARK: 查找
+    public func button(for identifier: String) -> Button? {
+        if let index = actionIndex(for: identifier) {
+            return contentStack.arrangedSubviews[index] as? Button
+        }
+        return nil
+    }
+    
+    // MARK: 更新
+    public func update(action title: String, style: Action.Style? = nil, for identifier: String) {
+        if let btn = button(for: identifier), let act = btn.action {
+            act.title = title
+            if let style = style {
+                act.style = style
             }
+            btn.update(config: config, action: act)
         }
     }
     
-    /// 增加一个按钮
-    /// - Parameters:
-    ///   - title: 标题
-    ///   - style: 样式
-    ///   - identifier: 唯一标识符
-    ///   - handler: 点击事件
-    /// - Returns: 按钮实例
-    @discardableResult func add(action title: String, style: Action.Style = .tinted, identifier: String? = nil, handler: ((_ toast: Toast) -> Void)? = nil) -> Button {
-        if let handler = handler {
-            let action = Action(identifier: identifier, style: style, title: title) { vc in
-                if let vc = vc as? Toast {
-                    handler(vc)
+    // MARK: 删除
+    
+    public func remove(actions finder: Action.Filter) {
+        if finder.ids.count > 0 {
+            for identifier in finder.ids {
+                while let index = actionIndex(for: identifier), index < contentStack.arrangedSubviews.count {
+                    let view = contentStack.arrangedSubviews[index]
+                    contentStack.removeArrangedSubview(view)
+                    view.removeFromSuperview()
+                    buttonEvents[view] = nil
                 }
             }
-            return add(action: action)
         } else {
-            return add(action: .init(identifier: identifier, style: style, title: title, handler: nil))
+            for view in contentStack.arrangedSubviews {
+                contentStack.removeArrangedSubview(view)
+                view.removeFromSuperview()
+                buttonEvents[view] = nil
+            }
+        }
+        if isViewDisplayed {
+            UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
+                self.contentStack.layoutIfNeeded()
+                self.view.layoutIfNeeded()
+            }
         }
     }
     
+    // MARK: 自定义控件
+    
+    @discardableResult public func add(subview: UIView) -> UIView {
+        if contentStack.superview != nil {
+            contentStack.removeFromSuperview()
+        }
+        contentView.addSubview(subview)
+        return subview
+    }
+    
+    // MARK: 布局工具
+    
+    public func set(spacing: CGFloat, after: UIView?, in stack: UIStackView) {
+        if #available(iOS 11.0, *) {
+            if let after = after ?? stack.arrangedSubviews.last {
+                stack.setCustomSpacing(spacing, after: after)
+            }
+        }
+    }
+    
+    public func set(contentSpacing: CGFloat, after: UIView?) {
+        set(spacing: contentSpacing, after: after, in: contentStack)
+    }
+    public func set(textSpacing: CGFloat, after: UIView?) {
+        set(spacing: textSpacing, after: after, in: textStack)
+    }
+    public func set(actionSpacing: CGFloat, after: UIView?) {
+        set(spacing: actionSpacing, after: after, in: actionStack)
+    }
+    public func add(contentSpacing: CGFloat) {
+        set(spacing: contentSpacing, after: nil, in: contentStack)
+    }
+    public func add(textSpacing: CGFloat) {
+        set(spacing: textSpacing, after: nil, in: textStack)
+    }
+    public func add(actionSpacing: CGFloat) {
+        set(spacing: actionSpacing, after: nil, in: actionStack)
+    }
+    
+    
+    // MARK: 完全自定义布局
+    
+    public func set(customView: UIView) -> UIView {
+        self.customView = customView
+        contentView.addSubview(customView)
+        return customView
+    }
+    
+    // MARK: internal
+    func actionIndex(for identifier: String) -> Int? {
+        let arr = contentStack.arrangedSubviews.compactMap({ $0 as? Button })
+        for i in 0 ..< arr.count {
+            if arr[i].action?.identifier == identifier {
+                return i
+            }
+        }
+        return nil
+    }
     
 }
 

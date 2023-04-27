@@ -13,12 +13,13 @@ open class Button: UIButton {
     
     public internal(set) var action: Action?
     
-    var edgeInset: CGFloat { 8 * 1.5 }
+    var customEdgeInset: UIEdgeInsets {
+        .init(top: 12, left: 24, bottom: 12, right: 24)
+    }
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        let padding = edgeInset
-        contentEdgeInsets = .init(top: padding, left: padding * 2, bottom: padding, right: padding * 2)
+        contentEdgeInsets = customEdgeInset
         addTarget(self, action: #selector(self._onTouchUp(_:)), for: [.touchUpInside, .touchUpOutside])
         addTarget(self, action: #selector(self._onTouchDown(_:)), for: .touchDown)
         addTarget(self, action: #selector(self._onTouchUpInside(_:)), for: .touchUpInside)

@@ -28,7 +28,7 @@ extension Sheet: ConvenienceLayout {
                 self?.pop()
             }
         }
-        if isViewLoaded {
+        if isViewDisplayed {
             self.contentStack.layoutIfNeeded()
             UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
                 self.view.layoutIfNeeded()
@@ -74,7 +74,7 @@ extension Sheet: ConvenienceLayout {
                 buttonEvents[view] = nil
             }
         }
-        if isViewLoaded {
+        if isViewDisplayed {
             UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
                 self.contentStack.layoutIfNeeded()
                 self.view.layoutIfNeeded()
@@ -92,12 +92,16 @@ extension Sheet: ConvenienceLayout {
     
     // MARK: 布局工具
     
-    public func add(spacing: CGFloat) {
+    public func set(spacing: CGFloat, after: UIView?, in stack: UIStackView) {
         if #available(iOS 11.0, *) {
-            if let last = contentStack.arrangedSubviews.last {
-                contentStack.setCustomSpacing(spacing, after: last)
+            if let after = after ?? stack.arrangedSubviews.last {
+                stack.setCustomSpacing(spacing, after: after)
             }
         }
+    }
+    
+    public func add(spacing: CGFloat) {
+        set(spacing: spacing, after: nil, in: contentStack)
     }
     
     // MARK: 完全自定义布局

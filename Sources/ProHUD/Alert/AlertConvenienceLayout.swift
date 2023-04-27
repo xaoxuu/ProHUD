@@ -14,7 +14,7 @@ extension Alert: InternalConvenienceLayout {
         insert(action: action, at: actionStack.arrangedSubviews.count)
     }
     @discardableResult public func insert(action: Action, at index: Int) -> Button {
-        let btn = Button(config: config, action: action)
+        let btn = AlertButton(config: config, action: action)
         if index < actionStack.arrangedSubviews.count {
             actionStack.insertArrangedSubview(btn, at: index)
         } else {
@@ -32,7 +32,7 @@ extension Alert: InternalConvenienceLayout {
                 self?.pop()
             }
         }
-        if isViewLoaded {
+        if isViewDisplayed {
             self.actionStack.layoutIfNeeded()
             UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
                 self.view.layoutIfNeeded()
@@ -78,7 +78,7 @@ extension Alert: InternalConvenienceLayout {
                 buttonEvents[view] = nil
             }
         }
-        if isViewLoaded {
+        if isViewDisplayed {
             UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
                 self.actionStack.layoutIfNeeded()
                 self.view.layoutIfNeeded()
@@ -105,16 +105,31 @@ extension Alert: InternalConvenienceLayout {
     
     // MARK: 布局工具
     
-    public func add(spacing: CGFloat) {
-        add(spacing: spacing, for: contentStack)
-    }
-    
-    public func add(spacing: CGFloat, for stack: UIStackView) {
+    public func set(spacing: CGFloat, after: UIView?, in stack: UIStackView) {
         if #available(iOS 11.0, *) {
-            if let last = stack.arrangedSubviews.last {
-                stack.setCustomSpacing(spacing, after: last)
+            if let after = after ?? stack.arrangedSubviews.last {
+                stack.setCustomSpacing(spacing, after: after)
             }
         }
+    }
+    
+    public func set(contentSpacing: CGFloat, after: UIView?) {
+        set(spacing: contentSpacing, after: after, in: contentStack)
+    }
+    public func set(textSpacing: CGFloat, after: UIView?) {
+        set(spacing: textSpacing, after: after, in: textStack)
+    }
+    public func set(actionSpacing: CGFloat, after: UIView?) {
+        set(spacing: actionSpacing, after: after, in: actionStack)
+    }
+    public func add(contentSpacing: CGFloat) {
+        set(spacing: contentSpacing, after: nil, in: contentStack)
+    }
+    public func add(textSpacing: CGFloat) {
+        set(spacing: textSpacing, after: nil, in: textStack)
+    }
+    public func add(actionSpacing: CGFloat) {
+        set(spacing: actionSpacing, after: nil, in: actionStack)
     }
     
     // MARK: 完全自定义布局

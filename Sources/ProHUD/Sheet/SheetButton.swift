@@ -8,5 +8,7 @@
 import UIKit
 
 public class SheetButton: Button {
-    override var edgeInset: CGFloat { 8 * 1.75 }
+    override var customEdgeInset: UIEdgeInsets {
+        .init(top: 14, left: 28, bottom: 14, right: 28)
+    }
 }

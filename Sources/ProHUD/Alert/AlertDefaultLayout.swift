@@ -13,10 +13,13 @@ extension Alert: DefaultLayout {
         return config
     }
     
-    func reloadDataByDefault() {
+    func reloadData(animated: Bool) {
+        if self.cfg.customReloadData?(self) == true {
+            return
+        }
         let isFirstLayout: Bool
         if contentView.superview == nil {
-            isFirstLayout = true
+            isFirstLayout = animated
             // 布局主容器视图
             loadContentViewIfNeeded()
         } else {
@@ -42,19 +45,22 @@ extension Alert: DefaultLayout {
         contentView.layoutIfNeeded()
         
         // 动画
-        if isFirstLayout {
-            view.layoutIfNeeded()
-            imageView.transform = .init(scaleX: 0.7, y: 0.7)
-            UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
-                self.view.layoutIfNeeded()
-                self.imageView.transform = .identity
+        if animated {
+            if isFirstLayout {
+                view.layoutIfNeeded()
+                imageView.transform = .init(scaleX: 0.7, y: 0.7)
+                UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
+                    self.view.layoutIfNeeded()
+                    self.imageView.transform = .identity
+                }
+            } else {
+                UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
+                    self.view.layoutIfNeeded()
+                }
             }
         } else {
-            UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
-                self.view.layoutIfNeeded()
-            }
+            view.layoutIfNeeded()
         }
-        
     }
     
     func loadContentViewIfNeeded() {
@@ -166,14 +172,14 @@ extension Alert {
                     contentStack.insertArrangedSubview(textStack, at: 0)
                 }
                 textStack.snp.remakeConstraints { (mk) in
-                    mk.top.greaterThanOrEqualTo(contentView).inset(config.padding*1.75)
-                    mk.bottom.lessThanOrEqualTo(contentView).inset(config.padding*1.75)
+                    mk.top.greaterThanOrEqualTo(contentView).inset(config.padding*1.875)
+                    mk.bottom.lessThanOrEqualTo(contentView).inset(config.padding*1.875)
                     if UIScreen.main.bounds.width < 414 {
-                        mk.left.greaterThanOrEqualTo(contentView).inset(config.padding*1.5)
-                        mk.right.lessThanOrEqualTo(contentView).inset(config.padding*1.5)
-                    } else {
                         mk.left.greaterThanOrEqualTo(contentView).inset(config.padding*2)
                         mk.right.lessThanOrEqualTo(contentView).inset(config.padding*2)
+                    } else {
+                        mk.left.greaterThanOrEqualTo(contentView).inset(config.padding*3)
+                        mk.right.lessThanOrEqualTo(contentView).inset(config.padding*3)
                     }
                 }
             }

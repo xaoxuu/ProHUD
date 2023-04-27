@@ -13,7 +13,10 @@ extension Toast: DefaultLayout {
         return config
     }
     
-    func reloadDataByDefault() {
+    func reloadData(animated: Bool) {
+        if self.cfg.customReloadData?(self) == true {
+            return
+        }
         loadContentViewIfNeeded()
         loadContentMaskViewIfNeeded()
         guard customView == nil else {

@@ -8,6 +8,8 @@
 import UIKit
 
 public class ToastButton: Button {
-    override var edgeInset: CGFloat { 8 * 1.25 }
+    override var customEdgeInset: UIEdgeInsets {
+        .init(top: 10, left: 24, bottom: 10, right: 24)
+    }
 }
 

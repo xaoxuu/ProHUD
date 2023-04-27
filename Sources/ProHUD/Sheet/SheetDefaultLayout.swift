@@ -13,7 +13,10 @@ extension Sheet: DefaultLayout {
         return config
     }
     
-    func reloadDataByDefault() {
+    func reloadData(animated: Bool) {
+        if self.cfg.customReloadData?(self) == true {
+            return
+        }
         // background
         if backgroundView.superview == nil {
             view.insertSubview(backgroundView, at: 0)
@@ -30,10 +33,9 @@ extension Sheet: DefaultLayout {
                 self.view.layoutIfNeeded()
             }
         }
-        
     }
     
-    func loadContentViewIfNeeded() {
+    private func loadContentViewIfNeeded() {
         contentView.layer.cornerRadiusWithContinuous = config.cardCornerRadiusByDefault
         if contentView.superview != view {
             view.insertSubview(contentView, aboveSubview: backgroundView)
@@ -91,6 +93,5 @@ extension Sheet: DefaultLayout {
         }
         
     }
-    
     
 }

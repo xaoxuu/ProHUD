@@ -58,6 +58,11 @@ open class Controller: UIViewController {
     
     var navEvents = [NavEvent: ((Controller) -> Void)]()
     
+    @discardableResult public func onViewDidLoad(_ callback: ((_ vc: Controller) -> Void)?) -> Controller {
+        navEvents[.onViewDidLoad] = callback
+        return self
+    }
+    
     @discardableResult public func onViewWillAppear(_ callback: ((_ vc: Controller) -> Void)?) -> Controller {
         navEvents[.onViewWillAppear] = callback
         return self

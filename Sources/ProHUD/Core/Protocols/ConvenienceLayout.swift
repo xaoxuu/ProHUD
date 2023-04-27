@@ -54,9 +54,12 @@ public protocol ConvenienceLayout {
     
     // MARK: 布局工具
     
-    /// 增加空隙（仅iOS11以上可用）
-    /// - Parameter spacing: 自定义空隙
-    func add(spacing: CGFloat)
+    /// 设置stack容器内的元素间距
+    /// - Parameters:
+    ///   - spacing: 间距
+    ///   - after: 哪个view后面
+    ///   - stack: 在哪个stack容器内
+    func set(spacing: CGFloat, after: UIView?, in stack: UIStackView)
     
     // MARK: 自定义布局
     

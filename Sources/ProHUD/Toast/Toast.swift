@@ -124,7 +124,9 @@ public class Toast: Controller {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(_onPanGesture(_:)))
         view.addGestureRecognizer(pan)
         
-        reloadData()
+        reloadData(animated: false)
+        navEvents[.onViewDidLoad]?(self)
+        
     }
     
     public func onTapped(action: @escaping (_ toast: Toast) -> Void) {

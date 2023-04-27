@@ -11,9 +11,7 @@ protocol DefaultLayout: CommonLayout {
     
     var cfg: Configuration { get }
     
-    func reloadDataByDefault()
-    
-    func loadContentViewIfNeeded()
+    func reloadData(animated: Bool)
     
 }
 

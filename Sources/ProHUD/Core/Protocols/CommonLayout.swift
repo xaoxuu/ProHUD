@@ -17,10 +17,7 @@ public extension CommonLayout {
         guard let self = self as? DefaultLayout else {
             return
         }
-        if self.cfg.customReloadData?(self) == true {
-            return
-        }
-        self.reloadDataByDefault()
+        self.reloadData(animated: true)
     }
     
 }

@@ -69,20 +69,46 @@ class AlertVC: ListVC {
             }
         }
         list.add(title: "文字 + 按钮") { section in
+            section.add(title: "只有一小段文字 + 无背景色按钮") {
+                Alert { alert in
+                    alert.config.boldTextFont = .systemFont(ofSize: 15)
+                    alert.config.buttonFont = .systemFont(ofSize: 15)
+                    alert.config.cardCornerRadius = 12
+                    alert.vm.title = "你正在使用移动网络观看"
+                } .onViewDidLoad { vc in
+                    guard let alert = vc as? Alert else {
+                        return
+                    }
+                    alert.add(contentSpacing: 30)
+                    let v = UIView()
+                    v.backgroundColor = UIColor("#f2f2f2")
+                    alert.add(subview: v).snp.makeConstraints { make in
+                        make.left.right.equalToSuperview()
+                        make.height.equalTo(1)
+                    }
+                    alert.add(contentSpacing: 16)
+                    alert.add(action: "确定", style: .plain(textColor: UIColor("#14cccc")))
+                    
+                }
+            }
             section.add(title: "只有一段文字 + 无背景色按钮") {
                 Alert { alert in
                     alert.config.boldTextFont = .systemFont(ofSize: 15)
                     alert.config.buttonFont = .systemFont(ofSize: 15)
                     alert.config.cardCornerRadius = 12
-                    
                     alert.vm.title = "为了维护社区氛围，上麦用户需进行主播认证"
+                } .onViewDidLoad { vc in
+                    guard let alert = vc as? Alert else {
+                        return
+                    }
+                    alert.add(contentSpacing: 30)
                     let v = UIView()
-                    v.backgroundColor = UIColor("#F7F7F7")
+                    v.backgroundColor = UIColor("#f2f2f2")
                     alert.add(subview: v).snp.makeConstraints { make in
                         make.left.right.equalToSuperview()
                         make.height.equalTo(1)
                     }
-                    alert.add(spacing: 16)
+                    alert.add(contentSpacing: 16)
                     alert.add(action: "取消", style: .plain(textColor: UIColor("#939999")))
                     alert.add(action: "确定", style: .plain(textColor: UIColor("#14cccc")))
                 }
@@ -281,7 +307,7 @@ class AlertVC: ListVC {
                     slider.maximumValue = 100
                     slider.value = 50
                     alert.add(action: slider)
-                    alert.add(spacing: 24, for: alert.actionStack)
+                    alert.add(actionSpacing: 124)
                     alert.add(action: "取消", style: .gray)
                 }
             }
@@ -305,7 +331,7 @@ class AlertVC: ListVC {
                         // Fallback on earlier versions
                     }
                     alert.config.actionAxis = .vertical
-                    alert.add(spacing: 24, for: alert.actionStack)
+                    alert.add(contentSpacing: 24)
                     alert.add(action: "OK", style: .gray)
                 }
             }
