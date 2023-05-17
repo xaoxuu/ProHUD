@@ -11,10 +11,6 @@ public extension Alert {
     
     class Configuration: ProHUD.Configuration {
         
-        
-        /// 指定排列方向（默认两个按钮水平排列，超过时垂直排列）
-        public var actionAxis: NSLayoutConstraint.Axis?
-        
         /// 堆叠深度
         public var stackDepth: CGFloat = 30
         

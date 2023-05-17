@@ -142,27 +142,19 @@ class AlertVC: ListVC {
                     alert.vm.message = "本次消费需要你支付999软妹豆，确认支付吗？"
                     alert.config.customActionStack { stack in
                         stack.spacing = 0
-                        stack.axis = .vertical
+                        stack.axis = .vertical // 竖排按钮
                     }
                 } .onViewDidLoad { vc in
                     guard let alert = vc as? Alert else {
                         return
                     }
-//                    alert.add(contentSpacing: 30)
-//                    let v = UIView()
-//                    v.backgroundColor = UIColor("#f2f2f2")
-//                    alert.add(subview: v).snp.makeConstraints { make in
-//                        make.left.right.equalToSuperview()
-//                        make.height.equalTo(1)
-//                    }
-//                    alert.add(contentSpacing: 16)
                     func createLine() -> UIView {
                         let v = UIView()
                         v.backgroundColor = UIColor("#f2f2f2")
                         return v
                     }
                     let btn1 = alert.add(action: "确认，以后不需要再提醒", style: .plain(textColor: UIColor("#14cccc")))
-                    btn1.contentEdgeInsets.top = 16
+                    btn1.contentEdgeInsets.top = 16 + 1 // 间距 + 线的高度
                     btn1.contentEdgeInsets.bottom = 16
                     let line1 = createLine()
                     btn1.insertSubview(line1, at: 0)
@@ -295,7 +287,6 @@ class AlertVC: ListVC {
                 Alert(.loading) { alert in
                     alert.vm.title = "在弹出过程中增加元素"
                     alert.add(action: "OK", style: .gray)
-                    alert.config.actionAxis = .vertical
                 } .onViewWillAppear { vc in
                     guard let alert = vc as? Alert else {
                         return
@@ -407,7 +398,6 @@ class AlertVC: ListVC {
                     } else {
                         // Fallback on earlier versions
                     }
-                    alert.config.actionAxis = .vertical
                     alert.add(contentSpacing: 24)
                     alert.add(action: "OK", style: .gray)
                 }
