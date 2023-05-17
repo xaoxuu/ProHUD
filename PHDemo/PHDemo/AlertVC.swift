@@ -127,6 +127,69 @@ class AlertVC: ListVC {
                     alert.add(action: "确定", style: .plain(textColor: UIColor("#14cccc")))
                 }
             }
+            section.add(title: "只有一段文字 + 3个无背景色按钮") {
+                Alert { alert in
+                    alert.config.cardMinWidth = 270
+                    alert.config.cardEdgeInsets = .zero
+                    alert.config.textEdgeInsets = .init(top: 30, left: 32, bottom: 30, right: 32)
+                    alert.config.cardCornerRadius = 12
+                    alert.config.customTextLabel { label in
+                        label.font = .systemFont(ofSize: 15)
+                    }
+                    alert.config.customButton { button in
+                        button.titleLabel?.font = .systemFont(ofSize: 15)
+                    }
+                    alert.vm.message = "本次消费需要你支付999软妹豆，确认支付吗？"
+                    alert.config.customActionStack { stack in
+                        stack.spacing = 0
+                        stack.axis = .vertical
+                    }
+                } .onViewDidLoad { vc in
+                    guard let alert = vc as? Alert else {
+                        return
+                    }
+//                    alert.add(contentSpacing: 30)
+//                    let v = UIView()
+//                    v.backgroundColor = UIColor("#f2f2f2")
+//                    alert.add(subview: v).snp.makeConstraints { make in
+//                        make.left.right.equalToSuperview()
+//                        make.height.equalTo(1)
+//                    }
+//                    alert.add(contentSpacing: 16)
+                    func createLine() -> UIView {
+                        let v = UIView()
+                        v.backgroundColor = UIColor("#f2f2f2")
+                        return v
+                    }
+                    let btn1 = alert.add(action: "确认，以后不需要再提醒", style: .plain(textColor: UIColor("#14cccc")))
+                    btn1.contentEdgeInsets.top = 16
+                    btn1.contentEdgeInsets.bottom = 16
+                    let line1 = createLine()
+                    btn1.insertSubview(line1, at: 0)
+                    line1.snp.makeConstraints { make in
+                        make.top.left.right.equalToSuperview()
+                        make.height.equalTo(1)
+                    }
+                    
+                    let btn2 = alert.add(action: "确认，每次消费前提醒", style: .plain(textColor: UIColor("#14cccc")))
+                    let line2 = createLine()
+                    btn2.insertSubview(line2, at: 0)
+                    line2.snp.makeConstraints { make in
+                        make.top.left.right.equalToSuperview()
+                        make.height.equalTo(1)
+                    }
+                    
+                    let btn3 = alert.add(action: "取消", style: .plain(textColor: UIColor("#939999")))
+                    let line3 = createLine()
+                    btn3.insertSubview(line3, at: 0)
+                    line3.snp.makeConstraints { make in
+                        make.top.left.right.equalToSuperview()
+                        make.height.equalTo(1)
+                    }
+                    
+                }
+            }
+            
             section.add(title: "只有一段文字 + 按钮") {
                 Alert { alert in
                     alert.vm.title = "只有一段文字"
