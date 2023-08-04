@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,6 +11,8 @@
 		CD6537C128C35E1C00A5981B /* ListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6537C028C35E1C00A5981B /* ListVC.swift */; };
 		CD6537C328C35E6200A5981B /* ToastVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6537C228C35E6200A5981B /* ToastVC.swift */; };
 		CD6537C528C35F2C00A5981B /* SheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6537C428C35F2C00A5981B /* SheetVC.swift */; };
+		CD6AE8A32A7CC1BA0044E53D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = CD6AE8A22A7CC1BA0044E53D /* SnapKit */; };
+		CD6AE8A62A7CC1C70044E53D /* Inspire in Frameworks */ = {isa = PBXBuildFile; productRef = CD6AE8A52A7CC1C70044E53D /* Inspire */; };
 		CD8EEF3B28BC5C7200E660EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8EEF3A28BC5C7200E660EA /* AppDelegate.swift */; };
 		CD8EEF3D28BC5C7200E660EA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8EEF3C28BC5C7200E660EA /* SceneDelegate.swift */; };
 		CD8EEF4228BC5C7200E660EA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD8EEF4028BC5C7200E660EA /* Main.storyboard */; };
@@ -45,7 +47,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD6AE8A62A7CC1C70044E53D /* Inspire in Frameworks */,
 				CDB6A2A228BC5F4600DEC80D /* ProHUD in Frameworks */,
+				CD6AE8A32A7CC1BA0044E53D /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,6 +127,8 @@
 			name = PHDemo;
 			packageProductDependencies = (
 				CDB6A2A128BC5F4600DEC80D /* ProHUD */,
+				CD6AE8A22A7CC1BA0044E53D /* SnapKit */,
+				CD6AE8A52A7CC1C70044E53D /* Inspire */,
 			);
 			productName = PHDemo;
 			productReference = CD8EEF3728BC5C7200E660EA /* PHDemo.app */;
@@ -152,6 +158,10 @@
 				Base,
 			);
 			mainGroup = CD8EEF2E28BC5C7200E660EA;
+			packageReferences = (
+				CD6AE8A12A7CC1BA0044E53D /* XCLocalSwiftPackageReference "../../SnapKit" */,
+				CD6AE8A42A7CC1C70044E53D /* XCLocalSwiftPackageReference "../../Inspire" */,
+			);
 			productRefGroup = CD8EEF3828BC5C7200E660EA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -408,7 +418,26 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		CD6AE8A12A7CC1BA0044E53D /* XCLocalSwiftPackageReference "../../SnapKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../SnapKit;
+		};
+		CD6AE8A42A7CC1C70044E53D /* XCLocalSwiftPackageReference "../../Inspire" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../Inspire;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+		CD6AE8A22A7CC1BA0044E53D /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SnapKit;
+		};
+		CD6AE8A52A7CC1C70044E53D /* Inspire */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Inspire;
+		};
 		CDB6A2A128BC5F4600DEC80D /* ProHUD */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ProHUD;

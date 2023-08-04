@@ -180,6 +180,23 @@ public class Configuration: NSObject {
     
     // MARK: 自定义
     
+    /// 网络图标
+    var customWebImage: ((_ imageView: UIImageView, _ imageURL: URL) -> Void)? = { imgv, url in
+        DispatchQueue.global().async {
+            URLSession.shared.dataTask(with: .init(url: url)) { data, resp, err in
+                guard let data = data else {
+                    return
+                }
+                DispatchQueue.main.async {
+                    imgv.image = UIImage(data: data)
+                }
+            }.resume()
+        }
+    }
+    public func customWebImage(handler: @escaping (_ imageView: UIImageView, _ imageURL: URL) -> Void) {
+        customWebImage = handler
+    }
+    
     var customReloadData: ((_ vc: Controller) -> Bool)?
     
     /// 自定义刷新规则（ ⚠️ 自定义此函数之后，整个容器将不再走默认布局规则，可实现完全自定义）

@@ -12,6 +12,7 @@ open class ViewModel: NSObject {
     
     /// 图标
     open var icon: UIImage?
+    var iconURL: URL?
     
     /// 图标旋转动画
     open var rotation: Rotation?
@@ -65,6 +66,12 @@ public extension ViewModel {
         self.icon = image
         return self
     }
+    
+    func icon(_ imageURL: URL?) -> ViewModel {
+        self.iconURL = imageURL
+        return self
+    }
+    
     
     func title(_ text: String?) -> ViewModel {
         self.title = text

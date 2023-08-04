@@ -141,8 +141,11 @@ extension Alert {
         // 移除进度
         progressView?.removeFromSuperview()
         
-        if vm.icon != nil {
+        if vm.icon != nil || vm.iconURL != nil {
             imageView.image = vm.icon
+            if let iconURL = vm.iconURL {
+                config.customWebImage?(imageView, iconURL)
+            }
             if imageView.superview == nil {
                 contentStack.insertArrangedSubview(imageView, at: 0)
                 imageView.snp.remakeConstraints { (mk) in

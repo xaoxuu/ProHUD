@@ -25,7 +25,7 @@ extension Toast: DefaultLayout {
             }
             return
         }
-        if vm.icon != nil {
+        if vm.icon != nil || vm.iconURL != nil {
             if imageView.superview == nil {
                 infoStack.insertArrangedSubview(imageView, at: 0)
                 imageView.snp.makeConstraints { make in
@@ -70,7 +70,6 @@ extension Toast: DefaultLayout {
             bodyLabel.removeFromSuperview()
         }
         // 设置数据
-        imageView.image = vm.icon
         titleLabel.text = vm.title
         bodyLabel.text = vm.message
         view.layoutIfNeeded()
@@ -133,6 +132,9 @@ extension Toast {
         progressView?.removeFromSuperview()
         
         imageView.image = vm.icon
+        if let iconURL = vm.iconURL {
+            config.customWebImage?(imageView, iconURL)
+        }
         if let rotation = vm.rotation {
             startRotate(rotation)
         }

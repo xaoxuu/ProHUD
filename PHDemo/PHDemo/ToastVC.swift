@@ -46,6 +46,9 @@ class ToastVC: ListVC {
                 mask.backgroundColor = .clear
                 mask.effect = UIBlurEffect(style: .systemChromeMaterial)
             }
+//            config.customWebImage { imageView, imageURL in
+//                imageView.backgroundColor = .red
+//            }
         }
         
         list.add(title: "默认布局") { section in
@@ -84,6 +87,9 @@ class ToastVC: ListVC {
             }
             section.add(title: "图标 + 一段长文本") {
                 Toast(.note.message(message)).push()
+            }
+            section.add(title: "网络图标 + 一段文本") {
+                Toast(.message("这是网络图标").icon(.init(string: "https://xaoxuu.com/assets/xaoxuu/avatar/rect-256@2x.png"))).push()
             }
         }
         
