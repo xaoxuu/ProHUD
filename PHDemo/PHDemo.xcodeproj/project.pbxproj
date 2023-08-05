@@ -12,13 +12,12 @@
 		CD6537C328C35E6200A5981B /* ToastVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6537C228C35E6200A5981B /* ToastVC.swift */; };
 		CD6537C528C35F2C00A5981B /* SheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6537C428C35F2C00A5981B /* SheetVC.swift */; };
 		CD6AE8A32A7CC1BA0044E53D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = CD6AE8A22A7CC1BA0044E53D /* SnapKit */; };
-		CD6AE8A62A7CC1C70044E53D /* Inspire in Frameworks */ = {isa = PBXBuildFile; productRef = CD6AE8A52A7CC1C70044E53D /* Inspire */; };
 		CD8EEF3B28BC5C7200E660EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8EEF3A28BC5C7200E660EA /* AppDelegate.swift */; };
 		CD8EEF3D28BC5C7200E660EA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8EEF3C28BC5C7200E660EA /* SceneDelegate.swift */; };
 		CD8EEF4228BC5C7200E660EA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD8EEF4028BC5C7200E660EA /* Main.storyboard */; };
 		CD8EEF4428BC5C7300E660EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD8EEF4328BC5C7300E660EA /* Assets.xcassets */; };
 		CD8EEF4728BC5C7300E660EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD8EEF4528BC5C7300E660EA /* LaunchScreen.storyboard */; };
-		CD9C7B1E28CB8972006190CD /* Scenes.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9C7B1D28CB8972006190CD /* Scenes.swift */; };
+		CD9C7B1E28CB8972006190CD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9C7B1D28CB8972006190CD /* Extensions.swift */; };
 		CDA83DB928C601E60025F0DF /* TableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA83DB828C601E60025F0DF /* TableHeaderView.swift */; };
 		CDB6A2A228BC5F4600DEC80D /* ProHUD in Frameworks */ = {isa = PBXBuildFile; productRef = CDB6A2A128BC5F4600DEC80D /* ProHUD */; };
 		CDB7A1D028C32A7400E034D8 /* AlertVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB7A1CF28C32A7400E034D8 /* AlertVC.swift */; };
@@ -36,7 +35,7 @@
 		CD8EEF4328BC5C7300E660EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CD8EEF4628BC5C7300E660EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CD8EEF4828BC5C7300E660EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CD9C7B1D28CB8972006190CD /* Scenes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scenes.swift; sourceTree = "<group>"; };
+		CD9C7B1D28CB8972006190CD /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		CDA83DB828C601E60025F0DF /* TableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableHeaderView.swift; sourceTree = "<group>"; };
 		CDB6A29F28BC5F0F00DEC80D /* ProHUD */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ProHUD; path = ..; sourceTree = "<group>"; };
 		CDB7A1CF28C32A7400E034D8 /* AlertVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertVC.swift; sourceTree = "<group>"; };
@@ -47,7 +46,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CD6AE8A62A7CC1C70044E53D /* Inspire in Frameworks */,
 				CDB6A2A228BC5F4600DEC80D /* ProHUD in Frameworks */,
 				CD6AE8A32A7CC1BA0044E53D /* SnapKit in Frameworks */,
 			);
@@ -81,7 +79,7 @@
 				CD8EEF3C28BC5C7200E660EA /* SceneDelegate.swift */,
 				CD6537BE28C3311B00A5981B /* ListModel.swift */,
 				CDA83DB828C601E60025F0DF /* TableHeaderView.swift */,
-				CD9C7B1D28CB8972006190CD /* Scenes.swift */,
+				CD9C7B1D28CB8972006190CD /* Extensions.swift */,
 				CD6537C028C35E1C00A5981B /* ListVC.swift */,
 				CDB7A1CF28C32A7400E034D8 /* AlertVC.swift */,
 				CD6537C228C35E6200A5981B /* ToastVC.swift */,
@@ -128,7 +126,6 @@
 			packageProductDependencies = (
 				CDB6A2A128BC5F4600DEC80D /* ProHUD */,
 				CD6AE8A22A7CC1BA0044E53D /* SnapKit */,
-				CD6AE8A52A7CC1C70044E53D /* Inspire */,
 			);
 			productName = PHDemo;
 			productReference = CD8EEF3728BC5C7200E660EA /* PHDemo.app */;
@@ -160,7 +157,6 @@
 			mainGroup = CD8EEF2E28BC5C7200E660EA;
 			packageReferences = (
 				CD6AE8A12A7CC1BA0044E53D /* XCLocalSwiftPackageReference "../../SnapKit" */,
-				CD6AE8A42A7CC1C70044E53D /* XCLocalSwiftPackageReference "../../Inspire" */,
 			);
 			productRefGroup = CD8EEF3828BC5C7200E660EA /* Products */;
 			projectDirPath = "";
@@ -196,7 +192,7 @@
 				CD6537C128C35E1C00A5981B /* ListVC.swift in Sources */,
 				CD8EEF3B28BC5C7200E660EA /* AppDelegate.swift in Sources */,
 				CD8EEF3D28BC5C7200E660EA /* SceneDelegate.swift in Sources */,
-				CD9C7B1E28CB8972006190CD /* Scenes.swift in Sources */,
+				CD9C7B1E28CB8972006190CD /* Extensions.swift in Sources */,
 				CD6537BF28C3311B00A5981B /* ListModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -423,20 +419,12 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../SnapKit;
 		};
-		CD6AE8A42A7CC1C70044E53D /* XCLocalSwiftPackageReference "../../Inspire" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../Inspire;
-		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		CD6AE8A22A7CC1BA0044E53D /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SnapKit;
-		};
-		CD6AE8A52A7CC1C70044E53D /* Inspire */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Inspire;
 		};
 		CDB6A2A128BC5F4600DEC80D /* ProHUD */ = {
 			isa = XCSwiftPackageProductDependency;

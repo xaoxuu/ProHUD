@@ -6,11 +6,6 @@
 //
 
 import UIKit
-import Inspire
-
-var screenSafeAreaInsets: UIEdgeInsets {
-    Inspire.shared.screen.safeAreaInsets
-}
 
 extension UIImage {
     public convenience init?(inProHUD named: String) {
@@ -23,8 +18,11 @@ extension UIImage {
 }
 
 
-/// 是否是手机竖屏模式
+/// 是否是竖屏(紧凑布局)模式
 internal var isPortrait: Bool {
+    if AppContext.appBounds.width < 450 {
+        return true
+    }
     if UIDevice.current.userInterfaceIdiom == .phone {
         if UIApplication.shared.statusBarOrientation.isPortrait {
             return true

@@ -19,7 +19,7 @@ class ToastWindow: Window {
         self.toast = toast
         super.init(frame: .zero)
         if #available(iOS 13.0, *) {
-            windowScene = toast.config.windowScene ?? UIWindowScene.mainWindowScene
+            windowScene = AppContext.windowScene
         }
         toast.window = self
         windowLevel = .init(rawValue: UIWindow.Level.alert.rawValue + 1000)
@@ -49,8 +49,9 @@ class ToastWindow: Window {
             isNew = true
         }
         let config = toast.config
+        
         // frame
-        let width = CGFloat.minimum(UIScreen.main.bounds.width - config.cardEdgeInsets.left - config.cardEdgeInsets.right, config.cardMaxWidthByDefault)
+        let width = CGFloat.minimum(AppContext.appBounds.width - config.cardEdgeInsets.left - config.cardEdgeInsets.right, config.cardMaxWidthByDefault)
         toast.view.frame.size = CGSize(width: width, height: config.cardMaxHeightByDefault)
         toast.titleLabel.sizeToFit()
         toast.bodyLabel.sizeToFit()
@@ -59,7 +60,7 @@ class ToastWindow: Window {
         let height = toast.calcHeight()
         toast.view.frame.size = CGSize(width: width, height: height)
         // 应用到frame
-        window.frame = CGRect(x: (UIScreen.main.bounds.width - width) / 2, y: 0, width: width, height: height)
+        window.frame = CGRect(x: (AppContext.appBounds.width - width) / 2, y: 0, width: width, height: height)
         window.rootViewController = toast // 此时toast.view.frame.size会自动更新为window.frame.size
         if windows.contains(window) == false {
             windows.append(window)
@@ -108,16 +109,11 @@ fileprivate var updateToastsLayoutWorkItem: DispatchWorkItem?
 fileprivate extension ToastWindow {
     
     static func setToastWindowsLayout() {
-        let top = screenSafeAreaInsets.top
         for (i, window) in windows.enumerated() {
             let config = window.toast.config
             var y = window.frame.origin.y
             if i == 0 {
-                if isPortrait {
-                    y = top
-                } else {
-                    y = config.margin
-                }
+                y = max(AppContext.appWindow?.layoutMargins.top ?? config.margin, config.margin)
             } else {
                 if i - 1 < windows.count && i > 0 {
                     y = config.margin + windows[i-1].frame.maxY

@@ -44,7 +44,7 @@ extension Sheet: DefaultLayout {
         loadContentMaskViewIfNeeded()
         // layout
         let maxWidth = config.cardMaxWidthByDefault
-        var width = UIScreen.main.bounds.width - config.screenEdgeInset * 2
+        var width = AppContext.appBounds.width - config.screenEdgeInset * 2
         if width > maxWidth {
             // landscape iPhone or iPad
             width = maxWidth
@@ -54,14 +54,15 @@ extension Sheet: DefaultLayout {
                 make.edges.equalToSuperview()
             } else {
                 make.centerX.equalToSuperview()
-                if UIDevice.current.userInterfaceIdiom == .phone {
-                    if width < maxWidth {
+                if UIDevice.current.userInterfaceIdiom == .pad && width >= maxWidth {
+                    // iPad且窗口宽度较宽时居中弹出
+                    make.centerY.equalToSuperview()
+                } else {
+                    if isPortrait {
                         make.bottom.equalToSuperview().inset(config.screenEdgeInset)
                     } else {
-                        make.bottom.equalToSuperview().inset(screenSafeAreaInsets.bottom)
+                        make.bottom.equalToSuperview().inset(AppContext.safeAreaInsets.bottom)
                     }
-                } else if UIDevice.current.userInterfaceIdiom == .pad {
-                    make.centerY.equalToSuperview()
                 }
                 make.width.equalTo(width)
                 make.height.greaterThanOrEqualTo(config.cardCornerRadiusByDefault * 2)
@@ -80,7 +81,7 @@ extension Sheet: DefaultLayout {
             contentStack.snp.remakeConstraints { make in
                 let safeArea: UIEdgeInsets
                 if config.isFullScreen {
-                    safeArea = screenSafeAreaInsets
+                    safeArea = AppContext.safeAreaInsets
                 } else {
                     safeArea = .zero
                 }

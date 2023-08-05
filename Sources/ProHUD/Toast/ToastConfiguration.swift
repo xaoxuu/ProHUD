@@ -34,7 +34,7 @@ public extension Toast {
         }
         
         override var cardMaxHeightByDefault: CGFloat {
-            cardMaxHeight ?? (UIScreen.main.bounds.height / 3)
+            cardMaxHeight ?? (AppContext.appBounds.height / 3)
         }
         
         override var animateDurationForBuildInByDefault: CGFloat {

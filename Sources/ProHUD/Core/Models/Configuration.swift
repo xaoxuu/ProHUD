@@ -11,24 +11,6 @@ public class Configuration: NSObject {
     
     /// 是否允许log输出
     public static var enablePrint = true
-
-    /// 根控制器，默认可以自动获取，如果获取失败请主动设置
-    public var rootViewController: UIViewController?
-
-    /// iOS13必须设置此值，默认可以自动获取，如果获取失败请主动设置
-    @available(iOS 13.0, *)
-    private static var sharedWindowScene: UIWindowScene?
-
-    /// iOS13必须设置此值，默认可以自动获取，如果获取失败请主动设置
-    @available(iOS 13.0, *)
-    public var windowScene: UIWindowScene? {
-        set {
-            Self.sharedWindowScene = newValue
-        }
-        get {
-            return Self.sharedWindowScene
-        }
-    }
     
     public lazy var dynamicBackgroundColor: UIColor = {
         if #available(iOS 13.0, *) {
@@ -78,12 +60,12 @@ public class Configuration: NSObject {
     /// 最大宽度（用于优化横屏或者iPad显示）
     public var cardMaxWidth: CGFloat?
     var cardMaxWidthByDefault: CGFloat {
-        cardMaxWidth ?? .minimum(UIScreen.main.bounds.width * 0.72, 400)
+        cardMaxWidth ?? .minimum(AppContext.appBounds.width * 0.72, 400)
     }
     
     public var cardMaxHeight: CGFloat?
     var cardMaxHeightByDefault: CGFloat {
-        cardMaxHeight ?? (UIScreen.main.bounds.height - 100)
+        cardMaxHeight ?? (AppContext.appBounds.height - 100)
     }
     /// 最小宽度
     public var cardMinWidth = CGFloat(32)

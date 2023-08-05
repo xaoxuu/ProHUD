@@ -43,7 +43,7 @@ public extension Sheet {
         
         override var cardMaxWidthByDefault: CGFloat { cardMaxWidth ?? 500 }
         
-        override var cardMaxHeightByDefault: CGFloat { cardMaxHeight ?? (UIScreen.main.bounds.height - 50) }
+        override var cardMaxHeightByDefault: CGFloat { cardMaxHeight ?? (AppContext.appBounds.height - 50) }
         
         override var animateDurationForBuildInByDefault: CGFloat {
             animateDurationForBuildIn ?? 0.5

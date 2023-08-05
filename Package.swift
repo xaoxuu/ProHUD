@@ -10,12 +10,11 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/SnapKit/SnapKit.git", "5.0.0" ..< "6.0.0"),
-        .package(url: "https://github.com/xaoxuu/Inspire.git", "3.0.0" ..< "4.0.0"),
     ],
     targets: [
         .target(
             name: "ProHUD",
-            dependencies: ["SnapKit", "Inspire"],
+            dependencies: ["SnapKit"],
             resources: [.process("Resources/ProHUD.xcassets")]
         )
     ]

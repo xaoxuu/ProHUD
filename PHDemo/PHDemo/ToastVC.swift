@@ -295,7 +295,7 @@ class ToastVC: ListVC {
                     }
                     toast.add(action: "纯色") { toast in
                         toast.contentMaskView.effect = .none
-                        toast.contentMaskView.backgroundColor = .red.lighten()
+                        toast.contentMaskView.backgroundColor = .red
                     }
                 }
                 

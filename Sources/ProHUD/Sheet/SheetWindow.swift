@@ -16,13 +16,13 @@ class SheetWindow: Window {
     init(sheet: Sheet) {
         self.sheet = sheet
         if #available(iOS 13.0, *) {
-            if let scene = sheet.config.windowScene ?? UIWindowScene.mainWindowScene {
+            if let scene = AppContext.windowScene {
                 super.init(windowScene: scene)
             } else {
-                super.init(frame: UIScreen.main.bounds)
+                super.init(frame: AppContext.appBounds)
             }
         } else {
-            super.init(frame: UIScreen.main.bounds)
+            super.init(frame: AppContext.appBounds)
         }
         sheet.window = self
         windowLevel = .init(rawValue: UIWindow.Level.alert.rawValue - 2)
