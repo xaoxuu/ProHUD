@@ -8,12 +8,14 @@
 import UIKit
 
 extension Alert: HUD {
-    
+    public func push(scene: UIWindowScene?) {
+        push()
+    }
     public func push() {
-        guard AlertWindow.alerts.contains(self) == false else {
+        let window = createAttachedWindowIfNotExists()
+        guard window.alerts.contains(self) == false else {
             return
         }
-        let window = attachedWindow
         view.transform = .init(scaleX: 1.2, y: 1.2)
         view.alpha = 0
         navEvents[.onViewWillAppear]?(self)
@@ -32,13 +34,13 @@ extension Alert: HUD {
         } completion: { done in
             self.navEvents[.onViewDidAppear]?(self)
         }
-        AlertWindow.alerts.append(self)
-        Alert.updateAlertsLayout()
+        window.alerts.append(self)
+        Alert.updateAlertsLayout(alerts: window.alerts)
     }
     
     public func pop() {
         navEvents[.onViewWillDisappear]?(self)
-        let window = attachedWindow
+        let window = window ?? createAttachedWindowIfNotExists()
         Alert.removeAlert(alert: self)
         let duration = config.animateDurationForBuildOut ?? config.animateDurationForBuildOutByDefault
         UIView.animateEaseOut(duration: duration) {
@@ -50,13 +52,14 @@ extension Alert: HUD {
             self.navEvents[.onViewDidDisappear]?(self)
         }
         // hide window
-        let count = AlertWindow.alerts.count
-        if count == 0 && AlertWindow.current != nil {
+        let count = window.alerts.count
+        if count == 0 {
             UIView.animateEaseOut(duration: duration) {
                 window.backgroundView.alpha = 0
             } completion: { done in
-                if AlertWindow.alerts.count == 0 {
-                    AlertWindow.current = nil
+                // 此时不能用self.window，因为alert已经释放掉了
+                if window.alerts.count == 0, let scene = window.windowScene {
+                    AppContext.alertWindow[scene] = nil
                 }
             }
         }
@@ -72,7 +75,7 @@ public extension Alert {
     ///   - handler: 实例创建代码
     static func lazyPush(identifier: String? = nil, file: String = #file, line: Int = #line, handler: @escaping (_ alert: Alert) -> Void, onExists: ((_ alert: Alert) -> Void)? = nil) {
         let id = identifier ?? (file + "#\(line)")
-        if let vc = AlertWindow.alerts.last(where: { $0.identifier == id }) {
+        if let vc = find(identifier: id).last {
             vc.update(handler: onExists ?? handler)
         } else {
             Alert { alert in
@@ -96,7 +99,7 @@ public extension Alert {
     /// - Parameter identifier: 唯一标识符
     /// - Returns: HUD实例
     @discardableResult static func find(identifier: String, update handler: ((_ alert: Alert) -> Void)? = nil) -> [Alert] {
-        let arr = AlertWindow.alerts.filter({ $0.identifier == identifier })
+        let arr = AppContext.alertWindow.values.flatMap({ $0.alerts }).filter({ $0.identifier == identifier })
         if let handler = handler {
             arr.forEach({ $0.update(handler: handler) })
         }
@@ -106,8 +109,8 @@ public extension Alert {
 }
 
 fileprivate extension Alert {
-    static func updateAlertsLayout() {
-        for (i, a) in AlertWindow.alerts.reversed().enumerated() {
+    static func updateAlertsLayout(alerts: [Alert]) {
+        for (i, a) in alerts.reversed().enumerated() {
             let scale = CGFloat(pow(0.9, CGFloat(i)))
             UIView.animate(withDuration: 1.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.allowUserInteraction, .curveEaseInOut], animations: {
                 let y = 0 - a.config.stackDepth * CGFloat(i) * CGFloat(pow(0.85, CGFloat(i)))
@@ -118,25 +121,29 @@ fileprivate extension Alert {
         }
     }
     
-    var attachedWindow: AlertWindow {
-        AlertWindow.attachedWindow(config: config)
+    func createAttachedWindowIfNotExists() -> AlertWindow {
+        AlertWindow.createAttachedWindowIfNotExists(config: config)
     }
     
     static func removeAlert(alert: Alert) {
-        if AlertWindow.alerts.count > 1 {
-            for (i, a) in AlertWindow.alerts.enumerated() {
+        guard var alerts = alert.window?.alerts else {
+            return
+        }
+        if alerts.count > 1 {
+            for (i, a) in alerts.enumerated() {
                 if a == alert {
-                    if i < AlertWindow.alerts.count {
-                        AlertWindow.alerts.remove(at: i)
+                    if i < alerts.count {
+                        alerts.remove(at: i)
                     }
                 }
             }
-            updateAlertsLayout()
-        } else if AlertWindow.alerts.count == 1 {
-            AlertWindow.alerts.removeAll()
+            updateAlertsLayout(alerts: alerts)
+        } else if alerts.count == 1 {
+            alerts.removeAll()
         } else {
             print("‼️代码漏洞：已经没有alert了")
         }
+        alert.window?.alerts = alerts
     }
     
 }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ProHUD
 
 class ListVC: UITableViewController {
 
@@ -46,6 +47,7 @@ class ListVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        AppContext.workspace = self
         list.sections[indexPath.section].rows[indexPath.row].action()
     }
     

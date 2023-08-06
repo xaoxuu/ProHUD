@@ -68,7 +68,8 @@ extension Alert: DefaultLayout {
         if contentView.superview != view {
             view.insertSubview(contentView, at: 0)
         }
-        if config.enableShadow && AlertWindow.alerts.count > 0 {
+        let alerts = window?.alerts ?? []
+        if config.enableShadow && alerts.count > 0 {
             contentView.clipsToBounds = false
             contentView.layer.shadowRadius = 4
             contentView.layer.shadowOpacity = 0.08
@@ -242,7 +243,8 @@ extension Alert {
     
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if config.enableShadow && AlertWindow.alerts.count > 1 {
+        let alerts = window?.alerts ?? []
+        if config.enableShadow && alerts.count > 1 {
             contentView.layer.shadowPath = UIBezierPath.init(rect: contentView.bounds).cgPath
         }
     }

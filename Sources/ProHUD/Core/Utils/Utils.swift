@@ -9,11 +9,7 @@ import UIKit
 
 extension UIImage {
     public convenience init?(inProHUD named: String) {
-        if #available(iOS 13.0, *) {
-            self.init(named: named, in: .module, with: .none)
-        } else {
-            self.init(named: named)
-        }
+        self.init(named: named, in: .module, with: .none)
     }
 }
 
@@ -24,7 +20,7 @@ internal var isPortrait: Bool {
         return true
     }
     if UIDevice.current.userInterfaceIdiom == .phone {
-        if UIApplication.shared.statusBarOrientation.isPortrait {
+        if AppContext.windowScene?.interfaceOrientation.isPortrait == true {
             return true
         }
     }

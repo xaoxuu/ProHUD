@@ -41,7 +41,6 @@ class Window: UIWindow {
         rootViewController = vc
     }
     
-    @available(iOS 13.0, *)
     override init(windowScene: UIWindowScene) {
         super.init(windowScene: windowScene)
         setup()

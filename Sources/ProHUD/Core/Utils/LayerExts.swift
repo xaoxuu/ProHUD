@@ -13,10 +13,8 @@ extension CALayer {
     var cornerRadiusWithContinuous: CGFloat {
         set {
             cornerRadius = newValue
-            if #available(iOS 13.0, *) {
+            if cornerCurve != .continuous {
                 cornerCurve = .continuous
-            } else {
-                // Fallback on earlier versions
             }
         }
         get { cornerRadius }

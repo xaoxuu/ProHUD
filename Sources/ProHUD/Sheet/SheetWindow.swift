@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  SheetWindow.swift
 //  
 //
 //  Created by xaoxuu on 2022/9/8.
@@ -7,20 +7,30 @@
 
 import UIKit
 
+
+private extension Sheet {
+    func getContextWindows() -> [SheetWindow] {
+        guard let windowScene = windowScene else {
+            return []
+        }
+        return AppContext.sheetWindows[windowScene] ?? []
+    }
+    func setContextWindows(_ windows: [SheetWindow]) {
+        guard let windowScene = windowScene else {
+            return
+        }
+        AppContext.sheetWindows[windowScene] = windows
+    }
+}
+
 class SheetWindow: Window {
-    
-    static var windows = [SheetWindow]()
     
     var sheet: Sheet
     
     init(sheet: Sheet) {
         self.sheet = sheet
-        if #available(iOS 13.0, *) {
-            if let scene = AppContext.windowScene {
-                super.init(windowScene: scene)
-            } else {
-                super.init(frame: AppContext.appBounds)
-            }
+        if let scene = AppContext.windowScene {
+            super.init(windowScene: scene)
         } else {
             super.init(frame: AppContext.appBounds)
         }
@@ -36,6 +46,7 @@ class SheetWindow: Window {
     static func push(sheet: Sheet) {
         let isNew: Bool
         let window: SheetWindow
+        var windows = AppContext.current?.sheetWindows ?? []
         if let w = windows.first(where: { $0.sheet == sheet }) {
             isNew = false
             window = w
@@ -46,6 +57,7 @@ class SheetWindow: Window {
         window.rootViewController = sheet
         if windows.contains(window) == false {
             windows.append(window)
+            sheet.setContextWindows(windows)
         }
         if isNew {
             sheet.navEvents[.onViewWillAppear]?(sheet)
@@ -58,6 +70,7 @@ class SheetWindow: Window {
     }
     
     static func pop(sheet: Sheet) {
+        var windows = sheet.getContextWindows()
         guard let window = windows.first(where: { $0.sheet == sheet }) else {
             return
         }
@@ -72,6 +85,7 @@ class SheetWindow: Window {
                 } else {
                     consolePrint("‼️代码漏洞：已经没有sheet了")
                 }
+                sheet.setContextWindows(windows)
             }
         }
     }

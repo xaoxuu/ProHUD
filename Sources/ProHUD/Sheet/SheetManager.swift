@@ -51,7 +51,7 @@ public extension Sheet {
     /// - Parameter identifier: 唯一标识符
     /// - Returns: HUD实例
     @discardableResult static func find(identifier: String, update handler: ((_ sheet: Sheet) -> Void)? = nil) -> [Sheet] {
-        let arr = SheetWindow.windows.compactMap({ $0.sheet }).filter({ $0.identifier == identifier })
+        let arr = AppContext.sheetWindows.values.flatMap({ $0 }).compactMap({ $0.sheet }).filter({ $0.identifier == identifier })
         if let handler = handler {
             arr.forEach({ $0.update(handler: handler) })
         }

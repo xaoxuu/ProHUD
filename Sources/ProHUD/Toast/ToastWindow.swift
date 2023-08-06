@@ -7,9 +7,22 @@
 
 import UIKit
 
+private extension Toast {
+    func getContextWindows() -> [ToastWindow] {
+        guard let windowScene = windowScene else {
+            return []
+        }
+        return AppContext.toastWindows[windowScene] ?? []
+    }
+    func setContextWindows(_ windows: [ToastWindow]) {
+        guard let windowScene = windowScene else {
+            return
+        }
+        AppContext.toastWindows[windowScene] = windows
+    }
+}
+
 class ToastWindow: Window {
-    
-    static var windows = [ToastWindow]()
     
     var toast: Toast
     
@@ -18,9 +31,7 @@ class ToastWindow: Window {
     init(toast: Toast) {
         self.toast = toast
         super.init(frame: .zero)
-        if #available(iOS 13.0, *) {
-            windowScene = AppContext.windowScene
-        }
+        windowScene = AppContext.windowScene
         toast.window = self
         windowLevel = .init(rawValue: UIWindow.Level.alert.rawValue + 1000)
         layer.shadowRadius = 8
@@ -41,6 +52,7 @@ class ToastWindow: Window {
     static func push(toast: Toast) {
         let isNew: Bool
         let window: ToastWindow
+        var windows = AppContext.current?.toastWindows ?? []
         if let w = windows.first(where: { $0.toast == toast }) {
             isNew = false
             window = w
@@ -64,8 +76,9 @@ class ToastWindow: Window {
         window.rootViewController = toast // 此时toast.view.frame.size会自动更新为window.frame.size
         if windows.contains(window) == false {
             windows.append(window)
+            toast.setContextWindows(windows)
         }
-        updateToastWindowsLayout()
+        updateToastWindowsLayout(windows: windows)
         if isNew {
             window.transform = .init(translationX: 0, y: -window.frame.maxY)
             UIView.animateEaseOut(duration: config.animateDurationForBuildInByDefault) {
@@ -80,24 +93,26 @@ class ToastWindow: Window {
     }
     
     static func pop(toast: Toast) {
+        var windows = toast.getContextWindows()
         guard let window = windows.first(where: { $0.toast == toast }) else {
             return
         }
         if windows.count > 1 {
             windows.removeAll { $0 == window }
-            updateToastWindowsLayout()
+            updateToastWindowsLayout(windows: windows)
         } else if windows.count == 1 {
             windows.removeAll()
         } else {
             consolePrint("‼️代码漏洞：已经没有toast了")
         }
         toast.vm.duration = nil
+        toast.setContextWindows(windows)
         UIView.animateEaseOut(duration: toast.config.animateDurationForBuildOutByDefault) {
             window.transform = .init(translationX: 0, y: 0-20-window.maxY)
         } completion: { done in
-            window.toast.view.removeFromSuperview()
-            window.toast.removeFromParent()
-            window.toast.navEvents[.onViewDidDisappear]?(window.toast)
+            toast.view.removeFromSuperview()
+            toast.removeFromParent()
+            toast.navEvents[.onViewDidDisappear]?(toast)
         }
     }
     
@@ -108,7 +123,7 @@ fileprivate var updateToastsLayoutWorkItem: DispatchWorkItem?
 
 fileprivate extension ToastWindow {
     
-    static func setToastWindowsLayout() {
+    static func setToastWindowsLayout(windows: [ToastWindow]) {
         for (i, window) in windows.enumerated() {
             let config = window.toast.config
             var y = window.frame.origin.y
@@ -128,10 +143,10 @@ fileprivate extension ToastWindow {
         }
     }
     
-    static func updateToastWindowsLayout() {
+    static func updateToastWindowsLayout(windows: [ToastWindow]) {
         updateToastsLayoutWorkItem?.cancel()
         updateToastsLayoutWorkItem = DispatchWorkItem {
-            setToastWindowsLayout()
+            setToastWindowsLayout(windows: windows)
         }
         DispatchQueue.main.asyncAfter(deadline: .now()+0.001, execute: updateToastsLayoutWorkItem!)
     }

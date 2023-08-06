@@ -51,7 +51,7 @@ public extension Toast {
     /// - Parameter identifier: 唯一标识符
     /// - Returns: HUD实例
     @discardableResult static func find(identifier: String, update handler: ((_ toast: Toast) -> Void)? = nil) -> [Toast] {
-        let arr = ToastWindow.windows.compactMap({ $0.toast }).filter({ $0.identifier == identifier })
+        let arr = AppContext.toastWindows.values.flatMap({ $0 }).compactMap({ $0.toast }).filter({ $0.identifier == identifier })
         if let handler = handler {
             arr.forEach({ $0.update(handler: handler) })
         }

@@ -13,36 +13,26 @@ public class Configuration: NSObject {
     public static var enablePrint = true
     
     public lazy var dynamicBackgroundColor: UIColor = {
-        if #available(iOS 13.0, *) {
-            let color = UIColor { (traitCollection: UITraitCollection) -> UIColor in
-                if traitCollection.userInterfaceStyle == .dark {
-                    return .init(white: 0.15, alpha: 1)
-                } else {
-                    return .init(white: 1, alpha: 1)
-                }
-            }
-            return color
+        let color = UIColor { (traitCollection: UITraitCollection) -> UIColor in
+            if traitCollection.userInterfaceStyle == .dark {
+                return .init(white: 0.15, alpha: 1)
             } else {
-            // Fallback on earlier versions
+                return .init(white: 1, alpha: 1)
+            }
         }
-        return .init(white: 1, alpha: 1)
+        return color
     }()
     
     /// 动态颜色（适配iOS13）
     public lazy var dynamicTextColor: UIColor = {
-        if #available(iOS 13.0, *) {
-            let color = UIColor { (traitCollection: UITraitCollection) -> UIColor in
-                if traitCollection.userInterfaceStyle == .dark {
-                    return .init(white: 1, alpha: 1)
-                } else {
-                    return .init(white: 0.1, alpha: 1)
-                }
+        let color = UIColor { (traitCollection: UITraitCollection) -> UIColor in
+            if traitCollection.userInterfaceStyle == .dark {
+                return .init(white: 1, alpha: 1)
+            } else {
+                return .init(white: 0.1, alpha: 1)
             }
-            return color
-        } else {
-            // Fallback on earlier versions
         }
-        return .init(white: 0.1, alpha: 1)
+        return color
     }()
     
     /// 主标签文本颜色
