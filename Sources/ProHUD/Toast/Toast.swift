@@ -7,7 +7,7 @@
 
 import UIKit
 
-public class Toast: Controller {
+open class Toast: Controller {
     
     weak var window: ToastWindow?
     

@@ -7,7 +7,7 @@
 
 import UIKit
 
-public class Sheet: Controller {
+open class Sheet: Controller {
     
     weak var window: SheetWindow?
     

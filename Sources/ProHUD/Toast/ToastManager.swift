@@ -9,11 +9,12 @@ import UIKit
 
 extension Toast: HUD {
     
-    public func push() {
+    @objc open func push() {
+        guard Configuration.isEnabled else { return }
         ToastWindow.push(toast: self)
     }
     
-    public func pop() {
+    @objc open func pop() {
         ToastWindow.pop(toast: self)
     }
     

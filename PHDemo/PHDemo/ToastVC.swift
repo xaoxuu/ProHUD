@@ -30,6 +30,17 @@ func updateProgress(in duration: TimeInterval, callback: @escaping (_ percent: C
     }
 }
 
+let isTesting: Bool = false
+
+class TestToast: Toast {
+    override func push() {
+        guard isTesting else {
+            return
+        }
+        super.push()
+    }
+}
+
 
 class ToastVC: ListVC {
 
@@ -53,7 +64,7 @@ class ToastVC: ListVC {
         
         list.add(title: "默认布局") { section in
             section.add(title: "标题 + 正文") {
-                Toast(.title(title).message(message)).push()
+                TestToast(.title(title).message(message)).push()
             }
             section.add(title: "一段长文本") {
                 Toast(.message(message)).push()

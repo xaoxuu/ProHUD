@@ -9,6 +9,9 @@ import UIKit
 
 public class Configuration: NSObject {
     
+    /// 全局功能开关
+    public static var isEnabled: Bool = true
+    
     /// 是否允许log输出
     public static var enablePrint = true
     

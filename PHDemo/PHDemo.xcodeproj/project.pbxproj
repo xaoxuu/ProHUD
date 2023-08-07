@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -22,6 +22,7 @@
 		CDA83DB928C601E60025F0DF /* TableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA83DB828C601E60025F0DF /* TableHeaderView.swift */; };
 		CDB6A2A228BC5F4600DEC80D /* ProHUD in Frameworks */ = {isa = PBXBuildFile; productRef = CDB6A2A128BC5F4600DEC80D /* ProHUD */; };
 		CDB7A1D028C32A7400E034D8 /* AlertVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB7A1CF28C32A7400E034D8 /* AlertVC.swift */; };
+		CDCBAEC42A80D6FD00C30DE5 /* ProHUD in Frameworks */ = {isa = PBXBuildFile; productRef = CDCBAEC32A80D6FD00C30DE5 /* ProHUD */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,7 +39,6 @@
 		CD8EEF4828BC5C7300E660EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CD9C7B1D28CB8972006190CD /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		CDA83DB828C601E60025F0DF /* TableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableHeaderView.swift; sourceTree = "<group>"; };
-		CDB6A29F28BC5F0F00DEC80D /* ProHUD */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ProHUD; path = ..; sourceTree = "<group>"; };
 		CDB7A1CF28C32A7400E034D8 /* AlertVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -47,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDCBAEC42A80D6FD00C30DE5 /* ProHUD in Frameworks */,
 				CD891BCD2A80B58E00848BBC /* SnapKit in Frameworks */,
 				CDB6A2A228BC5F4600DEC80D /* ProHUD in Frameworks */,
 				CD6AE8A32A7CC1BA0044E53D /* SnapKit in Frameworks */,
@@ -59,7 +60,6 @@
 		CD8EEF2E28BC5C7200E660EA = {
 			isa = PBXGroup;
 			children = (
-				CDB6A29E28BC5F0F00DEC80D /* Packages */,
 				CD8EEF3928BC5C7200E660EA /* PHDemo */,
 				CD8EEF3828BC5C7200E660EA /* Products */,
 				CDB6A2A028BC5F4600DEC80D /* Frameworks */,
@@ -94,14 +94,6 @@
 			path = PHDemo;
 			sourceTree = "<group>";
 		};
-		CDB6A29E28BC5F0F00DEC80D /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				CDB6A29F28BC5F0F00DEC80D /* ProHUD */,
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 		CDB6A2A028BC5F4600DEC80D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -129,6 +121,7 @@
 				CDB6A2A128BC5F4600DEC80D /* ProHUD */,
 				CD6AE8A22A7CC1BA0044E53D /* SnapKit */,
 				CD891BCC2A80B58E00848BBC /* SnapKit */,
+				CDCBAEC32A80D6FD00C30DE5 /* ProHUD */,
 			);
 			productName = PHDemo;
 			productReference = CD8EEF3728BC5C7200E660EA /* PHDemo.app */;
@@ -160,6 +153,7 @@
 			mainGroup = CD8EEF2E28BC5C7200E660EA;
 			packageReferences = (
 				CD891BCB2A80B58E00848BBC /* XCRemoteSwiftPackageReference "SnapKit" */,
+				CDCBAEC22A80D6FD00C30DE5 /* XCLocalSwiftPackageReference ".." */,
 			);
 			productRefGroup = CD8EEF3828BC5C7200E660EA /* Products */;
 			projectDirPath = "";
@@ -417,6 +411,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		CDCBAEC22A80D6FD00C30DE5 /* XCLocalSwiftPackageReference ".." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ..;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		CD891BCB2A80B58E00848BBC /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -439,6 +440,10 @@
 			productName = SnapKit;
 		};
 		CDB6A2A128BC5F4600DEC80D /* ProHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ProHUD;
+		};
+		CDCBAEC32A80D6FD00C30DE5 /* ProHUD */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ProHUD;
 		};

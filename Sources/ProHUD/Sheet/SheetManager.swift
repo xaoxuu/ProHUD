@@ -9,11 +9,12 @@ import UIKit
 
 extension Sheet: HUD {
     
-    public func push() {
+    @objc open func push() {
+        guard Configuration.isEnabled else { return }
         SheetWindow.push(sheet: self)
     }
     
-    public func pop() {
+    @objc open func pop() {
         SheetWindow.pop(sheet: self)
     }
     

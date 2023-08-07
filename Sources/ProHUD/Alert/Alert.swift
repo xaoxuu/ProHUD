@@ -7,7 +7,7 @@
 
 import UIKit
 
-public class Alert: ProHUD.Controller {
+open class Alert: ProHUD.Controller {
     
     public lazy var config: Configuration = {
         var cfg = Configuration()
@@ -107,7 +107,7 @@ public class Alert: ProHUD.Controller {
         navEvents[.onViewDidLoad]?(self)
     }
     
-    required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

@@ -7,15 +7,14 @@
 
 import UIKit
 
-public protocol HUD {
-    func push()
-    func push(workspace: Workspace?)
-    func pop()
+@objc public protocol HUD {
+    @objc func push()
+    @objc func pop()
 }
 
-public extension HUD {
-    func push(workspace: Workspace?) {
-        AppContext.workspace = workspace
-        push()
-    }
-}
+//public extension HUD {
+//    func push(workspace: Workspace?) {
+//        AppContext.workspace = workspace
+//        push()
+//    }
+//}

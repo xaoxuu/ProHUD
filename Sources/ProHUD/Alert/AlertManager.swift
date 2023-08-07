@@ -8,10 +8,9 @@
 import UIKit
 
 extension Alert: HUD {
-    public func push(scene: UIWindowScene?) {
-        push()
-    }
-    public func push() {
+    
+    @objc open func push() {
+        guard Configuration.isEnabled else { return }
         let window = createAttachedWindowIfNotExists()
         guard window.alerts.contains(self) == false else {
             return
@@ -38,7 +37,7 @@ extension Alert: HUD {
         Alert.updateAlertsLayout(alerts: window.alerts)
     }
     
-    public func pop() {
+    @objc open func pop() {
         navEvents[.onViewWillDisappear]?(self)
         let window = window ?? createAttachedWindowIfNotExists()
         Alert.removeAlert(alert: self)
