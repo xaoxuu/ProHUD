@@ -86,6 +86,25 @@ class SheetVC: ListVC {
         }
         
         list.add(title: "自定义样式") { section in
+            section.add(title: "堆叠样式") {
+                Sheet { sheet in
+                    sheet.config.stackDepthEffect = true
+                    sheet.config.windowEdgeInset = 0
+                    sheet.add(title: "ProHUD")
+                    sheet.add(subTitle: "堆叠样式")
+                    sheet.add(message: "这个效果目前有个小BUG，切后台之后显示会有点问题，如果有解决方案请麻烦去社区反馈一下，谢谢～")
+                    sheet.add(spacing: 24)
+                    sheet.add(action: "去反馈", style: .destructive) { sheet in
+                        guard let url = URL(string: "https://github.com/xaoxuu/ProHUD") else {
+                            return
+                        }
+                        if UIApplication.shared.canOpenURL(url) {
+                            UIApplication.shared.open(url)
+                        }
+                    }
+                    sheet.add(action: "取消", style: .gray)
+                }
+            }
             section.add(title: "圆角半径 & 屏幕边距") {
                 Sheet { sheet in
                     sheet.add(title: "圆角半径 & 屏幕边距")
@@ -111,13 +130,13 @@ class SheetVC: ListVC {
                     let s2 = UISlider()
                     s2.minimumValue = 0
                     s2.maximumValue = 40
-                    s2.value = Float(sheet.config.screenEdgeInset)
+                    s2.value = Float(sheet.config.windowEdgeInset)
                     sheet.add(subview: s2).snp.makeConstraints { make in
                         make.height.equalTo(50)
                     }
                     if #available(iOS 14.0, *) {
                         s2.addAction(.init(handler: { [unowned s2] act in
-                            sheet.config.screenEdgeInset = CGFloat(s2.value)
+                            sheet.config.windowEdgeInset = CGFloat(s2.value)
                             sheet.reloadData()
                         }), for: .valueChanged)
                     } else {

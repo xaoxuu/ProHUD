@@ -93,11 +93,12 @@ extension Alert: DefaultLayout {
         }
         if contentStack.superview == nil {
             contentView.addSubview(contentStack)
+            let cardEdgeInsets = config.cardEdgeInsetsByDefault
             contentStack.snp.remakeConstraints { make in
-                make.top.equalToSuperview().inset(config.cardEdgeInsets.top)
-                make.left.equalToSuperview().inset(config.cardEdgeInsets.left)
-                make.bottom.equalToSuperview().inset(config.cardEdgeInsets.bottom)
-                make.right.equalToSuperview().inset(config.cardEdgeInsets.right)
+                make.top.equalToSuperview().inset(cardEdgeInsets.top)
+                make.left.equalToSuperview().inset(cardEdgeInsets.left)
+                make.bottom.equalToSuperview().inset(cardEdgeInsets.bottom)
+                make.right.equalToSuperview().inset(cardEdgeInsets.right)
             }
         }
         // card background
@@ -149,9 +150,10 @@ extension Alert {
             }
             if imageView.superview == nil {
                 contentStack.insertArrangedSubview(imageView, at: 0)
+                let cardEdgeInsets = config.cardEdgeInsetsByDefault
                 imageView.snp.remakeConstraints { (mk) in
-                    mk.top.left.greaterThanOrEqualTo(contentView).inset(config.cardEdgeInsets.top * 2)
-                    mk.right.bottom.lessThanOrEqualTo(contentView).inset(config.cardEdgeInsets.right * 2)
+                    mk.top.left.greaterThanOrEqualTo(contentView).inset(cardEdgeInsets.top * 2)
+                    mk.right.bottom.lessThanOrEqualTo(contentView).inset(cardEdgeInsets.right * 2)
                     mk.width.equalTo(config.iconSize.width)
                     mk.height.equalTo(config.iconSize.height)
                 }
@@ -177,11 +179,12 @@ extension Alert {
                 } else {
                     contentStack.insertArrangedSubview(textStack, at: 0)
                 }
+                let cardEdgeInsets = config.cardEdgeInsetsByDefault
                 textStack.snp.remakeConstraints { (mk) in
                     mk.left.greaterThanOrEqualToSuperview().inset(config.textEdgeInsets.left)
                     mk.right.lessThanOrEqualToSuperview().inset(config.textEdgeInsets.right)
-                    mk.top.greaterThanOrEqualTo(contentView).inset(config.cardEdgeInsets.top + config.textEdgeInsets.top)
-                    mk.bottom.lessThanOrEqualTo(contentView).inset(config.cardEdgeInsets.bottom + config.textEdgeInsets.bottom)
+                    mk.top.greaterThanOrEqualTo(contentView).inset(cardEdgeInsets.top + config.textEdgeInsets.top)
+                    mk.bottom.lessThanOrEqualTo(contentView).inset(cardEdgeInsets.bottom + config.textEdgeInsets.bottom)
                 }
             }
             if titleCount > 0 {

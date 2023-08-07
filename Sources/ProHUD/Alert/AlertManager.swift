@@ -53,13 +53,12 @@ extension Alert: HUD {
         // hide window
         let count = window.alerts.count
         if count == 0 {
+            self.window = nil
             UIView.animateEaseOut(duration: duration) {
                 window.backgroundView.alpha = 0
             } completion: { done in
-                // 此时不能用self.window，因为alert已经释放掉了
-                if window.alerts.count == 0, let scene = window.windowScene {
-                    AppContext.alertWindow[scene] = nil
-                }
+                // 这里设置一下window属性，会使window的生命周期被延长到此处，即动画执行过程中window不会被提前释放
+                window.isHidden = true
             }
         }
     }

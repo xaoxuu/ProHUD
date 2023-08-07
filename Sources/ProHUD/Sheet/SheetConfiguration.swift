@@ -11,8 +11,11 @@ public extension Sheet {
     
     class Configuration: ProHUD.Configuration {
         
+        /// 堆叠效果
+        public var stackDepthEffect: Bool = false
+        
         /// 卡片距离屏幕的间距
-        public var screenEdgeInset: CGFloat = 4
+        public var windowEdgeInset: CGFloat = 16
         
         /// 是否是全屏的页面
         public var isFullScreen = false
@@ -41,6 +44,10 @@ public extension Sheet {
             customBackgroundViewMask = callback
         }
         
+        override var cardEdgeInsetsByDefault: UIEdgeInsets {
+            cardEdgeInsets ?? .init(top: 24, left: 24, bottom: 24, right: 24)
+        }
+        
         override var cardMaxWidthByDefault: CGFloat { cardMaxWidth ?? 500 }
         
         override var cardMaxHeightByDefault: CGFloat { cardMaxHeight ?? (AppContext.appBounds.height - 50) }
@@ -53,7 +60,7 @@ public extension Sheet {
             animateDurationForBuildOut ?? 0.5
         }
         
-        override var cardCornerRadiusByDefault: CGFloat { cardCornerRadius ?? 40 }
+        override var cardCornerRadiusByDefault: CGFloat { cardCornerRadius ?? 32 }
         
     }
     

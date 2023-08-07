@@ -29,6 +29,12 @@ public extension Toast {
             customShared = callback
         }
         
+        /// 距离窗口左右的间距
+        public var windowEdgeInset: CGFloat?
+        var windowEdgeInsetByDefault: CGFloat {
+            windowEdgeInset ?? 16
+        }
+        
         override var cardMaxWidthByDefault: CGFloat {
             cardMaxWidth ?? 500
         }

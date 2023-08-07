@@ -63,7 +63,8 @@ class ToastWindow: Window {
         let config = toast.config
         
         // frame
-        let width = CGFloat.minimum(AppContext.appBounds.width - config.cardEdgeInsets.left - config.cardEdgeInsets.right, config.cardMaxWidthByDefault)
+        let cardEdgeInsets = config.cardEdgeInsetsByDefault
+        let width = CGFloat.minimum(AppContext.appBounds.width - config.windowEdgeInsetByDefault - config.windowEdgeInsetByDefault, config.cardMaxWidthByDefault)
         toast.view.frame.size = CGSize(width: width, height: config.cardMaxHeightByDefault)
         toast.titleLabel.sizeToFit()
         toast.bodyLabel.sizeToFit()
@@ -113,6 +114,8 @@ class ToastWindow: Window {
             toast.view.removeFromSuperview()
             toast.removeFromParent()
             toast.navEvents[.onViewDidDisappear]?(toast)
+            // 这里设置一下window属性，会使window的生命周期被延长到此处，即动画执行过程中window不会被提前释放
+            window.isHidden = true
         }
     }
     
@@ -128,7 +131,8 @@ fileprivate extension ToastWindow {
             let config = window.toast.config
             var y = window.frame.origin.y
             if i == 0 {
-                y = max(AppContext.appWindow?.safeAreaInsets.top ?? config.margin, config.margin)
+                let topLayoutMargins = AppContext.appWindow?.layoutMargins.top ?? config.margin
+                y = max(topLayoutMargins - config.margin, config.margin)
             } else {
                 if i - 1 < windows.count && i > 0 {
                     y = config.margin + windows[i-1].frame.maxY
@@ -147,6 +151,7 @@ fileprivate extension ToastWindow {
         updateToastsLayoutWorkItem?.cancel()
         updateToastsLayoutWorkItem = DispatchWorkItem {
             setToastWindowsLayout(windows: windows)
+            updateToastsLayoutWorkItem = nil
         }
         DispatchQueue.main.asyncAfter(deadline: .now()+0.001, execute: updateToastsLayoutWorkItem!)
     }
@@ -175,7 +180,8 @@ fileprivate extension Toast {
             height = CGFloat.maximum(v.frame.maxY, height)
         }
         // 上下边间距
-        height += config.cardEdgeInsets.top + config.cardEdgeInsets.bottom
+        let cardEdgeInsets = config.cardEdgeInsetsByDefault
+        height += cardEdgeInsets.top + cardEdgeInsets.bottom
         return height
     }
 }

@@ -36,7 +36,7 @@ open class Controller: UIViewController {
     }
     
     deinit {
-        consolePrint("👌", self, "init")
+        consolePrint("👌", self, "deinit")
     }
     
     override public func viewDidLoad() {

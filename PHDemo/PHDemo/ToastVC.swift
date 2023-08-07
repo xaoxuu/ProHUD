@@ -30,7 +30,7 @@ func updateProgress(in duration: TimeInterval, callback: @escaping (_ percent: C
     }
 }
 
-let isTesting: Bool = false
+let isTesting: Bool = true
 
 class TestToast: Toast {
     override func push() {
@@ -173,7 +173,7 @@ class ToastVC: ListVC {
             var i = 0
             section.add(title: "多实例共存") {
                 Toast(.loading.title("多实例共存").message("直接创建的实例，以平铺方式排列").duration(2)) { toast in
-                    toast.config.cardEdgeInsets = .init(top: 32, left: 20, bottom: 32, right: 20)
+                    
                 }
             }
             section.add(title: "不存在就创建，存在就更新") {
@@ -209,7 +209,17 @@ class ToastVC: ListVC {
                     }
                 }
             }
-            
+            section.add(title: "修改内边距") {
+                Toast(.message("这条toast的内边距经过自定义设置，与其它的有所不同。")) { toast in
+                    toast.config.cardEdgeInsets = .init(top: 40, left: 32, bottom: 40, right: 32)
+                }
+            }
+            section.add(title: "修改左右外边距") {
+                Toast(.message("这条toast的左右外边距经过自定义设置，与其它的有所不同。")) { toast in
+                    toast.config.windowEdgeInset = 8
+                    toast.config.cardCornerRadius = 24
+                }
+            }
             section.add(title: "圆角半径") {
                 func foo() {
                     Toast { toast in

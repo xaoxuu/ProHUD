@@ -66,9 +66,10 @@ public class Configuration: NSObject {
     public var cardMinHeight = CGFloat(32)
     
     /// 卡片内边距
-    public var cardEdgeInsets: UIEdgeInsets = {
-        .init(top: 16, left: 16, bottom: 16, right: 16)
-    }()
+    public var cardEdgeInsets: UIEdgeInsets?
+    var cardEdgeInsetsByDefault: UIEdgeInsets {
+        cardEdgeInsets ?? .init(top: 16, left: 16, bottom: 16, right: 16)
+    }
     
     /// 文字区域内边距
     public var textEdgeInsets: UIEdgeInsets = {

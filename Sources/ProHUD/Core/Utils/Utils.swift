@@ -15,7 +15,7 @@ extension UIImage {
 
 
 /// 是否是竖屏(紧凑布局)模式
-internal var isPortrait: Bool {
+var isPortrait: Bool {
     if AppContext.appBounds.width < 450 {
         return true
     }
@@ -25,4 +25,8 @@ internal var isPortrait: Bool {
         }
     }
     return false
+}
+
+var isPhonePortrait: Bool {
+    UIDevice.current.userInterfaceIdiom == .phone && (AppContext.windowScene?.interfaceOrientation.isPortrait == true)
 }
