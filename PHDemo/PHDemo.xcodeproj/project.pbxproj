@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -12,6 +12,7 @@
 		CD6537C328C35E6200A5981B /* ToastVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6537C228C35E6200A5981B /* ToastVC.swift */; };
 		CD6537C528C35F2C00A5981B /* SheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6537C428C35F2C00A5981B /* SheetVC.swift */; };
 		CD6AE8A32A7CC1BA0044E53D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = CD6AE8A22A7CC1BA0044E53D /* SnapKit */; };
+		CD891BCD2A80B58E00848BBC /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = CD891BCC2A80B58E00848BBC /* SnapKit */; };
 		CD8EEF3B28BC5C7200E660EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8EEF3A28BC5C7200E660EA /* AppDelegate.swift */; };
 		CD8EEF3D28BC5C7200E660EA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8EEF3C28BC5C7200E660EA /* SceneDelegate.swift */; };
 		CD8EEF4228BC5C7200E660EA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD8EEF4028BC5C7200E660EA /* Main.storyboard */; };
@@ -46,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD891BCD2A80B58E00848BBC /* SnapKit in Frameworks */,
 				CDB6A2A228BC5F4600DEC80D /* ProHUD in Frameworks */,
 				CD6AE8A32A7CC1BA0044E53D /* SnapKit in Frameworks */,
 			);
@@ -126,6 +128,7 @@
 			packageProductDependencies = (
 				CDB6A2A128BC5F4600DEC80D /* ProHUD */,
 				CD6AE8A22A7CC1BA0044E53D /* SnapKit */,
+				CD891BCC2A80B58E00848BBC /* SnapKit */,
 			);
 			productName = PHDemo;
 			productReference = CD8EEF3728BC5C7200E660EA /* PHDemo.app */;
@@ -156,7 +159,7 @@
 			);
 			mainGroup = CD8EEF2E28BC5C7200E660EA;
 			packageReferences = (
-				CD6AE8A12A7CC1BA0044E53D /* XCLocalSwiftPackageReference "../../SnapKit" */,
+				CD891BCB2A80B58E00848BBC /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			productRefGroup = CD8EEF3828BC5C7200E660EA /* Products */;
 			projectDirPath = "";
@@ -414,16 +417,25 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		CD6AE8A12A7CC1BA0044E53D /* XCLocalSwiftPackageReference "../../SnapKit" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../SnapKit;
+/* Begin XCRemoteSwiftPackageReference section */
+		CD891BCB2A80B58E00848BBC /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://git.xaox.cc/mirrors/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.6.0;
+			};
 		};
-/* End XCLocalSwiftPackageReference section */
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		CD6AE8A22A7CC1BA0044E53D /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
+			productName = SnapKit;
+		};
+		CD891BCC2A80B58E00848BBC /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CD891BCB2A80B58E00848BBC /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
 		};
 		CDB6A2A128BC5F4600DEC80D /* ProHUD */ = {

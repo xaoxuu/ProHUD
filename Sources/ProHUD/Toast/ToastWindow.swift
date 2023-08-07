@@ -128,7 +128,7 @@ fileprivate extension ToastWindow {
             let config = window.toast.config
             var y = window.frame.origin.y
             if i == 0 {
-                y = max(AppContext.appWindow?.layoutMargins.top ?? config.margin, config.margin)
+                y = max(AppContext.appWindow?.safeAreaInsets.top ?? config.margin, config.margin)
             } else {
                 if i - 1 < windows.count && i > 0 {
                     y = config.margin + windows[i-1].frame.maxY
