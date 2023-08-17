@@ -44,14 +44,15 @@ open class Capsule: Controller {
         return lb
     }()
     
-    open class ViewModel: BaseViewModel {
+    @objc(CapsuleViewModel) open class ViewModel: BaseViewModel {
         
-        public enum Position {
+        @objc public enum Position: Int {
             case top
             case middle
             case bottom
         }
-        public var position: Position = .top
+        
+        @objc public var position: Position = .top
         
         public static var top: Self {
             let obj = Self.init()
@@ -72,11 +73,11 @@ open class Capsule: Controller {
     }
     
     /// 视图模型
-    public var vm = ViewModel()
+    @objc public var vm = ViewModel()
     
     private var tapActionCallback: ((_ capsule: Capsule) -> Void)?
     
-    @discardableResult public init(_ vm: ViewModel, handler: ((_ capsule: Capsule) -> Void)? = nil) {
+    @discardableResult @objc public init(_ vm: ViewModel, handler: ((_ capsule: Capsule) -> Void)? = nil) {
         super.init()
         self.vm = vm
         handler?(self)
@@ -87,7 +88,7 @@ open class Capsule: Controller {
         }
     }
     
-    @discardableResult public convenience init(handler: ((_ capsule: Capsule) -> Void)?) {
+    @discardableResult @objc public convenience init(handler: ((_ capsule: Capsule) -> Void)?) {
         self.init(.init(), handler: handler)
     }
     

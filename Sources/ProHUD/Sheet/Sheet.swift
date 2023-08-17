@@ -41,7 +41,7 @@ open class Sheet: Controller {
         }
     }
     
-    @discardableResult public init(handler: @escaping (_ sheet: Sheet) -> Void, onTappedBackground action: ((_ sheet: Sheet) -> Void)? = nil) {
+    @discardableResult @objc public init(handler: @escaping (_ sheet: Sheet) -> Void, onTappedBackground action: ((_ sheet: Sheet) -> Void)? = nil) {
         super.init()
         
         onTappedBackground = action

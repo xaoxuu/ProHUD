@@ -73,10 +73,10 @@ open class Alert: ProHUD.Controller {
         return stack
     }()
     
-    open class ViewModel: BaseViewModel {}
+    @objc(AlertViewModel) open class ViewModel: BaseViewModel {}
     
     /// 视图模型
-    public var vm = ViewModel()
+    @objc public var vm = ViewModel()
     
     public override var title: String? {
         didSet {
@@ -84,7 +84,7 @@ open class Alert: ProHUD.Controller {
         }
     }
     
-    @discardableResult public init(_ vm: ViewModel, handler: ((_ alert: Alert) -> Void)? = nil) {
+    @discardableResult @objc public init(_ vm: ViewModel, handler: ((_ alert: Alert) -> Void)? = nil) {
         super.init()
         self.vm = vm
         handler?(self)
@@ -96,7 +96,7 @@ open class Alert: ProHUD.Controller {
         }
     }
     
-    @discardableResult public convenience init(handler: ((_ alert: Alert) -> Void)?) {
+    @discardableResult @objc public convenience init(handler: ((_ alert: Alert) -> Void)?) {
         self.init(.init(), handler: handler)
     }
     

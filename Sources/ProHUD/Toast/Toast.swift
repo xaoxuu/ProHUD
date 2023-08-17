@@ -83,10 +83,10 @@ open class Toast: Controller {
     /// 是否可以通过手势移除（向上滑出屏幕）
     public var isRemovable = true
     
-    open class ViewModel: BaseViewModel {}
+    @objc(ToastViewModel) open class ViewModel: BaseViewModel {}
     
     /// 视图模型
-    public var vm = ViewModel()
+    @objc public var vm = ViewModel()
     
     private var tapActionCallback: ((_ toast: Toast) -> Void)?
     
@@ -98,7 +98,7 @@ open class Toast: Controller {
     }
     
     
-    @discardableResult public init(_ vm: ViewModel, handler: ((_ toast: Toast) -> Void)? = nil) {
+    @discardableResult @objc public init(_ vm: ViewModel, handler: ((_ toast: Toast) -> Void)? = nil) {
         super.init()
         self.vm = vm
         handler?(self)
@@ -109,7 +109,7 @@ open class Toast: Controller {
         }
     }
     
-    @discardableResult public convenience init(handler: ((_ toast: Toast) -> Void)?) {
+    @discardableResult @objc public convenience init(handler: ((_ toast: Toast) -> Void)?) {
         self.init(.init(), handler: handler)
     }
     

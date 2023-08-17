@@ -11,19 +11,19 @@ import UIKit
 open class BaseViewModel: NSObject {
     
     /// 图标
-    open var icon: UIImage?
-    var iconURL: URL?
+    @objc open var icon: UIImage?
+    @objc var iconURL: URL?
     
     /// 图标旋转动画
     open var rotation: Rotation?
     
     /// 标题
-    open var title: String?
+    @objc open var title: String?
     
     /// 消息正文
-    open var message: String?
+    @objc open var message: String?
     
-    open var tintColor: UIColor?
+    @objc open var tintColor: UIColor?
     
     /// 持续时间（为空代表根据场景不同的默认配置，为0代表无穷大）
     open var duration: TimeInterval? {
@@ -32,7 +32,7 @@ open class BaseViewModel: NSObject {
         }
     }
     
-    public required override init() {
+    @objc public required override init() {
         
     }
     
