@@ -62,18 +62,45 @@ extension Capsule: HUD {
         navEvents[.onViewWillAppear]?(self)
         if isNew {
             window.isHidden = false
+            func completion() {
+                self.navEvents[.onViewDidAppear]?(self)
+            }
             if let animateBuildIn = config.animateBuildIn {
-                animateBuildIn(window) {
-                    self.navEvents[.onViewDidAppear]?(self)
-                }
+                animateBuildIn(window, completion)
             } else {
                 let duration = config.animateDurationForBuildInByDefault
-                window.transform = .init(translationX: 0, y: -window.frame.maxY - 20)
-                UIView.animateEaseOut(duration: duration) {
-                    window.transform = .identity
-                } completion: { done in
-                    self.navEvents[.onViewDidAppear]?(self)
+                switch position {
+                case .top:
+                    window.transform = .init(translationX: 0, y: -window.frame.maxY - 20)
+                    UIView.animateEaseOut(duration: duration) {
+                        window.transform = .identity
+                    } completion: { done in
+                        completion()
+                    }
+                case .middle:
+                    let d0 = duration * 0.2
+                    let d1 = duration
+                    window.transform = .init(scaleX: 0.001, y: 0.001)
+                    window.alpha = 0
+                    UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5) {
+                        window.transform = .identity
+                    } completion: { done in
+                        completion()
+                    }
+                    UIView.animate(withDuration: duration * 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1) {
+                        window.alpha = 1
+                    }
+                case .bottom:
+                    let offsetY = AppContext.appBounds.height - newFrame.maxY + 100
+                    window.transform = .init(translationX: 0, y: offsetY)
+                    UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 0.75, initialSpringVelocity: 0.5) {
+                        window.transform = .identity
+                    } completion: { done in
+                        completion()
+                    }
                 }
+                
+                
             }
         } else {
             view.layoutIfNeeded()
@@ -91,21 +118,41 @@ extension Capsule: HUD {
         guard let window = attachedWindow, let windowScene = windowScene else { return }
         AppContext.capsuleWindows[windowScene]?[vm.position] = nil
         navEvents[.onViewWillDisappear]?(self)
+        func completion() {
+            window.isHidden = true
+            window.transform = .identity
+            self.navEvents[.onViewDidDisappear]?(self)
+        }
         if let animateBuildOut = config.animateBuildOut {
-            animateBuildOut(window) {
-                window.isHidden = true
-                window.transform = .identity
-                self.navEvents[.onViewDidAppear]?(self)
-            }
+            animateBuildOut(window, completion)
         } else {
             let duration = config.animateDurationForBuildOutByDefault
-            UIView.animateEaseOut(duration: duration) {
-                window.transform = .init(translationX: 0, y: -window.frame.maxY - 20)
-            } completion: { done in
-                window.isHidden = true
-                window.transform = .identity
-                self.navEvents[.onViewDidDisappear]?(self)
+            let oldFrame = window.frame
+            switch vm.position {
+            case .top:
+                UIView.animateEaseOut(duration: duration) {
+                    window.transform = .init(translationX: 0, y: -oldFrame.maxY - 20)
+                } completion: { done in
+                    completion()
+                }
+            case .middle:
+                UIView.animate(withDuration: duration * 0.6, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.5) {
+                    window.transform = .init(scaleX: 0.001, y: 0.001)
+                } completion: { done in
+                    completion()
+                }
+                UIView.animate(withDuration: duration * 0.4, delay: duration * 0.2, usingSpringWithDamping: 1, initialSpringVelocity: 0.5) {
+                    window.alpha = 0
+                }
+            case .bottom:
+                let offsetY = AppContext.appBounds.height - oldFrame.maxY + 100
+                UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0) {
+                    window.transform = .init(translationX: 0, y: offsetY)
+                } completion: { done in
+                    completion()
+                }
             }
+            
         }
     }
     

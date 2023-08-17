@@ -58,43 +58,20 @@ class CapsuleVC: ListVC {
         }
         
         list.add(title: "不同位置、不同动画") { section in
-            section.add(title: "顶部，缩放") {
+            section.add(title: "顶部，默认滑入") {
                 Capsule(.info("一条简短的消息")) { capsule in
-                    capsule.config.animateBuildIn { window, completion in
-                        let duration = 1.0
-                        let d0 = duration * 0.2
-                        let d1 = duration
-                        window.transform = .init(scaleX: 0.001, y: 0.001)
-                        window.alpha = 0
-                        UIView.animate(withDuration: d0, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.5) {
-                            window.transform = .init(scaleX: 0.01, y: 0.5)
-                        }
-                        UIView.animate(withDuration: d1, delay: d0 * 0.2, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5) {
-                            window.transform = .identity
-                        } completion: { done in
-                            completion()
-                        }
-                        UIView.animate(withDuration: duration * 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1) {
-                            window.alpha = 1
-                        }
-                    }
-                    capsule.config.animateBuildOut { window, completion in
-                        let duration = 0.8
-                        UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1) {
-                            window.transform = .init(scaleX: 0.0001, y: 0.5)
-                        } completion: { done in
-                            completion()
-                        }
-                        UIView.animate(withDuration: duration * 0.6, delay: duration * 0.4, usingSpringWithDamping: 1, initialSpringVelocity: 1) {
-                            window.alpha = 0
-                        }
-                    }
+                    
+                }
+            }
+            section.add(title: "中间，默认缩放") {
+                Capsule(.middle.info("一条简短的消息")) { capsule in
+                    
                 }
             }
             section.add(title: "中间，黑底白字，透明渐变") {
                 Capsule(.middle.info("一条简短的消息")) { capsule in
                     capsule.config.tintColor = .white
-                    capsule.config.cardCornerRadius = 4
+                    capsule.config.cardCornerRadius = 8
                     capsule.config.contentViewMask { mask in
                         mask.layer.backgroundColor = UIColor.black.withAlphaComponent(0.75).cgColor
                     }
@@ -118,11 +95,13 @@ class CapsuleVC: ListVC {
                     }
                 }
             }
-            section.add(title: "底部，渐变背景，回弹滑入") {
+            section.add(title: "底部，渐变背景，默认回弹滑入") {
                 Capsule(.bottom.enter("点击进入")) { capsule in
                     capsule.config.tintColor = .white
+                    capsule.config.cardEdgeInsets = .init(top: 16, left: 24, bottom: 16, right: 24)
                     capsule.config.customTextLabel { label in
                         label.textColor = .white
+                        label.font = .boldSystemFont(ofSize: 16)
                     }
                     capsule.config.contentViewMask { mask in
                         mask.effect = .none
@@ -137,24 +116,6 @@ class CapsuleVC: ListVC {
                         mask.layer.insertSublayer(gradientLayer, at: 0)
                     }
                     capsule.config.cardCornerRadius = .infinity
-                    capsule.config.animateBuildIn { window, completion in
-                        window.transform = .init(translationX: 0, y: 240)
-                        window.alpha = 0
-                        UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.75, initialSpringVelocity: 0.5) {
-                            window.transform = .identity
-                            window.alpha = 1
-                        } completion: { done in
-                            completion()
-                        }
-                    }
-                    capsule.config.animateBuildOut { window, completion in
-                        UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.5) {
-                            window.transform = .init(translationX: 0, y: 240)
-                            window.alpha = 0
-                        } completion: { done in
-                            completion()
-                        }
-                    }
                 }.onTapped { capsule in
                     Alert(.message("收到点击事件").duration(1)).push()
                     capsule.pop()
@@ -181,7 +142,7 @@ extension Capsule.ViewModel {
     func enter(_ text: String?) -> Self {
         self.message(text)
         .icon(.init(systemName: "arrow.right.circle.fill"))
-        .duration(.infinity)
+//        .duration(.infinity)
     }
     
     static var systemError: Self {

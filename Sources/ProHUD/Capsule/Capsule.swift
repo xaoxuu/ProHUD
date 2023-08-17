@@ -54,6 +54,10 @@ open class Capsule: Controller {
         
         @objc public var position: Position = .top
         
+        public func position(position: Position) -> Self {
+            self.position = position
+            return self
+        }
         public static var top: Self {
             let obj = Self.init()
             obj.position = .top
