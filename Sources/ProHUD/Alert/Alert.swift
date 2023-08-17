@@ -73,6 +73,8 @@ open class Alert: ProHUD.Controller {
         return stack
     }()
     
+    open class ViewModel: BaseViewModel {}
+    
     /// 视图模型
     public var vm = ViewModel()
     

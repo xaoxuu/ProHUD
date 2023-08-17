@@ -8,7 +8,7 @@
 import UIKit
 import ProHUD
 
-public extension ViewModel {
+public extension BaseViewModel {
 //    static var plain: ViewModel {
 //        ViewModel()
 //    }
@@ -16,27 +16,37 @@ public extension ViewModel {
 //        ViewModel(icon: UIImage(named: "prohud.note"))
 //    }
     // MARK: note
-    static var note: ViewModel {
-        .init(icon: UIImage(named: "demo.note"))
+    static var note: Self {
+        .init()
+        .icon(.init(named: "demo.note"))
     }
-    static func note(_ seconds: TimeInterval) -> ViewModel {
-        .init(icon: UIImage(named: "demo.note"), duration: seconds)
+    static func note(_ seconds: TimeInterval) -> Self {
+        .init()
+        .icon(.init(named: "demo.note"))
+        .duration(seconds)
     }
-    static var msg: ViewModel {
-        ViewModel(icon: UIImage(named: "demo.message"))
+    static var msg: Self {
+        .init()
+        .icon(.init(named: "demo.message"))
     }
-    static func msg(_ seconds: TimeInterval) -> ViewModel {
-        ViewModel(icon: UIImage(named: "demo.message"), duration: seconds)
+    static func msg(_ seconds: TimeInterval) -> Self {
+        .init()
+        .icon(.init(named: "demo.message"))
+        .duration(seconds)
     }
-    static var delete: ViewModel {
-        ViewModel(icon: UIImage(named: "demo.trash"))
+    static var delete: Self {
+        .init()
+        .icon(.init(named: "demo.trash"))
     }
     // MARK: confirm
-    static var confirm: ViewModel {
-        .init(icon: UIImage(named: "demo.questionmark"))
+    static var confirm: Self {
+        .init()
+        .icon(.init(named: "demo.questionmark"))
     }
-    static func confirm(_ seconds: TimeInterval) -> ViewModel {
-        .init(icon: UIImage(named: "demo.questionmark"), duration: seconds)
+    static func confirm(_ seconds: TimeInterval) -> Self {
+        .init()
+        .icon(.init(named: "demo.questionmark"))
+        .duration(seconds)
     }
     
 //    static func loading(_ seconds: TimeInterval) -> ViewModel {

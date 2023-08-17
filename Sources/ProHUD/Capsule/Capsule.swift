@@ -44,7 +44,7 @@ open class Capsule: Controller {
         return lb
     }()
     
-    open class CapsuleViewModel: ViewModel {
+    open class ViewModel: BaseViewModel {
         
         public enum Position {
             case top
@@ -72,11 +72,11 @@ open class Capsule: Controller {
     }
     
     /// 视图模型
-    public var vm = CapsuleViewModel()
+    public var vm = ViewModel()
     
     private var tapActionCallback: ((_ capsule: Capsule) -> Void)?
     
-    @discardableResult public init(_ vm: CapsuleViewModel, handler: ((_ capsule: Capsule) -> Void)? = nil) {
+    @discardableResult public init(_ vm: ViewModel, handler: ((_ capsule: Capsule) -> Void)? = nil) {
         super.init()
         self.vm = vm
         handler?(self)
@@ -97,7 +97,7 @@ open class Capsule: Controller {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        view.tintColor = config.tintColor
+        view.tintColor = vm.tintColor ?? config.tintColor
         view.layer.shadowRadius = 8
         view.layer.shadowOffset = .init(width: 0, height: 5)
         view.layer.shadowOpacity = 0.1

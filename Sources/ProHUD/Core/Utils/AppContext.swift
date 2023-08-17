@@ -36,7 +36,7 @@ public struct AppContext {
     static var toastWindows: [UIWindowScene: [ToastWindow]] = [:]
     static var alertWindow: [UIWindowScene: AlertWindow] = [:]
     static var sheetWindows: [UIWindowScene: [SheetWindow]] = [:]
-    static var capsuleWindows: [UIWindowScene: [Capsule.CapsuleViewModel.Position: CapsuleWindow]] = [:]
+    static var capsuleWindows: [UIWindowScene: [Capsule.ViewModel.Position: CapsuleWindow]] = [:]
     
     static var current: AppContext? {
         guard let windowScene = windowScene else { return nil }
@@ -120,7 +120,7 @@ extension AppContext {
     var toastWindows: [ToastWindow] {
         Self.toastWindows[windowScene] ?? []
     }
-    var capsuleWindows: [Capsule.CapsuleViewModel.Position: CapsuleWindow] {
+    var capsuleWindows: [Capsule.ViewModel.Position: CapsuleWindow] {
         Self.capsuleWindows[windowScene] ?? [:]
     }
 }

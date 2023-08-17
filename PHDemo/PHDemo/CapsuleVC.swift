@@ -43,7 +43,7 @@ class CapsuleVC: ListVC {
                 Capsule(.info("一条简短的消息")).push()
             }
             section.add(title: "一条稍微长一点的消息") {
-                Capsule(.info("一条稍微长一点的消息")).push()
+                Capsule(.systemError.title("500").message("一条稍微长一点的消息")).push()
             }
             section.add(title: "（默认）状态胶囊控件，用于状态显示，一个主程序窗口只有一个状态胶囊实例。") {
                 Capsule(.info("状态胶囊控件，用于状态显示，一个主程序窗口只有一个状态胶囊实例。")).push()
@@ -165,7 +165,7 @@ class CapsuleVC: ListVC {
 
 }
 
-extension Capsule.CapsuleViewModel {
+extension Capsule.ViewModel {
     
     static func info(_ text: String?) -> Self {
         .init()
@@ -182,6 +182,16 @@ extension Capsule.CapsuleViewModel {
         self.message(text)
         .icon(.init(systemName: "arrow.right.circle.fill"))
         .duration(.infinity)
+    }
+    
+    static var systemError: Self {
+        .init()
+        .icon(.init(systemName: "xmark.circle.fill"))
+        .tintColor(.systemRed)
+    }
+    static func systemError(_ text: String?) -> Self {
+        .systemError
+        .message(text)
     }
     
 }

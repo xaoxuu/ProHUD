@@ -83,6 +83,8 @@ open class Toast: Controller {
     /// 是否可以通过手势移除（向上滑出屏幕）
     public var isRemovable = true
     
+    open class ViewModel: BaseViewModel {}
+    
     /// 视图模型
     public var vm = ViewModel()
     

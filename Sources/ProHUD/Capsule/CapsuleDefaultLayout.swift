@@ -33,7 +33,7 @@ extension Capsule: DefaultLayout {
         
         // text
         textLabel.removeFromSuperview()
-        let text = (vm.title ?? "") + (vm.message ?? "")
+        var text = [vm.title ?? "", vm.message ?? ""].filter({ $0.count > 0 }).joined(separator: " ")
         if text.count > 0 {
             contentStack.addArrangedSubview(textLabel)
             textLabel.snp.makeConstraints { make in

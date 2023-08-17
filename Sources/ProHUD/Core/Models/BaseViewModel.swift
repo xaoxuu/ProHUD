@@ -1,6 +1,6 @@
 //
-//  ViewModel.swift
-//  
+//  BaseViewModel.swift
+//
 //
 //  Created by xaoxuu on 2022/8/29.
 //
@@ -8,7 +8,7 @@
 import UIKit
 
 /// 数据模型
-open class ViewModel: NSObject {
+open class BaseViewModel: NSObject {
     
     /// 图标
     open var icon: UIImage?
@@ -22,6 +22,8 @@ open class ViewModel: NSObject {
     
     /// 消息正文
     open var message: String?
+    
+    open var tintColor: UIColor?
     
     /// 持续时间（为空代表根据场景不同的默认配置，为0代表无穷大）
     open var duration: TimeInterval? {
@@ -64,7 +66,7 @@ open class ViewModel: NSObject {
 }
 
 // MARK: - convenience func
-public extension ViewModel {
+public extension BaseViewModel {
     
     func icon(_ image: UIImage?) -> Self {
         self.icon = image
@@ -96,10 +98,15 @@ public extension ViewModel {
         return self
     }
     
+    func tintColor(_ tintColor: UIColor?) -> Self {
+        self.tintColor = tintColor
+        return self
+    }
+    
 }
 
 // MARK: - example scenes
-public extension ViewModel {
+public extension BaseViewModel {
     
     // MARK: plain
     static func title(_ text: String?) -> Self {
