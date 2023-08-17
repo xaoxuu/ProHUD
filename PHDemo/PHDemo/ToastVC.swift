@@ -47,9 +47,11 @@ class ToastVC: ListVC {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        title = "Toast"
+        
         let title = "通知条控件"
         let message = "通知条控件，用于非阻塞性事件通知。显示效果如同原生通知，默认会自动消失，可以支持手势移除，有多条通知可以平铺并列显示。"
-        header.titleLabel.text = "ProHUD.Toast"
+        
         header.detailLabel.text = message
         
         Toast.Configuration.shared { config in

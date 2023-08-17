@@ -15,7 +15,7 @@ class AlertVC: ListVC {
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
         
-        header.titleLabel.text = "ProHUD.Alert"
+        title = "Alert"
         header.detailLabel.text = "弹窗控件，用于强阻塞性交互，用户必须做出选择或者等待结果才能进入下一步，当多个实例出现时，会以堆叠的形式显示，新的实例会在覆盖旧的实例上层。"
         
         Alert.Configuration.shared { config in

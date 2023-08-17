@@ -48,7 +48,11 @@ extension Toast: DefaultLayout {
             if bodyCount > 0 {
                 config.customTitleLabel?(titleLabel)
             } else {
-                config.customTextLabel?(bodyLabel)
+                if let customTextLabel = config.customTextLabel {
+                    customTextLabel(titleLabel)
+                } else {
+                    titleLabel.font = .boldSystemFont(ofSize: 18)
+                }
             }
         } else {
             if textStack.arrangedSubviews.contains(titleLabel) {
@@ -61,7 +65,11 @@ extension Toast: DefaultLayout {
             if titleCount > 0 {
                 config.customBodyLabel?(bodyLabel)
             } else {
-                config.customTextLabel?(bodyLabel)
+                if let customTextLabel = config.customTextLabel {
+                    customTextLabel(bodyLabel)
+                } else {
+                    bodyLabel.font = .boldSystemFont(ofSize: 18)
+                }
             }
         } else {
             if textStack.arrangedSubviews.contains(bodyLabel) {

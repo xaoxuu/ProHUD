@@ -19,7 +19,7 @@ open class Toast: Controller {
     
     public var progressView: ProgressView?
     
-    /// 内容容器（包括icon、textStack、actionStack)
+    /// 内容容器（包括infoStack、actionStack)
     public lazy var contentStack: StackView = {
         let stack = StackView(axis: .vertical)
         stack.spacing = 16
@@ -27,7 +27,7 @@ open class Toast: Controller {
         return stack
     }()
     
-    /// 信息容器（image+text）
+    /// 信息容器（imageView+textStack）
     public lazy var infoStack: StackView = {
         let stack = StackView(axis: .horizontal)
         stack.spacing = 8
@@ -36,7 +36,7 @@ open class Toast: Controller {
         return stack
     }()
     
-    /// 文本容器
+    /// 文本容器（title、body）
     public lazy var textStack: StackView = {
         let stack = StackView(axis: .vertical)
         stack.spacing = config.lineSpace
@@ -96,21 +96,19 @@ open class Toast: Controller {
     }
     
     
-    @discardableResult public init(_ vm: ViewModel?, handler: ((_ toast: Toast) -> Void)? = nil) {
+    @discardableResult public init(_ vm: ViewModel, handler: ((_ toast: Toast) -> Void)? = nil) {
         super.init()
-        if let vm = vm {
-            self.vm = vm
-        }
+        self.vm = vm
         handler?(self)
         DispatchQueue.main.async {
             if handler != nil {
-                ToastWindow.push(toast: self)
+                self.push()
             }
         }
     }
     
     @discardableResult public convenience init(handler: ((_ toast: Toast) -> Void)?) {
-        self.init(nil, handler: handler)
+        self.init(.init(), handler: handler)
     }
     
     required public init?(coder: NSCoder) {

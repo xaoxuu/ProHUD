@@ -7,23 +7,6 @@
 
 import UIKit
 
-extension Alert {
-    var window: AlertWindow? {
-        get {
-            guard let windowScene = windowScene else {
-                return nil
-            }
-            return AppContext.alertWindow[windowScene]
-        }
-        set {
-            guard let windowScene = windowScene else {
-                return
-            }
-            AppContext.alertWindow[windowScene] = newValue
-        }
-    }
-}
-
 class AlertWindow: Window {
     
     var alerts: [Alert] = []
@@ -45,8 +28,14 @@ class AlertWindow: Window {
             AppContext.alertWindow[windowScene] = w
         }
         // 比原生alert层级低一点
-        w.windowLevel = .init(rawValue: UIWindow.Level.alert.rawValue - 1)
+        w.windowLevel = .phAlert
         return w
     }
     
+}
+
+extension Alert {
+    var attachedWindow: AlertWindow? {
+        view.window as? AlertWindow
+    }
 }

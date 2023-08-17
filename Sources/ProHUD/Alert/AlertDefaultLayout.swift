@@ -68,7 +68,7 @@ extension Alert: DefaultLayout {
         if contentView.superview != view {
             view.insertSubview(contentView, at: 0)
         }
-        let alerts = window?.alerts ?? []
+        let alerts = attachedWindow?.alerts ?? []
         if config.enableShadow && alerts.count > 0 {
             contentView.clipsToBounds = false
             contentView.layer.shadowRadius = 4
@@ -195,7 +195,11 @@ extension Alert {
                 if bodyCount > 0 {
                     config.customTitleLabel?(titleLabel)
                 } else {
-                    config.customTextLabel?(titleLabel)
+                    if let customTextLabel = config.customTextLabel {
+                        customTextLabel(titleLabel)
+                    } else {
+                        titleLabel.font = .boldSystemFont(ofSize: 18)
+                    }
                 }
             } else {
                 if textStack.arrangedSubviews.contains(titleLabel) {
@@ -211,7 +215,11 @@ extension Alert {
                 if titleCount > 0 {
                     config.customBodyLabel?(bodyLabel)
                 } else {
-                    config.customTextLabel?(bodyLabel)
+                    if let customTextLabel = config.customTextLabel {
+                        customTextLabel(bodyLabel)
+                    } else {
+                        bodyLabel.font = .boldSystemFont(ofSize: 18)
+                    }
                 }
             } else {
                 if textStack.arrangedSubviews.contains(bodyLabel) {
@@ -246,7 +254,7 @@ extension Alert {
     
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let alerts = window?.alerts ?? []
+        let alerts = attachedWindow?.alerts ?? []
         if config.enableShadow && alerts.count > 1 {
             contentView.layer.shadowPath = UIBezierPath.init(rect: contentView.bounds).cgPath
         }

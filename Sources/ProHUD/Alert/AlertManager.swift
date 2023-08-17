@@ -39,7 +39,6 @@ extension Alert: HUD {
     
     @objc open func pop() {
         navEvents[.onViewWillDisappear]?(self)
-        let window = window ?? createAttachedWindowIfNotExists()
         Alert.removeAlert(alert: self)
         let duration = config.animateDurationForBuildOut ?? config.animateDurationForBuildOutByDefault
         UIView.animateEaseOut(duration: duration) {
@@ -51,9 +50,10 @@ extension Alert: HUD {
             self.navEvents[.onViewDidDisappear]?(self)
         }
         // hide window
+        guard let window = view.window as? AlertWindow, let windowScene = windowScene else { return }
         let count = window.alerts.count
         if count == 0 {
-            self.window = nil
+            AppContext.alertWindow[windowScene] = nil
             UIView.animateEaseOut(duration: duration) {
                 window.backgroundView.alpha = 0
             } completion: { done in
@@ -106,6 +106,8 @@ public extension Alert {
     
 }
 
+// MARK: - layout
+
 fileprivate extension Alert {
     static func updateAlertsLayout(alerts: [Alert]) {
         for (i, a) in alerts.reversed().enumerated() {
@@ -124,7 +126,7 @@ fileprivate extension Alert {
     }
     
     static func removeAlert(alert: Alert) {
-        guard var alerts = alert.window?.alerts else {
+        guard var alerts = alert.attachedWindow?.alerts else {
             return
         }
         if alerts.count > 1 {
@@ -141,7 +143,7 @@ fileprivate extension Alert {
         } else {
             print("‼️代码漏洞：已经没有alert了")
         }
-        alert.window?.alerts = alerts
+        alert.attachedWindow?.alerts = alerts
     }
     
 }

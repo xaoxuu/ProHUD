@@ -11,11 +11,50 @@ extension Sheet: HUD {
     
     @objc open func push() {
         guard Configuration.isEnabled else { return }
-        SheetWindow.push(sheet: self)
+        let isNew: Bool
+        let window: SheetWindow
+        var windows = AppContext.current?.sheetWindows ?? []
+        if let w = windows.first(where: { $0.sheet == self }) {
+            isNew = false
+            window = w
+        } else {
+            window = SheetWindow(sheet: self)
+            isNew = true
+        }
+        window.rootViewController = self
+        if windows.contains(window) == false {
+            windows.append(window)
+            setContextWindows(windows)
+        }
+        if isNew {
+            navEvents[.onViewWillAppear]?(self)
+            window.sheet.translateIn { [weak self] in
+                guard let self = self else { return }
+                self.navEvents[.onViewDidAppear]?(self)
+            }
+        } else {
+            view.layoutIfNeeded()
+        }
     }
     
     @objc open func pop() {
-        SheetWindow.pop(sheet: self)
+        var windows = getContextWindows()
+        guard let window = windows.first(where: { $0.sheet == self }) else {
+            return
+        }
+        navEvents[.onViewWillDisappear]?(self)
+        window.sheet.translateOut { [weak window, weak self] in
+            guard let self = self, let win = window else { return }
+            win.sheet.navEvents[.onViewDidDisappear]?(win.sheet)
+            if windows.count > 1 {
+                windows.removeAll { $0 == win }
+            } else if windows.count == 1 {
+                windows.removeAll()
+            } else {
+                consolePrint("‼️代码漏洞：已经没有sheet了")
+            }
+            self.setContextWindows(windows)
+        }
     }
     
 }

@@ -30,6 +30,10 @@ open class ViewModel: NSObject {
         }
     }
     
+    public required override init() {
+        
+    }
+    
     public convenience init(icon: UIImage? = nil, duration: TimeInterval? = nil) {
         self.init()
         self.icon = icon
@@ -62,29 +66,33 @@ open class ViewModel: NSObject {
 // MARK: - convenience func
 public extension ViewModel {
     
-    func icon(_ image: UIImage?) -> ViewModel {
+    func icon(_ image: UIImage?) -> Self {
         self.icon = image
         return self
     }
     
-    func icon(_ imageURL: URL?) -> ViewModel {
+    func icon(_ imageURL: URL?) -> Self {
         self.iconURL = imageURL
         return self
     }
     
-    
-    func title(_ text: String?) -> ViewModel {
+    func title(_ text: String?) -> Self {
         self.title = text
         return self
     }
     
-    func message(_ text: String?) -> ViewModel {
+    func message(_ text: String?) -> Self {
         self.message = text
         return self
     }
     
-    func duration(_ seconds: TimeInterval?) -> ViewModel {
+    func duration(_ seconds: TimeInterval?) -> Self {
         self.duration = seconds
+        return self
+    }
+    
+    func rotation(_ rotation: Rotation?) -> Self {
+        self.rotation = rotation
         return self
     }
     
@@ -94,51 +102,59 @@ public extension ViewModel {
 public extension ViewModel {
     
     // MARK: plain
-    static func title(_ text: String?) -> ViewModel {
-        let obj = ViewModel()
-        obj.title = text
-        return obj
+    static func title(_ text: String?) -> Self {
+        .init()
+        .title(text)
     }
-    static func message(_ text: String?) -> ViewModel {
-        let obj = ViewModel()
-        obj.message = text
-        return obj
+    static func message(_ text: String?) -> Self {
+        .init()
+        .message(text)
     }
     
     // MARK: loading
-    static var loading: ViewModel {
-        let obj = ViewModel(icon: UIImage(inProHUD: "prohud.windmill"))
-        obj.rotation = .init(repeatCount: .infinity)
-        return obj
+    static var loading: Self {
+        .init()
+        .icon(.init(inProHUD: "prohud.windmill"))
+        .rotation(.init(repeatCount: .infinity))
     }
-    static func loading(_ seconds: TimeInterval) -> ViewModel {
-        let obj = ViewModel(icon: UIImage(inProHUD: "prohud.windmill"), duration: seconds)
-        obj.rotation = .init(repeatCount: .infinity)
-        return obj
+    static func loading(_ seconds: TimeInterval) -> Self {
+        .init()
+        .icon(.init(inProHUD: "prohud.windmill"))
+        .rotation(.init(repeatCount: .infinity))
+        .duration(seconds)
     }
     // MARK: success
-    static var success: ViewModel {
-        .init(icon: UIImage(inProHUD: "prohud.checkmark"))
+    static var success: Self {
+        .init()
+        .icon(.init(inProHUD: "prohud.checkmark"))
     }
-    static func success(_ seconds: TimeInterval) -> ViewModel {
-        .init(icon: UIImage(inProHUD: "prohud.checkmark"), duration: seconds)
+    static func success(_ seconds: TimeInterval) -> Self {
+        .init()
+        .icon(.init(inProHUD: "prohud.checkmark"))
+        .duration(seconds)
     }
     // MARK: warning
-    static var warning: ViewModel {
-        .init(icon: UIImage(inProHUD: "prohud.exclamationmark"))
+    static var warning: Self {
+        .init()
+        .icon(.init(inProHUD: "prohud.exclamationmark"))
     }
-    static func warning(_ seconds: TimeInterval) -> ViewModel {
-        .init(icon: UIImage(inProHUD: "prohud.exclamationmark"), duration: seconds)
+    static func warning(_ seconds: TimeInterval) -> Self {
+        .init()
+        .icon(.init(inProHUD: "prohud.exclamationmark"))
+        .duration(seconds)
     }
     // MARK: error
-    static var error: ViewModel {
-        .init(icon: UIImage(inProHUD: "prohud.xmark"))
+    static var error: Self {
+        .init()
+        .icon(.init(inProHUD: "prohud.xmark"))
     }
-    static func error(_ seconds: TimeInterval) -> ViewModel {
-        .init(icon: UIImage(inProHUD: "prohud.xmark"), duration: seconds)
+    static func error(_ seconds: TimeInterval) -> Self {
+        .init()
+        .icon(.init(inProHUD: "prohud.xmark"))
+        .duration(seconds)
     }
     // MARK: failure
-    static var failure: ViewModel { error }
-    static func failure(_ seconds: TimeInterval) -> ViewModel { error(seconds) }
+    static var failure: Self { error }
+    static func failure(_ seconds: TimeInterval) -> Self { error(seconds) }
     
 }

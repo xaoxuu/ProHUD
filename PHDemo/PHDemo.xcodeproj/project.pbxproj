@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CD2439342A82164E00A3BBF5 /* CapsuleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD2439332A82164E00A3BBF5 /* CapsuleVC.swift */; };
 		CD6537BF28C3311B00A5981B /* ListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6537BE28C3311B00A5981B /* ListModel.swift */; };
 		CD6537C128C35E1C00A5981B /* ListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6537C028C35E1C00A5981B /* ListVC.swift */; };
 		CD6537C328C35E6200A5981B /* ToastVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6537C228C35E6200A5981B /* ToastVC.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CD2439332A82164E00A3BBF5 /* CapsuleVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CapsuleVC.swift; sourceTree = "<group>"; };
 		CD6537BE28C3311B00A5981B /* ListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListModel.swift; sourceTree = "<group>"; };
 		CD6537C028C35E1C00A5981B /* ListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListVC.swift; sourceTree = "<group>"; };
 		CD6537C228C35E6200A5981B /* ToastVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastVC.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 				CD6537C228C35E6200A5981B /* ToastVC.swift */,
 				CDB7A1CF28C32A7400E034D8 /* AlertVC.swift */,
 				CD6537C428C35F2C00A5981B /* SheetVC.swift */,
+				CD2439332A82164E00A3BBF5 /* CapsuleVC.swift */,
 				CD8EEF4028BC5C7200E660EA /* Main.storyboard */,
 				CD8EEF4328BC5C7300E660EA /* Assets.xcassets */,
 				CD8EEF4528BC5C7300E660EA /* LaunchScreen.storyboard */,
@@ -184,6 +187,7 @@
 			files = (
 				CDA83DB928C601E60025F0DF /* TableHeaderView.swift in Sources */,
 				CD6537C528C35F2C00A5981B /* SheetVC.swift in Sources */,
+				CD2439342A82164E00A3BBF5 /* CapsuleVC.swift in Sources */,
 				CD6537C328C35E6200A5981B /* ToastVC.swift in Sources */,
 				CDB7A1D028C32A7400E034D8 /* AlertVC.swift in Sources */,
 				CD6537C128C35E1C00A5981B /* ListVC.swift in Sources */,

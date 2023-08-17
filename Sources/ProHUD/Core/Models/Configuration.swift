@@ -106,13 +106,11 @@ public class Configuration: NSObject {
     
     // MARK: 文本样式
     
-    var customTextLabel: ((_ label: UILabel) -> Void)? = { label in
-        label.font = .boldSystemFont(ofSize: 18)
-    }
+    var customTextLabel: ((_ label: UILabel) -> Void)?
     
     /// 自定义文本标签（标题或正文）
     /// - Parameter handler: 自定义文本标签（标题或正文）
-    public func customTextLabel(handler: @escaping (_ label: UILabel) -> Void) {
+    public func customTextLabel(_ handler: @escaping (_ label: UILabel) -> Void) {
         customTextLabel = handler
     }
     
@@ -120,7 +118,7 @@ public class Configuration: NSObject {
     
     /// 自定义标题标签
     /// - Parameter handler: 自定义标题标签
-    public func customTitleLabel(handler: @escaping (_ label: UILabel) -> Void) {
+    public func customTitleLabel(_ handler: @escaping (_ label: UILabel) -> Void) {
         customTitleLabel = handler
     }
     
@@ -129,7 +127,7 @@ public class Configuration: NSObject {
     
     /// 自定义正文标签
     /// - Parameter handler: 自定义正文标签
-    public func customBodyLabel(handler: @escaping (_ label: UILabel) -> Void) {
+    public func customBodyLabel(_ handler: @escaping (_ label: UILabel) -> Void) {
         customBodyLabel = handler
     }
     

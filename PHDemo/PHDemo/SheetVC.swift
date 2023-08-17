@@ -13,7 +13,7 @@ class SheetVC: ListVC {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        header.titleLabel.text = "ProHUD.Sheet"
+        title = "Sheet"
         header.detailLabel.text = "操作表控件，用于弱阻塞性交互。显示区域为从屏幕底部向上弹出的新图层，可以放置丰富的内容，自由度较高。"
         
         list.add(title: "默认布局") { section in

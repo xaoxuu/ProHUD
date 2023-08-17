@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22146" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="06J-FN-U3n">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22152" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="06J-FN-U3n">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22127"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Alert-->
+        <!--AlertVC-->
         <scene sceneID="LP0-RE-kvY">
             <objects>
                 <tableViewController id="NBo-Re-tKO" customClass="AlertVC" customModule="PHDemo" customModuleProvider="target" sceneMemberID="viewController">
@@ -32,11 +32,11 @@
                             <outlet property="delegate" destination="NBo-Re-tKO" id="1L3-SV-7FG"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Alert" image="exclamationmark.triangle.fill" catalog="system" id="pLJ-z8-SS1"/>
+                    <navigationItem key="navigationItem" id="vza-Sb-cyH"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ydp-D5-Zdx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1865" y="804"/>
+            <point key="canvasLocation" x="3684.057971014493" y="803.57142857142856"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="ej2-I3-4Bd">
@@ -50,16 +50,17 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
-                        <segue destination="h7R-Kd-Dn5" kind="relationship" relationship="viewControllers" id="4rA-b5-Kd6"/>
-                        <segue destination="NBo-Re-tKO" kind="relationship" relationship="viewControllers" id="4BA-vv-RD2"/>
-                        <segue destination="9SY-ag-pK6" kind="relationship" relationship="viewControllers" id="vVd-PW-h6L"/>
+                        <segue destination="N1b-1U-hgP" kind="relationship" relationship="viewControllers" id="4rA-b5-Kd6"/>
+                        <segue destination="XXi-nT-rRc" kind="relationship" relationship="viewControllers" id="4BA-vv-RD2"/>
+                        <segue destination="U9P-t8-UPd" kind="relationship" relationship="viewControllers" id="vVd-PW-h6L"/>
+                        <segue destination="gUp-HF-Hqk" kind="relationship" relationship="viewControllers" id="Ven-DH-gtQ"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="avc-BE-wZC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1865.217391304348" y="71.651785714285708"/>
         </scene>
-        <!--Toast-->
+        <!--ToastVC-->
         <scene sceneID="DAh-i5-GcF">
             <objects>
                 <tableViewController id="h7R-Kd-Dn5" customClass="ToastVC" customModule="PHDemo" customModuleProvider="target" sceneMemberID="viewController">
@@ -83,13 +84,13 @@
                             <outlet property="delegate" destination="h7R-Kd-Dn5" id="8Px-ei-ipU"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Toast" image="bubble.left.fill" catalog="system" id="YYs-U3-EWo"/>
+                    <navigationItem key="navigationItem" id="CTm-r7-VWj"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VmT-Tm-s4d" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="954" y="804"/>
+            <point key="canvasLocation" x="1863.7681159420292" y="803.57142857142856"/>
         </scene>
-        <!--Sheet-->
+        <!--SheetVC-->
         <scene sceneID="DG9-RE-7gC">
             <objects>
                 <tableViewController id="9SY-ag-pK6" customClass="SheetVC" customModule="PHDemo" customModuleProvider="target" sceneMemberID="viewController">
@@ -113,19 +114,126 @@
                             <outlet property="delegate" destination="9SY-ag-pK6" id="UkD-l4-OhM"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Sheet" image="iphone" catalog="system" id="3or-OI-jbb"/>
+                    <navigationItem key="navigationItem" id="Mf8-vT-Rhv"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pal-Bf-SfP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2742" y="804"/>
+            <point key="canvasLocation" x="5471.0144927536239" y="803.57142857142856"/>
+        </scene>
+        <!--CapsuleVC-->
+        <scene sceneID="Bhf-XS-ITh">
+            <objects>
+                <tableViewController id="xyo-OI-w9X" customClass="CapsuleVC" customModule="PHDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="jta-3v-OTY">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="reuseIdentifier" id="ghs-Pa-9eL">
+                                <rect key="frame" x="20" y="55.5" width="374" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ghs-Pa-9eL" id="28C-qc-X0l">
+                                    <rect key="frame" x="0.0" y="0.0" width="343.5" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="xyo-OI-w9X" id="nD4-u6-Vmn"/>
+                            <outlet property="delegate" destination="xyo-OI-w9X" id="xH8-rN-VjG"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="ye2-RQ-uQG"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="O9X-HU-Yb0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="7282.6086956521749" y="803.57142857142856"/>
+        </scene>
+        <!--Capsule-->
+        <scene sceneID="L6I-bD-l0i">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="gUp-HF-Hqk" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Capsule" image="capsule.inset.filled" catalog="system" id="TpM-bR-LUV"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="UzI-ky-yFv">
+                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="xyo-OI-w9X" kind="relationship" relationship="rootViewController" id="hQP-fq-eZ3"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zJ7-JR-Ywx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6372.4637681159429" y="803.57142857142856"/>
+        </scene>
+        <!--Sheet-->
+        <scene sceneID="hej-Jg-pJw">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="U9P-t8-UPd" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Sheet" image="square.bottomthird.inset.filled" catalog="system" id="3or-OI-jbb"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ocF-2w-0SZ">
+                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="9SY-ag-pK6" kind="relationship" relationship="rootViewController" id="hYH-5O-2G2"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="11x-h4-csl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4560.8695652173919" y="803.57142857142856"/>
+        </scene>
+        <!--Alert-->
+        <scene sceneID="LMI-vK-E1X">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="XXi-nT-rRc" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Alert" image="exclamationmark.circle.fill" catalog="system" id="pLJ-z8-SS1"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="2p6-UA-EMg">
+                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="NBo-Re-tKO" kind="relationship" relationship="rootViewController" id="rn4-yf-GQT"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Wn1-r8-7Ki" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2773.913043478261" y="803.57142857142856"/>
+        </scene>
+        <!--Toast-->
+        <scene sceneID="r0g-zP-tPJ">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="N1b-1U-hgP" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Toast" image="square.topthird.inset.filled" catalog="system" id="YYs-U3-EWo"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="7e6-Ka-UlW">
+                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="h7R-Kd-Dn5" kind="relationship" relationship="rootViewController" id="B3Q-IY-9gI"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cJI-hc-E7h" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="953.62318840579712" y="803.57142857142856"/>
         </scene>
     </scenes>
     <resources>
-        <image name="bubble.left.fill" catalog="system" width="128" height="110"/>
-        <image name="exclamationmark.triangle.fill" catalog="system" width="128" height="109"/>
-        <image name="iphone" catalog="system" width="112" height="128"/>
+        <image name="capsule.inset.filled" catalog="system" width="128" height="96"/>
+        <image name="exclamationmark.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="square.bottomthird.inset.filled" catalog="system" width="128" height="114"/>
+        <image name="square.topthird.inset.filled" catalog="system" width="128" height="114"/>
         <systemColor name="systemGroupedBackgroundColor">
-            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -48,7 +48,7 @@ open class Sheet: Controller {
         handler(self)
         
         DispatchQueue.main.async {
-            SheetWindow.push(sheet: self)
+            self.push()
         }
         
     }
@@ -80,7 +80,7 @@ extension Sheet {
         if let act = onTappedBackground {
             act(self)
         } else {
-            SheetWindow.pop(sheet: self)
+            self.pop()
         }
     }
 }

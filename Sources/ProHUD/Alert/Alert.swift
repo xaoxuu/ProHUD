@@ -82,11 +82,9 @@ open class Alert: ProHUD.Controller {
         }
     }
     
-    @discardableResult public init(_ vm: ViewModel?, handler: ((_ alert: Alert) -> Void)? = nil) {
+    @discardableResult public init(_ vm: ViewModel, handler: ((_ alert: Alert) -> Void)? = nil) {
         super.init()
-        if let vm = vm {
-            self.vm = vm
-        }
+        self.vm = vm
         handler?(self)
         DispatchQueue.main.async {
             if handler != nil {
@@ -97,7 +95,7 @@ open class Alert: ProHUD.Controller {
     }
     
     @discardableResult public convenience init(handler: ((_ alert: Alert) -> Void)?) {
-        self.init(nil, handler: handler)
+        self.init(.init(), handler: handler)
     }
     
     public override func viewDidLoad() {
