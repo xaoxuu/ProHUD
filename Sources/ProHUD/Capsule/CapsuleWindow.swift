@@ -9,9 +9,9 @@ import UIKit
 
 class CapsuleWindow: Window {
     
-    var capsule: Capsule
+    var capsule: CapsuleTarget
     
-    init(capsule: Capsule) {
+    init(capsule: CapsuleTarget) {
         self.capsule = capsule
         super.init(frame: .zero)
         windowScene = AppContext.windowScene
@@ -36,7 +36,7 @@ class CapsuleWindow: Window {
     
 }
 
-extension Capsule {
+extension CapsuleTarget {
     var attachedWindow: CapsuleWindow? {
         view.window as? CapsuleWindow
     }

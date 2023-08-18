@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol CommonLayout: Controller {
+public protocol CommonLayout: BaseController {
     func reloadData()
 }
 

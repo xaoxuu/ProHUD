@@ -1,13 +1,13 @@
 //
-//  Controller.swift
-//  
+//  BaseController.swift
+//
 //
 //  Created by xaoxuu on 2022/8/29.
 //
 
 import UIKit
 
-open class Controller: UIViewController {
+open class BaseController: UIViewController {
     
     /// ID标识
     public var identifier = String(Date().timeIntervalSince1970)
@@ -56,29 +56,29 @@ open class Controller: UIViewController {
         case onTappedBackground = "onTappedBackground"
     }
     
-    var navEvents = [NavEvent: ((Controller) -> Void)]()
+    var navEvents = [NavEvent: ((BaseController) -> Void)]()
     
-    @discardableResult public func onViewDidLoad(_ callback: ((_ vc: Controller) -> Void)?) -> Controller {
+    @discardableResult public func onViewDidLoad(_ callback: ((_ vc: BaseController) -> Void)?) -> BaseController {
         navEvents[.onViewDidLoad] = callback
         return self
     }
     
-    @discardableResult public func onViewWillAppear(_ callback: ((_ vc: Controller) -> Void)?) -> Controller {
+    @discardableResult public func onViewWillAppear(_ callback: ((_ vc: BaseController) -> Void)?) -> BaseController {
         navEvents[.onViewWillAppear] = callback
         return self
     }
     
-    @discardableResult public func onViewDidAppear(_ callback: ((_ vc: Controller) -> Void)?) -> Controller {
+    @discardableResult public func onViewDidAppear(_ callback: ((_ vc: BaseController) -> Void)?) -> BaseController {
         navEvents[.onViewDidAppear] = callback
         return self
     }
     
-    @discardableResult public func onViewWillDisappear(_ callback: ((_ vc: Controller) -> Void)?) -> Controller {
+    @discardableResult public func onViewWillDisappear(_ callback: ((_ vc: BaseController) -> Void)?) -> BaseController {
         navEvents[.onViewWillDisappear] = callback
         return self
     }
     
-    @discardableResult public func onViewDidDisappear(_ callback: ((_ vc: Controller) -> Void)?) -> Controller {
+    @discardableResult public func onViewDidDisappear(_ callback: ((_ vc: BaseController) -> Void)?) -> BaseController {
         navEvents[.onViewDidDisappear] = callback
         return self
     }
@@ -91,7 +91,7 @@ open class Controller: UIViewController {
 }
 
 // MARK: - 事件
-extension Controller {
+extension BaseController {
     
     func addTouchUpAction(for button: UIButton, action: @escaping () -> Void) {
         button.addTarget(self, action: #selector(didTappedButton(_:)), for: .touchUpInside)

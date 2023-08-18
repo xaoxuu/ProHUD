@@ -9,11 +9,11 @@ import UIKit
 
 class AlertWindow: Window {
     
-    var alerts: [Alert] = []
+    var alerts: [AlertTarget] = []
     
     override var usingBackground: Bool { true }
     
-    static func createAttachedWindowIfNotExists(config: Configuration) -> AlertWindow {
+    static func createAttachedWindowIfNotExists(config: AlertConfiguration) -> AlertWindow {
         let windowScene = AppContext.windowScene
         if let windowScene = windowScene, let w = AppContext.alertWindow[windowScene] {
             return w
@@ -34,7 +34,7 @@ class AlertWindow: Window {
     
 }
 
-extension Alert {
+extension AlertTarget {
     var attachedWindow: AlertWindow? {
         view.window as? AlertWindow
     }

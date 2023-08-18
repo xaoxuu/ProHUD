@@ -7,8 +7,10 @@
 
 import UIKit
 
+public protocol HUDViewModelType {}
+
 /// 数据模型
-open class BaseViewModel: NSObject {
+open class BaseViewModel: NSObject, HUDViewModelType {
     
     /// 图标
     @objc open var icon: UIImage?

@@ -29,7 +29,7 @@ open class Button: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public convenience init(config: ProHUD.Configuration, action: Action) {
+    public convenience init(config: CommonConfiguration, action: Action) {
         self.init(frame: .zero)
         layer.cornerRadiusWithContinuous = 8
         self.update(config: config, action: action)
@@ -37,7 +37,7 @@ open class Button: UIButton {
     
     /// 更新按钮
     /// - Parameter style: 样式
-    open func update(config: ProHUD.Configuration, action: Action) {
+    open func update(config: CommonConfiguration, action: Action) {
         self.action = action
         setTitle(action.title, for: .normal)
         switch action.style {

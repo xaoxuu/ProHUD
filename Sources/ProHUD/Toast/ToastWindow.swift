@@ -9,11 +9,11 @@ import UIKit
 
 class ToastWindow: Window {
     
-    var toast: Toast
+    var toast: ToastTarget
     
     var maxY = CGFloat(0)
     
-    init(toast: Toast) {
+    init(toast: ToastTarget) {
         self.toast = toast
         super.init(frame: .zero)
         windowScene = AppContext.windowScene
@@ -36,7 +36,7 @@ class ToastWindow: Window {
     
 }
 
-extension Toast {
+extension ToastTarget {
     func getContextWindows() -> [ToastWindow] {
         guard let windowScene = windowScene else {
             return []

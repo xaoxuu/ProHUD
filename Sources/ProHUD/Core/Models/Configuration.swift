@@ -7,7 +7,7 @@
 
 import UIKit
 
-public class Configuration: NSObject {
+open class CommonConfiguration: NSObject {
     
     /// 全局功能开关
     public static var isEnabled: Bool = true
@@ -171,11 +171,11 @@ public class Configuration: NSObject {
         customWebImage = handler
     }
     
-    var customReloadData: ((_ vc: Controller) -> Bool)?
+    var customReloadData: ((_ vc: BaseController) -> Bool)?
     
     /// 自定义刷新规则（ ⚠️ 自定义此函数之后，整个容器将不再走默认布局规则，可实现完全自定义）
     /// - Parameter callback: 自定义刷新规则代码
-    public func reloadData(_ callback: @escaping (_ vc: Controller) -> Bool) {
+    public func reloadData(_ callback: @escaping (_ vc: BaseController) -> Bool) {
         customReloadData = callback
     }
     
@@ -188,5 +188,9 @@ public class Configuration: NSObject {
         customContentViewMask = callback
     }
 
+    override init() {
+        
+    }
+    
 }
 

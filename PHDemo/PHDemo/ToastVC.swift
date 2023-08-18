@@ -32,15 +32,14 @@ func updateProgress(in duration: TimeInterval, callback: @escaping (_ percent: C
 
 let isTesting: Bool = true
 
-class TestToast: Toast {
+class TestToastTarget: ToastTarget {
     override func push() {
-        guard isTesting else {
-            return
-        }
+        guard isTesting else { return }
         super.push()
     }
 }
 
+typealias TestToast = HUDProvider<ToastViewModel, TestToastTarget>
 
 class ToastVC: ListVC {
 
@@ -54,7 +53,7 @@ class ToastVC: ListVC {
         
         header.detailLabel.text = message
         
-        Toast.Configuration.shared { config in
+        ToastConfiguration.global { config in
             config.contentViewMask { mask in
                 mask.backgroundColor = .clear
                 mask.effect = UIBlurEffect(style: .systemChromeMaterial)
@@ -66,15 +65,15 @@ class ToastVC: ListVC {
         
         list.add(title: "默认布局") { section in
             section.add(title: "标题 + 正文") {
-                TestToast(.title(title).message(message)).push()
+                TestToast(.title(title).message(message))
             }
             section.add(title: "一段长文本") {
-                Toast(.message(message)).push()
+                Toast(.message(message))
             }
             section.add(title: "图标 + 标题 + 正文") {
                 let s1 = "笑容正在加载"
                 let s2 = "这通常不会太久"
-                let toast = Toast(.loading.title(s1).message(s2))
+                let toast = Toast(.loading.title(s1).message(s2)).target
                 toast.push()
                 toast.update(progress: 0)
                 updateProgress(in: 4) { percent in
@@ -99,10 +98,10 @@ class ToastVC: ListVC {
                 }
             }
             section.add(title: "图标 + 一段长文本") {
-                Toast(.note.message(message)).push()
+                Toast(.note.message(message))
             }
             section.add(title: "网络图标 + 一段文本") {
-                Toast(.message("这是网络图标").icon(.init(string: "https://xaoxuu.com/assets/xaoxuu/avatar/rect-256@2x.png"))).push()
+                Toast(.message("这是网络图标").icon(.init(string: "https://xaoxuu.com/assets/xaoxuu/avatar/rect-256@2x.png")))
             }
         }
         
@@ -113,7 +112,7 @@ class ToastVC: ListVC {
                 Toast(.msg.title(title).message(message)) { toast in
                     toast.onTapped { toast in
                         toast.pop()
-                        Alert(.success(1).message("操作成功")).push()
+                        Alert(.success(1).message("操作成功"))
                     }
                 }
             }
@@ -150,7 +149,7 @@ class ToastVC: ListVC {
                             alert.pop()
                         })
                         toast.pop()
-                        Alert(.success(1).message("Good choice!")).push()
+                        Alert(.success(1).message("Good choice!"))
                     }
                     Toast.find(identifier: "loading") { toast in
                         toast.vm = .success(2).message("加载成功")
@@ -227,28 +226,28 @@ class ToastVC: ListVC {
                     Toast { toast in
                         toast.vm = .title("圆角半径").message("可以在共享配置中设置，则全局生效")
                         toast.add(action: "8", style: .gray) { toast in
-                            Toast.Configuration.shared { config in
+                            ToastConfiguration.global { config in
                                 config.cardCornerRadius = 8
                             }
                             toast.pop()
                             foo()
                         }
                         toast.add(action: "16", style: .gray) { toast in
-                            Toast.Configuration.shared { config in
+                            ToastConfiguration.global { config in
                                 config.cardCornerRadius = 16
                             }
                             toast.pop()
                             foo()
                         }
                         toast.add(action: "24", style: .gray) { toast in
-                            Toast.Configuration.shared { config in
+                            ToastConfiguration.global { config in
                                 config.cardCornerRadius = 24
                             }
                             toast.pop()
                             foo()
                         }
                         toast.add(action: "32", style: .gray) { toast in
-                            Toast.Configuration.shared { config in
+                            ToastConfiguration.global { config in
                                 config.cardCornerRadius = 32
                             }
                             toast.pop()
@@ -330,7 +329,7 @@ class ToastVC: ListVC {
                         toast.title = "共享配置"
                         toast.vm.message = "建议在App启动后进行通用配置设置，所有实例都会先拉取通用配置为默认值，修改这些配置会影响到所有实例。"
                         toast.add(action: "默认", style: .gray) { toast in
-                            Toast.Configuration.shared { config in
+                            ToastConfiguration.global { config in
                                 config.customTitleLabel { titleLabel in
                                     titleLabel.font = .systemFont(ofSize: 19, weight: .bold)
                                 }
@@ -339,7 +338,7 @@ class ToastVC: ListVC {
                             foo()
                         }
                         toast.add(action: "大号标题") { toast in
-                            Toast.Configuration.shared { config in
+                            ToastConfiguration.global { config in
                                 config.customTitleLabel { titleLabel in
                                     titleLabel.font = .systemFont(ofSize: 28, weight: .medium)
                                 }

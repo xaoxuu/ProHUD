@@ -7,9 +7,9 @@
 
 import UIKit
 
-extension Capsule: DefaultLayout {
+extension CapsuleTarget: DefaultLayout {
     
-    var cfg: ProHUD.Configuration {
+    var cfg: CommonConfiguration {
         return config
     }
     
@@ -18,18 +18,14 @@ extension Capsule: DefaultLayout {
             return
         }
         
+        view.tintColor = vm.tintColor ?? config.tintColor
+        
         // content
         loadContentViewIfNeeded()
         loadContentMaskViewIfNeeded()
         
         // image
-        imageView.removeFromSuperview()
-        if let icon = vm.icon {
-            contentStack.insertArrangedSubview(imageView, at: 0)
-            imageView.image = icon
-        } else {
-            contentStack.removeArrangedSubview(imageView)
-        }
+        setupImageView()
         
         // text
         textLabel.removeFromSuperview()
@@ -94,4 +90,27 @@ extension Capsule: DefaultLayout {
         })
     }
     
+    private func setupImageView() {
+        // 移除动画
+        stopRotate(animateLayer)
+        animateLayer = nil
+        animation = nil
+        
+        // 移除进度
+        progressView?.removeFromSuperview()
+        
+        if vm.icon == nil && vm.iconURL == nil {
+            contentStack.removeArrangedSubview(imageView)
+        } else {
+            contentStack.insertArrangedSubview(imageView, at: 0)
+        }
+        imageView.image = vm.icon
+        if let iconURL = vm.iconURL {
+            config.customWebImage?(imageView, iconURL)
+        }
+        if let rotation = vm.rotation {
+            startRotate(rotation)
+        }
+        
+    }
 }

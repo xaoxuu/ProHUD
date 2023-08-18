@@ -9,9 +9,9 @@ import UIKit
 
 class SheetWindow: Window {
     
-    var sheet: Sheet
+    var sheet: SheetTarget
     
-    init(sheet: Sheet) {
+    init(sheet: SheetTarget) {
         self.sheet = sheet
         if let scene = AppContext.windowScene {
             super.init(windowScene: scene)
@@ -29,7 +29,7 @@ class SheetWindow: Window {
     
 }
 
-extension Sheet {
+extension SheetTarget {
     func getContextWindows() -> [SheetWindow] {
         guard let windowScene = windowScene else {
             return []

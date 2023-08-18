@@ -7,9 +7,9 @@
 
 import UIKit
 
-extension Sheet: DefaultLayout {
+extension SheetTarget: DefaultLayout {
     
-    var cfg: ProHUD.Configuration {
+    var cfg: CommonConfiguration {
         return config
     }
     
@@ -17,6 +17,7 @@ extension Sheet: DefaultLayout {
         if self.cfg.customReloadData?(self) == true {
             return
         }
+        view.tintColor = vm.tintColor ?? config.tintColor
         // background
         if backgroundView.superview == nil {
             view.insertSubview(backgroundView, at: 0)

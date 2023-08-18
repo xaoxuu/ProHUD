@@ -7,10 +7,10 @@
 
 import UIKit
 
-extension Sheet: HUD {
+extension SheetTarget {
     
     @objc open func push() {
-        guard Configuration.isEnabled else { return }
+        guard SheetConfiguration.isEnabled else { return }
         let isNew: Bool
         let window: SheetWindow
         var windows = AppContext.current?.sheetWindows ?? []
@@ -57,29 +57,9 @@ extension Sheet: HUD {
         }
     }
     
-}
-
-public extension Sheet {
-    
-    /// 如果不存在就创建并弹出一个HUD实例，如果存在就更新实例
-    /// - Parameters:
-    ///   - identifier: 实例唯一标识符（如果为空，则以代码位置为唯一标识符）
-    ///   - handler: 实例创建代码
-    static func lazyPush(identifier: String? = nil, file: String = #file, line: Int = #line, handler: @escaping (_ sheet: Sheet) -> Void, onExists: ((_ sheet: Sheet) -> Void)? = nil) {
-        let id = identifier ?? (file + "#\(line)")
-        if let vc = find(identifier: id).last {
-            vc.update(handler: onExists ?? handler)
-        } else {
-            Sheet { sheet in
-                sheet.identifier = id
-                handler(sheet)
-            }
-        }
-    }
-    
     /// 更新HUD实例
     /// - Parameter handler: 实例更新代码
-    func update(handler: @escaping (_ sheet: Sheet) -> Void) {
+    @objc open func update(handler: @escaping (_ sheet: SheetTarget) -> Void) {
         handler(self)
         reloadData()
         UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
@@ -87,21 +67,9 @@ public extension Sheet {
         }
     }
     
-    /// 查找HUD实例
-    /// - Parameter identifier: 唯一标识符
-    /// - Returns: HUD实例
-    @discardableResult static func find(identifier: String, update handler: ((_ sheet: Sheet) -> Void)? = nil) -> [Sheet] {
-        let arr = AppContext.sheetWindows.values.flatMap({ $0 }).compactMap({ $0.sheet }).filter({ $0.identifier == identifier })
-        if let handler = handler {
-            arr.forEach({ $0.update(handler: handler) })
-        }
-        return arr
-    }
-    
 }
 
-
-extension Sheet {
+extension SheetTarget {
     
     func translateIn(completion: (() -> Void)?) {
         UIView.animateEaseOut(duration: config.animateDurationForBuildInByDefault) {

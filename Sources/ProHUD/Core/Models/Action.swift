@@ -37,9 +37,9 @@ open class Action: NSObject {
     
     open var title: String?
     
-    open var handler: ((_ vc: HUD) -> Void)?
+    open var handler: ((_ vc: HUDControllerType) -> Void)?
 
-    public init(identifier: String? = nil, style: Style = .tinted, title: String?, handler: ((_ vc: HUD) -> Void)? = nil) {
+    public init(identifier: String? = nil, style: Style = .tinted, title: String?, handler: ((_ vc: HUDControllerType) -> Void)? = nil) {
         self.identifier = identifier
         self.style = style
         self.title = title

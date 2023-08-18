@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension Alert: InternalConvenienceLayout {
+extension AlertTarget: InternalConvenienceLayout {
     
     // MARK: 增加
     @discardableResult public func add(action: Action) -> Button {
@@ -155,7 +155,7 @@ extension Alert: InternalConvenienceLayout {
 }
 
 // MARK: more 
-public extension Alert {
+public extension AlertTarget {
     
     /// 增加一个按钮
     /// - Parameters:
@@ -164,10 +164,10 @@ public extension Alert {
     ///   - identifier: 唯一标识符
     ///   - handler: 点击事件
     /// - Returns: 按钮实例
-    @discardableResult func add(action title: String, style: Action.Style = .tinted, identifier: String? = nil, handler: ((_ alert: Alert) -> Void)? = nil) -> Button {
+    @discardableResult func add(action title: String, style: Action.Style = .tinted, identifier: String? = nil, handler: ((_ alert: AlertTarget) -> Void)? = nil) -> Button {
         if let handler = handler {
             let action = Action(identifier: identifier, style: style, title: title) { vc in
-                if let vc = vc as? Alert {
+                if let vc = vc as? AlertTarget {
                     handler(vc)
                 }
             }

@@ -7,9 +7,9 @@
 
 import UIKit
 
-extension Alert: DefaultLayout {
+extension AlertTarget: DefaultLayout {
     
-    var cfg: ProHUD.Configuration {
+    var cfg: CommonConfiguration {
         return config
     }
     
@@ -17,6 +17,7 @@ extension Alert: DefaultLayout {
         if self.cfg.customReloadData?(self) == true {
             return
         }
+        view.tintColor = vm.tintColor ?? config.tintColor
         let isFirstLayout: Bool
         if contentView.superview == nil {
             isFirstLayout = animated
@@ -132,7 +133,7 @@ extension Alert: DefaultLayout {
     
 }
 
-extension Alert {
+extension AlertTarget {
     
     func setupImageView() {
         // 移除动画

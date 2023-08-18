@@ -73,13 +73,14 @@ class SheetVC: ListVC {
                     sheet.add(spacing: 24)
                     sheet.add(action: "确认")
                     sheet.add(action: "取消", style: .gray)
-                } onTappedBackground: { sheet in
-                    print("点击了背景")
-                    Toast.lazyPush(identifier: "alert") { toast in
-                        toast.vm = .error
-                        toast.vm.title = "点击了背景"
-                        toast.vm.message = "点击背景将不会dismiss，必须在下方做出选择才能关掉"
-                        toast.vm.duration = 2
+                    sheet.onTappedBackground { sheet in
+                        print("点击了背景")
+                        Toast.lazyPush(identifier: "alert") { toast in
+                            toast.vm = .error
+                            toast.vm.title = "点击了背景"
+                            toast.vm.message = "点击背景将不会dismiss，必须在下方做出选择才能关掉"
+                            toast.vm.duration = 2
+                        }
                     }
                 }
             }
@@ -180,16 +181,17 @@ class SheetVC: ListVC {
                         mask.effect = .none
                         mask.backgroundColor = .clear
                     }
-                } .onViewWillAppear { vc in
-                    guard let sheet = vc as? Sheet else { return }
-                    let imgv = UIImageView(image: UIImage(named: "landscape"))
-                    imgv.contentMode = .scaleAspectFill
-                    imgv.clipsToBounds = true
-                    imgv.layer.cornerRadiusWithContinuous = 16
-                    sheet.contentView.insertSubview(imgv, at: 0)
-                    imgv.snp.makeConstraints { make in
-                        make.edges.equalToSuperview()
-                        make.height.equalTo(300)
+                    sheet.onViewWillAppear { vc in
+                        guard let sheet = vc as? SheetTarget else { return }
+                        let imgv = UIImageView(image: UIImage(named: "landscape"))
+                        imgv.contentMode = .scaleAspectFill
+                        imgv.clipsToBounds = true
+                        imgv.layer.cornerRadiusWithContinuous = 16
+                        sheet.contentView.insertSubview(imgv, at: 0)
+                        imgv.snp.makeConstraints { make in
+                            make.edges.equalToSuperview()
+                            make.height.equalTo(300)
+                        }
                     }
                 }
             }

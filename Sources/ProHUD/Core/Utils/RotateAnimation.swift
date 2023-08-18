@@ -59,7 +59,7 @@ extension LoadingAnimation {
 }
 
 /// 动画扩展
-extension Controller {
+extension BaseController {
     @objc func pauseLoadingAnimation() {
         if let layer = animateLayer {
             animation = layer.animation(forKey: .rotateKey)

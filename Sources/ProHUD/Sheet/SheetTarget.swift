@@ -7,13 +7,13 @@
 
 import UIKit
 
-open class Sheet: Controller {
+open class SheetTarget: BaseController, HUDTargetType {
     
     weak var window: SheetWindow?
     
-    public lazy var config: Configuration = {
-        var cfg = Configuration()
-        Configuration.customShared?(cfg)
+    public lazy var config: SheetConfiguration = {
+        var cfg = SheetConfiguration()
+        SheetConfiguration.customGlobalConfig?(cfg)
         return cfg
     }()
     
@@ -33,7 +33,7 @@ open class Sheet: Controller {
         return stack
     }()
     
-    private var onTappedBackground: ((_ sheet: Sheet) -> Void)?
+    private var tapActionCallback: ((_ sheet: SheetTarget) -> Void)?
     
     public override var title: String? {
         didSet {
@@ -41,16 +41,10 @@ open class Sheet: Controller {
         }
     }
     
-    @discardableResult @objc public init(handler: @escaping (_ sheet: Sheet) -> Void, onTappedBackground action: ((_ sheet: Sheet) -> Void)? = nil) {
+    public var vm: SheetViewModel = .init()
+    
+    required public override init() {
         super.init()
-        
-        onTappedBackground = action
-        handler(self)
-        
-        DispatchQueue.main.async {
-            self.push()
-        }
-        
     }
     
     required public init?(coder: NSCoder) {
@@ -59,7 +53,6 @@ open class Sheet: Controller {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        view.tintColor = config.tintColor
         
         // 点击
         let tap = UITapGestureRecognizer(target: self, action: #selector(_onTappedBackground(_:)))
@@ -73,11 +66,15 @@ open class Sheet: Controller {
         
     }
     
+    public func onTappedBackground(action: @escaping (_ sheet: SheetTarget) -> Void) {
+        self.tapActionCallback = action
+    }
+    
 }
 
-extension Sheet {
+extension SheetTarget {
     @objc func _onTappedBackground(_ sender: UITapGestureRecognizer) {
-        if let act = onTappedBackground {
+        if let act = tapActionCallback {
             act(self)
         } else {
             self.pop()

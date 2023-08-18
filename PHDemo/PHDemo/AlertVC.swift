@@ -18,7 +18,7 @@ class AlertVC: ListVC {
         title = "Alert"
         header.detailLabel.text = "弹窗控件，用于强阻塞性交互，用户必须做出选择或者等待结果才能进入下一步，当多个实例出现时，会以堆叠的形式显示，新的实例会在覆盖旧的实例上层。"
         
-        Alert.Configuration.shared { config in
+        AlertConfiguration.global { config in
             config.reloadData { vc in
                 if vc.identifier == "custom" {
                     return true
@@ -29,7 +29,7 @@ class AlertVC: ListVC {
         
         list.add(title: "纯文字") { section in
             section.add(title: "只有一句话") {
-                Alert(.message("只有一句话").duration(2)).push()
+                Alert(.message("只有一句话").duration(2))
             }
             section.add(title: "标题 + 正文") {
                 let title = "这是标题"
@@ -43,7 +43,7 @@ class AlertVC: ListVC {
         
         list.add(title: "图文弹窗") { section in
             section.add(title: "纯图标") {
-                Alert(.loading(3)).push()
+                Alert(.loading(3))
             }
             section.add(title: "图标 + 文字") {
                 Alert(.loading.message("正在加载")) { alert in
@@ -82,20 +82,21 @@ class AlertVC: ListVC {
                         button.titleLabel?.font = .systemFont(ofSize: 15)
                     }
                     alert.vm.title = "你正在使用移动网络观看"
-                } .onViewDidLoad { vc in
-                    guard let alert = vc as? Alert else {
-                        return
+                    alert.onViewDidLoad { vc in
+                        guard let alert = vc as? AlertTarget else {
+                            return
+                        }
+                        alert.add(contentSpacing: 30)
+                        let v = UIView()
+                        v.backgroundColor = UIColor("#f2f2f2")
+                        alert.add(subview: v).snp.makeConstraints { make in
+                            make.left.right.equalToSuperview()
+                            make.height.equalTo(1)
+                        }
+                        alert.add(contentSpacing: 16)
+                        alert.add(action: "确定", style: .plain(textColor: UIColor("#14cccc")))
+                        
                     }
-                    alert.add(contentSpacing: 30)
-                    let v = UIView()
-                    v.backgroundColor = UIColor("#f2f2f2")
-                    alert.add(subview: v).snp.makeConstraints { make in
-                        make.left.right.equalToSuperview()
-                        make.height.equalTo(1)
-                    }
-                    alert.add(contentSpacing: 16)
-                    alert.add(action: "确定", style: .plain(textColor: UIColor("#14cccc")))
-                    
                 }
             }
             section.add(title: "只有一段文字 + 无背景色按钮") {
@@ -111,20 +112,21 @@ class AlertVC: ListVC {
                         button.titleLabel?.font = .systemFont(ofSize: 15)
                     }
                     alert.vm.message = "为了维护社区氛围，上麦用户需进行主播认证"
-                } .onViewDidLoad { vc in
-                    guard let alert = vc as? Alert else {
-                        return
+                    alert.onViewDidLoad { vc in
+                        guard let alert = vc as? AlertTarget else {
+                            return
+                        }
+                        alert.add(contentSpacing: 30)
+                        let v = UIView()
+                        v.backgroundColor = UIColor("#f2f2f2")
+                        alert.add(subview: v).snp.makeConstraints { make in
+                            make.left.right.equalToSuperview()
+                            make.height.equalTo(1)
+                        }
+                        alert.add(contentSpacing: 16)
+                        alert.add(action: "取消", style: .plain(textColor: UIColor("#939999")))
+                        alert.add(action: "确定", style: .plain(textColor: UIColor("#14cccc")))
                     }
-                    alert.add(contentSpacing: 30)
-                    let v = UIView()
-                    v.backgroundColor = UIColor("#f2f2f2")
-                    alert.add(subview: v).snp.makeConstraints { make in
-                        make.left.right.equalToSuperview()
-                        make.height.equalTo(1)
-                    }
-                    alert.add(contentSpacing: 16)
-                    alert.add(action: "取消", style: .plain(textColor: UIColor("#939999")))
-                    alert.add(action: "确定", style: .plain(textColor: UIColor("#14cccc")))
                 }
             }
             section.add(title: "只有一段文字 + 3个无背景色按钮") {
@@ -144,41 +146,42 @@ class AlertVC: ListVC {
                         stack.spacing = 0
                         stack.axis = .vertical // 竖排按钮
                     }
-                } .onViewDidLoad { vc in
-                    guard let alert = vc as? Alert else {
-                        return
+                    alert.onViewDidLoad { vc in
+                        guard let alert = vc as? AlertTarget else {
+                            return
+                        }
+                        func createLine() -> UIView {
+                            let v = UIView()
+                            v.backgroundColor = UIColor("#f2f2f2")
+                            return v
+                        }
+                        let btn1 = alert.add(action: "确认，以后不需要再提醒", style: .plain(textColor: UIColor("#14cccc")))
+                        btn1.contentEdgeInsets.top = 16 + 1 // 间距 + 线的高度
+                        btn1.contentEdgeInsets.bottom = 16
+                        let line1 = createLine()
+                        btn1.insertSubview(line1, at: 0)
+                        line1.snp.makeConstraints { make in
+                            make.top.left.right.equalToSuperview()
+                            make.height.equalTo(1)
+                        }
+                        
+                        let btn2 = alert.add(action: "确认，每次消费前提醒", style: .plain(textColor: UIColor("#14cccc")))
+                        let line2 = createLine()
+                        btn2.insertSubview(line2, at: 0)
+                        line2.snp.makeConstraints { make in
+                            make.top.left.right.equalToSuperview()
+                            make.height.equalTo(1)
+                        }
+                        
+                        let btn3 = alert.add(action: "取消", style: .plain(textColor: UIColor("#939999")))
+                        let line3 = createLine()
+                        btn3.insertSubview(line3, at: 0)
+                        line3.snp.makeConstraints { make in
+                            make.top.left.right.equalToSuperview()
+                            make.height.equalTo(1)
+                        }
+                        
                     }
-                    func createLine() -> UIView {
-                        let v = UIView()
-                        v.backgroundColor = UIColor("#f2f2f2")
-                        return v
-                    }
-                    let btn1 = alert.add(action: "确认，以后不需要再提醒", style: .plain(textColor: UIColor("#14cccc")))
-                    btn1.contentEdgeInsets.top = 16 + 1 // 间距 + 线的高度
-                    btn1.contentEdgeInsets.bottom = 16
-                    let line1 = createLine()
-                    btn1.insertSubview(line1, at: 0)
-                    line1.snp.makeConstraints { make in
-                        make.top.left.right.equalToSuperview()
-                        make.height.equalTo(1)
-                    }
-                    
-                    let btn2 = alert.add(action: "确认，每次消费前提醒", style: .plain(textColor: UIColor("#14cccc")))
-                    let line2 = createLine()
-                    btn2.insertSubview(line2, at: 0)
-                    line2.snp.makeConstraints { make in
-                        make.top.left.right.equalToSuperview()
-                        make.height.equalTo(1)
-                    }
-                    
-                    let btn3 = alert.add(action: "取消", style: .plain(textColor: UIColor("#939999")))
-                    let line3 = createLine()
-                    btn3.insertSubview(line3, at: 0)
-                    line3.snp.makeConstraints { make in
-                        make.top.left.right.equalToSuperview()
-                        make.height.equalTo(1)
-                    }
-                    
                 }
             }
             
@@ -203,7 +206,7 @@ class AlertVC: ListVC {
         }
         list.add(title: "图标 + 文字 + 按钮") { section in
             section.add(title: "操作成功") {
-                Alert(.success(3).title("操作成功").message("这条消息将在3s后消失")).push()
+                Alert(.success(3).title("操作成功").message("这条消息将在3s后消失"))
             }
             section.add(title: "操作失败") {
                 Alert { alert in
@@ -287,12 +290,13 @@ class AlertVC: ListVC {
                 Alert(.loading) { alert in
                     alert.vm.title = "在弹出过程中增加元素"
                     alert.add(action: "OK", style: .gray)
-                } .onViewWillAppear { vc in
-                    guard let alert = vc as? Alert else {
-                        return
+                    alert.onViewWillAppear { vc in
+                        guard let alert = vc as? AlertTarget else {
+                            return
+                        }
+                        alert.vm.message = "这是一段后增加的文字\n动画效果会有细微差别"
+                        alert.reloadTextStack()
                     }
-                    alert.vm.message = "这是一段后增加的文字\n动画效果会有细微差别"
-                    alert.reloadTextStack()
                 }
             }
         }
@@ -337,7 +341,7 @@ class AlertVC: ListVC {
                 let vc = UIViewController()
                 vc.title = "页面"
                 vc.view.backgroundColor = .systemYellow
-                let alert = Alert(.loading.title("正在加载").message("这个弹窗被放在指定容器中"))
+                let alert = Alert(.loading.title("正在加载").message("这个弹窗被放在指定容器中")).target
                 alert.add(action: "返回上一页") { alert in
                     vc.dismiss(animated: true)
                 }

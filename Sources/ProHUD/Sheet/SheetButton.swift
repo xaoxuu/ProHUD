@@ -13,7 +13,7 @@ public class SheetButton: Button {
         .init(top: 14, left: 28, bottom: 14, right: 28)
     }
     
-    public override func update(config: ProHUD.Configuration, action: Action) {
+    public override func update(config: CommonConfiguration, action: Action) {
         titleLabel?.font = .boldSystemFont(ofSize: 18)
         layer.cornerRadiusWithContinuous = 12
         super.update(config: config, action: action)

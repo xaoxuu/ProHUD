@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension Sheet: ConvenienceLayout {
+extension SheetTarget: ConvenienceLayout {
     
     // MARK: 增加
     @discardableResult public func add(action: Action) -> Button {
@@ -126,7 +126,7 @@ extension Sheet: ConvenienceLayout {
 }
 
 // MARK: more
-public extension Sheet {
+public extension SheetTarget {
     
     /// 增加一个标题
     /// - Parameter text: 文本
@@ -185,10 +185,10 @@ public extension Sheet {
     ///   - identifier: 唯一标识符
     ///   - handler: 点击事件
     /// - Returns: 按钮实例
-    @discardableResult func add(action title: String, style: Action.Style = .tinted, identifier: String? = nil, handler: ((_ sheet: Sheet) -> Void)? = nil) -> Button {
+    @discardableResult func add(action title: String, style: Action.Style = .tinted, identifier: String? = nil, handler: ((_ sheet: SheetTarget) -> Void)? = nil) -> Button {
         if let handler = handler {
             let action = Action(identifier: identifier, style: style, title: title) { vc in
-                if let vc = vc as? Sheet {
+                if let vc = vc as? SheetTarget {
                     handler(vc)
                 }
             }

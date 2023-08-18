@@ -7,11 +7,11 @@
 
 import UIKit
 
-open class Capsule: Controller {
+open class CapsuleTarget: BaseController, HUDTargetType {
     
-    public lazy var config: Configuration = {
-        var cfg = Configuration()
-        Configuration.customShared?(cfg)
+    public lazy var config: CapsuleConfiguration = {
+        var cfg = CapsuleConfiguration()
+        CapsuleConfiguration.customGlobalConfig?(cfg)
         return cfg
     }()
     
@@ -33,6 +33,8 @@ open class Capsule: Controller {
         return imgv
     }()
     
+    public var progressView: ProgressView?
+    
     /// 文本
     public lazy var textLabel: UILabel = {
         let lb = UILabel()
@@ -44,56 +46,12 @@ open class Capsule: Controller {
         return lb
     }()
     
-    @objc(CapsuleViewModel) open class ViewModel: BaseViewModel {
-        
-        @objc public enum Position: Int {
-            case top
-            case middle
-            case bottom
-        }
-        
-        @objc public var position: Position = .top
-        
-        public func position(position: Position) -> Self {
-            self.position = position
-            return self
-        }
-        public static var top: Self {
-            let obj = Self.init()
-            obj.position = .top
-            return obj
-        }
-        public static var middle: Self {
-            let obj = Self.init()
-            obj.position = .middle
-            return obj
-        }
-        public static var bottom: Self {
-            let obj = Self.init()
-            obj.position = .bottom
-            return obj
-        }
-        
-    }
+    public var vm: CapsuleViewModel = .init()
     
-    /// 视图模型
-    @objc public var vm = ViewModel()
+    private var tapActionCallback: ((_ capsule: CapsuleTarget) -> Void)?
     
-    private var tapActionCallback: ((_ capsule: Capsule) -> Void)?
-    
-    @discardableResult @objc public init(_ vm: ViewModel, handler: ((_ capsule: Capsule) -> Void)? = nil) {
+    required public override init() {
         super.init()
-        self.vm = vm
-        handler?(self)
-        DispatchQueue.main.async {
-            if handler != nil {
-                self.push()
-            }
-        }
-    }
-    
-    @discardableResult @objc public convenience init(handler: ((_ capsule: Capsule) -> Void)?) {
-        self.init(.init(), handler: handler)
     }
     
     required public init?(coder: NSCoder) {
@@ -102,7 +60,6 @@ open class Capsule: Controller {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        view.tintColor = vm.tintColor ?? config.tintColor
         view.layer.shadowRadius = 8
         view.layer.shadowOffset = .init(width: 0, height: 5)
         view.layer.shadowOpacity = 0.1
@@ -117,13 +74,13 @@ open class Capsule: Controller {
         
     }
     
-    public func onTapped(action: @escaping (_ capsule: Capsule) -> Void) {
+    public func onTapped(action: @escaping (_ capsule: CapsuleTarget) -> Void) {
         self.tapActionCallback = action
     }
     
 }
 
-fileprivate extension Capsule {
+fileprivate extension CapsuleTarget {
     
     /// 点击事件
     /// - Parameter sender: 手势
@@ -132,3 +89,6 @@ fileprivate extension Capsule {
     }
     
 }
+
+
+extension CapsuleTarget: LoadingAnimation { }

@@ -7,13 +7,13 @@
 
 import UIKit
 
-open class Toast: Controller {
+open class ToastTarget: BaseController, HUDTargetType {
     
     weak var window: ToastWindow?
     
-    public lazy var config: Configuration = {
-        var cfg = Configuration()
-        Configuration.customShared?(cfg)
+    public lazy var config: ToastConfiguration = {
+        var cfg = ToastConfiguration()
+        ToastConfiguration.customGlobalConfig?(cfg)
         return cfg
     }()
     
@@ -83,12 +83,10 @@ open class Toast: Controller {
     /// 是否可以通过手势移除（向上滑出屏幕）
     public var isRemovable = true
     
-    @objc(ToastViewModel) open class ViewModel: BaseViewModel {}
-    
     /// 视图模型
-    @objc public var vm = ViewModel()
+    @objc public var vm = ToastViewModel()
     
-    private var tapActionCallback: ((_ toast: Toast) -> Void)?
+    private var tapActionCallback: ((_ toast: ToastTarget) -> Void)?
     
     
     public override var title: String? {
@@ -97,20 +95,8 @@ open class Toast: Controller {
         }
     }
     
-    
-    @discardableResult @objc public init(_ vm: ViewModel, handler: ((_ toast: Toast) -> Void)? = nil) {
+    required public override init() {
         super.init()
-        self.vm = vm
-        handler?(self)
-        DispatchQueue.main.async {
-            if handler != nil {
-                self.push()
-            }
-        }
-    }
-    
-    @discardableResult @objc public convenience init(handler: ((_ toast: Toast) -> Void)?) {
-        self.init(.init(), handler: handler)
     }
     
     required public init?(coder: NSCoder) {
@@ -119,7 +105,6 @@ open class Toast: Controller {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        view.tintColor = config.tintColor
         
         // 点击
         let tap = UITapGestureRecognizer(target: self, action: #selector(_onTappedGesture(_:)))
@@ -133,13 +118,13 @@ open class Toast: Controller {
         
     }
     
-    public func onTapped(action: @escaping (_ toast: Toast) -> Void) {
+    public func onTapped(action: @escaping (_ toast: ToastTarget) -> Void) {
         self.tapActionCallback = action
     }
     
 }
 
-fileprivate extension Toast {
+fileprivate extension ToastTarget {
     
     /// 点击事件
     /// - Parameter sender: 手势
@@ -173,4 +158,4 @@ fileprivate extension Toast {
     
 }
 
-extension Toast: LoadingAnimation { }
+extension ToastTarget: LoadingAnimation { }

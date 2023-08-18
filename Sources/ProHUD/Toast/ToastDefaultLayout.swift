@@ -7,9 +7,9 @@
 
 import UIKit
 
-extension Toast: DefaultLayout {
+extension ToastTarget: DefaultLayout {
     
-    var cfg: ProHUD.Configuration {
+    var cfg: CommonConfiguration {
         return config
     }
     
@@ -17,6 +17,7 @@ extension Toast: DefaultLayout {
         if self.cfg.customReloadData?(self) == true {
             return
         }
+        view.tintColor = vm.tintColor ?? config.tintColor
         loadContentViewIfNeeded()
         loadContentMaskViewIfNeeded()
         guard customView == nil else {
@@ -117,7 +118,7 @@ extension Toast: DefaultLayout {
     
 }
 
-extension Toast {
+extension ToastTarget {
     func loadActionStackIfNeeded() {
         guard actionStack.arrangedSubviews.count > 0 else {
             actionStack.removeFromSuperview()
@@ -149,4 +150,5 @@ extension Toast {
         }
         
     }
+    
 }

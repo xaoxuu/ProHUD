@@ -7,11 +7,11 @@
 
 import UIKit
 
-open class Alert: ProHUD.Controller {
+open class AlertTarget: BaseController, HUDTargetType {
     
-    public lazy var config: Configuration = {
-        var cfg = Configuration()
-        Configuration.customShared?(cfg)
+    public lazy var config: AlertConfiguration = {
+        var cfg = AlertConfiguration()
+        AlertConfiguration.customGlobalConfig?(cfg)
         return cfg
     }()
     
@@ -73,10 +73,8 @@ open class Alert: ProHUD.Controller {
         return stack
     }()
     
-    @objc(AlertViewModel) open class ViewModel: BaseViewModel {}
-    
     /// 视图模型
-    @objc public var vm = ViewModel()
+    @objc public var vm: AlertViewModel = .init()
     
     public override var title: String? {
         didSet {
@@ -84,35 +82,22 @@ open class Alert: ProHUD.Controller {
         }
     }
     
-    @discardableResult @objc public init(_ vm: ViewModel, handler: ((_ alert: Alert) -> Void)? = nil) {
+    required public override init() {
         super.init()
-        self.vm = vm
-        handler?(self)
-        DispatchQueue.main.async {
-            if handler != nil {
-                self.setDefaultAxis()
-                self.push()
-            }
-        }
-    }
-    
-    @discardableResult @objc public convenience init(handler: ((_ alert: Alert) -> Void)?) {
-        self.init(.init(), handler: handler)
-    }
-    
-    public override func viewDidLoad() {
-        super.viewDidLoad()
-        view.tintColor = config.tintColor
-        reloadData(animated: false)
-        navEvents[.onViewDidLoad]?(self)
     }
     
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        reloadData(animated: false)
+        navEvents[.onViewDidLoad]?(self)
+    }
+    
     
 }
 
 // MARK: 动画扩展
-extension Alert: LoadingAnimation {}
+extension AlertTarget: LoadingAnimation {}

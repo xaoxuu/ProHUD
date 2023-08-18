@@ -8,7 +8,7 @@
 import UIKit
 
 /// 加载动画
-public protocol LoadingAnimation: Controller {
+public protocol LoadingAnimation: BaseController {
     
     var imageView: UIImageView { get }
     var progressView: ProgressView? { get set }

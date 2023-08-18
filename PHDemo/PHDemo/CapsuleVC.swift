@@ -16,20 +16,30 @@ class CapsuleVC: ListVC {
         title = "Capsule"
         header.detailLabel.text = "状态胶囊控件，用于状态显示，一个主程序窗口每个位置（上中下）各自最多只有一个状态胶囊实例。"
         
-        Capsule.Configuration.shared { config in
+        CapsuleConfiguration.global { config in
 //            config.cardCornerRadius = .infinity // 设置一个较大的数字就会变成胶囊形状
         }
         list.add(title: "默认布局：纯文字") { section in
             section.add(title: "一条简短的消息") {
-                Capsule(.message("一条简短的消息")).push()
+                // 设置vm或者handler都会自动push，这里测试传入vm：
+                Capsule(.message("一条简短消息"))
             }
             section.add(title: "一条稍微长一点的消息") {
-                Capsule(.message("一条稍微长一点的消息")).push()
+                // 设置vm或者handler都会自动push，这里测试传入handler：
+                Capsule { capsule in
+                    // handler中可以进行复杂设置（详见下面的其它例子）
+                    capsule.vm = .message("一条稍微长一点的消息")
+                }
             }
             section.add(title: "（默认）状态胶囊控件，用于状态显示，一个主程序窗口只有一个状态胶囊实例。") {
-                Capsule(.message("状态胶囊控件，用于状态显示，一个主程序窗口只有一个状态胶囊实例。")).push()
+                // 也可以创建一个空白实例，在需要的时候再push
+                let obj = Capsule().target
+                obj.vm = .message("状态胶囊控件，用于状态显示，一个主程序窗口只有一个状态胶囊实例。")
+                // ... 在需要的时候手动push
+                obj.push()
             }
             section.add(title: "（限制1行）状态胶囊控件，用于状态显示，一个主程序窗口只有一个状态胶囊实例。") {
+                // 同时设置vm和handler也可以
                 Capsule(.message("状态胶囊控件，用于状态显示，一个主程序窗口只有一个状态胶囊实例。")) { capsule in
                     capsule.config.customTextLabel { label in
                         label.numberOfLines = 1
@@ -39,14 +49,27 @@ class CapsuleVC: ListVC {
         }
         
         list.add(title: "默认布局：图文") { section in
-            section.add(title: "一条简短的消息") {
-                Capsule(.info("一条简短的消息")).push()
+            section.add(title: "下载进度") {
+                let capsule = Capsule().target
+                capsule.vm = .message("正在下载").icon(.init(systemName: "arrow.down.circle.fill")).duration(.infinity)
+                capsule.update(progress: 0)
+                capsule.push()
+                updateProgress(in: 4) { percent in
+                    capsule.update(progress: percent)
+                } completion: {
+                    capsule.update { toast in
+                        toast.vm = .message("下载成功")
+                            .icon(.init(systemName: "checkmark.circle.fill"))
+                            .duration(5)
+                            .tintColor(.systemGreen)
+                    }
+                }
             }
-            section.add(title: "一条稍微长一点的消息") {
-                Capsule(.systemError.title("500").message("一条稍微长一点的消息")).push()
+            section.add(title: "接口报错提示") {
+                Capsule(.systemError.title("[500]").message("服务端错误"))
             }
             section.add(title: "（默认）状态胶囊控件，用于状态显示，一个主程序窗口只有一个状态胶囊实例。") {
-                Capsule(.info("状态胶囊控件，用于状态显示，一个主程序窗口只有一个状态胶囊实例。")).push()
+                Capsule(.info("状态胶囊控件，用于状态显示，一个主程序窗口只有一个状态胶囊实例。"))
             }
             section.add(title: "（限制1行）状态胶囊控件，用于状态显示，一个主程序窗口只有一个状态胶囊实例。") {
                 Capsule(.info("状态胶囊控件，用于状态显示，一个主程序窗口只有一个状态胶囊实例。")) { capsule in
@@ -59,14 +82,10 @@ class CapsuleVC: ListVC {
         
         list.add(title: "不同位置、不同动画") { section in
             section.add(title: "顶部，默认滑入") {
-                Capsule(.info("一条简短的消息")) { capsule in
-                    
-                }
+                Capsule(.info("一条简短的消息"))
             }
             section.add(title: "中间，默认缩放") {
-                Capsule(.middle.info("一条简短的消息")) { capsule in
-                    
-                }
+                Capsule(.middle.info("一条简短的消息"))
             }
             section.add(title: "中间，黑底白字，透明渐变") {
                 Capsule(.middle.info("一条简短的消息")) { capsule in
@@ -98,7 +117,7 @@ class CapsuleVC: ListVC {
             section.add(title: "底部，渐变背景，默认回弹滑入") {
                 Capsule(.bottom.enter("点击进入")) { capsule in
                     capsule.config.tintColor = .white
-                    capsule.config.cardEdgeInsets = .init(top: 16, left: 24, bottom: 16, right: 24)
+                    capsule.config.cardEdgeInsets = .init(top: 12, left: 20, bottom: 12, right: 20)
                     capsule.config.customTextLabel { label in
                         label.textColor = .white
                         label.font = .boldSystemFont(ofSize: 16)
@@ -116,9 +135,10 @@ class CapsuleVC: ListVC {
                         mask.layer.insertSublayer(gradientLayer, at: 0)
                     }
                     capsule.config.cardCornerRadius = .infinity
-                }.onTapped { capsule in
-                    Alert(.message("收到点击事件").duration(1)).push()
-                    capsule.pop()
+                    capsule.onTapped { capsule in
+                        Alert(.message("收到点击事件").duration(1))
+                        capsule.pop()
+                    }
                 }
             }
         }
@@ -126,7 +146,7 @@ class CapsuleVC: ListVC {
 
 }
 
-extension Capsule.ViewModel {
+extension CapsuleTarget.ViewModel {
     
     static func info(_ text: String?) -> Self {
         .init()

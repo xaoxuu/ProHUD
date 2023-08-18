@@ -9,7 +9,7 @@ import UIKit
 
 protocol DefaultLayout: CommonLayout {
     
-    var cfg: Configuration { get }
+    var cfg: CommonConfiguration { get }
     
     func reloadData(animated: Bool)
     

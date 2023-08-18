@@ -9,7 +9,7 @@ import Foundation
 
 func consolePrint(_ items: Any...) {
     #if DEBUG
-    guard Configuration.enablePrint else { return }
+    guard CommonConfiguration.enablePrint else { return }
     print(">> ProHUD:", items)
     #endif
 }

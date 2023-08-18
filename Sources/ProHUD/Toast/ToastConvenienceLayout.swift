@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension Toast: ConvenienceLayout {
+extension ToastTarget: ConvenienceLayout {
     
     // MARK: 增加
     
@@ -18,10 +18,10 @@ extension Toast: ConvenienceLayout {
     ///   - identifier: 唯一标识符
     ///   - handler: 点击事件
     /// - Returns: 按钮实例
-    @discardableResult public func add(action title: String, style: Action.Style = .tinted, identifier: String? = nil, handler: ((_ toast: Toast) -> Void)? = nil) -> Button {
+    @discardableResult public func add(action title: String, style: Action.Style = .tinted, identifier: String? = nil, handler: ((_ toast: ToastTarget) -> Void)? = nil) -> Button {
         if let handler = handler {
             let action = Action(identifier: identifier, style: style, title: title) { vc in
-                if let vc = vc as? Toast {
+                if let vc = vc as? ToastTarget {
                     handler(vc)
                 }
             }
