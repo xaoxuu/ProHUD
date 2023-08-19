@@ -26,11 +26,17 @@ extension ToastTarget: DefaultLayout {
             }
             return
         }
+        let titleCount = vm?.title?.count ?? 0
+        let bodyCount = vm?.message?.count ?? 0
         if vm?.icon != nil || vm?.iconURL != nil {
             if imageView.superview == nil {
                 infoStack.insertArrangedSubview(imageView, at: 0)
                 imageView.snp.makeConstraints { make in
-                    make.width.height.equalTo(config.iconSize)
+                    if titleCount > 0 && bodyCount > 0 {
+                        make.width.height.equalTo(config.iconSize)
+                    } else {
+                        make.width.equalTo(config.iconSize)
+                    }
                 }
             }
         } else {
@@ -42,8 +48,6 @@ extension ToastTarget: DefaultLayout {
         if textStack.superview == nil {
             infoStack.addArrangedSubview(textStack)
         }
-        let titleCount = vm?.title?.count ?? 0
-        let bodyCount = vm?.message?.count ?? 0
         if titleCount > 0 {
             textStack.insertArrangedSubview(titleLabel, at: 0)
             if bodyCount > 0 {

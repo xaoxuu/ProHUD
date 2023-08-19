@@ -41,7 +41,11 @@ open class SheetTarget: BaseController, HUDTargetType {
         }
     }
     
-    public var vm: SheetViewModel? = nil
+    public var vm: SheetViewModel? = nil {
+        didSet {
+            vm?.vc = self
+        }
+    }
     
     required public override init() {
         super.init()

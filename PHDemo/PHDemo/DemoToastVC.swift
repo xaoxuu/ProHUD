@@ -79,7 +79,7 @@ class DemoToastVC: ListVC {
             section.add(title: "图标 + 标题 + 正文") {
                 let s1 = "笑容正在加载"
                 let s2 = "这通常不会太久"
-                let toast = Toast(.loading.title(s1).message(s2)).target
+                let toast = ToastTarget(.loading.title(s1).message(s2))
                 toast.push()
                 toast.update(progress: 0)
                 updateProgress(in: 4) { percent in
@@ -186,9 +186,7 @@ class DemoToastVC: ListVC {
             }
             section.add(title: "不存在就创建，存在就更新") {
                 i += 1
-                Toast.lazyPush(identifier: "loading") { toast in
-                    toast.vm = .loading.title("正在加载\(i)").message("这条消息不会重复显示多条")
-                }
+                Toast(.identifier("loading").title("正在加载\(i)").message("这条消息不会重复显示多条"))
             }
             section.add(title: "如果存在就更新，如果不存在就忽略") {
                 i += 1

@@ -21,9 +21,17 @@ open class AlertProvider: HUDProvider<AlertViewModel, AlertTarget> {
     ///   - vm: 数据模型
     ///   - initializer: 自定义的初始化代码
     @discardableResult public convenience init(_ vm: ViewModel, initializer: ((_ alert: Target) -> Void)?) {
-        self.init { alert in
-            alert.vm = vm
-            initializer?(alert)
+        if let id = vm.identifier, id.count > 0 {
+            Self.lazyPush(identifier: id) { target in
+                target.vm = vm
+                initializer?(target)
+            }
+            self.init(initializer: nil)
+        } else {
+            self.init { target in
+                target.vm = vm
+                initializer?(target)
+            }
         }
     }
     /// 根据ViewModel创建一个Target并显示

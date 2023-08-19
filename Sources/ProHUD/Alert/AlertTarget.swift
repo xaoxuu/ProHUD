@@ -9,6 +9,8 @@ import UIKit
 
 open class AlertTarget: BaseController, HUDTargetType {
     
+    public typealias ViewModel = AlertViewModel
+    
     public lazy var config: AlertConfiguration = {
         var cfg = AlertConfiguration()
         AlertConfiguration.customGlobalConfig?(cfg)
@@ -74,7 +76,11 @@ open class AlertTarget: BaseController, HUDTargetType {
     }()
     
     /// 视图模型
-    @objc public var vm: AlertViewModel?
+    @objc public var vm: AlertViewModel? {
+        didSet {
+            vm?.vc = self
+        }
+    }
     
     public override var title: String? {
         didSet {
@@ -92,6 +98,11 @@ open class AlertTarget: BaseController, HUDTargetType {
     
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    public convenience init(_ vm: ViewModel) {
+        self.init()
+        self.vm = vm
     }
     
     public override func viewDidLoad() {

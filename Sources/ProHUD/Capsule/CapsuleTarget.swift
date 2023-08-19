@@ -9,7 +9,9 @@ import UIKit
 
 open class CapsuleTarget: BaseController, HUDTargetType {
     
-    public lazy var config: CapsuleConfiguration = {
+    public typealias ViewModel = CapsuleViewModel
+    
+    @objc public lazy var config: CapsuleConfiguration = {
         var cfg = CapsuleConfiguration()
         CapsuleConfiguration.customGlobalConfig?(cfg)
         return cfg
@@ -46,7 +48,11 @@ open class CapsuleTarget: BaseController, HUDTargetType {
         return lb
     }()
     
-    public var vm: CapsuleViewModel?
+    @objc public var vm: CapsuleViewModel? {
+        didSet {
+            vm?.vc = self
+        }
+    }
     
     public override var title: String? {
         didSet {
@@ -68,6 +74,11 @@ open class CapsuleTarget: BaseController, HUDTargetType {
         fatalError("init(coder:) has not been implemented")
     }
     
+    public convenience init(_ vm: ViewModel) {
+        self.init()
+        self.vm = vm
+    }
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.layer.shadowRadius = 8
@@ -84,7 +95,7 @@ open class CapsuleTarget: BaseController, HUDTargetType {
         
     }
     
-    public func onTapped(action: @escaping (_ capsule: CapsuleTarget) -> Void) {
+    @objc public func onTapped(action: @escaping (_ capsule: CapsuleTarget) -> Void) {
         self.tapActionCallback = action
     }
     

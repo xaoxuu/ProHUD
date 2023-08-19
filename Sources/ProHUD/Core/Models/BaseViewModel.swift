@@ -12,6 +12,26 @@ public protocol HUDViewModelType {}
 /// 数据模型
 open class BaseViewModel: NSObject, HUDViewModelType {
     
+    /// 在创建target之前临时暂存的id
+    private var tmpStoredIdentifier: String?
+    
+    /// 创建target时将指定为此值
+    @objc open var identifier: String? {
+        set {
+            tmpStoredIdentifier = newValue
+            if let id = tmpStoredIdentifier, id.count > 0 {
+                vc?.identifier = id
+            }
+        }
+        get {
+            if let vc = vc {
+                return vc.identifier
+            } else {
+                return tmpStoredIdentifier
+            }
+        }
+    }
+    
     /// 图标
     @objc open var icon: UIImage?
     @objc var iconURL: URL?
@@ -34,7 +54,15 @@ open class BaseViewModel: NSObject, HUDViewModelType {
         }
     }
     
-    @objc public required override init() {
+    weak var vc: BaseController? {
+        didSet {
+            if let id = tmpStoredIdentifier {
+                vc?.identifier = id
+            }
+        }
+    }
+    
+    @objc required public override init() {
         
     }
     
@@ -69,6 +97,11 @@ open class BaseViewModel: NSObject, HUDViewModelType {
 
 // MARK: - convenience func
 public extension BaseViewModel {
+    
+    func identifier(_ identifier: String?) -> Self {
+        self.identifier = identifier
+        return self
+    }
     
     func icon(_ image: UIImage?) -> Self {
         self.icon = image
@@ -109,6 +142,11 @@ public extension BaseViewModel {
 
 // MARK: - example scenes
 public extension BaseViewModel {
+    
+    static func identifier(_ text: String?) -> Self {
+        .init()
+        .identifier(text)
+    }
     
     // MARK: plain
     static func title(_ text: String?) -> Self {

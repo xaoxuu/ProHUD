@@ -110,7 +110,7 @@ class DemoAlertVC: ListVC {
                     alert.config.customButton { button in
                         button.titleLabel?.font = .systemFont(ofSize: 15)
                     }
-                    alert.vm?.message = "为了维护社区氛围，上麦用户需进行主播认证"
+                    alert.title = "为了维护社区氛围，上麦用户需进行主播认证"
                     alert.onViewDidLoad { vc in
                         guard let alert = vc as? AlertTarget else {
                             return
@@ -140,7 +140,7 @@ class DemoAlertVC: ListVC {
                     alert.config.customButton { button in
                         button.titleLabel?.font = .systemFont(ofSize: 15)
                     }
-                    alert.vm?.message = "本次消费需要你支付999软妹豆，确认支付吗？"
+                    alert.title = "本次消费需要你支付999软妹豆，确认支付吗？"
                     alert.config.customActionStack { stack in
                         stack.spacing = 0
                         stack.axis = .vertical // 竖排按钮
@@ -193,8 +193,7 @@ class DemoAlertVC: ListVC {
             }
             section.add(title: "标题 + 正文 + 按钮") {
                 Alert { alert in
-                    alert.vm?.title = "标题"
-                    alert.vm?.message = "这是一段正文，长度超出最大宽度时会自动换行"
+                    alert.vm = .title("标题").message("这是一段正文，长度超出最大宽度时会自动换行")
                     alert.add(action: "取消", style: .gray)
                     alert.add(action: "删除", style: .destructive) { alert in
                         // 自定义了按钮事件之后，需要手动pop弹窗
@@ -301,8 +300,7 @@ class DemoAlertVC: ListVC {
             section.add(title: "多层级弹窗") {
                 func f(i: Int) {
                     Alert { alert in
-                        alert.vm?.title = "第\(i)次弹"
-                        alert.vm?.message = "每次都是一个新的实例覆盖在上一个弹窗上面，而背景不会叠加变深。"
+                        alert.vm = .title("第\(i)次弹").message("每次都是一个新的实例覆盖在上一个弹窗上面，而背景不会叠加变深。")
                         alert.add(action: "取消", style: .gray)
                         alert.add(action: "增加一个") { alert in
                             f(i: i + 1)
@@ -338,7 +336,7 @@ class DemoAlertVC: ListVC {
                 let vc = UIViewController()
                 vc.title = "页面"
                 vc.view.backgroundColor = .systemYellow
-                let alert = Alert(.loading.title("正在加载").message("这个弹窗被放在指定容器中")).target
+                let alert = AlertTarget(.loading.title("正在加载").message("这个弹窗被放在指定容器中"))
                 alert.add(action: "返回上一页") { alert in
                     vc.dismiss(animated: true)
                 }

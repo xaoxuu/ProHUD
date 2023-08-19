@@ -35,9 +35,8 @@ class DemoCapsuleVC: ListVC {
                 }
             }
             section.add(title: "延迟显示") {
-                // 也可以创建一个空白实例，在需要的时候再push
-                let obj = Capsule().target
-                obj.vm = .message("状态胶囊控件，用于状态显示，一个主程序窗口只有一个状态胶囊实例。")
+                // 也可以手动创建一个Target实例，在需要的时候再push
+                let obj = CapsuleTarget(.message("状态胶囊控件，用于状态显示，一个主程序窗口只有一个状态胶囊实例。"))
                 // ... 在需要的时候手动push
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                     obj.push()
@@ -55,7 +54,7 @@ class DemoCapsuleVC: ListVC {
         
         list.add(title: "默认布局：图文") { section in
             section.add(title: "下载进度") {
-                let capsule = Capsule().target
+                let capsule = CapsuleTarget()
                 capsule.vm = .message("正在下载").icon(.init(systemName: "arrow.down.circle.fill")).duration(.infinity)
                 capsule.update(progress: 0)
                 capsule.push()

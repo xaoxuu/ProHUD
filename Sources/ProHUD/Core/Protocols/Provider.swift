@@ -18,28 +18,23 @@ public protocol HUDProviderType {
     
 }
 
-open class HUDProvider<ViewModel: HUDViewModelType, Target: HUDTargetType>: HUDProviderType {
-    
-    /// HUD实例
-    public var target: Target
+open class HUDProvider<ViewModel: HUDViewModelType, Target: HUDTargetType>: NSObject, HUDProviderType {
     
     /// 根据自定义的初始化代码创建一个Target并显示
-    /// - Parameter initializer: 初始化代码
+    /// - Parameter initializer: 初始化代码（传空值时不会做任何事）
     @discardableResult public required init(initializer: ((_ target: Target) -> Void)?) {
+        guard let initializer = initializer else {
+            // Provider的作用就是push一个target
+            // 如果没有任何初始化代码就没有target，就是个无意义的Provider
+            // 但为了支持lazyPush（找到已有实例并更新），所以就需要支持无意义的Provider
+            // 详见子类中的 self.init(initializer: nil)
+            return
+        }
         var t = Target()
-        initializer?(t)
-        self.target = t
-        if (t.vm == nil && initializer == nil) == false {
-            DispatchQueue.main.async {
-                t.push()
-            }
+        initializer(t)
+        DispatchQueue.main.async {
+            t.push()
         }
     }
-    
-    /// 创建一个空白的实例，不立即显示，需要手动调用target.push()来显示
-    @discardableResult public convenience init() {
-        self.init(initializer: nil)
-    }
-    
     
 }

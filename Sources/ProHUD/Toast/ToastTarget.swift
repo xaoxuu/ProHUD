@@ -9,6 +9,8 @@ import UIKit
 
 open class ToastTarget: BaseController, HUDTargetType {
     
+    public typealias ViewModel = ToastViewModel
+    
     weak var window: ToastWindow?
     
     public lazy var config: ToastConfiguration = {
@@ -84,7 +86,11 @@ open class ToastTarget: BaseController, HUDTargetType {
     public var isRemovable = true
     
     /// 视图模型
-    @objc public var vm: ToastViewModel?
+    @objc public var vm: ToastViewModel? {
+        didSet {
+            vm?.vc = self
+        }
+    }
     
     private var tapActionCallback: ((_ toast: ToastTarget) -> Void)?
     
@@ -103,7 +109,12 @@ open class ToastTarget: BaseController, HUDTargetType {
     }
     
     required public init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+    }
+    
+    public convenience init(_ vm: ViewModel) {
+        self.init()
+        self.vm = vm
     }
     
     public override func viewDidLoad() {

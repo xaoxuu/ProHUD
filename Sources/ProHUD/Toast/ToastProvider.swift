@@ -21,9 +21,17 @@ open class ToastProvider: HUDProvider<ToastViewModel, ToastTarget> {
     ///   - vm: 数据模型
     ///   - initializer: 自定义的初始化代码
     @discardableResult public convenience init(_ vm: ViewModel, initializer: ((_ toast: Target) -> Void)?) {
-        self.init { toast in
-            toast.vm = vm
-            initializer?(toast)
+        if let id = vm.identifier, id.count > 0 {
+            Self.lazyPush(identifier: id) { target in
+                target.vm = vm
+                initializer?(target)
+            }
+            self.init(initializer: nil)
+        } else {
+            self.init { target in
+                target.vm = vm
+                initializer?(target)
+            }
         }
     }
     

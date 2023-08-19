@@ -34,7 +34,7 @@ public class ProgressView: UIView {
         let bgLayer = CAShapeLayer()
         bgLayer.fillColor = UIColor.clear.cgColor
         bgLayer.path = path.cgPath
-        bgLayer.strokeColor = UIColor.white.cgColor
+        bgLayer.strokeColor = UIColor.clear.cgColor
         bgLayer.lineWidth = lineWidth
         bgLayer.lineCap = .round
         bgLayer.strokeStart = 0

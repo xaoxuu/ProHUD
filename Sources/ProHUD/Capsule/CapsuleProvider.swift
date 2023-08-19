@@ -21,9 +21,17 @@ open class CapsuleProvider: HUDProvider<CapsuleViewModel, CapsuleTarget> {
     ///   - vm: 数据模型
     ///   - initializer: 初始化代码
     @discardableResult public convenience init(_ vm: ViewModel, initializer: ((_ capsule: Target) -> Void)?) {
-        self.init { capsule in
-            capsule.vm = vm
-            initializer?(capsule)
+        if let id = vm.identifier, id.count > 0 {
+            Self.lazyPush(identifier: id) { target in
+                target.vm = vm
+                initializer?(target)
+            }
+            self.init(initializer: nil)
+        } else {
+            self.init { target in
+                target.vm = vm
+                initializer?(target)
+            }
         }
     }
     
