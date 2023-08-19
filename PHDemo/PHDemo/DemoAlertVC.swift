@@ -1,5 +1,5 @@
 //
-//  AlertVC.swift
+//  DemoAlertVC.swift
 //  PHDemo
 //
 //  Created by xaoxuu on 2022/9/3.
@@ -8,7 +8,7 @@
 import UIKit
 import ProHUD
 
-class AlertVC: ListVC {
+class DemoAlertVC: ListVC {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,9 +29,7 @@ class AlertVC: ListVC {
         
         list.add(title: "纯文字") { section in
             section.add(title: "只有一句话") {
-                // Alert(.message("只有一句话").duration(2))
-                // 可以简写成这样：
-                Alert("只有一句话")
+                 Alert(.message("只有一句话").duration(2))
             }
             section.add(title: "标题 + 正文") {
                 let title = "这是标题"

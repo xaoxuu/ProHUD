@@ -33,6 +33,8 @@ open class CapsuleProvider: HUDProvider<CapsuleViewModel, CapsuleTarget> {
         self.init(vm, initializer: nil)
     }
     
+    /// 根据文本作为数据模型创建一个Target并显示
+    /// - Parameter text: 文本
     @discardableResult public convenience init(_ text: String) {
         self.init(.message(text), initializer: nil)
     }

@@ -16,6 +16,10 @@ open class ToastProvider: HUDProvider<ToastViewModel, ToastTarget> {
         super.init(initializer: initializer)
     }
     
+    /// 根据ViewModel和自定义的初始化代码创建一个Target并显示
+    /// - Parameters:
+    ///   - vm: 数据模型
+    ///   - initializer: 自定义的初始化代码
     @discardableResult public convenience init(_ vm: ViewModel, initializer: ((_ toast: Target) -> Void)?) {
         self.init { toast in
             toast.vm = vm
@@ -29,6 +33,8 @@ open class ToastProvider: HUDProvider<ToastViewModel, ToastTarget> {
         self.init(vm, initializer: nil)
     }
     
+    /// 根据文本作为数据模型创建一个Target并显示
+    /// - Parameter text: 文本
     @discardableResult @objc public convenience init(_ text: String) {
         self.init(.message(text), initializer: nil)
     }

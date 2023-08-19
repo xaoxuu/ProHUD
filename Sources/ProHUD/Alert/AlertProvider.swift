@@ -16,6 +16,10 @@ open class AlertProvider: HUDProvider<AlertViewModel, AlertTarget> {
         super.init(initializer: initializer)
     }
     
+    /// 根据ViewModel和自定义的初始化代码创建一个Target并显示
+    /// - Parameters:
+    ///   - vm: 数据模型
+    ///   - initializer: 自定义的初始化代码
     @discardableResult public convenience init(_ vm: ViewModel, initializer: ((_ alert: Target) -> Void)?) {
         self.init { alert in
             alert.vm = vm
@@ -27,11 +31,6 @@ open class AlertProvider: HUDProvider<AlertViewModel, AlertTarget> {
     @discardableResult public convenience init(_ vm: ViewModel) {
         self.init(vm, initializer: nil)
     }
-    
-    @discardableResult @objc public convenience init(_ text: String, duration: TimeInterval = 3) {
-        self.init(.message(text).duration(duration), initializer: nil)
-    }
-    
     
     /// 如果不存在就创建并弹出一个HUD实例，如果存在就更新实例
     /// - Parameters:

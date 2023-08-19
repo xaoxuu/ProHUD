@@ -2,16 +2,15 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22152" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="06J-FN-U3n">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22127"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--AlertVC-->
+        <!--Demo AlertVC-->
         <scene sceneID="LP0-RE-kvY">
             <objects>
-                <tableViewController id="NBo-Re-tKO" customClass="AlertVC" customModule="PHDemo" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="NBo-Re-tKO" customClass="DemoAlertVC" customModule="PHDemo" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="eCS-6f-ub3">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -60,10 +59,10 @@
             </objects>
             <point key="canvasLocation" x="1865.217391304348" y="71.651785714285708"/>
         </scene>
-        <!--ToastVC-->
+        <!--Demo ToastVC-->
         <scene sceneID="DAh-i5-GcF">
             <objects>
-                <tableViewController id="h7R-Kd-Dn5" customClass="ToastVC" customModule="PHDemo" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="h7R-Kd-Dn5" customClass="DemoToastVC" customModule="PHDemo" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="MVT-cH-t1Z">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -90,10 +89,10 @@
             </objects>
             <point key="canvasLocation" x="1863.7681159420292" y="803.57142857142856"/>
         </scene>
-        <!--SheetVC-->
+        <!--Demo SheetVC-->
         <scene sceneID="DG9-RE-7gC">
             <objects>
-                <tableViewController id="9SY-ag-pK6" customClass="SheetVC" customModule="PHDemo" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="9SY-ag-pK6" customClass="DemoSheetVC" customModule="PHDemo" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="N9I-Aa-GtP">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -120,10 +119,10 @@
             </objects>
             <point key="canvasLocation" x="5471.0144927536239" y="803.57142857142856"/>
         </scene>
-        <!--CapsuleVC-->
+        <!--Demo CapsuleVC-->
         <scene sceneID="Bhf-XS-ITh">
             <objects>
-                <tableViewController id="xyo-OI-w9X" customClass="CapsuleVC" customModule="PHDemo" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="xyo-OI-w9X" customClass="DemoCapsuleVC" customModule="PHDemo" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="jta-3v-OTY">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

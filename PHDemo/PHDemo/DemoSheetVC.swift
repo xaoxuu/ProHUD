@@ -1,5 +1,5 @@
 //
-//  SheetVC.swift
+//  DemoSheetVC.swift
 //  PHDemo
 //
 //  Created by xaoxuu on 2022/9/3.
@@ -8,7 +8,7 @@
 import UIKit
 import ProHUD
 
-class SheetVC: ListVC {
+class DemoSheetVC: ListVC {
 
     override func viewDidLoad() {
         super.viewDidLoad()

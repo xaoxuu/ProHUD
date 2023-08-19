@@ -1,5 +1,5 @@
 //
-//  ToastVC.swift
+//  DemoToastVC.swift
 //  PHDemo
 //
 //  Created by xaoxuu on 2022/9/3.
@@ -44,7 +44,7 @@ class TestToast: ToastProvider {
     typealias Target = TestToastTarget
 }
 
-class ToastVC: ListVC {
+class DemoToastVC: ListVC {
 
     override func viewDidLoad() {
         super.viewDidLoad()

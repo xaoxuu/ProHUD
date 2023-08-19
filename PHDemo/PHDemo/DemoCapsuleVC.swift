@@ -1,5 +1,5 @@
 //
-//  CapsuleVC.swift
+//  DemoCapsuleVC.swift
 //  PHDemo
 //
 //  Created by xaoxuu on 2022/9/3.
@@ -8,7 +8,7 @@
 import UIKit
 import ProHUD
 
-class CapsuleVC: ListVC {
+class DemoCapsuleVC: ListVC {
 
     override func viewDidLoad() {
         super.viewDidLoad()
