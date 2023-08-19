@@ -8,12 +8,12 @@
 import UIKit
 
 open class SheetProvider: HUDProvider<SheetViewModel, SheetTarget> {
-    @discardableResult public required init(_ vm: ViewModel?, initializer: ((_ sheet: Target) -> Void)?) {
-        super.init(vm, initializer: initializer)
-    }
     
-    @discardableResult public required convenience init(initializer: ((_ sheet: Target) -> Void)?) {
-        self.init(nil, initializer: initializer)
+    public typealias ViewModel = SheetViewModel
+    public typealias Target = SheetTarget
+    
+    @discardableResult @objc public required init(initializer: ((_ sheet: Target) -> Void)?) {
+        super.init(initializer: initializer)
     }
     
     /// 如果不存在就创建并弹出一个HUD实例，如果存在就更新实例

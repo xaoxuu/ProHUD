@@ -9,16 +9,6 @@ import UIKit
 
 public class ToastConfiguration: CommonConfiguration {
     
-    /// 元素与元素之间的距离
-    public var margin = CGFloat(8)
-    
-    var customInfoStack: ((_ stack: StackView) -> Void)?
-    public func customInfoStack(handler: @escaping (_ stack: StackView) -> Void) {
-        customInfoStack = handler
-    }
-    /// 行间距
-    public var lineSpace = CGFloat(4)
-    
     static var customGlobalConfig: ((_ config: ToastConfiguration) -> Void)?
     
     /// 全局共享配置（只能设置一次，影响所有实例）
@@ -27,11 +17,21 @@ public class ToastConfiguration: CommonConfiguration {
         customGlobalConfig = callback
     }
     
-    /// 距离窗口左右的间距
-    public var windowEdgeInset: CGFloat?
-    var windowEdgeInsetByDefault: CGFloat {
-        windowEdgeInset ?? 16
+    /// 默认的持续时间
+    public var defaultDuration: TimeInterval = 10
+    
+    /// 元素与左右屏幕之间的距离（在没有达到最大宽度的情况下）
+    public var marginX = CGFloat(8)
+    
+    /// 元素与元素之间的纵向距离
+    public var marginY = CGFloat(8)
+    
+    var customInfoStack: ((_ stack: StackView) -> Void)?
+    public func customInfoStack(handler: @escaping (_ stack: StackView) -> Void) {
+        customInfoStack = handler
     }
+    /// 行间距
+    public var lineSpace = CGFloat(4)
     
     override var cardMaxWidthByDefault: CGFloat {
         cardMaxWidth ?? 500

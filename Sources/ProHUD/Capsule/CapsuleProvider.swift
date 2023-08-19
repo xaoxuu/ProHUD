@@ -7,19 +7,36 @@
 
 import UIKit
 
-open class CapsuleProvider: HUDProvider<CapsuleTarget.ViewModel, CapsuleTarget> {
+open class CapsuleProvider: HUDProvider<CapsuleViewModel, CapsuleTarget> {
+    
+    public typealias ViewModel = CapsuleViewModel
+    public typealias Target = CapsuleTarget
+    
+    @discardableResult @objc public required init(initializer: ((_ capsule: Target) -> Void)?) {
+        super.init(initializer: initializer)
+    }
     
     /// 根据ViewModel和自定义的初始化代码创建一个Target并显示
     /// - Parameters:
     ///   - vm: 数据模型
     ///   - initializer: 初始化代码
-    @discardableResult public required init(_ vm: ViewModel?, initializer: ((_ capsule: Target) -> Void)?) {
-        super.init(vm, initializer: initializer)
+    @discardableResult public convenience init(_ vm: ViewModel, initializer: ((_ capsule: Target) -> Void)?) {
+        self.init { capsule in
+            capsule.vm = vm
+            initializer?(capsule)
+        }
     }
     
-    @discardableResult public required convenience init(initializer: ((_ capsule: Target) -> Void)?) {
-        self.init(nil, initializer: initializer)
+    /// 根据ViewModel创建一个Target并显示
+    /// - Parameter vm: 数据模型
+    @discardableResult public convenience init(_ vm: ViewModel) {
+        self.init(vm, initializer: nil)
     }
+    
+    @discardableResult public convenience init(_ text: String) {
+        self.init(.message(text), initializer: nil)
+    }
+    
     
     /// 如果不存在就创建并弹出一个HUD实例，如果存在就更新实例
     /// - Parameters:

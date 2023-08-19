@@ -13,7 +13,7 @@ extension CapsuleTarget {
         guard CapsuleConfiguration.isEnabled else { return }
         let isNew: Bool
         let window: CapsuleWindow
-        let position = vm.position
+        let position = vm?.position ?? .top
         
         if let w = AppContext.current?.capsuleWindows[position] {
             isNew = false
@@ -30,10 +30,10 @@ extension CapsuleTarget {
         
         // 应用到frame
         let newFrame: CGRect
-        switch vm.position {
-        case .top:
-            let topLayoutMargins = AppContext.appWindow?.layoutMargins.top ?? 8
-            let y = max(topLayoutMargins - 8, 8)
+        switch vm?.position {
+        case .top, .none:
+            let topLayoutMargins = AppContext.appWindow?.safeAreaInsets.top ?? 8
+            let y = max(topLayoutMargins, 8)
             newFrame = .init(x: (AppContext.appBounds.width - size.width) / 2, y: y, width: size.width, height: size.height)
         case .middle:
             newFrame = .init(x: (AppContext.appBounds.width - size.width) / 2, y: (AppContext.appBounds.height - size.height) / 2 - 20, width: size.width, height: size.height)
@@ -60,6 +60,10 @@ extension CapsuleTarget {
             AppContext.capsuleWindows[s]?[position] = window
         }
         navEvents[.onViewWillAppear]?(self)
+        
+        // 更新toast防止重叠
+        ToastWindow.updateToastWindowsLayout()
+        
         if isNew {
             window.isHidden = false
             func completion() {
@@ -116,8 +120,11 @@ extension CapsuleTarget {
     
     @objc open func pop() {
         guard let window = attachedWindow, let windowScene = windowScene else { return }
-        AppContext.capsuleWindows[windowScene]?[vm.position] = nil
+        AppContext.capsuleWindows[windowScene]?[vm?.position ?? .top] = nil
         navEvents[.onViewWillDisappear]?(self)
+        // 更新toast防止重叠
+        ToastWindow.updateToastWindowsLayout()
+        
         func completion() {
             window.isHidden = true
             window.transform = .identity
@@ -128,8 +135,8 @@ extension CapsuleTarget {
         } else {
             let duration = config.animateDurationForBuildOutByDefault
             let oldFrame = window.frame
-            switch vm.position {
-            case .top:
+            switch vm?.position {
+            case .top, .none:
                 UIView.animateEaseOut(duration: duration) {
                     window.transform = .init(translationX: 0, y: -oldFrame.maxY - 20)
                 } completion: { done in

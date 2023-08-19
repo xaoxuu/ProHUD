@@ -17,7 +17,7 @@ extension SheetTarget: DefaultLayout {
         if self.cfg.customReloadData?(self) == true {
             return
         }
-        view.tintColor = vm.tintColor ?? config.tintColor
+        view.tintColor = vm?.tintColor ?? config.tintColor
         // background
         if backgroundView.superview == nil {
             view.insertSubview(backgroundView, at: 0)

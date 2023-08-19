@@ -8,13 +8,30 @@
 import UIKit
 
 open class AlertProvider: HUDProvider<AlertViewModel, AlertTarget> {
-    @discardableResult public required init(_ vm: ViewModel?, initializer: ((_ alert: Target) -> Void)?) {
-        super.init(vm, initializer: initializer)
+    
+    public typealias ViewModel = AlertViewModel
+    public typealias Target = AlertTarget
+    
+    @discardableResult @objc public required init(initializer: ((_ alert: Target) -> Void)?) {
+        super.init(initializer: initializer)
     }
     
-    @discardableResult public required convenience init(initializer: ((_ alert: Target) -> Void)?) {
-        self.init(nil, initializer: initializer)
+    @discardableResult public convenience init(_ vm: ViewModel, initializer: ((_ alert: Target) -> Void)?) {
+        self.init { alert in
+            alert.vm = vm
+            initializer?(alert)
+        }
     }
+    /// 根据ViewModel创建一个Target并显示
+    /// - Parameter vm: 数据模型
+    @discardableResult public convenience init(_ vm: ViewModel) {
+        self.init(vm, initializer: nil)
+    }
+    
+    @discardableResult @objc public convenience init(_ text: String, duration: TimeInterval = 3) {
+        self.init(.message(text).duration(duration), initializer: nil)
+    }
+    
     
     /// 如果不存在就创建并弹出一个HUD实例，如果存在就更新实例
     /// - Parameters:

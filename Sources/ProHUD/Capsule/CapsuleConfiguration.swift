@@ -19,6 +19,9 @@ public class CapsuleConfiguration: CommonConfiguration {
         customGlobalConfig = callback
     }
     
+    /// 默认的持续时间
+    public var defaultDuration: TimeInterval = 3
+    
     override var cardCornerRadiusByDefault: CGFloat {
         cardCornerRadius ?? 16
     }

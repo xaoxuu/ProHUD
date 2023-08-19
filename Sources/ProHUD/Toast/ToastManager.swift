@@ -50,7 +50,7 @@ extension ToastTarget {
         
         // frame
         let cardEdgeInsets = config.cardEdgeInsetsByDefault
-        let width = CGFloat.minimum(AppContext.appBounds.width - config.windowEdgeInsetByDefault - config.windowEdgeInsetByDefault, config.cardMaxWidthByDefault)
+        let width = CGFloat.minimum(AppContext.appBounds.width - config.marginX - config.marginX, config.cardMaxWidthByDefault)
         view.frame.size = CGSize(width: width, height: config.cardMaxHeightByDefault)
         titleLabel.sizeToFit()
         bodyLabel.sizeToFit()
@@ -92,7 +92,7 @@ extension ToastTarget {
         } else {
             consolePrint("‼️代码漏洞：已经没有toast了")
         }
-        vm.duration = nil
+        vm?.duration = nil
         setContextWindows(windows)
         UIView.animateEaseOut(duration: config.animateDurationForBuildOutByDefault) {
             window.transform = .init(translationX: 0, y: 0-20-window.maxY)
@@ -124,21 +124,34 @@ fileprivate var updateToastsLayoutWorkItem: DispatchWorkItem?
 fileprivate extension ToastWindow {
     
     static func setToastWindowsLayout(windows: [ToastWindow]) {
+        var windows: [Window] = windows
+        if let win = AppContext.current?.capsuleWindows[.top] {
+            windows.insert(win, at: 0)
+        }
         for (i, window) in windows.enumerated() {
-            let config = window.toast.config
+            let margin: CGFloat
+            if let window = window as? ToastWindow {
+                margin = window.toast.config.marginY
+            } else if let window = window as? CapsuleWindow {
+                margin = window.safeAreaInsets.top
+            } else {
+                margin = 8
+            }
             var y = window.frame.origin.y
             if i == 0 {
-                let topLayoutMargins = AppContext.appWindow?.layoutMargins.top ?? config.margin
-                y = max(topLayoutMargins - config.margin, config.margin)
+                let topLayoutMargins = AppContext.appWindow?.safeAreaInsets.top ?? margin
+                y = max(topLayoutMargins, margin)
             } else {
                 if i - 1 < windows.count && i > 0 {
-                    y = config.margin + windows[i-1].frame.maxY
+                    y = margin + windows[i-1].frame.maxY
                 } else {
-                    y = config.margin
+                    y = margin
                 }
             }
-            window.maxY = y + window.frame.size.height
-            UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
+            if let window = window as? ToastWindow {
+                window.maxY = y + window.frame.size.height
+            }
+            UIView.animateEaseOut(duration: 0.68) {
                 window.frame.origin.y = y
             }
         }
@@ -153,4 +166,11 @@ fileprivate extension ToastWindow {
         DispatchQueue.main.asyncAfter(deadline: .now()+0.001, execute: updateToastsLayoutWorkItem!)
     }
     
+}
+
+extension ToastWindow {
+    static func updateToastWindowsLayout() {
+        let wins = AppContext.current?.toastWindows ?? []
+        updateToastWindowsLayout(windows: wins)
+    }
 }

@@ -46,7 +46,17 @@ open class CapsuleTarget: BaseController, HUDTargetType {
         return lb
     }()
     
-    public var vm: CapsuleViewModel = .init()
+    public var vm: CapsuleViewModel?
+    
+    public override var title: String? {
+        didSet {
+            if let vm = vm {
+                vm.title = title
+            } else {
+                vm = .title(title)
+            }
+        }
+    }
     
     private var tapActionCallback: ((_ capsule: CapsuleTarget) -> Void)?
     

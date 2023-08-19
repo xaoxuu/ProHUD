@@ -14,6 +14,6 @@ import UIKit
 
 public protocol HUDTargetType: HUDControllerType {
     associatedtype ViewModel = HUDViewModelType
-    var vm: ViewModel { get set }
+    var vm: ViewModel? { get set }
     init()
 }

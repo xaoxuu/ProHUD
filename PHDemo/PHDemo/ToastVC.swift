@@ -39,7 +39,10 @@ class TestToastTarget: ToastTarget {
     }
 }
 
-typealias TestToast = HUDProvider<ToastViewModel, TestToastTarget>
+//typealias TestToast = HUDProvider<ToastViewModel, TestToastTarget>
+class TestToast: ToastProvider {
+    typealias Target = TestToastTarget
+}
 
 class ToastVC: ListVC {
 
@@ -54,6 +57,7 @@ class ToastVC: ListVC {
         header.detailLabel.text = message
         
         ToastConfiguration.global { config in
+            config.defaultDuration = 5
             config.contentViewMask { mask in
                 mask.backgroundColor = .clear
                 mask.effect = UIBlurEffect(style: .systemChromeMaterial)
@@ -68,7 +72,9 @@ class ToastVC: ListVC {
                 TestToast(.title(title).message(message))
             }
             section.add(title: "一段长文本") {
-                Toast(.message(message))
+                // Toast(.message(message))
+                // 可以简写成这样：
+                Toast(message)
             }
             section.add(title: "图标 + 标题 + 正文") {
                 let s1 = "笑容正在加载"
@@ -80,8 +86,10 @@ class ToastVC: ListVC {
                     toast.update(progress: percent)
                 } completion: {
                     toast.update { toast in
-                        toast.vm = .success(5).title("加载成功").message("这条通知5s后消失")
-                        toast.vm.icon = UIImage(named: "twemoji")
+                        toast.vm = .success(5)
+                            .title("加载成功")
+                            .message("这条通知5s后消失")
+                            .icon(.init(named: "twemoji"))
                     }
                 }
             }
@@ -119,16 +127,15 @@ class ToastVC: ListVC {
             section.add(title: "增加按钮") {
                 let title = "您收到了一条好友申请"
                 let message = "丹妮莉丝·坦格利安申请添加您为好友，是否同意？"
-                Toast(.title(title).message(message)) { toast in
+                Toast(.title(title).message(message).icon(.init(named: "avatar"))) { toast in
                     toast.isRemovable = false
-                    toast.vm.icon = UIImage(named: "avatar")
                     toast.imageView.layer.masksToBounds = true
                     toast.imageView.layer.cornerRadius = toast.config.iconSize.width / 2
                     toast.add(action: "拒绝", style: .destructive) { toast in
                         Alert.lazyPush(identifier: "Dracarys") { alert in
                             alert.vm = .message("Dracarys")
-                            alert.vm.icon = UIImage(inProHUD: "prohud.windmill")
-                            alert.vm.rotation = .init(repeatCount: .infinity)
+                                .icon(UIImage(inProHUD: "prohud.windmill"))
+                                .rotation(.init(repeatCount: .infinity))
                             alert.config.enableShadow = false
                             alert.config.contentViewMask { mask in
                                 mask.effect = .none
@@ -217,7 +224,7 @@ class ToastVC: ListVC {
             }
             section.add(title: "修改左右外边距") {
                 Toast(.message("这条toast的左右外边距经过自定义设置，与其它的有所不同。")) { toast in
-                    toast.config.windowEdgeInset = 8
+                    toast.config.marginX = 32
                     toast.config.cardCornerRadius = 24
                 }
             }
@@ -306,7 +313,7 @@ class ToastVC: ListVC {
             
             section.add(title: "卡片背景样式") {
                 Toast { toast in
-                    toast.vm.title = "卡片背景样式"
+                    toast.title = "卡片背景样式"
                     toast.add(action: "浅色毛玻璃") { toast in
                         toast.contentMaskView.effect = UIBlurEffect(style: .light)
                         toast.contentMaskView.backgroundColor = .clear
@@ -327,7 +334,7 @@ class ToastVC: ListVC {
                 func foo() {
                     Toast { toast in
                         toast.title = "共享配置"
-                        toast.vm.message = "建议在App启动后进行通用配置设置，所有实例都会先拉取通用配置为默认值，修改这些配置会影响到所有实例。"
+                        toast.vm?.message = "建议在App启动后进行通用配置设置，所有实例都会先拉取通用配置为默认值，修改这些配置会影响到所有实例。"
                         toast.add(action: "默认", style: .gray) { toast in
                             ToastConfiguration.global { config in
                                 config.customTitleLabel { titleLabel in
@@ -359,7 +366,7 @@ class ToastVC: ListVC {
 
 fileprivate func testAlert() {
     Alert { alert in
-        alert.vm.title = "处理点击事件"
+        alert.title = "处理点击事件"
         alert.add(action: "我知道了", style: .destructive)
     }
 }

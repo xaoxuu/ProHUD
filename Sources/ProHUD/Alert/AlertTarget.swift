@@ -74,11 +74,15 @@ open class AlertTarget: BaseController, HUDTargetType {
     }()
     
     /// 视图模型
-    @objc public var vm: AlertViewModel = .init()
+    @objc public var vm: AlertViewModel?
     
     public override var title: String? {
         didSet {
-            vm.title = title
+            if let vm = vm {
+                vm.title = title
+            } else {
+                vm = .title(title)
+            }
         }
     }
     

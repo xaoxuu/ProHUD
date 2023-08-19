@@ -15,8 +15,8 @@ class CapsuleWindow: Window {
         self.capsule = capsule
         super.init(frame: .zero)
         windowScene = AppContext.windowScene
-        switch capsule.vm.position {
-        case .top:
+        switch capsule.vm?.position {
+        case .top, .none:
             // 略高于toast
             windowLevel = .phCapsuleTop
         case .middle:

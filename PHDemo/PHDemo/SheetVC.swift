@@ -25,7 +25,7 @@ class SheetVC: ListVC {
                     sheet.add(spacing: 24)
                     sheet.add(action: "确认", style: .destructive) { sheet in
                         Alert(.confirm) { alert in
-                            alert.vm.title = "处理点击事件"
+                            alert.title = "处理点击事件"
                             alert.add(action: "我知道了")
                         }
                     }
@@ -74,12 +74,11 @@ class SheetVC: ListVC {
                     sheet.add(action: "确认")
                     sheet.add(action: "取消", style: .gray)
                     sheet.onTappedBackground { sheet in
-                        print("点击了背景")
                         Toast.lazyPush(identifier: "alert") { toast in
                             toast.vm = .error
-                            toast.vm.title = "点击了背景"
-                            toast.vm.message = "点击背景将不会dismiss，必须在下方做出选择才能关掉"
-                            toast.vm.duration = 2
+                                .title("点击了背景")
+                                .message("点击背景将不会dismiss，必须在下方做出选择才能关掉")
+                                .duration(2)
                         }
                     }
                 }

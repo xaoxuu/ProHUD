@@ -17,12 +17,15 @@ class CapsuleVC: ListVC {
         header.detailLabel.text = "状态胶囊控件，用于状态显示，一个主程序窗口每个位置（上中下）各自最多只有一个状态胶囊实例。"
         
         CapsuleConfiguration.global { config in
+            config.defaultDuration = 3 // 默认的持续时间
 //            config.cardCornerRadius = .infinity // 设置一个较大的数字就会变成胶囊形状
         }
         list.add(title: "默认布局：纯文字") { section in
             section.add(title: "一条简短的消息") {
                 // 设置vm或者handler都会自动push，这里测试传入vm：
-                Capsule(.message("一条简短消息"))
+                // Capsule(.message("一条简短消息"))
+                // 如果只有一条文字信息，可以直接传字符串：
+                Capsule("一条简短消息")
             }
             section.add(title: "一条稍微长一点的消息") {
                 // 设置vm或者handler都会自动push，这里测试传入handler：
@@ -31,12 +34,14 @@ class CapsuleVC: ListVC {
                     capsule.vm = .message("一条稍微长一点的消息")
                 }
             }
-            section.add(title: "（默认）状态胶囊控件，用于状态显示，一个主程序窗口只有一个状态胶囊实例。") {
+            section.add(title: "延迟显示") {
                 // 也可以创建一个空白实例，在需要的时候再push
                 let obj = Capsule().target
                 obj.vm = .message("状态胶囊控件，用于状态显示，一个主程序窗口只有一个状态胶囊实例。")
                 // ... 在需要的时候手动push
-                obj.push()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    obj.push()
+                }
             }
             section.add(title: "（限制1行）状态胶囊控件，用于状态显示，一个主程序窗口只有一个状态胶囊实例。") {
                 // 同时设置vm和handler也可以
@@ -146,7 +151,7 @@ class CapsuleVC: ListVC {
 
 }
 
-extension CapsuleTarget.ViewModel {
+extension CapsuleViewModel {
     
     static func info(_ text: String?) -> Self {
         .init()

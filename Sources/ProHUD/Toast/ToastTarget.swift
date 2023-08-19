@@ -84,14 +84,17 @@ open class ToastTarget: BaseController, HUDTargetType {
     public var isRemovable = true
     
     /// 视图模型
-    @objc public var vm = ToastViewModel()
+    @objc public var vm: ToastViewModel?
     
     private var tapActionCallback: ((_ toast: ToastTarget) -> Void)?
     
-    
     public override var title: String? {
         didSet {
-            vm.title = title
+            if let vm = vm {
+                vm.title = title
+            } else {
+                vm = .title(title)
+            }
         }
     }
     
@@ -135,7 +138,7 @@ fileprivate extension ToastTarget {
     /// 拖拽事件
     /// - Parameter sender: 手势
     @objc func _onPanGesture(_ sender: UIPanGestureRecognizer) {
-        vm.timeoutTimer?.invalidate()
+        vm?.timeoutTimer?.invalidate()
         let point = sender.translation(in: sender.view)
         window?.transform = .init(translationX: 0, y: point.y)
         if sender.state == .recognized {
@@ -150,8 +153,8 @@ fileprivate extension ToastTarget {
             UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
                 self.window?.transform = .identity
             } completion: { done in
-                let d = self.vm.duration
-                self.vm.duration = d
+                let d = self.vm?.duration
+                self.vm?.duration = d
             }
         }
     }

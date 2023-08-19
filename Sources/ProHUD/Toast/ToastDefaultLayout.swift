@@ -17,7 +17,7 @@ extension ToastTarget: DefaultLayout {
         if self.cfg.customReloadData?(self) == true {
             return
         }
-        view.tintColor = vm.tintColor ?? config.tintColor
+        view.tintColor = vm?.tintColor ?? config.tintColor
         loadContentViewIfNeeded()
         loadContentMaskViewIfNeeded()
         guard customView == nil else {
@@ -26,7 +26,7 @@ extension ToastTarget: DefaultLayout {
             }
             return
         }
-        if vm.icon != nil || vm.iconURL != nil {
+        if vm?.icon != nil || vm?.iconURL != nil {
             if imageView.superview == nil {
                 infoStack.insertArrangedSubview(imageView, at: 0)
                 imageView.snp.makeConstraints { make in
@@ -42,8 +42,8 @@ extension ToastTarget: DefaultLayout {
         if textStack.superview == nil {
             infoStack.addArrangedSubview(textStack)
         }
-        let titleCount = vm.title?.count ?? 0
-        let bodyCount = vm.message?.count ?? 0
+        let titleCount = vm?.title?.count ?? 0
+        let bodyCount = vm?.message?.count ?? 0
         if titleCount > 0 {
             textStack.insertArrangedSubview(titleLabel, at: 0)
             if bodyCount > 0 {
@@ -79,14 +79,12 @@ extension ToastTarget: DefaultLayout {
             bodyLabel.removeFromSuperview()
         }
         // 设置数据
-        titleLabel.text = vm.title
-        bodyLabel.text = vm.message
+        titleLabel.text = vm?.title
+        bodyLabel.text = vm?.message
         view.layoutIfNeeded()
         
         // 设置持续时间
-        vm.timeoutHandler = DispatchWorkItem(block: { [weak self] in
-            self?.pop()
-        })
+        updateTimeoutDuration()
         
         setupImageView()
         
@@ -132,6 +130,17 @@ extension ToastTarget {
         }
     }
     
+    private func updateTimeoutDuration() {
+        // 为空时使用默认规则
+        if vm?.duration == nil {
+            vm?.duration = config.defaultDuration
+        }
+        // 设置持续时间
+        vm?.timeoutHandler = DispatchWorkItem(block: { [weak self] in
+            self?.pop()
+        })
+    }
+    
     func setupImageView() {
         // 移除动画
         stopRotate(animateLayer)
@@ -141,11 +150,11 @@ extension ToastTarget {
         // 移除进度
         progressView?.removeFromSuperview()
         
-        imageView.image = vm.icon
-        if let iconURL = vm.iconURL {
+        imageView.image = vm?.icon
+        if let iconURL = vm?.iconURL {
             config.customWebImage?(imageView, iconURL)
         }
-        if let rotation = vm.rotation {
+        if let rotation = vm?.rotation {
             startRotate(rotation)
         }
         

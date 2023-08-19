@@ -18,7 +18,7 @@ extension CapsuleTarget: DefaultLayout {
             return
         }
         
-        view.tintColor = vm.tintColor ?? config.tintColor
+        view.tintColor = vm?.tintColor ?? config.tintColor
         
         // content
         loadContentViewIfNeeded()
@@ -29,7 +29,7 @@ extension CapsuleTarget: DefaultLayout {
         
         // text
         textLabel.removeFromSuperview()
-        var text = [vm.title ?? "", vm.message ?? ""].filter({ $0.count > 0 }).joined(separator: " ")
+        var text = [vm?.title ?? "", vm?.message ?? ""].filter({ $0.count > 0 }).joined(separator: " ")
         if text.count > 0 {
             contentStack.addArrangedSubview(textLabel)
             textLabel.snp.makeConstraints { make in
@@ -81,11 +81,11 @@ extension CapsuleTarget: DefaultLayout {
     
     private func updateTimeoutDuration() {
         // 为空时使用默认规则
-        if vm.duration == nil {
-            vm.duration = 3
+        if vm?.duration == nil {
+            vm?.duration = config.defaultDuration
         }
         // 设置持续时间
-        vm.timeoutHandler = DispatchWorkItem(block: { [weak self] in
+        vm?.timeoutHandler = DispatchWorkItem(block: { [weak self] in
             self?.pop()
         })
     }
@@ -99,16 +99,16 @@ extension CapsuleTarget: DefaultLayout {
         // 移除进度
         progressView?.removeFromSuperview()
         
-        if vm.icon == nil && vm.iconURL == nil {
+        if vm?.icon == nil && vm?.iconURL == nil {
             contentStack.removeArrangedSubview(imageView)
         } else {
             contentStack.insertArrangedSubview(imageView, at: 0)
         }
-        imageView.image = vm.icon
-        if let iconURL = vm.iconURL {
+        imageView.image = vm?.icon
+        if let iconURL = vm?.iconURL {
             config.customWebImage?(imageView, iconURL)
         }
-        if let rotation = vm.rotation {
+        if let rotation = vm?.rotation {
             startRotate(rotation)
         }
         

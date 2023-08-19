@@ -29,14 +29,15 @@ class AlertVC: ListVC {
         
         list.add(title: "纯文字") { section in
             section.add(title: "只有一句话") {
-                Alert(.message("只有一句话").duration(2))
+                // Alert(.message("只有一句话").duration(2))
+                // 可以简写成这样：
+                Alert("只有一句话")
             }
             section.add(title: "标题 + 正文") {
                 let title = "这是标题"
                 let message = "这是正文，文字支持自动换行，可设置最小宽度和最大宽度。这个弹窗将会持续4秒。"
                 Alert { alert in
-                    alert.vm = .title(title).message(message)
-                    alert.vm.duration = 4
+                    alert.vm = .title(title).message(message).duration(4)
                 }
             }
         }
@@ -62,9 +63,9 @@ class AlertVC: ListVC {
             }
             section.add(title: "图标 + 标题 + 正文") {
                 Alert(.error) { alert in
-                    alert.vm.title = "加载失败"
-                    alert.vm.message = "请稍后重试"
-                    alert.vm.duration = 3
+                    alert.vm?.title = "加载失败"
+                    alert.vm?.message = "请稍后重试"
+                    alert.vm?.duration = 3
                 }
             }
         }
@@ -81,7 +82,7 @@ class AlertVC: ListVC {
                     alert.config.customButton { button in
                         button.titleLabel?.font = .systemFont(ofSize: 15)
                     }
-                    alert.vm.title = "你正在使用移动网络观看"
+                    alert.title = "你正在使用移动网络观看"
                     alert.onViewDidLoad { vc in
                         guard let alert = vc as? AlertTarget else {
                             return
@@ -111,7 +112,7 @@ class AlertVC: ListVC {
                     alert.config.customButton { button in
                         button.titleLabel?.font = .systemFont(ofSize: 15)
                     }
-                    alert.vm.message = "为了维护社区氛围，上麦用户需进行主播认证"
+                    alert.vm?.message = "为了维护社区氛围，上麦用户需进行主播认证"
                     alert.onViewDidLoad { vc in
                         guard let alert = vc as? AlertTarget else {
                             return
@@ -141,7 +142,7 @@ class AlertVC: ListVC {
                     alert.config.customButton { button in
                         button.titleLabel?.font = .systemFont(ofSize: 15)
                     }
-                    alert.vm.message = "本次消费需要你支付999软妹豆，确认支付吗？"
+                    alert.vm?.message = "本次消费需要你支付999软妹豆，确认支付吗？"
                     alert.config.customActionStack { stack in
                         stack.spacing = 0
                         stack.axis = .vertical // 竖排按钮
@@ -187,15 +188,15 @@ class AlertVC: ListVC {
             
             section.add(title: "只有一段文字 + 按钮") {
                 Alert { alert in
-                    alert.vm.title = "只有一段文字"
+                    alert.title = "只有一段文字"
                     alert.add(action: "取消", style: .gray)
                     alert.add(action: "默认按钮")
                 }
             }
             section.add(title: "标题 + 正文 + 按钮") {
                 Alert { alert in
-                    alert.vm.title = "标题"
-                    alert.vm.message = "这是一段正文，长度超出最大宽度时会自动换行"
+                    alert.vm?.title = "标题"
+                    alert.vm?.message = "这是一段正文，长度超出最大宽度时会自动换行"
                     alert.add(action: "取消", style: .gray)
                     alert.add(action: "删除", style: .destructive) { alert in
                         // 自定义了按钮事件之后，需要手动pop弹窗
@@ -229,8 +230,8 @@ class AlertVC: ListVC {
             }
             section.add(title: "确认删除") {
                 Alert(.delete) { alert in
-                    alert.vm.title = "确认删除"
-                    alert.vm.message = "此操作无法撤销"
+                    alert.vm?.title = "确认删除"
+                    alert.vm?.message = "此操作无法撤销"
                     alert.add(action: "取消", style: .gray)
                     alert.add(action: "删除", style: .destructive)
                 }
@@ -239,7 +240,7 @@ class AlertVC: ListVC {
         list.add(title: "控件管理") { section in
             section.add(title: "按钮增删改查") {
                 Alert(.note) { alert in
-                    alert.vm.message = "可以动态增加、删除按钮"
+                    alert.vm?.message = "可以动态增加、删除按钮"
                     alert.add(action: "在底部增加按钮", style: .filled(color: .systemGreen)) { alert in
                         alert.add(action: "哈哈1", identifier: "haha1")
                     }
@@ -265,36 +266,34 @@ class AlertVC: ListVC {
                 }
             }
             section.add(title: "更新文字") {
-                Alert(.note) { alert in
-                    alert.vm.message = "可以动态增加、删除、更新文字"
+                Alert(.note.message("可以动态增加、删除、更新文字")) { alert in
                     alert.add(action: "增加标题") { alert in
-                        alert.vm.title = "这是标题"
+                        alert.vm?.title = "这是标题"
                         alert.reloadTextStack()
                     }
                     alert.add(action: "增加正文") { alert in
-                        alert.vm.message = "可以动态增加、删除、更新文字"
+                        alert.vm?.message = "可以动态增加、删除、更新文字"
                         alert.reloadTextStack()
                     }
                     alert.add(action: "删除标题", style: .destructive) { alert in
-                        alert.vm.title = nil
+                        alert.vm?.title = nil
                         alert.reloadTextStack()
                     }
                     alert.add(action: "删除正文", style: .destructive) { alert in
-                        alert.vm.message = nil
+                        alert.vm?.message = nil
                         alert.reloadTextStack()
                     }
                     alert.add(action: "取消", style: .gray)
                 }
             }
             section.add(title: "在弹出过程中增加元素") {
-                Alert(.loading) { alert in
-                    alert.vm.title = "在弹出过程中增加元素"
+                Alert(.loading.title("在弹出过程中增加元素")) { alert in
                     alert.add(action: "OK", style: .gray)
                     alert.onViewWillAppear { vc in
                         guard let alert = vc as? AlertTarget else {
                             return
                         }
-                        alert.vm.message = "这是一段后增加的文字\n动画效果会有细微差别"
+                        alert.vm?.message = "这是一段后增加的文字\n动画效果会有细微差别"
                         alert.reloadTextStack()
                     }
                 }
@@ -304,8 +303,8 @@ class AlertVC: ListVC {
             section.add(title: "多层级弹窗") {
                 func f(i: Int) {
                     Alert { alert in
-                        alert.vm.title = "第\(i)次弹"
-                        alert.vm.message = "每次都是一个新的实例覆盖在上一个弹窗上面，而背景不会叠加变深。"
+                        alert.vm?.title = "第\(i)次弹"
+                        alert.vm?.message = "每次都是一个新的实例覆盖在上一个弹窗上面，而背景不会叠加变深。"
                         alert.add(action: "取消", style: .gray)
                         alert.add(action: "增加一个") { alert in
                             f(i: i + 1)
@@ -357,7 +356,7 @@ class AlertVC: ListVC {
         list.add(title: "自定义视图") { section in
             section.add(title: "自定义控件") {
                 Alert { alert in
-                    alert.vm.title = "自定义控件"
+                    alert.title = "自定义控件"
                     // 图片
                     let imgv = UIImageView(image: UIImage(named: "landscape"))
                     imgv.contentMode = .scaleAspectFill

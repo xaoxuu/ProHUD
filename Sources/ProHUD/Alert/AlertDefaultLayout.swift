@@ -17,7 +17,7 @@ extension AlertTarget: DefaultLayout {
         if self.cfg.customReloadData?(self) == true {
             return
         }
-        view.tintColor = vm.tintColor ?? config.tintColor
+        view.tintColor = vm?.tintColor ?? config.tintColor
         let isFirstLayout: Bool
         if contentView.superview == nil {
             isFirstLayout = animated
@@ -126,7 +126,7 @@ extension AlertTarget: DefaultLayout {
     
     func updateTimeoutDuration() {
         // 设置持续时间
-        vm.timeoutHandler = DispatchWorkItem(block: { [weak self] in
+        vm?.timeoutHandler = DispatchWorkItem(block: { [weak self] in
             self?.pop()
         })
     }
@@ -144,9 +144,9 @@ extension AlertTarget {
         // 移除进度
         progressView?.removeFromSuperview()
         
-        if vm.icon != nil || vm.iconURL != nil {
-            imageView.image = vm.icon
-            if let iconURL = vm.iconURL {
+        if vm?.icon != nil || vm?.iconURL != nil {
+            imageView.image = vm?.icon
+            if let iconURL = vm?.iconURL {
                 config.customWebImage?(imageView, iconURL)
             }
             if imageView.superview == nil {
@@ -159,7 +159,7 @@ extension AlertTarget {
                     mk.height.equalTo(config.iconSize.height)
                 }
             }
-            if let rotation = vm.rotation {
+            if let rotation = vm?.rotation {
                 startRotate(rotation)
             }
         } else {
@@ -171,8 +171,8 @@ extension AlertTarget {
         
     }
     func setupTextStack() {
-        let titleCount = vm.title?.count ?? 0
-        let bodyCount = vm.message?.count ?? 0
+        let titleCount = vm?.title?.count ?? 0
+        let bodyCount = vm?.message?.count ?? 0
         if titleCount > 0 || bodyCount > 0 {
             if textStack.superview != contentStack {
                 if let index = contentStack.arrangedSubviews.firstIndex(of: imageView) {
@@ -189,7 +189,7 @@ extension AlertTarget {
                 }
             }
             if titleCount > 0 {
-                titleLabel.text = vm.title
+                titleLabel.text = vm?.title
                 if titleLabel.superview != textStack {
                     textStack.insertArrangedSubview(titleLabel, at: 0)
                 }
@@ -209,7 +209,7 @@ extension AlertTarget {
                 titleLabel.removeFromSuperview()
             }
             if bodyCount > 0 {
-                bodyLabel.text = vm.message
+                bodyLabel.text = vm?.message
                 if bodyLabel.superview != textStack {
                     textStack.addArrangedSubview(bodyLabel)
                 }
