@@ -24,6 +24,8 @@ extension AlertTarget {
         view.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        // 为了更连贯，从进入动画开始时就开始计时
+        updateTimeoutDuration()
         UIView.animateEaseOut(duration: config.animateDurationForBuildIn ?? config.animateDurationForBuildInByDefault) {
             self.view.transform = .identity
             self.view.alpha = 1
@@ -33,7 +35,6 @@ extension AlertTarget {
             window.backgroundView.alpha = 1
         } completion: { done in
             self.navEvents[.onViewDidAppear]?(self)
-            self.updateTimeoutDuration()
         }
         window.alerts.append(self)
         AlertTarget.updateAlertsLayout(alerts: window.alerts)
@@ -76,9 +77,7 @@ extension AlertTarget {
     
     func updateTimeoutDuration() {
         // 设置持续时间
-        vm?.timeoutHandler = DispatchWorkItem(block: { [weak self] in
-            self?.pop()
-        })
+        vm?.restartTimer()
     }
     
 }
@@ -125,3 +124,18 @@ fileprivate extension AlertTarget {
     
 }
 
+
+public class AlertManager: NSObject {
+    
+    /// 查找HUD实例
+    /// - Parameter identifier: 唯一标识符
+    /// - Returns: HUD实例
+    @discardableResult public static func find(identifier: String, update handler: ((_ alert: AlertTarget) -> Void)? = nil) -> [AlertTarget] {
+        let arr = AppContext.alertWindow.values.flatMap({ $0.alerts }).filter({ $0.identifier == identifier })
+        if let handler = handler {
+            arr.forEach({ $0.update(handler: handler) })
+        }
+        return arr
+    }
+    
+}

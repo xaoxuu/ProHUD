@@ -26,7 +26,12 @@ public class SheetConfiguration: CommonConfiguration {
         customSubtitleLabel = handler
     }
     
-    static var customGlobalConfig: ((_ config: SheetConfiguration) -> Void)?
+    private static var customGlobalConfig: ((_ config: SheetConfiguration) -> Void)?
+    
+    public override init() {
+        super.init()
+        Self.customGlobalConfig?(self)
+    }
     
     /// 全局共享配置（只能设置一次，影响所有实例）
     /// - Parameter callback: 配置代码

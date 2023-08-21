@@ -11,11 +11,7 @@ open class AlertTarget: BaseController, HUDTargetType {
     
     public typealias ViewModel = AlertViewModel
     
-    public lazy var config: AlertConfiguration = {
-        var cfg = AlertConfiguration()
-        AlertConfiguration.customGlobalConfig?(cfg)
-        return cfg
-    }()
+    public lazy var config = AlertConfiguration()
     
     public var progressView: ProgressView?
     

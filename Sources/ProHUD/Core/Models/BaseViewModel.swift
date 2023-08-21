@@ -48,11 +48,7 @@ open class BaseViewModel: NSObject, HUDViewModelType {
     @objc open var tintColor: UIColor?
     
     /// 持续时间（为空代表根据场景不同的默认配置，为0代表无穷大）
-    open var duration: TimeInterval? {
-        didSet {
-            resetTimeoutHandler()
-        }
-    }
+    open var duration: TimeInterval?
     
     weak var vc: BaseController? {
         didSet {
@@ -72,25 +68,32 @@ open class BaseViewModel: NSObject, HUDViewModelType {
         self.duration = duration
     }
     
-    /// 超时处理
-    var timeoutHandler: DispatchWorkItem? {
-        didSet {
-            resetTimeoutHandler()
+    private var timeoutTimer: Timer?
+    
+    func restartTimer() {
+        cancelTimer()
+        if let duration = duration {
+            if duration > 0 {
+                let timer = Timer(timeInterval: duration, repeats: false, block: { [weak self] t in
+                    if let vc = self?.vc as? any HUDTargetType {
+                        vc.pop()
+                    }
+                })
+                RunLoop.main.add(timer, forMode: .common)
+                timeoutTimer = timer
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                    if let vc = self.vc as? any HUDTargetType {
+                        vc.pop()
+                    }
+                }
+            }
         }
     }
     
-    var timeoutTimer: Timer?
-    
-    func resetTimeoutHandler() {
+    func cancelTimer() {
         timeoutTimer?.invalidate()
         timeoutTimer = nil
-        if let t = duration, t > 0 {
-            let timer = Timer(timeInterval: t, repeats: false, block: { [weak self] t in
-                self?.timeoutHandler?.perform()
-            })
-            RunLoop.main.add(timer, forMode: .common)
-            timeoutTimer = timer
-        }
     }
     
 }
@@ -100,6 +103,11 @@ public extension BaseViewModel {
     
     func identifier(_ identifier: String?) -> Self {
         self.identifier = identifier
+        return self
+    }
+    
+    func lazyIdentifier(file: String = #file, line: Int = #line) -> Self {
+        self.identifier = (file + "#\(line)")
         return self
     }
     
@@ -143,9 +151,16 @@ public extension BaseViewModel {
 // MARK: - example scenes
 public extension BaseViewModel {
     
+    /// 设置指定的唯一标识符
+    /// - Parameter text: 唯一标识符
     static func identifier(_ text: String?) -> Self {
         .init()
         .identifier(text)
+    }
+    
+    /// 以当前代码位置作为唯一标识符
+    static func codeIdentifier(file: String = #file, line: Int = #line) -> Self {
+        identifier((file + "#\(line)"))
     }
     
     // MARK: plain

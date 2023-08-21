@@ -188,7 +188,7 @@ open class CommonConfiguration: NSObject {
         customContentViewMask = callback
     }
 
-    override init() {
+    public override init() {
         
     }
     

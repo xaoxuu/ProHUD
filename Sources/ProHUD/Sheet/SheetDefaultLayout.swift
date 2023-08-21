@@ -29,7 +29,7 @@ extension SheetTarget: DefaultLayout {
         // content
         loadContentViewIfNeeded()
         
-        if isViewDisplayed {
+        if isViewAppeared {
             UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
                 self.view.layoutIfNeeded()
             }

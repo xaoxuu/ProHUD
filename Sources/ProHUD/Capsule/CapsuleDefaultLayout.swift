@@ -43,10 +43,9 @@ extension CapsuleTarget: DefaultLayout {
         
         view.layoutIfNeeded()
         
-        // 更新时间
-        updateTimeoutDuration()
-        
-        if isViewDisplayed {
+        if isViewAppeared {
+            // 更新时间
+            updateTimeoutDuration()
             UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
                 self.view.layoutIfNeeded()
             }
@@ -102,4 +101,5 @@ extension CapsuleTarget: DefaultLayout {
         }
         
     }
+    
 }

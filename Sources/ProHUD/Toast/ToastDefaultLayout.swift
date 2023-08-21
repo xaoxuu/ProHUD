@@ -87,8 +87,10 @@ extension ToastTarget: DefaultLayout {
         bodyLabel.text = vm?.message
         view.layoutIfNeeded()
         
-        // 设置持续时间
-        updateTimeoutDuration()
+        if isViewAppeared {
+            // 更新时间
+            updateTimeoutDuration()
+        }
         
         setupImageView()
         

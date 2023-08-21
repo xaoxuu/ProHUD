@@ -11,11 +11,7 @@ open class SheetTarget: BaseController, HUDTargetType {
     
     weak var window: SheetWindow?
     
-    public lazy var config: SheetConfiguration = {
-        var cfg = SheetConfiguration()
-        SheetConfiguration.customGlobalConfig?(cfg)
-        return cfg
-    }()
+    public lazy var config = SheetConfiguration()
     
     public lazy var backgroundView: UIView = {
         let v = UIView()

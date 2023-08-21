@@ -35,6 +35,7 @@ extension CapsuleTarget {
                 // 直接覆盖
                 isNew = false
                 window = w
+                window.capsule = self
             }
         } else {
             // 空闲状态下推送一个新的
@@ -42,7 +43,7 @@ extension CapsuleTarget {
             window = CapsuleWindow(capsule: self)
             windows[position] = nil
         }
-        
+        window.isUserInteractionEnabled = tapActionCallback != nil
         // frame
         let cardEdgeInsetsByDefault = config.cardEdgeInsetsByDefault
         view.layoutIfNeeded()
@@ -83,10 +84,10 @@ extension CapsuleTarget {
             // 更新toast防止重叠
             ToastWindow.updateToastWindowsLayout()
         }
-        
+        // 为了更连贯，从进入动画开始时就开始计时
+        updateTimeoutDuration()
         func completion() {
             self.navEvents[.onViewDidAppear]?(self)
-            self.updateTimeoutDuration()
         }
         if isNew {
             window.isHidden = false
@@ -149,10 +150,10 @@ extension CapsuleTarget {
             window.transform = .identity
             self.navEvents[.onViewDidDisappear]?(self)
         }
+        var duration = config.animateDurationForBuildOutByDefault
         if let animateBuildOut = config.animateBuildOut {
             animateBuildOut(window, completion)
         } else {
-            let duration = config.animateDurationForBuildOutByDefault
             let oldFrame = window.frame
             switch position {
             case .top:
@@ -162,13 +163,13 @@ extension CapsuleTarget {
                     completion()
                 }
             case .middle:
-                let duration = config.animateDurationForBuildInByDefault * 1
+                duration = config.animateDurationForBuildInByDefault
                 UIView.animateEaseIn(duration: duration) {
                     window.transform = .init(translationX: 0, y: -24)
                 } completion: { done in
                     completion()
                 }
-                UIView.animateLinear(duration: duration * 0.5, delay: duration * 0.3) {
+                UIView.animateEaseIn(duration: duration * 0.5, delay: duration * 0.5) {
                     window.alpha = 0
                 }
             case .bottom:
@@ -182,7 +183,8 @@ extension CapsuleTarget {
         }
         if let next = AppContext.capsuleInQueue.first(where: { $0.preferredWindowScene == windowScene && $0.vm?.position == position }) {
             AppContext.capsuleInQueue.removeAll(where: { $0 == next })
-            DispatchQueue.main.asyncAfter(deadline: .now() + config.animateDurationForBuildOutByDefault * 0.8) {
+            // 在这个pop的同时push下一个
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                 next.push()
             }
         }
@@ -205,9 +207,24 @@ extension CapsuleTarget {
             vm?.duration = config.defaultDuration
         }
         // 设置持续时间
-        vm?.timeoutHandler = DispatchWorkItem(block: { [weak self] in
-            self?.pop()
-        })
+        vm?.restartTimer()
+    }
+    
+}
+
+public class CapsuleManager: NSObject {
+    
+    /// 查找HUD实例
+    /// - Parameter identifier: 唯一标识符
+    /// - Returns: HUD实例
+    @discardableResult public static func find(identifier: String, update handler: ((_ capsule: CapsuleTarget) -> Void)? = nil) -> [CapsuleTarget] {
+        let allPositions = AppContext.capsuleWindows.values.flatMap({ $0.values })
+        let allCapsules = allPositions.compactMap({ $0.capsule })
+        let arr = (allCapsules + AppContext.capsuleInQueue).filter({ $0.identifier == identifier || $0.vm?.identifier == identifier })
+        if let handler = handler {
+            arr.forEach({ $0.update(handler: handler) })
+        }
+        return arr
     }
     
 }

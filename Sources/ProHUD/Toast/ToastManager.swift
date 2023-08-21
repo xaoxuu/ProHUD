@@ -43,6 +43,7 @@ extension ToastTarget {
         if let w = windows.first(where: { $0.toast == self }) {
             isNew = false
             window = w
+            window.toast = self
         } else {
             window = ToastWindow(toast: self)
             isNew = true
@@ -66,10 +67,10 @@ extension ToastTarget {
             setContextWindows(windows)
         }
         ToastWindow.updateToastWindowsLayout(windows: windows)
-        
+        // 为了更连贯，从进入动画开始时就开始计时
+        updateTimeoutDuration()
         func completion() {
             self.navEvents[.onViewDidAppear]?(self)
-            self.updateTimeoutDuration()
         }
         if isNew {
             window.transform = .init(translationX: 0, y: -window.frame.maxY)
@@ -126,9 +127,7 @@ extension ToastTarget {
             vm?.duration = config.defaultDuration
         }
         // 设置持续时间
-        vm?.timeoutHandler = DispatchWorkItem(block: { [weak self] in
-            self?.pop()
-        })
+        vm?.restartTimer()
     }
     
 }
@@ -189,4 +188,19 @@ extension ToastWindow {
         let wins = AppContext.current?.toastWindows ?? []
         updateToastWindowsLayout(windows: wins)
     }
+}
+
+public class ToastManager: NSObject {
+    
+    /// 查找HUD实例
+    /// - Parameter identifier: 唯一标识符
+    /// - Returns: HUD实例
+    @discardableResult public static func find(identifier: String, update handler: ((_ toast: ToastTarget) -> Void)? = nil) -> [ToastTarget] {
+        let arr = AppContext.toastWindows.values.flatMap({ $0 }).compactMap({ $0.toast }).filter({ $0.identifier == identifier })
+        if let handler = handler {
+            arr.forEach({ $0.update(handler: handler) })
+        }
+        return arr
+    }
+    
 }

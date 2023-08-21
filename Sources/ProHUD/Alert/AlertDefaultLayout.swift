@@ -26,8 +26,10 @@ extension AlertTarget: DefaultLayout {
         } else {
             isFirstLayout = false
         }
-        // 更新时间
-        updateTimeoutDuration()
+        if isViewAppeared {
+            // 更新时间
+            updateTimeoutDuration()
+        }
         // custom layout
         guard customView == nil else {
             return
@@ -116,7 +118,7 @@ extension AlertTarget: DefaultLayout {
     }
     
     func setDefaultAxis() {
-        guard isViewDisplayed == false && config.customActionStack == nil else { return }
+        guard isViewAppeared == false && config.customActionStack == nil else { return }
         let count = actionStack.arrangedSubviews.filter({ $0.isKind(of: UIControl.self )}).count
         guard count < 4 else { return }
         if (isPortrait && count < 3) || !isPortrait {

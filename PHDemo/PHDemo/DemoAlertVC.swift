@@ -311,13 +311,12 @@ class DemoAlertVC: ListVC {
             }
             section.add(title: "弹出loading，如果已经存在就更新") {
                 func f(i: Int) {
-                    Alert.lazyPush(identifier: "haha") { alert in
+                    Alert(.identifier("haha")) { alert in
                         if i < 2 {
                             alert.vm = .loading.title("第\(i)次弹")
                             let btn = alert.add(action: "请稍等", identifier: "btn")
                             btn.isEnabled = false
                         } else {
-                            alert.update(progress: 1)
                             alert.vm = .success.title("第\(i)次弹").message("只更新内容")
                             alert.reloadTextStack()
                             alert.update(action: "完成", style: .filled(color: .systemGreen), for: "btn")

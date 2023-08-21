@@ -14,7 +14,12 @@ public class AlertConfiguration: CommonConfiguration {
     
     public var enableShadow: Bool = true
     
-    static var customGlobalConfig: ((_ config: AlertConfiguration) -> Void)?
+    private static var customGlobalConfig: ((_ config: AlertConfiguration) -> Void)?
+    
+    public override init() {
+        super.init()
+        Self.customGlobalConfig?(self)
+    }
     
     /// 全局共享配置（只能设置一次，影响所有实例）
     /// - Parameter callback: 配置代码

@@ -25,7 +25,7 @@ open class BaseController: UIViewController {
     
     open var customView: UIView?
     
-    public internal(set) var isViewDisplayed = false
+    public internal(set) var isViewAppeared = false
     
     /// 按钮事件
     var buttonEvents = [UIView: () -> Void]()
@@ -43,7 +43,7 @@ open class BaseController: UIViewController {
         consolePrint("👌", self, "deinit")
     }
     
-    override public func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
@@ -89,7 +89,7 @@ open class BaseController: UIViewController {
     
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        isViewDisplayed = true
+        isViewAppeared = true
     }
     
 }

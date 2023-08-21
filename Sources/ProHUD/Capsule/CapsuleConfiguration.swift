@@ -11,7 +11,12 @@ public class CapsuleConfiguration: CommonConfiguration {
     
     public typealias CustomAnimateHandler = ((_ window: UIWindow, _ completion: @escaping () -> Void) -> Void)
     
-    static var customGlobalConfig: ((_ config: CapsuleConfiguration) -> Void)?
+    private static var customGlobalConfig: ((_ config: CapsuleConfiguration) -> Void)?
+    
+    public override init() {
+        super.init()
+        Self.customGlobalConfig?(self)
+    }
     
     /// 全局共享配置（只能设置一次，影响所有实例）
     /// - Parameter callback: 配置代码

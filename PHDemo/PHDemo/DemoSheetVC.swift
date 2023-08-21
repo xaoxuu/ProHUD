@@ -74,12 +74,13 @@ class DemoSheetVC: ListVC {
                     sheet.add(action: "确认")
                     sheet.add(action: "取消", style: .gray)
                     sheet.onTappedBackground { sheet in
-                        Toast.lazyPush(identifier: "alert") { toast in
-                            toast.vm = .error
-                                .title("点击了背景")
-                                .message("点击背景将不会dismiss，必须在下方做出选择才能关掉")
-                                .duration(2)
-                        }
+                        Toast(
+                            .error
+                            .lazyIdentifier()
+                            .title("点击了背景")
+                            .message("点击背景将不会dismiss，必须在下方做出选择才能关掉")
+                            .duration(2)
+                        )
                     }
                 }
             }

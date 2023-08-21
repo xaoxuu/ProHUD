@@ -7,13 +7,24 @@
 
 import UIKit
 
-open class ToastProvider: HUDProvider<ToastViewModel, ToastTarget> {
+public final class ToastProvider: HUDProviderType {
     
     public typealias ViewModel = ToastViewModel
     public typealias Target = ToastTarget
     
-    @discardableResult @objc public required init(initializer: ((_ toast: Target) -> Void)?) {
-        super.init(initializer: initializer)
+    /// 根据自定义的初始化代码创建一个Target并显示
+    /// - Parameter initializer: 初始化代码（传空值时不会做任何事）
+    @discardableResult public required init(initializer: ((_ target: Target) -> Void)?) {
+        guard let initializer = initializer else {
+            // Provider的作用就是push一个target
+            // 如果没有任何初始化代码就没有target，就是个无意义的Provider
+            // 但为了支持lazyPush（找到已有实例并更新），所以就需要支持无意义的Provider
+            // 详见子类中的 self.init(initializer: nil)
+            return
+        }
+        let t = Target()
+        initializer(t)
+        t.push()
     }
     
     /// 根据ViewModel和自定义的初始化代码创建一个Target并显示
@@ -21,10 +32,10 @@ open class ToastProvider: HUDProvider<ToastViewModel, ToastTarget> {
     ///   - vm: 数据模型
     ///   - initializer: 自定义的初始化代码
     @discardableResult public convenience init(_ vm: ViewModel, initializer: ((_ toast: Target) -> Void)?) {
-        if let id = vm.identifier, id.count > 0 {
-            Self.lazyPush(identifier: id) { target in
-                target.vm = vm
-                initializer?(target)
+        if let id = vm.identifier, id.count > 0, let target = ToastManager.find(identifier: id).last {
+            target.update { t in
+                t.vm = vm
+                initializer?(t)
             }
             self.init(initializer: nil)
         } else {
@@ -45,34 +56,6 @@ open class ToastProvider: HUDProvider<ToastViewModel, ToastTarget> {
     /// - Parameter text: 文本
     @discardableResult @objc public convenience init(_ text: String) {
         self.init(.message(text), initializer: nil)
-    }
-    
-    
-    /// 如果不存在就创建并弹出一个HUD实例，如果存在就更新实例
-    /// - Parameters:
-    ///   - identifier: 实例唯一标识符（如果为空，则以代码位置为唯一标识符）
-    ///   - handler: 实例创建代码
-    @objc public static func lazyPush(identifier: String? = nil, file: String = #file, line: Int = #line, handler: @escaping (_ toast: ToastTarget) -> Void, onExists: ((_ toast: ToastTarget) -> Void)? = nil) {
-        let id = identifier ?? (file + "#\(line)")
-        if let vc = find(identifier: id).last {
-            vc.update(handler: onExists ?? handler)
-        } else {
-            Self.init { toast in
-                toast.identifier = id
-                handler(toast)
-            }
-        }
-    }
-    
-    /// 查找HUD实例
-    /// - Parameter identifier: 唯一标识符
-    /// - Returns: HUD实例
-    @discardableResult @objc public static func find(identifier: String, update handler: ((_ toast: ToastTarget) -> Void)? = nil) -> [ToastTarget] {
-        let arr = AppContext.toastWindows.values.flatMap({ $0 }).compactMap({ $0.toast }).filter({ $0.identifier == identifier })
-        if let handler = handler {
-            arr.forEach({ $0.update(handler: handler) })
-        }
-        return arr
     }
     
 }

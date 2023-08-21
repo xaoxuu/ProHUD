@@ -28,7 +28,7 @@ extension SheetTarget: ConvenienceLayout {
                 self?.pop()
             }
         }
-        if isViewDisplayed {
+        if isViewAppeared {
             self.contentStack.layoutIfNeeded()
             UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
                 self.view.layoutIfNeeded()
@@ -74,7 +74,7 @@ extension SheetTarget: ConvenienceLayout {
                 buttonEvents[view] = nil
             }
         }
-        if isViewDisplayed {
+        if isViewAppeared {
             UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
                 self.contentStack.layoutIfNeeded()
                 self.view.layoutIfNeeded()

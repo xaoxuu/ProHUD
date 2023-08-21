@@ -17,11 +17,13 @@ extension SheetTarget {
         if let w = windows.first(where: { $0.sheet == self }) {
             isNew = false
             window = w
+            window.sheet = self
         } else {
             window = SheetWindow(sheet: self)
             isNew = true
         }
         window.rootViewController = self
+        
         if windows.contains(window) == false {
             windows.append(window)
             setContextWindows(windows)

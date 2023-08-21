@@ -14,6 +14,7 @@ class CapsuleWindow: Window {
     init(capsule: CapsuleTarget) {
         self.capsule = capsule
         super.init(frame: .zero)
+        isUserInteractionEnabled = false
         windowScene = AppContext.windowScene
         switch capsule.vm?.position {
         case .top, .none:

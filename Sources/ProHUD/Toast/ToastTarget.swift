@@ -13,11 +13,7 @@ open class ToastTarget: BaseController, HUDTargetType {
     
     weak var window: ToastWindow?
     
-    public lazy var config: ToastConfiguration = {
-        var cfg = ToastConfiguration()
-        ToastConfiguration.customGlobalConfig?(cfg)
-        return cfg
-    }()
+    public lazy var config = ToastConfiguration()
     
     public var progressView: ProgressView?
     
@@ -149,7 +145,7 @@ fileprivate extension ToastTarget {
     /// 拖拽事件
     /// - Parameter sender: 手势
     @objc func _onPanGesture(_ sender: UIPanGestureRecognizer) {
-        vm?.timeoutTimer?.invalidate()
+        vm?.cancelTimer()
         let point = sender.translation(in: sender.view)
         window?.transform = .init(translationX: 0, y: point.y)
         if sender.state == .recognized {
@@ -164,8 +160,7 @@ fileprivate extension ToastTarget {
             UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
                 self.window?.transform = .identity
             } completion: { done in
-                let d = self.vm?.duration
-                self.vm?.duration = d
+                self.vm?.restartTimer()
             }
         }
     }

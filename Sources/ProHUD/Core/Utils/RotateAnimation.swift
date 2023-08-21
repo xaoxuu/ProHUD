@@ -12,7 +12,7 @@ extension LoadingAnimation {
     /// 更新进度（如果需要显示进度，需要先调用一次 updateProgress(0) 来初始化）
     /// - Parameter progress: 进度（0~1）
     public func update(progress: CGFloat) {
-        guard isViewDisplayed else { return }
+        guard isViewAppeared else { return }
         guard let superview = imageView.superview else { return }
         if progressView == nil {
             let width = imageView.frame.size.width + ProgressView.lineWidth * 2

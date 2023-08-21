@@ -34,14 +34,61 @@ let isTesting: Bool = true
 
 class TestToastTarget: ToastTarget {
     override func push() {
+        print("isTesting: \(isTesting)")
         guard isTesting else { return }
         super.push()
     }
 }
 
-//typealias TestToast = HUDProvider<ToastViewModel, TestToastTarget>
-class TestToast: ToastProvider {
-    typealias Target = TestToastTarget
+class TestToast: HUDProviderType {
+    
+    public typealias ViewModel = ToastViewModel
+    public typealias Target = TestToastTarget
+    
+    /// 根据自定义的初始化代码创建一个Target并显示
+    /// - Parameter initializer: 初始化代码（传空值时不会做任何事）
+    @discardableResult public required init(initializer: ((_ target: Target) -> Void)?) {
+        guard let initializer = initializer else {
+            // Provider的作用就是push一个target
+            // 如果没有任何初始化代码就没有target，就是个无意义的Provider
+            // 但为了支持lazyPush（找到已有实例并更新），所以就需要支持无意义的Provider
+            // 详见子类中的 self.init(initializer: nil)
+            return
+        }
+        let t = Target()
+        initializer(t)
+        t.push()
+    }
+    
+    /// 根据ViewModel和自定义的初始化代码创建一个Target并显示
+    /// - Parameters:
+    ///   - vm: 数据模型
+    ///   - initializer: 自定义的初始化代码
+    @discardableResult public convenience init(_ vm: ViewModel, initializer: ((_ toast: Target) -> Void)?) {
+        if let id = vm.identifier, id.count > 0, let target = ToastManager.find(identifier: id).last as? Target {
+            target.vm = vm
+            initializer?(target)
+            self.init(initializer: nil)
+        } else {
+            self.init { target in
+                target.vm = vm
+                initializer?(target)
+            }
+        }
+    }
+    
+    /// 根据ViewModel创建一个Target并显示
+    /// - Parameter vm: 数据模型
+    @discardableResult public convenience init(_ vm: ViewModel) {
+        self.init(vm, initializer: nil)
+    }
+    
+    /// 根据文本作为数据模型创建一个Target并显示
+    /// - Parameter text: 文本
+    @discardableResult @objc public convenience init(_ text: String) {
+        self.init(.message(text), initializer: nil)
+    }
+    
 }
 
 class DemoToastVC: ListVC {
@@ -127,12 +174,12 @@ class DemoToastVC: ListVC {
             section.add(title: "增加按钮") {
                 let title = "您收到了一条好友申请"
                 let message = "丹妮莉丝·坦格利安申请添加您为好友，是否同意？"
-                Toast(.title(title).message(message).icon(.init(named: "avatar"))) { toast in
+                Toast(.title(title).message(message).icon(.init(named: "avatar")).duration(.infinity)) { toast in
                     toast.isRemovable = false
                     toast.imageView.layer.masksToBounds = true
                     toast.imageView.layer.cornerRadius = toast.config.iconSize.width / 2
                     toast.add(action: "拒绝", style: .destructive) { toast in
-                        Alert.lazyPush(identifier: "Dracarys") { alert in
+                        Alert(.identifier("Dracarys")) { alert in
                             alert.vm = .message("Dracarys")
                                 .icon(UIImage(inProHUD: "prohud.windmill"))
                                 .rotation(.init(repeatCount: .infinity))
@@ -152,13 +199,13 @@ class DemoToastVC: ListVC {
                         }
                     }
                     toast.add(action: "同意") { toast in
-                        Alert.find(identifier: "Dracarys", update: { alert in
+                        AlertManager.find(identifier: "Dracarys", update: { alert in
                             alert.pop()
                         })
                         toast.pop()
                         Alert(.success(1).message("Good choice!"))
                     }
-                    Toast.find(identifier: "loading") { toast in
+                    ToastManager.find(identifier: "loading") { toast in
                         toast.vm = .success(2).message("加载成功")
                     }
                 }
@@ -190,12 +237,12 @@ class DemoToastVC: ListVC {
             }
             section.add(title: "如果存在就更新，如果不存在就忽略") {
                 i += 1
-                Toast.find(identifier: "loading") { toast in
+                ToastManager.find(identifier: "loading") { toast in
                     toast.vm = .success.title("加载完成\(i)").message("这条消息不会重复显示多条").duration(2)
                 }
             }
             section.add(title: "移除指定实例") {
-                Toast.find(identifier: "loading") { toast in
+                ToastManager.find(identifier: "loading") { toast in
                     toast.pop()
                 }
             }

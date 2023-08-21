@@ -11,11 +11,7 @@ open class CapsuleTarget: BaseController, HUDTargetType {
     
     public typealias ViewModel = CapsuleViewModel
     
-    @objc public lazy var config: CapsuleConfiguration = {
-        var cfg = CapsuleConfiguration()
-        CapsuleConfiguration.customGlobalConfig?(cfg)
-        return cfg
-    }()
+    @objc open lazy var config = CapsuleConfiguration()
     
     /// 内容容器（imageView、textLabel)
     public lazy var contentStack: StackView = {
@@ -49,6 +45,9 @@ open class CapsuleTarget: BaseController, HUDTargetType {
     }()
     
     @objc public var vm: CapsuleViewModel? {
+        willSet {
+            vm?.cancelTimer()
+        }
         didSet {
             vm?.vc = self
         }
@@ -64,7 +63,7 @@ open class CapsuleTarget: BaseController, HUDTargetType {
         }
     }
     
-    private var tapActionCallback: ((_ capsule: CapsuleTarget) -> Void)?
+    var tapActionCallback: ((_ capsule: CapsuleTarget) -> Void)?
     
     required public override init() {
         super.init()
@@ -79,7 +78,7 @@ open class CapsuleTarget: BaseController, HUDTargetType {
         self.vm = vm
     }
     
-    public override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         view.layer.shadowRadius = 8
         view.layer.shadowOffset = .init(width: 0, height: 5)

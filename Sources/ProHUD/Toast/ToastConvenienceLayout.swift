@@ -51,7 +51,7 @@ extension ToastTarget: ConvenienceLayout {
                 self?.pop()
             }
         }
-        if isViewDisplayed {
+        if isViewAppeared {
             self.actionStack.layoutIfNeeded()
             UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
                 self.view.layoutIfNeeded()
@@ -99,7 +99,7 @@ extension ToastTarget: ConvenienceLayout {
                 buttonEvents[view] = nil
             }
         }
-        if isViewDisplayed {
+        if isViewAppeared {
             UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
                 self.contentStack.layoutIfNeeded()
                 self.view.layoutIfNeeded()

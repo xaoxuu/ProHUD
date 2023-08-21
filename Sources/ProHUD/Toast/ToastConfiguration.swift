@@ -9,7 +9,12 @@ import UIKit
 
 public class ToastConfiguration: CommonConfiguration {
     
-    static var customGlobalConfig: ((_ config: ToastConfiguration) -> Void)?
+    private static var customGlobalConfig: ((_ config: ToastConfiguration) -> Void)?
+    
+    public override init() {
+        super.init()
+        Self.customGlobalConfig?(self)
+    }
     
     /// 全局共享配置（只能设置一次，影响所有实例）
     /// - Parameter callback: 配置代码

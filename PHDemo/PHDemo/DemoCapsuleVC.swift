@@ -84,15 +84,15 @@ class DemoCapsuleVC: ListVC {
             }
         }
         
-        list.add(title: "不同位置、不同动画，队列推送") { section in
+        list.add(title: "不同位置、不同动画") { section in
             section.add(title: "顶部，默认动画") {
-                Capsule(.info("一条简短的消息").queuedPush(true).duration(1))
+                Capsule(.info("一条简短的消息").duration(1))
             }
             section.add(title: "中间，默认动画") {
-                Capsule(.middle.queuedPush(true).info("一条简短的消息").duration(2))
+                Capsule(.middle.info("一条简短的消息").duration(1))
             }
             section.add(title: "中间，黑底白字，透明渐变") {
-                Capsule(.middle.queuedPush(true).info("一条简短的消息").duration(1)) { capsule in
+                Capsule(.middle.info("一条简短的消息").duration(1)) { capsule in
                     capsule.config.tintColor = .white
                     capsule.config.cardCornerRadius = 8
                     capsule.config.contentViewMask { mask in
@@ -119,22 +119,25 @@ class DemoCapsuleVC: ListVC {
                 }
             }
             section.add(title: "底部，渐变背景，默认回弹滑入") {
-                Capsule(.bottom.queuedPush(true).enter("点击进入").duration(1)) { capsule in
+                Capsule(.bottom.enter("点击进入").duration(2)) { capsule in
                     capsule.config.tintColor = .white
                     capsule.config.cardEdgeInsets = .init(top: 12, left: 20, bottom: 12, right: 20)
                     capsule.config.customTextLabel { label in
                         label.textColor = .white
                         label.font = .boldSystemFont(ofSize: 16)
                     }
-                    capsule.config.contentViewMask { mask in
+                    capsule.config.contentViewMask { [weak capsule] mask in
                         mask.effect = .none
                         mask.backgroundColor = .clear
                         let gradientLayer = CAGradientLayer()
-                        gradientLayer.frame = self.view.bounds
+                        if let f = capsule?.view.bounds {
+                            gradientLayer.frame = f
+                        } else {
+                            gradientLayer.frame = .init(x: 0, y: 0, width: 300, height: 100)
+                        }
                         gradientLayer.colors = [UIColor("#0091FF").cgColor, UIColor("#00FDFF").cgColor]
                         gradientLayer.startPoint = .init(x: 0.2, y: 0.6)
                         gradientLayer.endPoint = .init(x: 0.6, y: 0.2)
-                        gradientLayer.frame = .init(x: 0, y: 0, width: 300, height: 100)
                         mask.layer.sublayers?.forEach({ $0.removeFromSuperlayer() })
                         mask.layer.insertSublayer(gradientLayer, at: 0)
                     }
@@ -146,27 +149,157 @@ class DemoCapsuleVC: ListVC {
                 }
             }
         }
-        list.add(title: "lazy push") { section in
-            section.add(title: "id:1, text:1") {
-                Capsule(.test1("111:111"))
+        list.add(title: "自定义子类，队列推送") { section in
+            section.add(title: "视频采集，title:开") {
+                GradientCapsule(.videoRecord(on: true, text: "视频采集：开"))
             }
-            section.add(title: "id:1, text:2") {
-                Capsule(.test1("111:222"))
+            section.add(title: "视频推流，title:开") {
+                GradientCapsule(.videoPush(on: true, text: "视频推流：开"))
             }
-            section.add(title: "id:2, text:1") {
-                Capsule(.test2("222:111"))
+            section.add(title: "音频采集，title:开") {
+                GradientCapsule(.audioRecord(on: true, text: "音频采集：开"))
             }
-            section.add(title: "id:2, text:2") {
-                Capsule(.test2("222:222"))
+            section.add(title: "音频推流，title:开") {
+                GradientCapsule(.audioPush(on: true, text: "音频推流：开"))
             }
             
-            section.add(title: "id:2, text:2") {
-                Capsule(.test2("222:222"))
-                Capsule(.test2("222:111"))
+            section.add(title: "视频采集，title:关") {
+                GradientCapsule(.videoRecord(on: false, text: "视频采集：关"))
+            }
+            section.add(title: "视频推流，title:关") {
+                GradientCapsule(.videoPush(on: false, text: "视频推流：关"))
+            }
+            section.add(title: "音频采集，title:关") {
+                GradientCapsule(.audioRecord(on: false, text: "音频采集：关"))
+            }
+            section.add(title: "音频推流，title:关") {
+                GradientCapsule(.audioPush(on: false, text: "音频推流：关"))
+            }
+        }
+        
+        var i = 0
+        list.add(title: "lazy push") { section in
+            section.add(title: "以当前代码位置作为唯一标识符") {
+                i += 1
+                Capsule(.codeIdentifier().message("id=\(i)"))
+            }
+            section.add(title: "指定id=a, haha") {
+                Capsule(.identifier("a").message("id=a, haha"))
+            }
+            section.add(title: "指定id=a, hahaha") {
+                Capsule(.identifier("a").message("id=a, hahaha"))
+            }
+        }
+        
+    }
+
+}
+
+class GradientCapsuleTarget: CapsuleTarget {
+    
+    override var config: CapsuleConfiguration {
+        get { customConfig }
+        set { customConfig = newValue}
+    }
+    
+    private lazy var customConfig: CapsuleConfiguration = {
+        let cfg = CapsuleConfiguration()
+        cfg.tintColor = .white
+        cfg.customTextLabel { label in
+            label.textColor = .white
+        }
+        cfg.contentViewMask { [weak self] mask in
+            mask.effect = .none
+            mask.backgroundColor = .clear
+            let gradientLayer = CAGradientLayer()
+            if let f = self?.view.bounds {
+                gradientLayer.frame = f
+            } else {
+                gradientLayer.frame = .init(x: 0, y: 0, width: 300, height: 100)
+            }
+            gradientLayer.colors = [UIColor.systemGreen.cgColor, UIColor("#B6F598").cgColor]
+            gradientLayer.startPoint = .init(x: 0.2, y: 0.6)
+            gradientLayer.endPoint = .init(x: 0.6, y: 0.2)
+            mask.layer.sublayers?.forEach({ $0.removeFromSuperlayer() })
+            mask.layer.insertSublayer(gradientLayer, at: 0)
+            self?.gradientLayer = gradientLayer
+        }
+        return cfg
+    }()
+    
+    var gradientLayer: CAGradientLayer?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        let id = vm?.identifier ?? ""
+        if id.contains("video") == true {
+            if id.contains(":true") {
+                gradientLayer?.colors = [UIColor("#7EF19B").cgColor, UIColor.systemGreen.cgColor]
+            } else {
+                gradientLayer?.colors = [UIColor("#1A7531").cgColor, UIColor("#2A5133").cgColor]
+            }
+        } else {
+            if id.contains(":true") {
+                gradientLayer?.colors = [UIColor("#FFC470").cgColor, UIColor.systemOrange.cgColor]
+            } else {
+                gradientLayer?.colors = [UIColor("#8F5300").cgColor, UIColor("#51412A").cgColor]
+            }
+        }
+        
+    }
+}
+
+class GradientCapsule: HUDProviderType {
+    
+    public typealias ViewModel = CapsuleViewModel
+    public typealias Target = GradientCapsuleTarget
+    
+    /// 根据自定义的初始化代码创建一个Target并显示
+    /// - Parameter initializer: 初始化代码（传空值时不会做任何事）
+    @discardableResult required init(initializer: ((_ target: Target) -> Void)?) {
+        guard let initializer = initializer else {
+            // Provider的作用就是push一个target
+            // 如果没有任何初始化代码就没有target，就是个无意义的Provider
+            // 但为了支持lazyPush（找到已有实例并更新），所以就需要支持无意义的Provider
+            // 详见子类中的 self.init(initializer: nil)
+            return
+        }
+        let t = Target()
+        initializer(t)
+        t.push()
+    }
+    
+    /// 根据ViewModel和自定义的初始化代码创建一个Target并显示
+    /// - Parameters:
+    ///   - vm: 数据模型
+    ///   - initializer: 初始化代码
+    @discardableResult public convenience init(_ vm: ViewModel, initializer: ((_ capsule: Target) -> Void)?) {
+        if let id = vm.identifier, id.count > 0, let target = CapsuleManager.find(identifier: id).last as? Target {
+            target.update { capsule in
+                capsule.vm = vm
+                initializer?(capsule as! GradientCapsule.Target)
+            }
+            self.init(initializer: nil)
+        } else {
+            self.init { target in
+                target.vm = vm
+                initializer?(target)
             }
         }
     }
-
+    
+    /// 根据ViewModel创建一个Target并显示
+    /// - Parameter vm: 数据模型
+    @discardableResult public convenience init(_ vm: ViewModel) {
+        self.init(vm, initializer: nil)
+    }
+    
+    /// 根据文本作为数据模型创建一个Target并显示
+    /// - Parameter text: 文本
+    @discardableResult public convenience init(_ text: String) {
+        self.init(.message(text), initializer: nil)
+    }
+    
 }
 
 extension CapsuleViewModel {
@@ -198,22 +331,40 @@ extension CapsuleViewModel {
         .message(text)
     }
     
-    static func test1(_ text: String) -> CapsuleViewModel {
-        .identifier("id:1")
-        .icon(.init(systemName: "video.circle.fill"))
-        .tintColor(.systemGreen)
-        .duration(1)
+    static func videoRecord(on: Bool, text: String) -> CapsuleViewModel {
+        .middle
+        .identifier("video.record:\(on)")
+        .icon(.init(systemName: on ? "video.fill" : "video.slash.fill"))
+        .duration(0.5)
         .queuedPush(true)
         .message(text)
     }
     
-    static func test2(_ text: String) -> CapsuleViewModel {
-        .identifier("id:2")
-        .icon(.init(systemName: "mic.circle.fill"))
-        .tintColor(.systemOrange)
-        .duration(1)
+    static func audioRecord(on: Bool, text: String) -> CapsuleViewModel {
+        .middle
+        .identifier("audio.record:\(on)")
+        .icon(.init(systemName: on ? "mic.fill" : "mic.slash.fill"))
+        .duration(0.5)
         .queuedPush(true)
         .message(text)
     }
     
+    
+    static func videoPush(on: Bool, text: String) -> CapsuleViewModel {
+        .middle
+        .identifier("video.push:\(on)")
+        .icon(.init(systemName: on ? "icloud.fill" : "icloud.slash.fill"))
+        .duration(0.5)
+        .queuedPush(true)
+        .message(text)
+    }
+    
+    static func audioPush(on: Bool, text: String) -> CapsuleViewModel {
+        .middle
+        .identifier("audio.push:\(on)")
+        .icon(.init(systemName: on ? "icloud.fill" : "icloud.slash.fill"))
+        .duration(0.5)
+        .queuedPush(true)
+        .message(text)
+    }
 }
