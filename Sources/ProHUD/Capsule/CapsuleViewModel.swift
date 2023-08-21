@@ -17,24 +17,38 @@ import UIKit
     
     @objc public var position: Position = .top
     
-    public func position(position: Position) -> Self {
+    // Capsule 在一个位置最多只显示一个实例
+    // queuedPush: false 如果已有就直接覆盖
+    // queuedPush: true  如果已有就排队等待
+    @objc public var queuedPush: Bool = false
+    
+}
+
+public extension CapsuleViewModel {
+    
+    func position(_ position: Position) -> Self {
         self.position = position
         return self
     }
-    public static var top: Self {
+    static var top: Self {
         let obj = Self.init()
         obj.position = .top
         return obj
     }
-    public static var middle: Self {
+    static var middle: Self {
         let obj = Self.init()
         obj.position = .middle
         return obj
     }
-    public static var bottom: Self {
+    static var bottom: Self {
         let obj = Self.init()
         obj.position = .bottom
         return obj
+    }
+    
+    func queuedPush(_ queuedPush: Bool) -> Self {
+        self.queuedPush = queuedPush
+        return self
     }
     
 }

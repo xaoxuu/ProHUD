@@ -9,6 +9,9 @@ import UIKit
 
 open class BaseController: UIViewController {
     
+    /// 需要显示到那个UIWindowScene上
+    var preferredWindowScene: UIWindowScene?
+    
     /// ID标识
     public var identifier = String(Date().timeIntervalSince1970)
     
@@ -23,6 +26,7 @@ open class BaseController: UIViewController {
     open var customView: UIView?
     
     public internal(set) var isViewDisplayed = false
+    
     /// 按钮事件
     var buttonEvents = [UIView: () -> Void]()
     

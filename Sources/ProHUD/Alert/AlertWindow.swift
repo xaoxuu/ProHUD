@@ -36,6 +36,6 @@ class AlertWindow: Window {
 
 extension AlertTarget {
     var attachedWindow: AlertWindow? {
-        view.window as? AlertWindow
+        view.window as? AlertWindow ?? AppContext.current?.alertWindow
     }
 }

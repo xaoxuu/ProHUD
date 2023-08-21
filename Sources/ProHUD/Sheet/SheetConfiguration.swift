@@ -51,11 +51,11 @@ public class SheetConfiguration: CommonConfiguration {
     override var cardMaxHeightByDefault: CGFloat { cardMaxHeight ?? (AppContext.appBounds.height - 50) }
     
     override var animateDurationForBuildInByDefault: CGFloat {
-        animateDurationForBuildIn ?? 0.5
+        animateDurationForBuildIn ?? 0.38
     }
     
     override var animateDurationForBuildOutByDefault: CGFloat {
-        animateDurationForBuildOut ?? 0.5
+        animateDurationForBuildOut ?? 0.24
     }
     
     override var cardCornerRadiusByDefault: CGFloat { cardCornerRadius ?? 32 }

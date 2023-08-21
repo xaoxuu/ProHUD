@@ -20,7 +20,6 @@ open class SheetTarget: BaseController, HUDTargetType {
     public lazy var backgroundView: UIView = {
         let v = UIView()
         v.backgroundColor = .init(white: 0, alpha: 0.5)
-        v.alpha = 0
         return v
     }()
     
@@ -63,8 +62,6 @@ open class SheetTarget: BaseController, HUDTargetType {
         backgroundView.addGestureRecognizer(tap)
         
         reloadData(animated: false)
-        
-        _translateOut()
         
         navEvents[.onViewDidLoad]?(self)
         

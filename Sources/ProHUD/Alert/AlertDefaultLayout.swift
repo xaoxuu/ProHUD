@@ -124,13 +124,6 @@ extension AlertTarget: DefaultLayout {
         }
     }
     
-    func updateTimeoutDuration() {
-        // 设置持续时间
-        vm?.timeoutHandler = DispatchWorkItem(block: { [weak self] in
-            self?.pop()
-        })
-    }
-    
 }
 
 extension AlertTarget {

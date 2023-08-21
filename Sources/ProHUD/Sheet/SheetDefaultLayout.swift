@@ -44,18 +44,16 @@ extension SheetTarget: DefaultLayout {
         // mask
         loadContentMaskViewIfNeeded()
         // layout
+        let windowWidth = AppContext.appBounds.width
         let maxWidth = config.cardMaxWidthByDefault
-        var width = AppContext.appBounds.width - config.windowEdgeInset * 2
-        if width > maxWidth {
-            // landscape iPhone or iPad
-            width = maxWidth
-        }
+        let autoWidth = windowWidth - config.windowEdgeInset * 2
+        let width = min(autoWidth, maxWidth)
         contentView.snp.remakeConstraints { make in
             if config.isFullScreen {
                 make.edges.equalToSuperview()
             } else {
                 make.centerX.equalToSuperview()
-                if UIDevice.current.userInterfaceIdiom == .pad && width >= maxWidth {
+                if UIDevice.current.userInterfaceIdiom == .pad && width < autoWidth - 40 {
                     // iPad且窗口宽度较宽时居中弹出
                     make.centerY.equalToSuperview()
                 } else {

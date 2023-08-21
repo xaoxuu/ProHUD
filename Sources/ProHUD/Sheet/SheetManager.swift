@@ -27,6 +27,7 @@ extension SheetTarget {
             setContextWindows(windows)
         }
         if isNew {
+            _translateOut()
             navEvents[.onViewWillAppear]?(self)
             window.sheet.translateIn { [weak self] in
                 guard let self = self else { return }
@@ -89,7 +90,7 @@ extension SheetTarget {
     }
     
     func translateOut(completion: (() -> Void)?) {
-        UIView.animateEaseOut(duration: config.animateDurationForBuildOutByDefault) {
+        UIView.animateLinear(duration: config.animateDurationForBuildOutByDefault) {
             self._translateOut()
             if self.config.stackDepthEffect {
                 AppContext.appWindow?.transform = .identity

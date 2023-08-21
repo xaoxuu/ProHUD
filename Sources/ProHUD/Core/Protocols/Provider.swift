@@ -32,9 +32,7 @@ open class HUDProvider<ViewModel: HUDViewModelType, Target: HUDTargetType>: NSOb
         }
         var t = Target()
         initializer(t)
-        DispatchQueue.main.async {
-            t.push()
-        }
+        t.push()
     }
     
 }

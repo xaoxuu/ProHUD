@@ -42,11 +42,11 @@ public class ToastConfiguration: CommonConfiguration {
     }
     
     override var animateDurationForBuildInByDefault: CGFloat {
-        animateDurationForBuildIn ?? 0.8
+        animateDurationForBuildIn ?? 0.64
     }
     
     override var animateDurationForBuildOutByDefault: CGFloat {
-        animateDurationForBuildIn ?? 0.8
+        animateDurationForBuildIn ?? 0.32
     }
     
 }

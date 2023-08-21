@@ -84,15 +84,15 @@ class DemoCapsuleVC: ListVC {
             }
         }
         
-        list.add(title: "不同位置、不同动画") { section in
-            section.add(title: "顶部，默认滑入") {
-                Capsule(.info("一条简短的消息"))
+        list.add(title: "不同位置、不同动画，队列推送") { section in
+            section.add(title: "顶部，默认动画") {
+                Capsule(.info("一条简短的消息").queuedPush(true).duration(1))
             }
-            section.add(title: "中间，默认缩放") {
-                Capsule(.middle.info("一条简短的消息"))
+            section.add(title: "中间，默认动画") {
+                Capsule(.middle.queuedPush(true).info("一条简短的消息").duration(2))
             }
             section.add(title: "中间，黑底白字，透明渐变") {
-                Capsule(.middle.info("一条简短的消息")) { capsule in
+                Capsule(.middle.queuedPush(true).info("一条简短的消息").duration(1)) { capsule in
                     capsule.config.tintColor = .white
                     capsule.config.cardCornerRadius = 8
                     capsule.config.contentViewMask { mask in
@@ -119,7 +119,7 @@ class DemoCapsuleVC: ListVC {
                 }
             }
             section.add(title: "底部，渐变背景，默认回弹滑入") {
-                Capsule(.bottom.enter("点击进入")) { capsule in
+                Capsule(.bottom.queuedPush(true).enter("点击进入").duration(1)) { capsule in
                     capsule.config.tintColor = .white
                     capsule.config.cardEdgeInsets = .init(top: 12, left: 20, bottom: 12, right: 20)
                     capsule.config.customTextLabel { label in
@@ -144,6 +144,25 @@ class DemoCapsuleVC: ListVC {
                         capsule.pop()
                     }
                 }
+            }
+        }
+        list.add(title: "lazy push") { section in
+            section.add(title: "id:1, text:1") {
+                Capsule(.test1("111:111"))
+            }
+            section.add(title: "id:1, text:2") {
+                Capsule(.test1("111:222"))
+            }
+            section.add(title: "id:2, text:1") {
+                Capsule(.test2("222:111"))
+            }
+            section.add(title: "id:2, text:2") {
+                Capsule(.test2("222:222"))
+            }
+            
+            section.add(title: "id:2, text:2") {
+                Capsule(.test2("222:222"))
+                Capsule(.test2("222:111"))
             }
         }
     }
@@ -176,6 +195,24 @@ extension CapsuleViewModel {
     }
     static func systemError(_ text: String?) -> Self {
         .systemError
+        .message(text)
+    }
+    
+    static func test1(_ text: String) -> CapsuleViewModel {
+        .identifier("id:1")
+        .icon(.init(systemName: "video.circle.fill"))
+        .tintColor(.systemGreen)
+        .duration(1)
+        .queuedPush(true)
+        .message(text)
+    }
+    
+    static func test2(_ text: String) -> CapsuleViewModel {
+        .identifier("id:2")
+        .icon(.init(systemName: "mic.circle.fill"))
+        .tintColor(.systemOrange)
+        .duration(1)
+        .queuedPush(true)
         .message(text)
     }
     

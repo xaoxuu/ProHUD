@@ -106,7 +106,7 @@ class DemoToastVC: ListVC {
                 }
             }
             section.add(title: "图标 + 一段长文本") {
-                Toast(.note.message(message))
+                Toast(.note.message(message).duration(1))
             }
             section.add(title: "网络图标 + 一段文本") {
                 Toast(.message("这是网络图标").icon(.init(string: "https://xaoxuu.com/assets/xaoxuu/avatar/rect-256@2x.png")))
@@ -167,7 +167,7 @@ class DemoToastVC: ListVC {
             section.add(title: "禁止手势移除") {
                 let title = "这条消息很重要"
                 let message = "向上滑动将不会移除消息，您必须手动处理，用于重要但非阻塞性的事件。（通过代码处理或者在点击事件处理）"
-                Toast(.warning.title(title).message(message)) { toast in
+                Toast(.warning.title(title).message(message).duration(.infinity)) { toast in
                     toast.isRemovable = false
                     toast.onTapped { toast in
                         toast.pop()

@@ -68,7 +68,9 @@ open class CapsuleProvider: HUDProvider<CapsuleViewModel, CapsuleTarget> {
     /// - Parameter identifier: 唯一标识符
     /// - Returns: HUD实例
     @discardableResult public static func find(identifier: String, update handler: ((_ capsule: CapsuleTarget) -> Void)? = nil) -> [CapsuleTarget] {
-        let arr = AppContext.capsuleWindows.values.flatMap({ $0.values }).compactMap({ $0.capsule }).filter({ $0.identifier == identifier })
+        let allPositions = AppContext.capsuleWindows.values.flatMap({ $0.values })
+        let allCapsules = allPositions.compactMap({ $0.capsule })
+        let arr = (allCapsules + AppContext.capsuleInQueue).filter({ $0.identifier == identifier })
         if let handler = handler {
             arr.forEach({ $0.update(handler: handler) })
         }

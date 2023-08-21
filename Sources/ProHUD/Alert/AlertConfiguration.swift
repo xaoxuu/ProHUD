@@ -30,8 +30,8 @@ public class AlertConfiguration: CommonConfiguration {
         customBackgroundViewMask = callback
     }
     
-    override var animateDurationForBuildInByDefault: CGFloat {
-        animateDurationForBuildIn ?? 0.6
+    override var animateDurationForBuildOutByDefault: CGFloat {
+        animateDurationForBuildOut ?? 0.2
     }
     
 }

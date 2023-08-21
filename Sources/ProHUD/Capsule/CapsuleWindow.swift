@@ -27,7 +27,7 @@ class CapsuleWindow: Window {
             windowLevel = .phCapsuleBottom
         }
         frame = .init(x: 0, y: 0, width: 128, height: 48)
-        isHidden = false
+        isHidden = true
     }
     
     required init?(coder: NSCoder) {

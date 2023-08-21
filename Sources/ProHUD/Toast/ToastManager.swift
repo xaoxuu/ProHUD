@@ -66,16 +66,21 @@ extension ToastTarget {
             setContextWindows(windows)
         }
         ToastWindow.updateToastWindowsLayout(windows: windows)
+        
+        func completion() {
+            self.navEvents[.onViewDidAppear]?(self)
+            self.updateTimeoutDuration()
+        }
         if isNew {
             window.transform = .init(translationX: 0, y: -window.frame.maxY)
             UIView.animateEaseOut(duration: config.animateDurationForBuildInByDefault) {
                 window.transform = .identity
             } completion: { done in
-                self.navEvents[.onViewDidAppear]?(self)
+                completion()
             }
         } else {
             view.layoutIfNeeded()
-            self.navEvents[.onViewDidAppear]?(self)
+            completion()
         }
     }
     
@@ -94,7 +99,7 @@ extension ToastTarget {
         }
         vm?.duration = nil
         setContextWindows(windows)
-        UIView.animateEaseOut(duration: config.animateDurationForBuildOutByDefault) {
+        UIView.animateLinear(duration: config.animateDurationForBuildOutByDefault) {
             window.transform = .init(translationX: 0, y: 0-20-window.maxY)
         } completion: { done in
             self.view.removeFromSuperview()
@@ -113,6 +118,17 @@ extension ToastTarget {
         UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
             self.view.layoutIfNeeded()
         }
+    }
+    
+    func updateTimeoutDuration() {
+        // 为空时使用默认规则
+        if vm?.duration == nil {
+            vm?.duration = config.defaultDuration
+        }
+        // 设置持续时间
+        vm?.timeoutHandler = DispatchWorkItem(block: { [weak self] in
+            self?.pop()
+        })
     }
     
 }

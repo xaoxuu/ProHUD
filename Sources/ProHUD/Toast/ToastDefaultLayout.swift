@@ -134,17 +134,6 @@ extension ToastTarget {
         }
     }
     
-    private func updateTimeoutDuration() {
-        // 为空时使用默认规则
-        if vm?.duration == nil {
-            vm?.duration = config.defaultDuration
-        }
-        // 设置持续时间
-        vm?.timeoutHandler = DispatchWorkItem(block: { [weak self] in
-            self?.pop()
-        })
-    }
-    
     func setupImageView() {
         // 移除动画
         stopRotate(animateLayer)

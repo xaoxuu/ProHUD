@@ -11,17 +11,38 @@ extension CapsuleTarget {
     
     @objc open func push() {
         guard CapsuleConfiguration.isEnabled else { return }
+        guard let windowScene = preferredWindowScene ?? AppContext.windowScene else { return }
+        if windowScene != AppContext.windowScene {
+            AppContext.windowScene = windowScene
+        }
+        
         let isNew: Bool
         let window: CapsuleWindow
         let position = vm?.position ?? .top
         
-        if let w = AppContext.current?.capsuleWindows[position] {
-            isNew = false
-            window = w
-        } else {
-            window = CapsuleWindow(capsule: self)
-            isNew = true
+        if AppContext.capsuleWindows[windowScene] == nil {
+            AppContext.capsuleWindows[windowScene] = [:]
         }
+        var windows = AppContext.capsuleWindows[windowScene] ?? [:]
+        if let w = windows[position], w.isHidden == false {
+            // 此时同一位置已有capsule在显示
+            if vm?.queuedPush == true {
+                // 加入队列
+                self.preferredWindowScene = windowScene
+                AppContext.capsuleInQueue.append(self)
+                return
+            } else {
+                // 直接覆盖
+                isNew = false
+                window = w
+            }
+        } else {
+            // 空闲状态下推送一个新的
+            isNew = true
+            window = CapsuleWindow(capsule: self)
+            windows[position] = nil
+        }
+        
         // frame
         let cardEdgeInsetsByDefault = config.cardEdgeInsetsByDefault
         view.layoutIfNeeded()
@@ -53,22 +74,22 @@ extension CapsuleTarget {
         view.layer.cornerRadiusWithContinuous = config.cardCornerRadiusByDefault
         
         window.rootViewController = self // 此时toast.view.frame.size会自动更新为window.frame.size
-        if let s = AppContext.windowScene {
-            if AppContext.capsuleWindows[s] == nil {
-                AppContext.capsuleWindows[s] = [:]
-            }
-            AppContext.capsuleWindows[s]?[position] = window
-        }
+        
+        AppContext.capsuleWindows[windowScene]?[position] = window
+        
         navEvents[.onViewWillAppear]?(self)
         
-        // 更新toast防止重叠
-        ToastWindow.updateToastWindowsLayout()
+        if position == .top {
+            // 更新toast防止重叠
+            ToastWindow.updateToastWindowsLayout()
+        }
         
+        func completion() {
+            self.navEvents[.onViewDidAppear]?(self)
+            self.updateTimeoutDuration()
+        }
         if isNew {
             window.isHidden = false
-            func completion() {
-                self.navEvents[.onViewDidAppear]?(self)
-            }
             if let animateBuildIn = config.animateBuildIn {
                 animateBuildIn(window, completion)
             } else {
@@ -82,16 +103,14 @@ extension CapsuleTarget {
                         completion()
                     }
                 case .middle:
-                    let d0 = duration * 0.2
-                    let d1 = duration
-                    window.transform = .init(scaleX: 0.001, y: 0.001)
-                    window.alpha = 0
-                    UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5) {
+                    window.transform = .init(translationX: 0, y: 24)
+                    UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.5) {
                         window.transform = .identity
                     } completion: { done in
                         completion()
                     }
-                    UIView.animate(withDuration: duration * 0.4, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1) {
+                    window.alpha = 0
+                    UIView.animateLinear(duration: duration * 0.5) {
                         window.alpha = 1
                     }
                 case .bottom:
@@ -103,8 +122,6 @@ extension CapsuleTarget {
                         completion()
                     }
                 }
-                
-                
             }
         } else {
             view.layoutIfNeeded()
@@ -112,7 +129,7 @@ extension CapsuleTarget {
                 window.frame = newFrame
                 window.layoutIfNeeded()
             } completion: { done in
-                self.navEvents[.onViewDidAppear]?(self)
+                completion()
             }
         }
         
@@ -120,11 +137,13 @@ extension CapsuleTarget {
     
     @objc open func pop() {
         guard let window = attachedWindow, let windowScene = windowScene else { return }
-        AppContext.capsuleWindows[windowScene]?[vm?.position ?? .top] = nil
+        let position = vm?.position ?? .top
+        AppContext.capsuleWindows[windowScene]?[position] = nil
         navEvents[.onViewWillDisappear]?(self)
-        // 更新toast防止重叠
-        ToastWindow.updateToastWindowsLayout()
-        
+        if position == .top {
+            // 更新toast防止重叠
+            ToastWindow.updateToastWindowsLayout()
+        }
         func completion() {
             window.isHidden = true
             window.transform = .identity
@@ -135,31 +154,37 @@ extension CapsuleTarget {
         } else {
             let duration = config.animateDurationForBuildOutByDefault
             let oldFrame = window.frame
-            switch vm?.position {
-            case .top, .none:
-                UIView.animateEaseOut(duration: duration) {
+            switch position {
+            case .top:
+                UIView.animateEaseIn(duration: duration) {
                     window.transform = .init(translationX: 0, y: -oldFrame.maxY - 20)
                 } completion: { done in
                     completion()
                 }
             case .middle:
-                UIView.animate(withDuration: duration * 0.6, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.5) {
-                    window.transform = .init(scaleX: 0.001, y: 0.001)
+                let duration = config.animateDurationForBuildInByDefault * 1
+                UIView.animateEaseIn(duration: duration) {
+                    window.transform = .init(translationX: 0, y: -24)
                 } completion: { done in
                     completion()
                 }
-                UIView.animate(withDuration: duration * 0.4, delay: duration * 0.2, usingSpringWithDamping: 1, initialSpringVelocity: 0.5) {
+                UIView.animateLinear(duration: duration * 0.5, delay: duration * 0.3) {
                     window.alpha = 0
                 }
             case .bottom:
                 let offsetY = AppContext.appBounds.height - oldFrame.maxY + 100
-                UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0) {
+                UIView.animateEaseIn(duration: duration) {
                     window.transform = .init(translationX: 0, y: offsetY)
                 } completion: { done in
                     completion()
                 }
             }
-            
+        }
+        if let next = AppContext.capsuleInQueue.first(where: { $0.preferredWindowScene == windowScene && $0.vm?.position == position }) {
+            AppContext.capsuleInQueue.removeAll(where: { $0 == next })
+            DispatchQueue.main.asyncAfter(deadline: .now() + config.animateDurationForBuildOutByDefault * 0.8) {
+                next.push()
+            }
         }
     }
     
@@ -172,6 +197,17 @@ extension CapsuleTarget {
         UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
             self.view.layoutIfNeeded()
         }
+    }
+    
+    func updateTimeoutDuration() {
+        // 为空时使用默认规则
+        if vm?.duration == nil {
+            vm?.duration = config.defaultDuration
+        }
+        // 设置持续时间
+        vm?.timeoutHandler = DispatchWorkItem(block: { [weak self] in
+            self?.pop()
+        })
     }
     
 }

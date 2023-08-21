@@ -35,11 +35,11 @@ public class CapsuleConfiguration: CommonConfiguration {
     override var cardMaxHeightByDefault: CGFloat { cardMaxHeight ?? 120 }
     
     override var animateDurationForBuildInByDefault: CGFloat {
-        animateDurationForBuildIn ?? 0.8
+        animateDurationForBuildIn ?? 0.64
     }
     
     override var animateDurationForBuildOutByDefault: CGFloat {
-        animateDurationForBuildOut ?? 0.8
+        animateDurationForBuildOut ?? 0.32
     }
     
     var animateBuildIn: CustomAnimateHandler?

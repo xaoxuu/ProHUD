@@ -37,6 +37,7 @@ public struct AppContext {
     static var alertWindow: [UIWindowScene: AlertWindow] = [:]
     static var sheetWindows: [UIWindowScene: [SheetWindow]] = [:]
     static var capsuleWindows: [UIWindowScene: [CapsuleViewModel.Position: CapsuleWindow]] = [:]
+    static var capsuleInQueue: [CapsuleTarget] = []
     
     static var current: AppContext? {
         guard let windowScene = windowScene else { return nil }
@@ -122,6 +123,9 @@ extension AppContext {
     }
     var capsuleWindows: [CapsuleViewModel.Position: CapsuleWindow] {
         Self.capsuleWindows[windowScene] ?? [:]
+    }
+    var alertWindow: AlertWindow? {
+        Self.alertWindow[windowScene]
     }
 }
  

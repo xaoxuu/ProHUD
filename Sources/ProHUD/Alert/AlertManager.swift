@@ -16,7 +16,7 @@ extension AlertTarget {
             return
         }
         setDefaultAxis()
-        view.transform = .init(scaleX: 1.2, y: 1.2)
+        view.transform = .init(scaleX: 1.12, y: 1.12)
         view.alpha = 0
         navEvents[.onViewWillAppear]?(self)
         window.vc.addChild(self)
@@ -33,6 +33,7 @@ extension AlertTarget {
             window.backgroundView.alpha = 1
         } completion: { done in
             self.navEvents[.onViewDidAppear]?(self)
+            self.updateTimeoutDuration()
         }
         window.alerts.append(self)
         AlertTarget.updateAlertsLayout(alerts: window.alerts)
@@ -42,9 +43,9 @@ extension AlertTarget {
         navEvents[.onViewWillDisappear]?(self)
         AlertTarget.removeAlert(alert: self)
         let duration = config.animateDurationForBuildOut ?? config.animateDurationForBuildOutByDefault
-        UIView.animateEaseOut(duration: duration) {
+        UIView.animateLinear(duration: duration) {
             self.view.alpha = 0
-            self.view.transform = .init(scaleX: 1.08, y: 1.08)
+            self.view.transform = .init(scaleX: 1.05, y: 1.05)
         } completion: { done in
             self.view.removeFromSuperview()
             self.removeFromParent()
@@ -55,7 +56,7 @@ extension AlertTarget {
         let count = window.alerts.count
         if count == 0 {
             AppContext.alertWindow[windowScene] = nil
-            UIView.animateEaseOut(duration: duration) {
+            UIView.animateLinear(duration: duration) {
                 window.backgroundView.alpha = 0
             } completion: { done in
                 // 这里设置一下window属性，会使window的生命周期被延长到此处，即动画执行过程中window不会被提前释放
@@ -72,6 +73,13 @@ extension AlertTarget {
         UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
             self.view.layoutIfNeeded()
         }
+    }
+    
+    func updateTimeoutDuration() {
+        // 设置持续时间
+        vm?.timeoutHandler = DispatchWorkItem(block: { [weak self] in
+            self?.pop()
+        })
     }
     
 }
