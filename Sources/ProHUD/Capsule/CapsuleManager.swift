@@ -136,7 +136,7 @@ extension CapsuleTarget {
     }
     
     @objc open func pop() {
-        guard let window = attachedWindow, let windowScene = windowScene else { return }
+        guard let window = attachedWindow, let windowScene = windowScene ?? AppContext.windowScene else { return }
         let position = vm?.position ?? .top
         AppContext.capsuleWindows[windowScene]?[position] = nil
         navEvents[.onViewWillDisappear]?(self)

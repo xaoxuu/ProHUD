@@ -38,13 +38,13 @@ class ToastWindow: Window {
 
 extension ToastTarget {
     func getContextWindows() -> [ToastWindow] {
-        guard let windowScene = windowScene else {
+        guard let windowScene = windowScene ?? AppContext.windowScene else {
             return []
         }
         return AppContext.toastWindows[windowScene] ?? []
     }
     func setContextWindows(_ windows: [ToastWindow]) {
-        guard let windowScene = windowScene else {
+        guard let windowScene = windowScene ?? AppContext.windowScene else {
             return
         }
         AppContext.toastWindows[windowScene] = windows

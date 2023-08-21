@@ -52,9 +52,8 @@ extension AlertTarget {
             self.navEvents[.onViewDidDisappear]?(self)
         }
         // hide window
-        guard let window = view.window as? AlertWindow, let windowScene = windowScene else { return }
-        let count = window.alerts.count
-        if count == 0 {
+        guard let window = attachedWindow, let windowScene = windowScene ?? AppContext.windowScene else { return }
+        if window.alerts.count == 0 {
             AppContext.alertWindow[windowScene] = nil
             UIView.animateLinear(duration: duration) {
                 window.backgroundView.alpha = 0

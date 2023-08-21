@@ -31,13 +31,13 @@ class SheetWindow: Window {
 
 extension SheetTarget {
     func getContextWindows() -> [SheetWindow] {
-        guard let windowScene = windowScene else {
+        guard let windowScene = windowScene ?? AppContext.windowScene else {
             return []
         }
         return AppContext.sheetWindows[windowScene] ?? []
     }
     func setContextWindows(_ windows: [SheetWindow]) {
-        guard let windowScene = windowScene else {
+        guard let windowScene = windowScene ?? AppContext.windowScene else {
             return
         }
         AppContext.sheetWindows[windowScene] = windows
