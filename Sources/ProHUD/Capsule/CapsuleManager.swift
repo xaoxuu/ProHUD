@@ -48,7 +48,9 @@ extension CapsuleTarget {
         let cardEdgeInsetsByDefault = config.cardEdgeInsetsByDefault
         view.layoutIfNeeded()
         var size = contentStack.frame.size
-        size = CGSize(width: min(config.cardMaxWidthByDefault, size.width + cardEdgeInsetsByDefault.left + cardEdgeInsetsByDefault.right), height: min(config.cardMaxHeightByDefault, size.height + cardEdgeInsetsByDefault.top + cardEdgeInsetsByDefault.bottom))
+        let width = min(config.cardMaxWidthByDefault, size.width + cardEdgeInsetsByDefault.left + cardEdgeInsetsByDefault.right)
+        let height = min(config.cardMaxHeightByDefault, size.height + cardEdgeInsetsByDefault.top + cardEdgeInsetsByDefault.bottom)
+        size = CGSize(width: width, height: max(height, config.cardMinHeight))
         
         // 应用到frame
         let newFrame: CGRect

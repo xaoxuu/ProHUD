@@ -150,8 +150,8 @@ extension AlertTarget {
                 imageView.snp.remakeConstraints { (mk) in
                     mk.top.left.greaterThanOrEqualTo(contentView).inset(cardEdgeInsets.top * 2)
                     mk.right.bottom.lessThanOrEqualTo(contentView).inset(cardEdgeInsets.right * 2)
-                    mk.width.equalTo(config.iconSize.width)
-                    mk.height.equalTo(config.iconSize.height)
+                    mk.width.equalTo(config.iconSizeByDefault.width)
+                    mk.height.equalTo(config.iconSizeByDefault.height)
                 }
             }
             if let rotation = vm?.rotation {

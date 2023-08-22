@@ -101,47 +101,55 @@ open class BaseViewModel: NSObject, HUDViewModelType {
 // MARK: - convenience func
 public extension BaseViewModel {
     
-    func identifier(_ identifier: String?) -> Self {
+    @discardableResult func identifier(_ identifier: String?) -> Self {
         self.identifier = identifier
         return self
     }
     
-    func lazyIdentifier(file: String = #file, line: Int = #line) -> Self {
+    @discardableResult func lazyIdentifier(file: String = #file, line: Int = #line) -> Self {
         self.identifier = (file + "#\(line)")
         return self
     }
     
-    func icon(_ image: UIImage?) -> Self {
+    @discardableResult func icon(_ image: UIImage?) -> Self {
         self.icon = image
         return self
     }
     
-    func icon(_ imageURL: URL?) -> Self {
+    @discardableResult func icon(_ imageURL: URL?) -> Self {
         self.iconURL = imageURL
         return self
     }
     
-    func title(_ text: String?) -> Self {
+    @discardableResult func icon(_ imageURLStr: String) -> Self {
+        if let url = URL(string: imageURLStr) {
+            return icon(url)
+        } else {
+            return icon(.init(named: imageURLStr))
+        }
+    }
+    
+    @discardableResult func title(_ text: String?) -> Self {
         self.title = text
         return self
     }
     
-    func message(_ text: String?) -> Self {
+    @discardableResult func message(_ text: String?) -> Self {
         self.message = text
         return self
     }
     
-    func duration(_ seconds: TimeInterval?) -> Self {
+    @discardableResult func duration(_ seconds: TimeInterval?) -> Self {
         self.duration = seconds
         return self
     }
     
-    func rotation(_ rotation: Rotation?) -> Self {
+    @discardableResult func rotation(_ rotation: Rotation?) -> Self {
         self.rotation = rotation
         return self
     }
     
-    func tintColor(_ tintColor: UIColor?) -> Self {
+    @discardableResult func tintColor(_ tintColor: UIColor?) -> Self {
         self.tintColor = tintColor
         return self
     }
@@ -171,6 +179,16 @@ public extension BaseViewModel {
     static func message(_ text: String?) -> Self {
         .init()
         .message(text)
+    }
+    
+    static func icon(_ imageURLStr: String) -> Self {
+        .init().icon(imageURLStr)
+    }
+    static func icon(_ imageURL: URL) -> Self {
+        .init().icon(imageURL)
+    }
+    static func icon(_ image: UIImage?) -> Self {
+        .init().icon(image)
     }
     
     // MARK: loading

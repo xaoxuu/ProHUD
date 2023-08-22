@@ -35,6 +35,11 @@ public class AlertConfiguration: CommonConfiguration {
         customBackgroundViewMask = callback
     }
     
+    /// 最小宽度
+    public var cardMinWidth = CGFloat(32)
+    /// 最小高度
+    public var cardMinHeight = CGFloat(32)
+    
     override var animateDurationForBuildOutByDefault: CGFloat {
         animateDurationForBuildOut ?? 0.2
     }

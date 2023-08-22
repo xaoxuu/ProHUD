@@ -27,17 +27,20 @@ public class CapsuleConfiguration: CommonConfiguration {
     /// 默认的持续时间
     public var defaultDuration: TimeInterval = 3
     
-    override var cardCornerRadiusByDefault: CGFloat {
-        cardCornerRadius ?? 16
-    }
-    
-    override var cardEdgeInsetsByDefault: UIEdgeInsets {
-        cardEdgeInsets ?? .init(top: 12, left: 16, bottom: 12, right: 16)
-    }
-    
     override var cardMaxWidthByDefault: CGFloat { cardMaxWidth ?? 320 }
     
     override var cardMaxHeightByDefault: CGFloat { cardMaxHeight ?? 120 }
+    
+    /// 最小高度
+    public var cardMinHeight = CGFloat(40)
+    
+    override var cardCornerRadiusByDefault: CGFloat { cardCornerRadius ?? 16 }
+    
+    override var cardEdgeInsetsByDefault: UIEdgeInsets {
+        cardEdgeInsets ?? .init(top: 10, left: 16, bottom: 10, right: 16)
+    }
+    
+    override var iconSizeByDefault: CGSize { iconSize ?? .init(width: 20, height: 20) }
     
     override var animateDurationForBuildInByDefault: CGFloat {
         animateDurationForBuildIn ?? 0.64

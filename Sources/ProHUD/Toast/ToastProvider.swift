@@ -7,7 +7,7 @@
 
 import UIKit
 
-public final class ToastProvider: HUDProviderType {
+open class ToastProvider: HUDProviderType {
     
     public typealias ViewModel = ToastViewModel
     public typealias Target = ToastTarget

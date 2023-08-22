@@ -14,7 +14,7 @@ public final class SheetProvider: HUDProviderType {
     
     /// 根据自定义的初始化代码创建一个Target并显示
     /// - Parameter initializer: 初始化代码（传空值时不会做任何事）
-    @discardableResult public required init(initializer: ((_ target: Target) -> Void)?) {
+    @discardableResult public required init(initializer: ((_ sheet: Target) -> Void)?) {
         guard let initializer = initializer else {
             // Provider的作用就是push一个target
             // 如果没有任何初始化代码就没有target，就是个无意义的Provider

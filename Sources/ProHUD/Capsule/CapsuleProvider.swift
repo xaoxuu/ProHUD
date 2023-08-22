@@ -7,7 +7,7 @@
 
 import UIKit
 
-public final class CapsuleProvider: HUDProviderType {
+open class CapsuleProvider: HUDProviderType {
     
     public typealias ViewModel = CapsuleViewModel
     public typealias Target = CapsuleTarget

@@ -25,7 +25,7 @@ class DemoCapsuleVC: ListVC {
                 // 设置vm或者handler都会自动push，这里测试传入vm：
                 // Capsule(.message("一条简短消息"))
                 // 如果只有一条文字信息，可以直接传字符串：
-                Capsule("一条简短消息")
+                Capsule("成功")
             }
             section.add(title: "一条稍微长一点的消息") {
                 // 设置vm或者handler都会自动push，这里测试传入handler：
@@ -53,6 +53,9 @@ class DemoCapsuleVC: ListVC {
         }
         
         list.add(title: "默认布局：图文") { section in
+            section.add(title: "短的消息") {
+                Capsule(.icon(.init(systemName: "checkmark.circle.fill")).title("成功"))
+            }
             section.add(title: "下载进度") {
                 let capsule = CapsuleTarget()
                 capsule.vm = .message("正在下载").icon(.init(systemName: "arrow.down.circle.fill")).duration(.infinity)
@@ -188,6 +191,14 @@ class DemoCapsuleVC: ListVC {
             }
             section.add(title: "指定id=a, hahaha") {
                 Capsule(.identifier("a").message("id=a, hahaha"))
+            }
+        }
+        
+        list.add(title: "网络图片") { section in
+            section.add(title: "设置iconSize以修改默认约束尺寸") {
+                Capsule(.icon("https://xaoxuu.com/assets/wiki/prohud/icon.png").title("ProHUD").duration(5)) { capsule in
+                    capsule.config.iconSize = .init(width: 24, height: 24)
+                }
             }
         }
         

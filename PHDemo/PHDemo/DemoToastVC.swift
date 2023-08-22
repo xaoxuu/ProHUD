@@ -177,7 +177,7 @@ class DemoToastVC: ListVC {
                 Toast(.title(title).message(message).icon(.init(named: "avatar")).duration(.infinity)) { toast in
                     toast.isRemovable = false
                     toast.imageView.layer.masksToBounds = true
-                    toast.imageView.layer.cornerRadius = toast.config.iconSize.width / 2
+                    toast.imageView.layer.cornerRadius = 44 / 2
                     toast.add(action: "拒绝", style: .destructive) { toast in
                         Alert(.identifier("Dracarys")) { alert in
                             alert.vm = .message("Dracarys")

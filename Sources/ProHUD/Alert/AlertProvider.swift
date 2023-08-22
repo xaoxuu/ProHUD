@@ -7,7 +7,7 @@
 
 import UIKit
 
-public final class AlertProvider: HUDProviderType {
+open class AlertProvider: HUDProviderType {
     
     public typealias ViewModel = AlertViewModel
     public typealias Target = AlertTarget

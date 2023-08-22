@@ -18,7 +18,7 @@ open class CapsuleTarget: BaseController, HUDTargetType {
         let stack = StackView()
         stack.spacing = 8
         stack.distribution = .equalCentering
-        stack.alignment = .fill
+        stack.alignment = .center
         stack.axis = .horizontal
         config.customContentStack?(stack)
         return stack

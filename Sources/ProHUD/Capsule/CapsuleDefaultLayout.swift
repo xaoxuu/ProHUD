@@ -24,22 +24,20 @@ extension CapsuleTarget: DefaultLayout {
         loadContentViewIfNeeded()
         loadContentMaskViewIfNeeded()
         
-        // image
-        setupImageView()
-        
         // text
-        textLabel.removeFromSuperview()
+        contentStack.addArrangedSubview(textLabel)
         var text = [vm?.title ?? "", vm?.message ?? ""].filter({ $0.count > 0 }).joined(separator: " ")
         if text.count > 0 {
-            contentStack.addArrangedSubview(textLabel)
-            textLabel.snp.makeConstraints { make in
+            textLabel.snp.remakeConstraints { make in
                 make.width.lessThanOrEqualTo(AppContext.appBounds.width * 0.5)
             }
+            textLabel.snp.contentHuggingVerticalPriority = .infinity
             textLabel.text = text
             textLabel.sizeToFit()
-        } else {
-            contentStack.removeArrangedSubview(textLabel)
         }
+        
+        // 后设置image, 需要参考text
+        setupImageView()
         
         view.layoutIfNeeded()
         
@@ -91,6 +89,12 @@ extension CapsuleTarget: DefaultLayout {
             contentStack.removeArrangedSubview(imageView)
         } else {
             contentStack.insertArrangedSubview(imageView, at: 0)
+            if config.iconSizeByDefault != .zero {
+                imageView.snp.remakeConstraints { make in
+                    make.height.equalTo(config.iconSizeByDefault)
+                    make.width.equalTo(config.iconSizeByDefault)
+                }
+            }
         }
         imageView.image = vm?.icon
         if let iconURL = vm?.iconURL {

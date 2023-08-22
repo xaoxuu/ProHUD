@@ -33,9 +33,9 @@ extension ToastTarget: DefaultLayout {
                 infoStack.insertArrangedSubview(imageView, at: 0)
                 imageView.snp.makeConstraints { make in
                     if titleCount > 0 && bodyCount > 0 {
-                        make.width.height.equalTo(config.iconSize)
+                        make.width.height.equalTo(config.iconSizeByDefault)
                     } else {
-                        make.width.equalTo(config.iconSize)
+                        make.width.equalTo(config.iconSizeByDefault)
                     }
                 }
             }

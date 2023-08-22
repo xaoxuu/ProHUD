@@ -60,10 +60,6 @@ open class CommonConfiguration: NSObject {
     var cardMaxHeightByDefault: CGFloat {
         cardMaxHeight ?? (AppContext.appBounds.height - 100)
     }
-    /// 最小宽度
-    public var cardMinWidth = CGFloat(32)
-    /// 最小高度
-    public var cardMinHeight = CGFloat(32)
     
     /// 卡片内边距
     public var cardEdgeInsets: UIEdgeInsets?
@@ -102,7 +98,9 @@ open class CommonConfiguration: NSObject {
     
     // MARK: 图标样式
     /// 图标尺寸
-    public var iconSize = CGSize(width: 44, height: 44)
+    public var iconSize: CGSize?
+    
+    var iconSizeByDefault: CGSize { iconSize ?? .init(width: 44, height: 44) }
     
     // MARK: 文本样式
     
