@@ -233,7 +233,7 @@ class DemoToastVC: ListVC {
             }
             section.add(title: "不存在就创建，存在就更新") {
                 i += 1
-                Toast(.identifier("loading").title("正在加载\(i)").message("这条消息不会重复显示多条"))
+                Toast(.identifier("loading").title("正在加载\(i)").message("这条消息\n不会重复显示多条"))
             }
             section.add(title: "如果存在就更新，如果不存在就忽略") {
                 i += 1

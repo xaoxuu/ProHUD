@@ -9,32 +9,6 @@ import UIKit
 
 extension ToastTarget {
     
-    private func calcHeight() -> CGFloat {
-        var height = CGFloat(0)
-        for v in infoStack.arrangedSubviews {
-            // 图片或者文本最大高度
-            height = CGFloat.maximum(v.frame.maxY, height)
-        }
-        if actionStack.arrangedSubviews.count > 0 {
-            height += actionStack.frame.height + contentStack.spacing
-        }
-        contentView.subviews.filter { v in
-            if v == contentMaskView {
-                return false
-            }
-            if v == contentStack {
-                return false
-            }
-            return true
-        } .forEach { v in
-            height = CGFloat.maximum(v.frame.maxY, height)
-        }
-        // 上下边间距
-        let cardEdgeInsets = config.cardEdgeInsetsByDefault
-        height += cardEdgeInsets.top + cardEdgeInsets.bottom
-        return height
-    }
-    
     @objc open func push() {
         guard ToastConfiguration.isEnabled else { return }
         let isNew: Bool
@@ -49,23 +23,14 @@ extension ToastTarget {
             isNew = true
         }
         
-        // frame
-        let cardEdgeInsets = config.cardEdgeInsetsByDefault
-        let width = CGFloat.minimum(AppContext.appBounds.width - config.marginX - config.marginX, config.cardMaxWidthByDefault)
-        view.frame.size = CGSize(width: width, height: config.cardMaxHeightByDefault)
-        titleLabel.sizeToFit()
-        bodyLabel.sizeToFit()
-        view.layoutIfNeeded()
-        // 更新子视图之后获取正确的高度
-        let height = calcHeight()
-        view.frame.size = CGSize(width: width, height: height)
-        // 应用到frame
-        window.frame = CGRect(x: (AppContext.appBounds.width - width) / 2, y: 0, width: width, height: height)
-        window.rootViewController = self // 此时toast.view.frame.size会自动更新为window.frame.size
         if windows.contains(window) == false {
             windows.append(window)
             setContextWindows(windows)
         }
+        let size = getWindowSize(window: window)
+        window.frame = CGRect(x: (AppContext.appBounds.width - size.width) / 2, y: 0, width: size.width, height: size.height)
+        window.rootViewController = self // 此时toast.view.frame.size会自动更新为window.frame.size
+        
         ToastWindow.updateToastWindowsLayout(windows: windows)
         // 为了更连贯，从进入动画开始时就开始计时
         updateTimeoutDuration()

@@ -189,8 +189,8 @@ class DemoCapsuleVC: ListVC {
             section.add(title: "指定id=a, haha") {
                 Capsule(.identifier("a").message("id=a, haha"))
             }
-            section.add(title: "指定id=a, hahaha") {
-                Capsule(.identifier("a").message("id=a, hahaha"))
+            section.add(title: "指定id=a, hahahahahaha") {
+                Capsule(.identifier("a").message("id=a, hahahahahaha"))
             }
         }
         

@@ -43,30 +43,11 @@ extension CapsuleTarget {
             window = CapsuleWindow(capsule: self)
             windows[position] = nil
         }
+        
         window.isUserInteractionEnabled = tapActionCallback != nil
-        // frame
-        let cardEdgeInsetsByDefault = config.cardEdgeInsetsByDefault
-        view.layoutIfNeeded()
-        var size = contentStack.frame.size
-        let width = min(config.cardMaxWidthByDefault, size.width + cardEdgeInsetsByDefault.left + cardEdgeInsetsByDefault.right)
-        let height = min(config.cardMaxHeightByDefault, size.height + cardEdgeInsetsByDefault.top + cardEdgeInsetsByDefault.bottom)
-        size = CGSize(width: width, height: max(height, config.cardMinHeight))
         
-        // 应用到frame
-        let newFrame: CGRect
-        switch vm?.position {
-        case .top, .none:
-            let topLayoutMargins = AppContext.appWindow?.safeAreaInsets.top ?? 8
-            let y = max(topLayoutMargins, 8)
-            newFrame = .init(x: (AppContext.appBounds.width - size.width) / 2, y: y, width: size.width, height: size.height)
-        case .middle:
-            newFrame = .init(x: (AppContext.appBounds.width - size.width) / 2, y: (AppContext.appBounds.height - size.height) / 2 - 20, width: size.width, height: size.height)
-        case .bottom:
-            let bottomLayoutMargins = AppContext.appWindow?.layoutMargins.bottom ?? 8
-            let y = AppContext.appBounds.height - bottomLayoutMargins - size.height - 60
-            newFrame = .init(x: (AppContext.appBounds.width - size.width) / 2, y: y, width: size.width, height: size.height)
-        }
-        
+        let size = getWindowSize(window: window)
+        let newFrame = getWindowFrame(size: size)
         window.transform = .identity
         if isNew {
             window.frame = newFrame

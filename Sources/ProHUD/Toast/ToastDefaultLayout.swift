@@ -87,12 +87,13 @@ extension ToastTarget: DefaultLayout {
         bodyLabel.text = vm?.message
         view.layoutIfNeeded()
         
+        setupImageView()
+        
         if isViewAppeared {
             // 更新时间
             updateTimeoutDuration()
+            updateWindowSize()
         }
-        
-        setupImageView()
         
     }
     
@@ -153,6 +154,57 @@ extension ToastTarget {
             startRotate(rotation)
         }
         
+    }
+    
+    func getWindowSize(window: ToastWindow) -> CGSize {
+        let cardEdgeInsets = config.cardEdgeInsetsByDefault
+        let width = CGFloat.minimum(AppContext.appBounds.width - config.marginX - config.marginX, config.cardMaxWidthByDefault)
+        view.frame.size = CGSize(width: width, height: config.cardMaxHeightByDefault) // 以最大高度开始布局，然后计算实际需要高度
+        titleLabel.sizeToFit()
+        bodyLabel.sizeToFit()
+        view.layoutIfNeeded()
+        // 更新子视图之后获取正确的高度
+        let height = calcHeight()
+        let size = CGSize(width: width, height: height)
+        view.frame.size = size
+        view.layoutIfNeeded()
+        return size
+    }
+    
+    func updateWindowSize() {
+        guard let window = view.window as? ToastWindow else { return }
+        let lastSize = view.frame.size
+        let newSize = getWindowSize(window: window)
+        view.frame.size = lastSize
+        view.layoutIfNeeded()
+        window.frame.size = newSize
+        ToastWindow.updateToastWindowsLayout()
+    }
+    
+    private func calcHeight() -> CGFloat {
+        var height = CGFloat(0)
+        for v in infoStack.arrangedSubviews {
+            // 图片或者文本最大高度
+            height = CGFloat.maximum(v.frame.maxY, height)
+        }
+        if actionStack.arrangedSubviews.count > 0 {
+            height += actionStack.frame.height + contentStack.spacing
+        }
+        contentView.subviews.filter { v in
+            if v == contentMaskView {
+                return false
+            }
+            if v == contentStack {
+                return false
+            }
+            return true
+        } .forEach { v in
+            height = CGFloat.maximum(v.frame.maxY, height)
+        }
+        // 上下边间距
+        let cardEdgeInsets = config.cardEdgeInsetsByDefault
+        height += cardEdgeInsets.top + cardEdgeInsets.bottom
+        return height
     }
     
 }
