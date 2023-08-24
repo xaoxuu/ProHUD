@@ -101,15 +101,26 @@ open class BaseViewModel: NSObject, HUDViewModelType {
 // MARK: - convenience func
 public extension BaseViewModel {
     
-    @discardableResult func identifier(_ identifier: String?) -> Self {
-        self.identifier = identifier
+    // MARK: identifier
+    
+    /// 设置唯一标识符（不传参数则以代码位置作为唯一标识符）
+    /// - Parameters:
+    ///   - identifier: 指定的唯一标识符
+    /// - Returns: 唯一标识符
+    @discardableResult func identifier(_ identifier: String? = nil, file: String = #file, line: Int = #line) -> Self {
+        self.identifier = identifier ?? (file + "#\(line)")
         return self
     }
     
-    @discardableResult func lazyIdentifier(file: String = #file, line: Int = #line) -> Self {
-        self.identifier = (file + "#\(line)")
-        return self
+    /// 设置唯一标识符（不传参数则以代码位置作为唯一标识符）
+    /// - Parameters:
+    ///   - identifier: 指定的唯一标识符
+    /// - Returns: 唯一标识符
+    @discardableResult static func identifier(_ identifier: String? = nil, file: String = #file, line: Int = #line) -> Self {
+        .init().identifier(identifier, file: file, line: line)
     }
+    
+    // MARK: icon
     
     @discardableResult func icon(_ image: UIImage?) -> Self {
         self.icon = image
@@ -129,15 +140,39 @@ public extension BaseViewModel {
         }
     }
     
+    static func icon(_ imageURLStr: String) -> Self {
+        .init().icon(imageURLStr)
+    }
+    static func icon(_ imageURL: URL) -> Self {
+        .init().icon(imageURL)
+    }
+    static func icon(_ image: UIImage?) -> Self {
+        .init().icon(image)
+    }
+    
+    // MARK: text
+    
     @discardableResult func title(_ text: String?) -> Self {
         self.title = text
         return self
+    }
+    
+    static func title(_ text: String?) -> Self {
+        .init()
+        .title(text)
     }
     
     @discardableResult func message(_ text: String?) -> Self {
         self.message = text
         return self
     }
+    
+    static func message(_ text: String?) -> Self {
+        .init()
+        .message(text)
+    }
+    
+    // MARK: others
     
     @discardableResult func duration(_ seconds: TimeInterval?) -> Self {
         self.duration = seconds
@@ -159,48 +194,16 @@ public extension BaseViewModel {
 // MARK: - example scenes
 public extension BaseViewModel {
     
-    /// 设置指定的唯一标识符
-    /// - Parameter text: 唯一标识符
-    static func identifier(_ text: String?) -> Self {
-        .init()
-        .identifier(text)
-    }
-    
-    /// 以当前代码位置作为唯一标识符
-    static func codeIdentifier(file: String = #file, line: Int = #line) -> Self {
-        identifier((file + "#\(line)"))
-    }
-    
-    // MARK: plain
-    static func title(_ text: String?) -> Self {
-        .init()
-        .title(text)
-    }
-    static func message(_ text: String?) -> Self {
-        .init()
-        .message(text)
-    }
-    
-    static func icon(_ imageURLStr: String) -> Self {
-        .init().icon(imageURLStr)
-    }
-    static func icon(_ imageURL: URL) -> Self {
-        .init().icon(imageURL)
-    }
-    static func icon(_ image: UIImage?) -> Self {
-        .init().icon(image)
-    }
-    
     // MARK: loading
     static var loading: Self {
         .init()
         .icon(.init(inProHUD: "prohud.windmill"))
-        .rotation(.init(repeatCount: .infinity))
+        .rotation(.default)
     }
     static func loading(_ seconds: TimeInterval) -> Self {
         .init()
         .icon(.init(inProHUD: "prohud.windmill"))
-        .rotation(.init(repeatCount: .infinity))
+        .rotation(.default)
         .duration(seconds)
     }
     // MARK: success

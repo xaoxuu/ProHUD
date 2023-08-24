@@ -184,7 +184,7 @@ class DemoCapsuleVC: ListVC {
         list.add(title: "lazy push") { section in
             section.add(title: "以当前代码位置作为唯一标识符") {
                 i += 1
-                Capsule(.codeIdentifier().message("id=\(i)"))
+                Capsule(.identifier().message("id=\(i)"))
             }
             section.add(title: "指定id=a, haha") {
                 Capsule(.identifier("a").message("id=a, haha"))

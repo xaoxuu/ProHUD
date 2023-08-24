@@ -76,7 +76,7 @@ class DemoSheetVC: ListVC {
                     sheet.onTappedBackground { sheet in
                         Toast(
                             .error
-                            .lazyIdentifier()
+                            .identifier()
                             .title("点击了背景")
                             .message("点击背景将不会dismiss，必须在下方做出选择才能关掉")
                             .duration(2)
