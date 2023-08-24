@@ -54,21 +54,18 @@ class DemoCapsuleVC: ListVC {
         
         list.add(title: "默认布局：图文") { section in
             section.add(title: "短的消息") {
-                Capsule(.icon(.init(systemName: "checkmark.circle.fill")).title("成功"))
+                Capsule(.icon(.init(inProHUD: "prohud.rainbow.ring")).title("loading").rotation(.infinity))
             }
             section.add(title: "下载进度") {
                 let capsule = CapsuleTarget()
-                capsule.vm = .message("正在下载").icon(.init(systemName: "arrow.down.circle.fill")).duration(.infinity)
+                capsule.vm = .loading(.infinity).message("正在下载")
                 capsule.update(progress: 0)
                 capsule.push()
                 updateProgress(in: 4) { percent in
                     capsule.update(progress: percent)
                 } completion: {
                     capsule.update { toast in
-                        toast.vm = .message("下载成功")
-                            .icon(.init(systemName: "checkmark.circle.fill"))
-                            .duration(5)
-                            .tintColor(.systemGreen)
+                        toast.vm = .success(5).message("下载成功")
                     }
                 }
             }

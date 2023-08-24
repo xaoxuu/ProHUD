@@ -198,12 +198,12 @@ public extension BaseViewModel {
     static var loading: Self {
         .init()
         .icon(.init(inProHUD: "prohud.windmill"))
-        .rotation(.default)
+        .rotation(.infinity)
     }
     static func loading(_ seconds: TimeInterval) -> Self {
         .init()
         .icon(.init(inProHUD: "prohud.windmill"))
-        .rotation(.default)
+        .rotation(.infinity)
         .duration(seconds)
     }
     // MARK: success

@@ -32,7 +32,7 @@ public struct Rotation {
 }
 
 public extension Rotation {
-    static var `default`: Self {
+    static var infinity: Self {
         .init(direction: .clockwise, speed: 2, repeatCount: .infinity)
     }
 }
