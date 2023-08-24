@@ -33,7 +33,8 @@ extension CapsuleTarget: DefaultLayout {
             textLabel.snp.remakeConstraints { make in
                 make.width.lessThanOrEqualTo(AppContext.appBounds.width * 0.5)
             }
-            textLabel.snp.contentHuggingVerticalPriority = .infinity
+            textLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+            textLabel.setContentCompressionResistancePriority(.required, for: .vertical)
             textLabel.text = text
             textLabel.sizeToFit()
         }

@@ -15,11 +15,9 @@ open class CapsuleTarget: BaseController, HUDTargetType {
     
     /// 内容容器（imageView、textLabel)
     public lazy var contentStack: StackView = {
-        let stack = StackView()
+        let stack = StackView(axis: .horizontal)
         stack.spacing = 8
-        stack.distribution = .equalCentering
         stack.alignment = .center
-        stack.axis = .horizontal
         config.customContentStack?(stack)
         return stack
     }()
@@ -80,9 +78,6 @@ open class CapsuleTarget: BaseController, HUDTargetType {
     
     open override func viewDidLoad() {
         super.viewDidLoad()
-        view.layer.shadowRadius = 8
-        view.layer.shadowOffset = .init(width: 0, height: 5)
-        view.layer.shadowOpacity = 0.1
         
         // 点击
         let tap = UITapGestureRecognizer(target: self, action: #selector(_onTappedGesture(_:)))

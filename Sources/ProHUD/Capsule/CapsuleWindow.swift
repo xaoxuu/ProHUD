@@ -28,6 +28,9 @@ class CapsuleWindow: Window {
             windowLevel = .phCapsuleBottom
         }
         frame = .init(x: 0, y: 0, width: 128, height: 48)
+        layer.shadowRadius = 8
+        layer.shadowOffset = .init(width: 0, height: 5)
+        layer.shadowOpacity = 0.1
         isHidden = true
     }
     

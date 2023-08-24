@@ -55,7 +55,6 @@ extension CapsuleTarget {
         
         config.cardCornerRadius = min(size.height / 2, config.cardCornerRadiusByDefault)
         contentView.layer.cornerRadiusWithContinuous = config.cardCornerRadiusByDefault
-        view.layer.cornerRadiusWithContinuous = config.cardCornerRadiusByDefault
         
         window.rootViewController = self // 此时toast.view.frame.size会自动更新为window.frame.size
         
