@@ -74,20 +74,18 @@ extension CapsuleTarget: DefaultLayout {
         if contentStack.superview == nil {
             view.addSubview(contentStack)
             contentStack.snp.remakeConstraints { make in
-                make.center.equalToSuperview()
+                make.centerY.equalToSuperview()
+                if config.cardMinWidth != nil {
+                    make.left.greaterThanOrEqualToSuperview().inset(config.cardEdgeInsetsByDefault.left)
+                } else {
+                    make.centerX.equalToSuperview()
+                }
             }
         }
         
     }
     
     private func setupImageView() {
-        // 移除动画
-        stopRotate(animateLayer)
-        animateLayer = nil
-        animation = nil
-        
-        // 移除进度
-        progressView?.removeFromSuperview()
         
         if vm?.icon == nil && vm?.iconURL == nil {
             contentStack.removeArrangedSubview(imageView)
@@ -106,9 +104,9 @@ extension CapsuleTarget: DefaultLayout {
         if let iconURL = vm?.iconURL {
             config.customWebImage?(imageView, iconURL)
         }
-        if let rotation = vm?.rotation {
-            startRotate(rotation)
-        }
+        
+        vm?.updateRotation()
+        vm?.updateProgress()
         
     }
     
@@ -118,7 +116,7 @@ extension CapsuleTarget: DefaultLayout {
         var size = contentStack.frame.size
         let width = min(config.cardMaxWidthByDefault, size.width + cardEdgeInsetsByDefault.left + cardEdgeInsetsByDefault.right)
         let height = min(config.cardMaxHeightByDefault, size.height + cardEdgeInsetsByDefault.top + cardEdgeInsetsByDefault.bottom)
-        return .init(width: width, height: max(height, config.cardMinHeight))
+        return .init(width: max(width, config.cardMinWidth ?? 0), height: max(height, config.cardMinHeight))
     }
     
     func getWindowFrame(size: CGSize) -> CGRect {

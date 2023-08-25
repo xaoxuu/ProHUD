@@ -59,14 +59,33 @@ class DemoCapsuleVC: ListVC {
             section.add(title: "下载进度") {
                 let capsule = CapsuleTarget()
                 capsule.vm = .loading(.infinity).message("正在下载")
-                capsule.update(progress: 0)
                 capsule.push()
                 updateProgress(in: 4) { percent in
-                    capsule.update(progress: percent)
+                    capsule.vm?.progress(percent)
                 } completion: {
-                    capsule.update { toast in
-                        toast.vm = .success(5).message("下载成功")
-                    }
+                    capsule.vm(.success(5).message("下载成功"))
+                }
+            }
+            section.add(title: "倒计时3s") {
+                Capsule(.icon(.init(named: "twemoji")).title("倒计时3s").duration(4)) { capsule in
+                    capsule.config.cardMinWidth = 140 // 估算一下合适的宽度并固定，不然数字变化时总宽度也在一直变化，观感不佳
+                    capsule.vm?.countdown(seconds: 3, onUpdate: { progress in
+                        capsule.title = .init(format: "倒计时%.1fs", progress.current)
+                    }, onCompletion: {
+                        // 重新创建一个新的vm
+                        capsule.vm(.success(3).title("倒计时结束"))
+                    })
+                }
+            }
+            section.add(title: "倒计时10s") {
+                Capsule(.icon(.init(named: "twemoji")).title("倒计时3s").duration(10)) { capsule in
+                    capsule.config.cardMinWidth = 140 // 估算一下合适的宽度并固定，不然数字变化时总宽度也在一直变化，观感不佳
+                    capsule.vm?.countdown(seconds: 10, onUpdate: { progress in
+                        capsule.title = .init(format: "倒计时%.1fs", progress.current)
+                    }, onCompletion: {
+                        // 重新创建一个新的vm
+                        capsule.vm(.success(3).title("倒计时结束"))
+                    })
                 }
             }
             section.add(title: "接口报错提示") {
@@ -283,7 +302,7 @@ class GradientCapsule: HUDProviderType {
     ///   - initializer: 初始化代码
     @discardableResult public convenience init(_ vm: ViewModel, initializer: ((_ capsule: Target) -> Void)?) {
         if let id = vm.identifier, id.count > 0, let target = CapsuleManager.find(identifier: id).last as? Target {
-            target.update { capsule in
+            target.reloadData { capsule in
                 capsule.vm = vm
                 initializer?(capsule as! GradientCapsule.Target)
             }

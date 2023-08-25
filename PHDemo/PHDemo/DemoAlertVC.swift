@@ -47,9 +47,9 @@ class DemoAlertVC: ListVC {
             section.add(title: "图标 + 文字") {
                 Alert(.loading.message("正在加载")) { alert in
                     updateProgress(in: 4) { percent in
-                        alert.update(progress: percent)
+                        alert.vm?.progress(percent)
                     } completion: {
-                        alert.update { alert in
+                        alert.reloadData { alert in
                             alert.vm = .success.message("加载成功")
                             alert.add(action: "OK")
                         }

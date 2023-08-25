@@ -82,6 +82,7 @@ open class AlertTarget: BaseController, HUDTargetType {
         didSet {
             if let vm = vm {
                 vm.title = title
+                titleLabel.text = title
             } else {
                 vm = .title(title)
             }

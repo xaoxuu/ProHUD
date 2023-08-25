@@ -138,21 +138,14 @@ extension ToastTarget {
     }
     
     func setupImageView() {
-        // 移除动画
-        stopRotate(animateLayer)
-        animateLayer = nil
-        animation = nil
-        
-        // 移除进度
-        progressView?.removeFromSuperview()
         
         imageView.image = vm?.icon
         if let iconURL = vm?.iconURL {
             config.customWebImage?(imageView, iconURL)
         }
-        if let rotation = vm?.rotation {
-            startRotate(rotation)
-        }
+        
+        vm?.updateRotation()
+        vm?.updateProgress()
         
     }
     

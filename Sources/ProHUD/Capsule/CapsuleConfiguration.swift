@@ -31,6 +31,9 @@ public class CapsuleConfiguration: CommonConfiguration {
     
     override var cardMaxHeightByDefault: CGFloat { cardMaxHeight ?? 120 }
     
+    /// 最小宽度(当设置了最小宽度而内容没有达到时，内容布局默认靠左)
+    public var cardMinWidth: CGFloat? = nil
+    
     /// 最小高度
     public var cardMinHeight = CGFloat(40)
     

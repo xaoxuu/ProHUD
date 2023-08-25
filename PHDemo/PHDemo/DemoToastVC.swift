@@ -128,25 +128,23 @@ class DemoToastVC: ListVC {
                 let s2 = "这通常不会太久"
                 let toast = ToastTarget(.loading.title(s1).message(s2))
                 toast.push()
-                toast.update(progress: 0)
                 updateProgress(in: 4) { percent in
-                    toast.update(progress: percent)
+                    toast.vm?.progress(percent)
                 } completion: {
-                    toast.update { toast in
-                        toast.vm = .success(5)
-                            .title("加载成功")
-                            .message("这条通知5s后消失")
-                            .icon(.init(named: "twemoji"))
-                    }
+                    toast.vm(
+                        .success(5)
+                        .title("加载成功")
+                        .message("这条通知5s后消失")
+                        .icon(.init(named: "twemoji"))
+                    )
                 }
             }
             section.add(title: "倒计时") {
                 let s1 = "笑容正在消失"
                 let s2 = "这通常不会太久"
-                Toast { toast in
-                    toast.vm = .title(s1).message(s2).icon(UIImage(named: "twemoji"))
+                Toast(.title(s1).message(s2).icon(UIImage(named: "twemoji"))) { toast in
                     updateProgress(in: 5) { percent in
-                        toast.update(progress: 1 - percent)
+                        toast.vm?.progress(1 - percent)
                     } completion: {
                         toast.pop()
                     }

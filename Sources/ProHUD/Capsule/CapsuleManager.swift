@@ -172,15 +172,26 @@ extension CapsuleTarget {
         }
     }
     
-    /// 更新HUD实例
-    /// - Parameter handler: 实例更新代码
-    @objc open func update(handler: @escaping (_ capsule: CapsuleTarget) -> Void) {
+    /// 更新VC
+    /// - Parameter handler: 更新操作
+    @objc open func reloadData(handler: @escaping (_ capsule: CapsuleTarget) -> Void) {
         handler(self)
-        
         reloadData()
-        UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
-            self.view.layoutIfNeeded()
-        }
+    }
+    
+    /// 更新vm并刷新UI
+    /// - Parameter handler: 更新操作
+    @objc open func vm(handler: @escaping (_ vm: ViewModel) -> ViewModel) {
+        let new = handler(vm ?? .init())
+        vm?.update(another: new)
+        reloadData()
+    }
+    
+    /// 重设vm并刷新UI
+    /// - Parameter vm: 新的vm
+    @objc open func vm(_ vm: ViewModel) {
+        self.vm = vm
+        reloadData()
     }
     
     func updateTimeoutDuration() {
@@ -204,7 +215,22 @@ public class CapsuleManager: NSObject {
         let allCapsules = allPositions.compactMap({ $0.capsule })
         let arr = (allCapsules + AppContext.capsuleInQueue).filter({ $0.identifier == identifier || $0.vm?.identifier == identifier })
         if let handler = handler {
-            arr.forEach({ $0.update(handler: handler) })
+            arr.forEach({ $0.reloadData(handler: handler) })
+        }
+        return arr
+    }
+    
+    /// 查找HUD实例
+    /// - Parameters:
+    ///   - position: 位置
+    ///   - handler: 更新
+    /// - Returns: HUD实例
+    @discardableResult public static func find(position: CapsuleViewModel.Position, update handler: ((_ capsule: CapsuleTarget) -> Void)? = nil) -> [CapsuleTarget] {
+        let allPositions = AppContext.capsuleWindows.values.flatMap({ $0.values })
+        let allCapsules = allPositions.compactMap({ $0.capsule })
+        let arr = (allCapsules + AppContext.capsuleInQueue).filter({ $0.vm?.position == position })
+        if let handler = handler {
+            arr.forEach({ $0.reloadData(handler: handler) })
         }
         return arr
     }

@@ -76,14 +76,26 @@ extension ToastTarget {
         }
     }
     
-    /// 更新HUD实例
-    /// - Parameter handler: 实例更新代码
-    @objc open func update(handler: @escaping (_ toast: ToastTarget) -> Void) {
+    /// 更新VC
+    /// - Parameter handler: 更新操作
+    @objc open func reloadData(handler: @escaping (_ capsule: ToastTarget) -> Void) {
         handler(self)
         reloadData()
-        UIView.animateEaseOut(duration: config.animateDurationForReloadByDefault) {
-            self.view.layoutIfNeeded()
-        }
+    }
+    
+    /// 更新vm并刷新UI
+    /// - Parameter handler: 更新操作
+    @objc open func vm(handler: @escaping (_ vm: ViewModel) -> ViewModel) {
+        let new = handler(vm ?? .init())
+        vm?.update(another: new)
+        reloadData()
+    }
+    
+    /// 重设vm并刷新UI
+    /// - Parameter vm: 新的vm
+    @objc open func vm(_ vm: ViewModel) {
+        self.vm = vm
+        reloadData()
     }
     
     func updateTimeoutDuration() {
@@ -163,7 +175,7 @@ public class ToastManager: NSObject {
     @discardableResult public static func find(identifier: String, update handler: ((_ toast: ToastTarget) -> Void)? = nil) -> [ToastTarget] {
         let arr = AppContext.toastWindows.values.flatMap({ $0 }).compactMap({ $0.toast }).filter({ $0.identifier == identifier })
         if let handler = handler {
-            arr.forEach({ $0.update(handler: handler) })
+            arr.forEach({ $0.reloadData(handler: handler) })
         }
         return arr
     }

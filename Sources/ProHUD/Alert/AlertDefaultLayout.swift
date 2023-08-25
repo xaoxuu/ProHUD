@@ -131,13 +131,6 @@ extension AlertTarget: DefaultLayout {
 extension AlertTarget {
     
     func setupImageView() {
-        // 移除动画
-        stopRotate(animateLayer)
-        animateLayer = nil
-        animation = nil
-        
-        // 移除进度
-        progressView?.removeFromSuperview()
         
         if vm?.icon != nil || vm?.iconURL != nil {
             imageView.image = vm?.icon
@@ -154,15 +147,15 @@ extension AlertTarget {
                     mk.height.equalTo(config.iconSizeByDefault.height)
                 }
             }
-            if let rotation = vm?.rotation {
-                startRotate(rotation)
-            }
         } else {
             if contentStack.arrangedSubviews.contains(imageView) {
                 contentStack.removeArrangedSubview(imageView)
             }
             imageView.removeFromSuperview()
         }
+        
+        vm?.updateRotation()
+        vm?.updateProgress()
         
     }
     func setupTextStack() {

@@ -10,6 +10,12 @@ import UIKit
 /// 进度指示器
 public class ProgressView: UIView {
     
+    var progress: CGFloat = 0 {
+        didSet {
+            updateProgress()
+        }
+    }
+    
     var progressLayer = CAShapeLayer()
     
     static var lineWidth: CGFloat { 4 }
@@ -57,12 +63,16 @@ public class ProgressView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateProgress(progress: CGFloat) {
-        if progressLayer.superlayer == nil {
-            progressLayer.strokeEnd = 0
-            layer.addSublayer(progressLayer)
+    func updateProgress() {
+        if progress > 0 {
+            if progressLayer.superlayer == nil {
+                progressLayer.strokeEnd = 0
+                layer.addSublayer(progressLayer)
+            }
+            progressLayer.strokeEnd = max(min(progress, 1), 0)
+        } else {
+            progressLayer.removeFromSuperlayer()
         }
-        progressLayer.strokeEnd = max(min(progress, 1), 0)
     }
     
 }

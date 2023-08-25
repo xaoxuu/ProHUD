@@ -55,6 +55,7 @@ open class CapsuleTarget: BaseController, HUDTargetType {
         didSet {
             if let vm = vm {
                 vm.title = title
+                textLabel.text = title
             } else {
                 vm = .title(title)
             }

@@ -50,6 +50,13 @@ open class BaseViewModel: NSObject, HUDViewModelType {
     /// 持续时间（为空代表根据场景不同的默认配置，为0代表无穷大）
     open var duration: TimeInterval?
     
+    /// 进度条，大于0时显示，取值区间: 0~1
+    @objc open var progress: TimeProgress? {
+        didSet {
+            updateProgress()
+        }
+    }
+    
     weak var vc: BaseController? {
         didSet {
             if let id = tmpStoredIdentifier {
@@ -94,6 +101,108 @@ open class BaseViewModel: NSObject, HUDViewModelType {
     func cancelTimer() {
         timeoutTimer?.invalidate()
         timeoutTimer = nil
+    }
+    
+    @objc open func update(another vm: BaseViewModel) {
+        self.title(vm.title)
+            .message(vm.message)
+            .icon(vm.icon)
+            .icon(vm.iconURL)
+            .duration(vm.duration)
+            .rotation(vm.rotation)
+            .tintColor(vm.tintColor)
+            .progress(vm.progress)
+    }
+    
+}
+
+extension BaseViewModel {
+    
+    // MARK: rotation
+    
+    func updateRotation() {
+        guard let vc = vc as? LoadingAnimation else { return }
+        DispatchQueue.main.async {
+            if let rotation = self.rotation {
+                vc.startRotate(rotation)
+            } else {
+                vc.stopRotate(vc.animateLayer)
+                vc.animateLayer = nil
+                vc.animation = nil
+            }
+        }
+    }
+    
+    // MARK: progress
+    
+    @discardableResult
+    public func progress(_ progress: TimeProgress?) -> Self {
+        self.progress = progress
+        return self
+    }
+    
+    @discardableResult
+    public func progress(_ newPercent: CGFloat) -> Self {
+        if progress == nil {
+            let p: TimeProgress = .init(total: 1)
+            p.set(newPercent: newPercent)
+            self.progress = p
+        } else {
+            self.progress?.set(newPercent: newPercent)
+            self.updateProgress()
+        }
+        return self
+    }
+    
+    func updateProgress() {
+        guard let vc = vc as? LoadingAnimation else { return }
+        guard let superview = vc.imageView.superview else { return }
+        DispatchQueue.main.async {
+            if let progress = self.progress, progress.percent > 0 {
+                if vc.progressView == nil {
+                    let width = vc.imageView.frame.size.width + ProgressView.lineWidth * 2
+                    let v = ProgressView(frame: .init(origin: .zero, size: .init(width: width, height: width)))
+                    superview.addSubview(v)
+                    v.tintColor = superview.tintColor
+                    v.snp.remakeConstraints { (mk) in
+                        mk.center.equalTo(vc.imageView)
+                        mk.width.height.equalTo(width)
+                    }
+                    vc.progressView = v
+                }
+            } else {
+                vc.progressView?.removeFromSuperview()
+                vc.progressView = nil
+            }
+            if let v = vc.progressView, let progress = self.progress {
+                v.progress = progress.percent
+            }
+        }
+    }
+    
+    // MARK: countdown
+    
+    public func countdown(seconds: TimeInterval, onUpdate: ((_ progress: TimeProgress) -> Void)?, onCompletion: (() -> Void)?) {
+        guard let vc = vc as? LoadingAnimation else { return }
+        guard seconds > 0 else {
+            // stop countdown
+            self.progress = nil
+            return
+        }
+        let progress: TimeProgress = .init(total: seconds, direction: .counterclockwise, onUpdate: onUpdate, onCompletion: onCompletion)
+        self.progress = progress
+        countdownLoop(after: progress.interval)
+    }
+    
+    func countdownLoop(after: TimeInterval) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + after) {
+            if let p = self.progress, p.isFinish == false {
+                self.progress?.next()
+                self.updateProgress()
+                self.countdownLoop(after: p.interval)
+            }
+        }
+        
     }
     
 }
