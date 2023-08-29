@@ -34,7 +34,7 @@ open class BaseViewModel: NSObject, HUDViewModelType {
     
     /// 图标
     @objc open var icon: UIImage?
-    @objc var iconURL: URL?
+    @objc open var iconURL: URL?
     
     /// 图标旋转动画
     open var rotation: Rotation?
@@ -183,7 +183,6 @@ extension BaseViewModel {
     // MARK: countdown
     
     public func countdown(seconds: TimeInterval, onUpdate: ((_ progress: TimeProgress) -> Void)?, onCompletion: (() -> Void)?) {
-        guard let vc = vc as? LoadingAnimation else { return }
         guard seconds > 0 else {
             // stop countdown
             self.progress = nil
