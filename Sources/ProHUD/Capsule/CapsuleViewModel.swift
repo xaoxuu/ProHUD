@@ -9,7 +9,7 @@ import UIKit
 
 @objc open class CapsuleViewModel: BaseViewModel {
     
-    @objc public enum Position: Int {
+    @objc(CapsulePosition) public enum Position: Int {
         case top
         case middle
         case bottom
@@ -26,7 +26,8 @@ import UIKit
 
 public extension CapsuleViewModel {
     
-    func position(_ position: Position) -> Self {
+    @discardableResult
+    @objc func position(_ position: Position) -> Self {
         self.position = position
         return self
     }
