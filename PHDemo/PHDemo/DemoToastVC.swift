@@ -118,6 +118,12 @@ class DemoToastVC: ListVC {
             section.add(title: "标题 + 正文") {
                 TestToast(.title(title).message(message))
             }
+            section.add(title: "防止重复") {
+                TestToast(.identifier("toast").title(title).message(message).duration(2))
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    TestToast(.identifier("toast").title(title).message(message).duration(2))
+                }
+            }
             section.add(title: "一段长文本") {
                 // Toast(.message(message))
                 // 可以简写成这样：

@@ -83,8 +83,12 @@ open class ToastTarget: BaseController, HUDTargetType {
     
     /// 视图模型
     @objc public var vm: ToastViewModel? {
+        willSet {
+            vm?.cancelTimer()
+        }
         didSet {
             vm?.vc = self
+            vm?.restartTimer()
         }
     }
     

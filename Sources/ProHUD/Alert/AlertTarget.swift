@@ -73,8 +73,12 @@ open class AlertTarget: BaseController, HUDTargetType {
     
     /// 视图模型
     @objc public var vm: AlertViewModel? {
+        willSet {
+            vm?.cancelTimer()
+        }
         didSet {
             vm?.vc = self
+            vm?.restartTimer()
         }
     }
     

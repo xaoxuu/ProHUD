@@ -48,6 +48,7 @@ open class CapsuleTarget: BaseController, HUDTargetType {
         }
         didSet {
             vm?.vc = self
+            vm?.restartTimer()
         }
     }
     
