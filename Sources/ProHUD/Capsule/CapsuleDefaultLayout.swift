@@ -28,7 +28,7 @@ extension CapsuleTarget: DefaultLayout {
         if contentStack.arrangedSubviews.contains(textLabel) == false {
             contentStack.addArrangedSubview(textLabel)
         }
-        var text = [vm?.title ?? "", vm?.message ?? ""].filter({ $0.count > 0 }).joined(separator: " ")
+        let text = [vm?.title ?? "", vm?.message ?? ""].filter({ $0.count > 0 }).joined(separator: " ")
         if text.count > 0 {
             textLabel.snp.remakeConstraints { make in
                 make.width.lessThanOrEqualTo(AppContext.appBounds.width * 0.5)
@@ -113,7 +113,7 @@ extension CapsuleTarget: DefaultLayout {
     func getWindowSize(window: CapsuleWindow) -> CGSize {
         let cardEdgeInsetsByDefault = config.cardEdgeInsetsByDefault
         view.layoutIfNeeded()
-        var size = contentStack.frame.size
+        let size = contentStack.frame.size
         let width = min(config.cardMaxWidthByDefault, size.width + cardEdgeInsetsByDefault.left + cardEdgeInsetsByDefault.right)
         let height = min(config.cardMaxHeightByDefault, size.height + cardEdgeInsetsByDefault.top + cardEdgeInsetsByDefault.bottom)
         return .init(width: max(width, config.cardMinWidth ?? 0), height: max(height, config.cardMinHeight))

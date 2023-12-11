@@ -13,7 +13,6 @@
 		CD6537C328C35E6200A5981B /* DemoToastVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6537C228C35E6200A5981B /* DemoToastVC.swift */; };
 		CD6537C528C35F2C00A5981B /* DemoSheetVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6537C428C35F2C00A5981B /* DemoSheetVC.swift */; };
 		CD6AE8A32A7CC1BA0044E53D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = CD6AE8A22A7CC1BA0044E53D /* SnapKit */; };
-		CD891BCD2A80B58E00848BBC /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = CD891BCC2A80B58E00848BBC /* SnapKit */; };
 		CD8EEF3B28BC5C7200E660EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8EEF3A28BC5C7200E660EA /* AppDelegate.swift */; };
 		CD8EEF3D28BC5C7200E660EA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8EEF3C28BC5C7200E660EA /* SceneDelegate.swift */; };
 		CD8EEF4228BC5C7200E660EA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD8EEF4028BC5C7200E660EA /* Main.storyboard */; };
@@ -50,7 +49,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CDCBAEC42A80D6FD00C30DE5 /* ProHUD in Frameworks */,
-				CD891BCD2A80B58E00848BBC /* SnapKit in Frameworks */,
 				CDB6A2A228BC5F4600DEC80D /* ProHUD in Frameworks */,
 				CD6AE8A32A7CC1BA0044E53D /* SnapKit in Frameworks */,
 			);
@@ -123,7 +121,6 @@
 			packageProductDependencies = (
 				CDB6A2A128BC5F4600DEC80D /* ProHUD */,
 				CD6AE8A22A7CC1BA0044E53D /* SnapKit */,
-				CD891BCC2A80B58E00848BBC /* SnapKit */,
 				CDCBAEC32A80D6FD00C30DE5 /* ProHUD */,
 			);
 			productName = PHDemo;
@@ -138,7 +135,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1340;
-				LastUpgradeCheck = 1340;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					CD8EEF3628BC5C7200E660EA = {
 						CreatedOnToolsVersion = 13.4.1;
@@ -155,7 +152,6 @@
 			);
 			mainGroup = CD8EEF2E28BC5C7200E660EA;
 			packageReferences = (
-				CD891BCB2A80B58E00848BBC /* XCRemoteSwiftPackageReference "SnapKit" */,
 				CDCBAEC22A80D6FD00C30DE5 /* XCLocalSwiftPackageReference ".." */,
 			);
 			productRefGroup = CD8EEF3828BC5C7200E660EA /* Products */;
@@ -224,6 +220,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -256,6 +253,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -284,6 +282,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -316,6 +315,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -422,25 +422,9 @@
 		};
 /* End XCLocalSwiftPackageReference section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		CD891BCB2A80B58E00848BBC /* XCRemoteSwiftPackageReference "SnapKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://git.xaox.cc/mirrors/SnapKit.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.6.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
 		CD6AE8A22A7CC1BA0044E53D /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = SnapKit;
-		};
-		CD891BCC2A80B58E00848BBC /* SnapKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = CD891BCB2A80B58E00848BBC /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
 		};
 		CDB6A2A128BC5F4600DEC80D /* ProHUD */ = {
