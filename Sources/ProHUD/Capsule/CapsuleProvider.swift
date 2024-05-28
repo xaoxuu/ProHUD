@@ -22,9 +22,11 @@ open class CapsuleProvider: HUDProviderType {
             // 详见子类中的 self.init(initializer: nil)
             return
         }
-        let t = Target()
-        initializer(t)
-        t.push()
+        Task {
+            let t = await Target()
+            initializer(t)
+            await t.push()
+        }
     }
     
     /// 根据ViewModel和自定义的初始化代码创建一个Target并显示

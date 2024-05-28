@@ -22,9 +22,11 @@ public final class SheetProvider: HUDProviderType {
             // 详见子类中的 self.init(initializer: nil)
             return
         }
-        let t = Target()
-        initializer(t)
-        t.push()
+        Task {
+            let t = await Target()
+            initializer(t)
+            await t.push()
+        }
     }
     
     /// 如果不存在就创建并弹出一个HUD实例，如果存在就更新实例
