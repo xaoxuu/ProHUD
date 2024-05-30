@@ -22,7 +22,7 @@ public final class SheetProvider: HUDProviderType {
             // 详见子类中的 self.init(initializer: nil)
             return
         }
-        Task {
+        Task { @MainActor in
             let t = await Target()
             initializer(t)
             await t.push()
